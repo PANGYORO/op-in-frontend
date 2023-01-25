@@ -2,7 +2,10 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.9-SNAPSHOT'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'org.ec4j.editorconfig' version '0.0.3'
+    id 'checkstyle'
 }
+
 
 group = 'com.c211'
 version = '0.0.1-SNAPSHOT'
@@ -27,6 +30,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.mysql:mysql-connector-j'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
@@ -37,3 +41,15 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+checkstyle {
+    maxWarnings = 0 // 규칙이 어긋나는 코드가 하나라도 있을 경우 빌드 fail을 내고 싶다면 이 선언을 추가한다.
+    configFile = file("${rootDir}/naver-checkstyle-rules.xml")
+    configProperties = ["suppressionFile": "${rootDir}/naver-checkstyle-suppressions.xml"]
+    toolVersion = "8.29"
+}
+
+editorconfig {
+    excludes = ['build']
+}
+check.dependsOn editorconfigCheck
