@@ -14,6 +14,6 @@ public class Topic {
 	@GeneratedValue
 	@Column(name = "TOPIC_ID")
 	private Long id;
-
+	@Column(nullable = false)
 	private String title;
 }

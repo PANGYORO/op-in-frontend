@@ -1,6 +1,5 @@
 package com.c211.opinbackend.repo.entitiy;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,6 +22,5 @@ public class HashTag {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REPOSITORY_QNA_ID")
 	private RepositoryQnA repositoryQnA;
-
 
 }
