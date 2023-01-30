@@ -4,7 +4,11 @@ import Main from "./Main";
 import Repository from "./Repository";
 import Education from "./Education";
 import Search from "./Search";
-import User from "./User";
+import SignIn from './user/SignIn';
+import SignUp from './user/SignUp';
+import Detail from './user/Detail';
+import UserFind from './user/UserFind';
+
 
 const router = createBrowserRouter([
   {
@@ -24,8 +28,20 @@ const router = createBrowserRouter([
     element: <Search />,
   },
   {
-    path: "/user",
-    element: <User />,
+    path: "/detail/{nickname}",
+    element: <Detail />,
+  },
+  {
+    path: "/signin",
+    element: <SignIn />,
+  },
+  {
+    path: "/signup",
+    element: <SignUp />,
+  },
+  {
+    path: "/userfind",
+    element: <UserFind />,
   },
 
 ]);
