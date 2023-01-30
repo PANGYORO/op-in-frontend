@@ -2,6 +2,7 @@ package com.c211.opinbackend.repo.entitiy;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -14,7 +15,6 @@ import javax.persistence.ManyToOne;
 import com.c211.opinbackend.auth.entity.Member;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -25,11 +25,11 @@ public class RepositoryPost {
 	@Column(name = "REPOSITORY_POST_ID")
 	private Long id;
 
-	@ManyToOne( fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "REPOSITORY_ID")
 	private Repository repository;
 
-	@ManyToOne( fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "MEMBER_ID")
 	private Member member;
 
@@ -37,6 +37,6 @@ public class RepositoryPost {
 	private TitleContent titleContent;
 
 	private Boolean mergeFL;
-	private LocalDateTime  date;
+	private LocalDateTime date;
 	private Boolean closeState;
 }
