@@ -5,9 +5,9 @@ spring:
     livereload:
       enabled: true
   datasource:
-    url:
-    username:
-    password:
+    url: jdbc:mysql://i8C211.p.ssafy.io/minjidb?serverTimezone=UTC&useUniCode=yes&characterEncoding=UTF-8
+    username: ssafy1
+    password: ssafy
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
