@@ -11,7 +11,10 @@ import javax.persistence.ManyToOne;
 
 import com.c211.opinbackend.auth.entity.Member;
 
+import lombok.Getter;
+
 @Entity(name = "REPOSITORY_QNA_MEMBER_LIKE")
+@Getter
 public class RepositoryQnAMemberLike {
 
 	@Id
