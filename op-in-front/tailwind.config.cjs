@@ -1,8 +1,17 @@
 /** @type {import('tailwindcss').Config} */
+
+const colors = require('tailwindcss/colors');
 module.exports = {
-  content: ["./src/**/*.{html,js,jsx}"],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    container: {
+      center: true,
+    },
+    extend: {
+      colors: {
+        'regal-blue': '#243c5a',
+      },
+    }
   },
-  plugins: [],
-}
+  plugins: [require("@tailwindcss/forms")],
+};

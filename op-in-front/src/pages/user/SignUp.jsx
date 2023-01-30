@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 
 import Logo from "../../components/Logo";
 
+
 function Button({ onClick = () => {}, loading = false, children }) {
   return (
     <button
@@ -49,7 +50,7 @@ function Nickname({ register, error, name }) {
         type="text"
         required
         autoComplete="username"
-        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        className="mt-1 block w-full rounded-md border-gray-00 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         {...register(name, {
           required: {
             value: true,
