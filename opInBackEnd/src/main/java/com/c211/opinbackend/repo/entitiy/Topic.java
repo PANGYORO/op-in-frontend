@@ -1,4 +1,4 @@
-package com.c211.opinbackend.auth.entity;
+package com.c211.opinbackend.repo.entitiy;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
