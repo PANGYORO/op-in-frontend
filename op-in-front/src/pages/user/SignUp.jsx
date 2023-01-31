@@ -163,7 +163,12 @@ function SignUpForm() {
     formState: { isSubmitting, errors },
   } = useForm();
 
+  
+
   const onSubmit = async (data) => {
+    const wait = () => new Promise((resolve) => setTimeout((resolve) => {
+    
+    }, 2000);
     const result = await http.post((res) => {
       setTimeout(() => {
         res(data);
