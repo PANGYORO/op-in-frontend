@@ -1,8 +1,7 @@
-import { Link } from "react-router-dom";
+import React from "react";
 import { useForm } from "react-hook-form";
 
 import Logo from "../../components/Logo";
-
 
 function Button({ onClick = () => {}, loading = false, children }) {
   return (
@@ -39,16 +38,10 @@ function Button({ onClick = () => {}, loading = false, children }) {
   );
 }
 
-
-
-
 function EmailInput({ register, error }) {
   return (
     <div className="col-span-6 sm:col-span-3">
-      <label
-        htmlFor="email"
-        className="block text-sm font-medium text-gray-700"
-      >
+      <label htmlFor="email" className="block text-sm font-medium text-gray-700">
         Email Address
       </label>
       <input
@@ -73,25 +66,20 @@ function EmailInput({ register, error }) {
   );
 }
 function SignUpForm() {
-  
   const {
     register,
     handleSubmit,
-    watch,
     formState: { isSubmitting, errors },
   } = useForm();
 
-  const onSubmit = async (data, e) => {
+  const onSubmit = async (data) => {
     const result = await new Promise((res) => {
       setTimeout(() => {
         res(data);
       }, 3000);
-
     });
-    
-  
-    window.alert(JSON.stringify(result));
 
+    window.alert(JSON.stringify(result));
   };
 
   return (
@@ -111,7 +99,6 @@ function SignUpForm() {
                 Send email
               </Button>
             </div>
-    
           </form>
         </div>
       </div>
@@ -119,12 +106,7 @@ function SignUpForm() {
   );
 }
 function UserFind() {
-  return (
-    
-    <SignUpForm />
-
-  );
+  return <SignUpForm />;
 }
 
 export default UserFind;
-
