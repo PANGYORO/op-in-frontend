@@ -7,6 +7,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -18,6 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -44,7 +46,7 @@ public class Member {
 	private String nickname;
 
 	@Column(name = "AVATA_URL")
-	private String avatUrl;
+	private String avatarUrl;
 
 	@Column(name = "GITHUB_SYNC_FL")
 	@NotNull

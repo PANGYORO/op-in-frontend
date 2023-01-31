@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.sun.istack.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -31,12 +33,14 @@ public class GithubSync {
 	private String email;
 
 	@Column(name = "LOGIN_NICKNAME")
+	@NotNull
 	private String loginNickname;
-
 	@Column(name = "REFRESH_TOKEN")
+	@NotNull
 	private String refreshToken;
 
 	@Column(name = "ACCESS_TOKEN")
+	@NotNull
 	private String accessToken;
 
 	@OneToOne(mappedBy = "githubSync", fetch = FetchType.LAZY)
