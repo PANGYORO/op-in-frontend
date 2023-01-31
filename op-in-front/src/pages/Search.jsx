@@ -1,7 +1,5 @@
+import React from "react";
+
 export default function Search() {
-  return (
-    <div >
-      searchpage
-    </div>
-  )
+  return <div>searchpage</div>;
 }

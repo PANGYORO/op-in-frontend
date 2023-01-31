@@ -1,7 +1,5 @@
+import React from "react";
+
 export default function Main() {
-  return (
-    <div >
-      Edu page
-    </div>
-  )
+  return <div>Edu page</div>;
 }
