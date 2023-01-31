@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { ToastContainer, toast } from 'react-toastify';
 
 import Logo from "../../components/Logo";
 
@@ -74,7 +73,7 @@ function EmailInput({ register, error }) {
   );
 }
 function SignUpForm() {
-  const notify = () => toast("이메일 전송 완료!")
+  
   const {
     register,
     handleSubmit,
@@ -87,15 +86,16 @@ function SignUpForm() {
       setTimeout(() => {
         res(data);
       }, 3000);
+
     });
-    notify
-    // window.alert(JSON.stringify(result));
+    
+  
+    window.alert(JSON.stringify(result));
 
   };
 
   return (
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <ToastContainer/>
       <div className="w-full max-w-md space-y-8 bg-gray-50 p-5">
         <div>
           <Logo className="mx-auto h-20 w-auto" />
