@@ -8,6 +8,7 @@ export default function Main() {
       <div>
         <Header />
         <Sidebar />
+        
       </div>
     </div>
   );
