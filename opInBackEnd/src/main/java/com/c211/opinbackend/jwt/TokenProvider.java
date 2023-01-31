@@ -4,9 +4,9 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,8 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.c211.opinbackend.auth.model.TokenDto;
@@ -34,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TokenProvider implements InitializingBean {
 
-	// private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
+	private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
 
 	private static final String AUTHORITIES_KEY = "auth";
 
@@ -69,8 +67,6 @@ public class TokenProvider implements InitializingBean {
 	public TokenDto createToken(String email,
 		String authorities) {
 		long now = (new Date()).getTime();
-		// UserBase user = userRepository.findByEmail(email) // princial.toSTring()
-		// 	.orElseThrow(() -> new UserNotFoundException("해당하는 이메일이 존재하지 않습니다."));
 
 		String accessToken = Jwts.builder()
 			.claim("email", email)

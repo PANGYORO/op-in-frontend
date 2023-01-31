@@ -1,15 +1,10 @@
 package com.c211.opinbackend.auth.controller;
 
-import org.apache.catalina.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.entity.Role;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
@@ -38,23 +32,16 @@ public class MemberController {
 
 	private static final RestTemplate restTemplate = new RestTemplate();
 
-	// private final String clientId;
-	// private final String clientSecret;
-
 	MemberService memberService;
 
 	@Autowired
 	public MemberController(MemberService memberService,
 		TokenProvider tokenProvider,
 		AuthenticationManagerBuilder authenticationManagerBuilder
-		// @Value("${security.oauth.github.client-id}") String clientId,
-		// @Value("${security.oauth.github.client-secret}") String clientSecret
 	) {
 		this.memberService = memberService;
 		this.tokenProvider = tokenProvider;
 		this.authenticationManagerBuilder = authenticationManagerBuilder;
-		// this.clientId = clientId;
-		// this.clientSecret = clientSecret;
 	}
 
 	@PostMapping("/testauth")

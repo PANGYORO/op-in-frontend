@@ -20,8 +20,6 @@ import com.c211.opinbackend.jwt.JwtAuthenticationEntryPoint;
 import com.c211.opinbackend.jwt.JwtSecurityConfig;
 import com.c211.opinbackend.jwt.TokenProvider;
 
-import lombok.RequiredArgsConstructor;
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
