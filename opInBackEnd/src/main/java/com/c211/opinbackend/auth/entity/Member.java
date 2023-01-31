@@ -45,7 +45,7 @@ public class Member {
 	private String nickname;
 
 	@Column(name = "AVATA_URL")
-	private String avataUrl;
+	private String avatarUrl;
 
 	@Column(name = "GITHUB_SYNC_FL")
 	@NotNull
