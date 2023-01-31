@@ -18,13 +18,11 @@ import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.repository.MemberRepository;
 import com.c211.opinbackend.jwt.TokenProvider;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -34,7 +32,8 @@ public class MemberServiceImpl implements MemberService {
 
 	@Autowired
 	public MemberServiceImpl(MemberRepository memberRepository,
-		AuthenticationManagerBuilder authenticationManagerBuilder, TokenProvider tokenProvider) {
+		AuthenticationManagerBuilder authenticationManagerBuilder,
+		TokenProvider tokenProvider) {
 		this.memberRepository = memberRepository;
 		this.authenticationManagerBuilder = authenticationManagerBuilder;
 		this.tokenProvider = tokenProvider;
