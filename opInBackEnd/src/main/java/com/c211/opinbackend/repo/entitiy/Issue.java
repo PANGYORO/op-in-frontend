@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.sun.istack.NotNull;
+
 import lombok.Getter;
 
 @Entity
@@ -26,5 +28,6 @@ public class Issue {
 	private String title;
 	private String content;
 	@Column(nullable = false)
-	private Boolean doneFi;
+	@NotNull
+	private Boolean doneFl;
 }

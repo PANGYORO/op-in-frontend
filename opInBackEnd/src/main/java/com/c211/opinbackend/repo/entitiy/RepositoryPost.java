@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.c211.opinbackend.auth.entity.Member;
+import com.sun.istack.NotNull;
 
 import lombok.Getter;
 
@@ -36,7 +37,10 @@ public class RepositoryPost {
 	@Embedded
 	private TitleContent titleContent;
 
+	@NotNull
 	private Boolean mergeFL;
+	@NotNull
 	private LocalDateTime date;
+	@NotNull
 	private Boolean closeState;
 }

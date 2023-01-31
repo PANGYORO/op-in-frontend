@@ -16,11 +16,11 @@ public class HashTag {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "REPOSITORY_POST_ID")
+	@JoinColumn(name = "REPOSITORY_POST_ID", nullable = true)
 	private RepositoryPost repositoryPost;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "REPOSITORY_QNA_ID")
+	@JoinColumn(name = "REPOSITORY_QNA_ID", nullable = true)
 	private RepositoryQnA repositoryQnA;
 
 }
