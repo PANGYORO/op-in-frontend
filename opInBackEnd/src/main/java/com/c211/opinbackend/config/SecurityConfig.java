@@ -22,20 +22,14 @@ public class SecurityConfig {
 
 	@Bean
 	public WebSecurityCustomizer configure() {
-		return (web) -> web.ignoring().antMatchers(
-			"/css/**", "/script/**", "image/**", "/fonts/**", "lib/**"
-		);
+		return (web) -> web.ignoring().antMatchers("/css/**", "/script/**", "image/**", "/fonts/**", "lib/**");
 	}
 
 	@Bean
 	@Order(SecurityProperties.BASIC_AUTH_ORDER)
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-			.antMatchers("/admin/**").hasRole("ADMIN")
-			.antMatchers("/**").permitAll();
+		http.authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN").antMatchers("/**").permitAll();
 		http.csrf().disable();
-
 		return http.build();
 	}
-
 }

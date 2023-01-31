@@ -1,8 +1,6 @@
 package com.c211.opinbackend.auth.controller;
 
-import org.apache.catalina.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -34,23 +32,21 @@ public class MemberController {
 	MemberService memberService;
 
 	@Autowired
-	public MemberController(MemberService memberService,
-		AuthenticationManagerBuilder authenticationManagerBuilder
+	public MemberController(MemberService memberService, AuthenticationManagerBuilder authenticationManagerBuilder
 		// @Value("${security.oauth.github.client-id}") String clientId,
 		// @Value("${security.oauth.github.client-secret}") String clientSecret
-	){
+	) {
 		this.memberService = memberService;
 		this.authenticationManagerBuilder = authenticationManagerBuilder;
 		// this.clientId = clientId;
 		// this.clientSecret = clientSecret;
 	}
 
-
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody MemberLoginRequest request){
+	public ResponseEntity<?> login(@RequestBody MemberLoginRequest request) {
 
-		UsernamePasswordAuthenticationToken authenticationToken =
-			new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+			request.getEmail(), request.getPassword());
 
 		System.out.println(authenticationToken);
 

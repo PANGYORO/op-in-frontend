@@ -17,9 +17,8 @@ import lombok.Getter;
 public class RepositoryTechLanguage {
 	@Id
 	@GeneratedValue
-	@Column(name="REPOSITORY_TECH_LANGUAGE_ID")
+	@Column(name = "REPOSITORY_TECH_LANGUAGE_ID")
 	private Long id;
-
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TECH_LANGUAGE_ID")

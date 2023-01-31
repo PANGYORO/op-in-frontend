@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 public class HashTag {
 	@Id
 	@GeneratedValue
-	@Column(name = "HASH_TAG")
+	@Column(name = "HASH_TAG_ID")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)

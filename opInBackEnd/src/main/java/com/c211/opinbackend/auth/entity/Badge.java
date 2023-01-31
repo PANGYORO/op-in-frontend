@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import com.sun.istack.NotNull;
+
 import lombok.Getter;
 
 @Entity
@@ -15,8 +17,8 @@ public class Badge {
 	@Column(name = "BADGE_ID")
 	private Long id;
 
-	@Column(nullable = false)
+	@NotNull
 	private String title;
-	@Column(nullable = false)
+	@NotNull
 	private String imageUrl;
 }

@@ -15,7 +15,7 @@ import lombok.Getter;
 public class MemberTechLanguage {
 	@Id
 	@GeneratedValue
-	@Column(name = "MEMBER_TECH_LANGUAGE")
+	@Column(name = "MEMBER_TECH_LANGUAGE_ID")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)

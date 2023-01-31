@@ -18,7 +18,7 @@ import lombok.Getter;
 public class RepositoryPostMemberLike {
 	@Id
 	@GeneratedValue
-	@Column(name = "REPOSITORY_POST_MEMBER_LIKE")
+	@Column(name = "REPOSITORY_POST_MEMBER_LIKE_ID")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
