@@ -7,7 +7,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -17,22 +16,22 @@ import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
+@Getter
 @Table(name = "MEMBER")
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue
 	@Column(name = "MEMBER_ID")
 	private Long id;
 
-	@Column(name = "EMAIL")
+	@Column(name = "MEMBER_EMAIL")
 	@NotNull
 	private String email;
 
@@ -45,7 +44,7 @@ public class Member {
 	private String nickname;
 
 	@Column(name = "AVATA_URL")
-	private String avataUrl;
+	private String avatUrl;
 
 	@Column(name = "GITHUB_SYNC_FL")
 	@NotNull
