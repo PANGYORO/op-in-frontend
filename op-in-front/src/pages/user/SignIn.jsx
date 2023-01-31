@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
-
+import React from "react";
 
 import Logo from "../../components/Logo";
-
 
 function LoginForm() {
   return (
@@ -15,10 +14,7 @@ function LoginForm() {
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Or{" "}
-            <Link
-              to="/signup"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
-            >
+            <Link to="/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
               Sign up
             </Link>
           </p>
@@ -26,10 +22,7 @@ function LoginForm() {
         <form className="mt-8 space-y-6" action="#" method="POST">
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="col-span-6 sm:col-span-3">
-            <label
-              htmlFor=""
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="" className="block text-sm font-medium text-gray-700">
               Email Address
             </label>
             <input
@@ -42,10 +35,7 @@ function LoginForm() {
             />
           </div>
           <div className="col-span-6 sm:col-span-3">
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Password
             </label>
             <input
@@ -66,19 +56,13 @@ function LoginForm() {
                 type="checkbox"
                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
               />
-              <label
-                htmlFor="remember-me"
-                className="ml-2 block text-sm text-gray-900"
-              >
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
                 Remember me
               </label>
             </div>
 
             <div className="text-sm">
-              <Link
-                to="/userfind"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
+              <Link to="/userfind" className="font-medium text-indigo-600 hover:text-indigo-500">
                 Forgot your password?
               </Link>
             </div>
@@ -116,11 +100,7 @@ function LoginForm() {
 }
 
 function SignIn() {
-  return (
-    <LoginForm />
-
-  );
+  return <LoginForm />;
 }
-
 
 export default SignIn;

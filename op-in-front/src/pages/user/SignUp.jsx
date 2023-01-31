@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import React from "react";
 
 import Logo from "../../components/Logo";
-
 
 function Button({ onClick = () => {}, loading = false, children }) {
   return (
@@ -85,10 +85,8 @@ function Password({ register, error, name, label }) {
             message: "비밀번호를 입력해주세요.",
           },
           pattern: {
-            value:
-              /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$/,
-            message:
-              "비밀번호는 대문자, 소문자, 특수문자, 숫자를 포함해야합니다 (8~16 글자)",
+            value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$/,
+            message: "비밀번호는 대문자, 소문자, 특수문자, 숫자를 포함해야합니다 (8~16 글자)",
           },
         })}
       />
@@ -116,10 +114,8 @@ function PasswordConfirm({ register, error, name, label, password }) {
             message: "비밀번호를 입력해주세요.",
           },
           pattern: {
-            value:
-              /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$/,
-            message:
-              "비밀번호는 대문자, 소문자, 특수문자, 숫자를 포함해야합니다 (8~16 글자)",
+            value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$/,
+            message: "비밀번호는 대문자, 소문자, 특수문자, 숫자를 포함해야합니다 (8~16 글자)",
           },
           validate: (value) => {
             if (value != password) {
@@ -135,10 +131,7 @@ function PasswordConfirm({ register, error, name, label, password }) {
 function EmailInput({ register, error }) {
   return (
     <div className="col-span-6 sm:col-span-3">
-      <label
-        htmlFor="email"
-        className="block text-sm font-medium text-gray-700"
-      >
+      <label htmlFor="email" className="block text-sm font-medium text-gray-700">
         Email Address
       </label>
       <input
@@ -170,7 +163,7 @@ function SignUpForm() {
     formState: { isSubmitting, errors },
   } = useForm();
 
-  const onSubmit = async (data, e) => {
+  const onSubmit = async (data) => {
     const result = await new Promise((res) => {
       setTimeout(() => {
         res(data);
@@ -240,10 +233,7 @@ function SignUpForm() {
   );
 }
 function SignUp() {
-  return (
-    <SignUpForm />
-
-  );
+  return <SignUpForm />;
 }
 
 export default SignUp;
