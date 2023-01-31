@@ -4,8 +4,9 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 const navigation = [
   //메뉴 목록
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Projects', href: '#', current: false },
+  { name: 'SignIn', href: '/signin', current: true },
+  { name: 'SignUp', href: '/signup', current: true },
+
 ]
 
 function classNames(...classes) {
@@ -43,8 +44,11 @@ export default function Example() {
                     alt="Your Company"
                   />
                 </div>
+
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
+                    <input type="text" class="block w-full py-1.5 pl-10 pr-4 leading-normal rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-400 aa-input" placeholder="Search" />
+
                     {navigation.map((item) => (
                       <a
                         key={item.name}
@@ -121,25 +125,6 @@ export default function Example() {
               </div>
             </div>
           </div>
-
-          {/* <Disclosure.Panel className="sm:hidden">
-            <div className="space-y-1 px-2 pt-2 pb-3">
-              {navigation.map((item) => (
-                <Disclosure.Button
-                  key={item.name}
-                  as="a"
-                  href={item.href}
-                  className={classNames(
-                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'block px-3 py-2 rounded-md text-base font-medium'
-                  )}
-                  aria-current={item.current ? 'page' : undefined}
-                >
-                  {item.name}
-                </Disclosure.Button>
-              ))}
-            </div>
-          </Disclosure.Panel> */}
         </>
       )}
     </Disclosure>
