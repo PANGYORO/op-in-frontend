@@ -17,18 +17,19 @@ import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
+@Getter
 @Table(name = "MEMBER")
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue
 	@Column(name = "MEMBER_ID")
 	private Long id;
 
