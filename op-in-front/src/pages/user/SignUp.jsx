@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import React from "react";
 
 import Logo from "../../components/Logo";
-
+import http from "../../api/http"
 function Button({ onClick = () => {}, loading = false, children }) {
   return (
     <button
@@ -164,7 +164,7 @@ function SignUpForm() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const result = await new Promise((res) => {
+    const result = await http.post((res) => {
       setTimeout(() => {
         res(data);
       }, 3000);
