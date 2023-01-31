@@ -2,6 +2,8 @@ package com.c211.opinbackend.repo.entitiy;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -38,8 +40,6 @@ public class Comment {
 	private RepositoryPost post;
 	private String content;
 
-	@ManyToOne
-	@JoinColumn(name = "COMMENT_TYPE")
+	@Enumerated(EnumType.STRING)
 	private CommentType commentType;
-
 }
