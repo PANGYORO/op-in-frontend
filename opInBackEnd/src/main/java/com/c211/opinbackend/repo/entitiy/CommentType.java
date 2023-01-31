@@ -1,4 +1,4 @@
-package com.c211.opinbackend.auth.entity;
+package com.c211.opinbackend.repo.entitiy;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,15 +7,12 @@ import javax.persistence.Id;
 
 import com.sun.istack.NotNull;
 
-import lombok.Getter;
-
 @Entity
-@Getter
-public class TechLanguage {
+public class CommentType {
 	@Id
 	@GeneratedValue
-	@Column(name = "TECH_LANGUAGE_ID")
+	@Column(name = "COMMENT_TYPE")
 	private Long id;
 	@NotNull
-	private String title;
+	private String tittle;
 }

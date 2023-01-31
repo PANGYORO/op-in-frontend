@@ -38,4 +38,8 @@ public class Comment {
 	private RepositoryPost post;
 	private String content;
 
+	@ManyToOne
+	@JoinColumn(name = "COMMENT_TYPE")
+	private CommentType commentType;
+
 }

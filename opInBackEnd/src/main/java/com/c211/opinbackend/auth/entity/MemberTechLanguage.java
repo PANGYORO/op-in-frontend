@@ -21,4 +21,8 @@ public class MemberTechLanguage {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TECH_LANGUAGE_ID")
 	private TechLanguage techLanguage;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "MEMBER_ID")
+	private Member member;
 }
