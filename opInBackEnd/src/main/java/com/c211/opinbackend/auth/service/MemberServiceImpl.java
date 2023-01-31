@@ -34,12 +34,10 @@ public class MemberServiceImpl implements MemberService {
 	private final TokenProvider tokenProvider;
 
 	MemberRepository memberRepository;
+
 	@Autowired
-	public MemberServiceImpl(
-		MemberRepository memberRepository,
-		AuthenticationManagerBuilder authenticationManagerBuilder,
-		TokenProvider tokenProvider
-		) {
+	public MemberServiceImpl(MemberRepository memberRepository,
+		AuthenticationManagerBuilder authenticationManagerBuilder, TokenProvider tokenProvider) {
 		this.memberRepository = memberRepository;
 		this.authenticationManagerBuilder = authenticationManagerBuilder;
 		this.tokenProvider = tokenProvider;
@@ -49,15 +47,14 @@ public class MemberServiceImpl implements MemberService {
 	public TokenDto authorize(String email, String password) {
 
 		boolean exist = memberRepository.existsByEmail(email);
-		if (!exist){ // 테스트용 - id가 없으면,
+		if (!exist) { // 테스트용 - id가 없으면,
 			return new TokenDto("N", "N");
 		}
 
-		UsernamePasswordAuthenticationToken authenticationToken =
-			new UsernamePasswordAuthenticationToken(email, password);
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email,
+			password);
 
-		Authentication authentication = authenticationManagerBuilder.getObject()
-			.authenticate(authenticationToken);
+		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -68,7 +65,8 @@ public class MemberServiceImpl implements MemberService {
 
 	// 권한 가져오기
 	public String getAuthorities(Authentication authentication) {
-		return authentication.getAuthorities().stream()
+		return authentication.getAuthorities()
+			.stream()
 			.map(GrantedAuthority::getAuthority)
 			.collect(Collectors.joining(","));
 	}

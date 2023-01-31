@@ -49,7 +49,7 @@ public class MemberController {
 		AuthenticationManagerBuilder authenticationManagerBuilder
 		// @Value("${security.oauth.github.client-id}") String clientId,
 		// @Value("${security.oauth.github.client-secret}") String clientSecret
-	){
+	) {
 		this.memberService = memberService;
 		this.tokenProvider = tokenProvider;
 		this.authenticationManagerBuilder = authenticationManagerBuilder;
@@ -58,23 +58,14 @@ public class MemberController {
 	}
 
 	@PostMapping("/testauth")
-	public ResponseEntity<?> testauth(@RequestBody MemberLoginRequest request){
-
-		// UsernamePasswordAuthenticationToken authenticationToken =
-		// 	new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
-		//
-		// Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-		//
-		// SecurityContextHolder.getContext().setAuthentication(authentication);
-		//
-		// TokenDto jwt = tokenProvider.createToken(authentication);
+	public ResponseEntity<?> testauth(@RequestBody MemberLoginRequest request) {
 
 		return ResponseEntity.ok(null);
 	}
 
 
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody MemberLoginRequest request){
+	public ResponseEntity<?> login(@RequestBody MemberLoginRequest request) {
 		TokenDto token = memberService.authorize(request.getEmail(), request.getPassword());
 
 		HttpHeaders httpHeaders = new HttpHeaders();
@@ -88,8 +79,6 @@ public class MemberController {
 
 
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		// member.setRoles(Arrays.asList(role));
-		// memberRepository.save(member);
 
 		MemberDto joinMember = MemberDto.builder()
 			.email(request.getEmail())
