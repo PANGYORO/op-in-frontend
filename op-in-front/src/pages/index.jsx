@@ -1,14 +1,14 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from "react-router-dom";
+import React from "react";
 
 import Main from "./Main";
 import Repository from "./Repository";
 import Education from "./Education";
 import Search from "./Search";
-import SignIn from './user/SignIn';
-import SignUp from './user/SignUp';
-import Detail from './user/Detail';
-import UserFind from './user/UserFind';
-
+import SignIn from "./user/SignIn";
+import SignUp from "./user/SignUp";
+import Detail from "./user/Detail";
+import UserFind from "./user/UserFind";
 
 const router = createBrowserRouter([
   {
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
     element: <Search />,
   },
   {
-    path: "/detail/{nickname}",
+    path: "/detail",
     element: <Detail />,
   },
   {
@@ -43,7 +43,6 @@ const router = createBrowserRouter([
     path: "/userfind",
     element: <UserFind />,
   },
-
 ]);
 
 export default router;
