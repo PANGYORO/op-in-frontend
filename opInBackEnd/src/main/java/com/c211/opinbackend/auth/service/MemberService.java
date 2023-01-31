@@ -2,9 +2,10 @@ package com.c211.opinbackend.auth.service;
 
 import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.model.MemberDto;
+import com.c211.opinbackend.auth.model.TokenDto;
 
 public interface MemberService {
-	Member login(String email, String password);
+	TokenDto authorize(String email, String password);
 
 	Member signUp(MemberDto memberDto);
 }
