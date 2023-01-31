@@ -19,7 +19,7 @@ public class RepositoryTopic {
 	@Column(name = "REPOSITORY_TOPIC_ID")
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TOPIC_ID")
 	private Topic topic;
 

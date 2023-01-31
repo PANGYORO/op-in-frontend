@@ -32,7 +32,7 @@ public class Member {
 	@Column(name = "MEMBER_ID")
 	private Long id;
 
-	@Column(name = "EMAIL")
+	@Column(name = "MEMBER_EMAIL")
 	@NotNull
 	private String email;
 
