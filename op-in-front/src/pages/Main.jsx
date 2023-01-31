@@ -10,7 +10,9 @@ import SignUp from "./user/SignUp";
 import Detail from "./user/Detail";
 import UserFind from "./user/UserFind";
 
+
 export default function Main() {
+  // const [subDomain] = useLocation();
   return (
     <BrowserRouter>
       <div className="Main">
