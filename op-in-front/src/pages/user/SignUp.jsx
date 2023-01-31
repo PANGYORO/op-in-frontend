@@ -166,16 +166,19 @@ function SignUpForm() {
   
 
   const onSubmit = async (data) => {
-    const wait = () => new Promise((resolve) => setTimeout((resolve) => {
-    
-    }, 2000);
-    const result = await http.post((res) => {
-      setTimeout(() => {
-        res(data);
-      }, 3000);
-    });
+    const result = await http.post('auth/signup', {
+      email: data.email,
+      password: data.password,
+      nickname: data.nickname 
+    })
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 
-    window.alert(JSON.stringify(result));
+    
   };
 
   return (
