@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 
 export default function Sidebar() {
   return (
-    <div className="relative hidden h-screen my-4 ml-4 shadow-lg lg:block w-80">
-      <div className="h-full bg-white rounded-2xl dark:bg-gray-700 w-80">
+    <div className="relative hidden h-screen my-4 ml-4 shadow-lg lg:block w-64">
+      <div className="h-full bg-white rounded-2xl dark:bg-gray-700 w-64">
         <div className="flex items-center justify-center pt-6">
           <Link to="/" className="place-self-center">
             <img src={BoxLogo} alt="none" className="object-contain h-30 w-48" />
