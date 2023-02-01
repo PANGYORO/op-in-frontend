@@ -17,11 +17,21 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RepositoryPostResponse {
 
-	private String repository_id;
+	private String title;
+
+	private String content;
+
+	private String imageUrl;
 
 	private Boolean mergeFL;
 
 	private LocalDateTime date;
 
 	private Boolean closeState;
+
+	private String repoTitle;
+
+	private long likeCount;
+
+	private long commentCount;
 }
