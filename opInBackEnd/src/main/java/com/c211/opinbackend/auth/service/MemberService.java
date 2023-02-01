@@ -3,11 +3,14 @@ package com.c211.opinbackend.auth.service;
 import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
+import com.c211.opinbackend.auth.model.response.MypageResponse;
 
 public interface MemberService {
 	TokenDto authorize(String email, String password);
 
-	Member signUp(MemberDto memberDto) throws Exception;
+	Member signUp(MemberDto memberDto);
+
+	MypageResponse getMemberInfo(String email);
 
 	boolean existEmail(String email);
 
