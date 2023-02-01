@@ -9,6 +9,8 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.exception.auth.AuthRuntimeException;
+import com.c211.opinbackend.exception.member.MemberExceptionEntity;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEntity;
 import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
 
@@ -24,11 +26,20 @@ public class ExceptionAdvice {
 	 * @param runError
 	 * @return
 	 */
+	// TODO: 2023-02-01 이부분 수정해야합니다 맴버 어디갔누?
 	@ExceptionHandler({RepositoryRuntimeException.class})
-	private ResponseEntity<RepositoryExceptionEntity> memberExceptionHandler(
+	private ResponseEntity<RepositoryExceptionEntity> repoExceptionHandler(
 		final RepositoryRuntimeException runError) {
 		return new ResponseEntity<>(
 			new RepositoryExceptionEntity(runError.getErrorEnum().getHttpStatus(), runError.getMessage()),
+			runError.getErrorEnum().getHttpStatus());
+	}
+
+	@ExceptionHandler({MemberRuntimeException.class})
+	private ResponseEntity<MemberExceptionEntity> memberExceptionHandler(
+		final MemberRuntimeException runError) {
+		return new ResponseEntity<>(
+			new MemberExceptionEntity(runError.getErrorEnum().getHttpStatus(), runError.getMessage()),
 			runError.getErrorEnum().getHttpStatus());
 	}
 

@@ -34,7 +34,7 @@ public class Repository {
 	private Member member;
 
 	@OneToMany(mappedBy = "repository")
-	List<Issue> repositoryList = new ArrayList<>();
+	List<Issue> issueList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "repository")
 	List<RepositoryPost> repositoryPostList = new ArrayList<>();

@@ -1,7 +1,9 @@
 package com.c211.opinbackend.repo.service;
 
-import com.c211.opinbackend.auth.model.MemberDto;
+import java.util.List;
+
+import com.c211.opinbackend.repo.model.repository.RepositoryDto;
 
 public interface RepositoryService {
-	MemberDto finRepositoryByMember(String email);
+	List<RepositoryDto> finRepositoryListByMember(String email);
 }
