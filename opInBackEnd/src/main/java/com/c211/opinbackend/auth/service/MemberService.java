@@ -9,6 +9,8 @@ public interface MemberService {
 
 	Member signUp(MemberDto memberDto) throws Exception;
 
+	MemberDto getMemberInfo(String email);
+
 	boolean existEmail(String email);
 
 	boolean existNickname(String nickname);

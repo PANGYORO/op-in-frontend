@@ -52,6 +52,13 @@ public class MemberController {
 		this.authenticationManagerBuilder = authenticationManagerBuilder;
 	}
 
+	@PostMapping("/getMember")
+	public ResponseEntity<?> getMemberInfo(@RequestBody MemberEmailRequest request) throws Exception {
+		MemberDto memberDto = memberService.getMemberInfo(request.getEmail());
+
+		return new ResponseEntity<MemberDto>(memberDto, HttpStatus.OK);
+	}
+
 	@PostMapping("/email/check")
 	public ResponseEntity<?> existEmail(@RequestBody MemberEmailRequest request) throws Exception {
 		boolean exist = memberService.existEmail(request.getEmail());
