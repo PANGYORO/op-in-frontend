@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { useForm } from "react-hook-form";
 import React from "react";
+
 
 import Logo from "../../components/Logo";
 import http from "../../api/http"
@@ -163,6 +164,8 @@ function SignUpForm() {
     formState: { isSubmitting, errors },
   } = useForm();
 
+  const navigate = useNavigate();
+
   
 
   const onSubmit = async (data) => {
@@ -173,6 +176,7 @@ function SignUpForm() {
     })
     .then((res) => {
       console.log(res)
+      navigate("/signin")
     })
     .catch((err) => {
       console.log(err)

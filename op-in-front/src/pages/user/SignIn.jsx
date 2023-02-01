@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import React from "react";
 
 import Logo from "../../components/Logo";
 import http from '../../api/http';
+
 
 function Button({ onClick = () => {}, loading = false, children }) {
   return (
@@ -98,14 +99,15 @@ function LoginForm() {
     formState: { isSubmitting, errors },
   } = useForm();
 
+  const navigate = useNavigate();
+
   const onSubmit = async (data) => {
-    console.log(data)
     await http.post('auth/login', {
       email: data.email,
       password: data.password
     })
-    .then((res) => {
-      console.log(res)
+    .then(() => {
+      navigate("/")
     })
     .catch((err) => {
       console.log(err)
