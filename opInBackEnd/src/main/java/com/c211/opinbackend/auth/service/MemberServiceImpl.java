@@ -1,6 +1,5 @@
 package com.c211.opinbackend.auth.service;
 
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -102,7 +101,9 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public boolean existEmail(String email) { return memberRepository.existsByEmail(email);	}
+	public boolean existEmail(String email) {
+		return memberRepository.existsByEmail(email);
+	}
 
 	@Override
 	public boolean existNickname(String nickname) {
