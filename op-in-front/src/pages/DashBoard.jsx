@@ -1,5 +1,11 @@
 import React from "react";
+import Sidebar from "../components/SideBar";
 
 export default function DashBoard() {
-  return <div>DashBoard</div>;
+  return (
+    <>
+      <Sidebar />
+      DashBoard
+    </>
+  );
 }
