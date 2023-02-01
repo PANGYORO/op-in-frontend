@@ -1,20 +1,6 @@
 import DefaultImg from "../assets/basicprofile.png";
 
-var options = {
-    series:[{
-        name: "Page Views",
-        data:[1,2,3,4,2,1,12,13,15,7,1,1,8,21,9]
-    }],
-    chart:{
-        height: 350,
-        type:'line',
-        zoom:{
-            enabled: false
-        },
-    },
-}
-var chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
+
 export default function Status() {
     return (
         <div class="relative max-w-xs p-4 overflow-hidden bg-white shadow-lg rounded-xl dark:bg-gray-800 my-2">
@@ -47,7 +33,7 @@ export default function Status() {
                 </div>
 
             </div>
-            <div class='my-2'>{chart}</div>
+            <div class='my-2'>이게 뭐지?</div>
             <div class='my-2 text-gray-400 dark:text-white-300'>2 months ago</div>
             <div class='my-2 font-bold'>About</div>
             <div class='inline-flex items-center w-auto my-2'>
