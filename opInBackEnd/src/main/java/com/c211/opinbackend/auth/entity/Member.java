@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.c211.opinbackend.repo.entitiy.Repository;
+import com.c211.opinbackend.repo.entitiy.RepositoryTechLanguage;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -63,5 +64,8 @@ public class Member {
 	private Role role;
 
 	@OneToMany(mappedBy = "member")
-	List<Repository> memberList = new ArrayList<>();
+	List<Repository> repositoryList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "repository")
+	List<RepositoryTechLanguage> repositoryTechLanguages = new ArrayList<>();
 }

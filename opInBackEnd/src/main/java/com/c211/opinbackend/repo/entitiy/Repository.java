@@ -1,5 +1,8 @@
 package com.c211.opinbackend.repo.entitiy;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -8,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.c211.opinbackend.auth.entity.Member;
 
@@ -28,5 +32,14 @@ public class Repository {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MEMBER_ID")
 	private Member member;
+
+	@OneToMany(mappedBy = "repository")
+	List<Issue> repositoryList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "repository")
+	List<RepositoryPost> repositoryPostList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "repository")
+	List<RepositoryQnA> repositoryQnAList = new ArrayList<>();
 
 }

@@ -9,8 +9,8 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.exception.auth.AuthRuntimeException;
-import com.c211.opinbackend.exception.member.MemberExceptionEntity;
-import com.c211.opinbackend.exception.member.MemberRuntimeException;
+import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEntity;
+import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
 
 /**
  * The type Exception advice.
@@ -24,11 +24,11 @@ public class ExceptionAdvice {
 	 * @param runError
 	 * @return
 	 */
-	@ExceptionHandler({MemberRuntimeException.class})
-	private ResponseEntity<MemberExceptionEntity> memberExceptionHandler(
-		final MemberRuntimeException runError) {
+	@ExceptionHandler({RepositoryRuntimeException.class})
+	private ResponseEntity<RepositoryExceptionEntity> memberExceptionHandler(
+		final RepositoryRuntimeException runError) {
 		return new ResponseEntity<>(
-			new MemberExceptionEntity(runError.getErrorEnum().getHttpStatus(), runError.getMessage()),
+			new RepositoryExceptionEntity(runError.getErrorEnum().getHttpStatus(), runError.getMessage()),
 			runError.getErrorEnum().getHttpStatus());
 	}
 
@@ -37,11 +37,11 @@ public class ExceptionAdvice {
 	 * 존재하지 않는 API에 대한 기본 메세지 처리입니다.
 	 */
 	@ExceptionHandler({NoHandlerFoundException.class})
-	private ResponseEntity<MemberExceptionEntity> apiExceptionHandler(
+	private ResponseEntity<RepositoryExceptionEntity> apiExceptionHandler(
 		final Exception exception) {
 		ApiRuntimeException runError = new ApiRuntimeException(ApiExceptionEnum.API_NOT_EXIST_EXCEPTION);
 		return new ResponseEntity<>(
-			new MemberExceptionEntity(runError.getErrorEnum().getHttpStatus(), runError.getMessage()),
+			new RepositoryExceptionEntity(runError.getErrorEnum().getHttpStatus(), runError.getMessage()),
 			runError.getErrorEnum().getHttpStatus());
 	}
 
@@ -51,10 +51,10 @@ public class ExceptionAdvice {
 	 * @return
 	 */
 	@ExceptionHandler({AuthenticationException.class})
-	private ResponseEntity<MemberExceptionEntity> authExceptionHandler(
+	private ResponseEntity<RepositoryExceptionEntity> authExceptionHandler(
 		final AuthRuntimeException runError) {
 		return new ResponseEntity<>(
-			new MemberExceptionEntity(runError.getErrorEnum().getHttpStatus(), runError.getMessage()),
+			new RepositoryExceptionEntity(runError.getErrorEnum().getHttpStatus(), runError.getMessage()),
 			runError.getErrorEnum().getHttpStatus());
 	}
 

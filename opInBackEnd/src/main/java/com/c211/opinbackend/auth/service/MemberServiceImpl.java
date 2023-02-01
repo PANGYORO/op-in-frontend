@@ -20,7 +20,6 @@ import com.c211.opinbackend.auth.repository.MemberRepository;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.jwt.TokenProvider;
-import com.c211.opinbackend.repo.entitiy.Repository;
 import com.c211.opinbackend.repo.repository.RepoPostRepository;
 import com.c211.opinbackend.repo.repository.RepoRepository;
 
@@ -119,8 +118,6 @@ public class MemberServiceImpl implements MemberService {
 		if (member == null) {
 			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
 		}
-
-		Repository repo = repoRepository.findByMember(member).orElse(null);
 
 		MypageResponse mypageResponse = MypageResponse.builder()
 			.nickname(member.getNickname())

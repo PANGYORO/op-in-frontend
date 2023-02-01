@@ -10,6 +10,7 @@ import lombok.Getter;
 public enum MemberExceptionEnum {
 
 	//user 관련
+
 	MEMBER_ACCESS_EXCEPTION(HttpStatus.FORBIDDEN, "M0001", "접근 권한이 없습니다."),
 	MEMBER_EXIST_NICKNAME_EXCEPTION(HttpStatus.BAD_REQUEST, "M0002", "이미 존재하는 닉네임 입니다."),
 	MEMBER_EXIST_EMAIL_EXCEPTION(HttpStatus.BAD_REQUEST, "M0002", "이미 존재하는 이메일 입니다."),
