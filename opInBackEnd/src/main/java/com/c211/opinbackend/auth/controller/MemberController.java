@@ -19,8 +19,10 @@ import org.springframework.web.client.RestTemplate;
 import com.c211.opinbackend.auth.entity.Role;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
+import com.c211.opinbackend.auth.model.request.MemberEmailRequest;
 import com.c211.opinbackend.auth.model.request.MemberJoinRequest;
 import com.c211.opinbackend.auth.model.request.MemberLoginRequest;
+import com.c211.opinbackend.auth.model.request.MemberNicknameRequest;
 import com.c211.opinbackend.auth.service.MemberService;
 import com.c211.opinbackend.jwt.JwtFilter;
 import com.c211.opinbackend.jwt.TokenProvider;
@@ -48,15 +50,15 @@ public class MemberController {
 		this.authenticationManagerBuilder = authenticationManagerBuilder;
 	}
 
-	@GetMapping("/existEmail/{email}")
-	public ResponseEntity<?> existEmail(@PathVariable("email") String email) throws Exception {
-		boolean exist = memberService.existEmail(email);
+	@PostMapping("/email/check")
+	public ResponseEntity<?> existEmail(@RequestBody MemberEmailRequest request) throws Exception {
+		boolean exist = memberService.existEmail(request.getEmail());
 		return new ResponseEntity<Boolean>(exist, HttpStatus.OK);
 	}
 
-	@GetMapping("/existNickname/{nickname}")
-	public ResponseEntity<?> existNickname(@PathVariable("nickname") String nickname) throws Exception {
-		boolean exist = memberService.existNickname(nickname);
+	@PostMapping("/nickname/check")
+	public ResponseEntity<?> existNickname(@RequestBody MemberNicknameRequest request) throws Exception {
+		boolean exist = memberService.existNickname(request.getNickname());
 		return new ResponseEntity<Boolean>(exist, HttpStatus.OK);
 	}
 
