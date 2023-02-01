@@ -19,6 +19,7 @@ import com.c211.opinbackend.exceoption.member.MemberRuntimeException;
 public class ExceptionAdvice {
 
 	/**
+	 * throw new ApiException(ExceptionEnum.RUNTIME_EXCEPTION)
 	 * 맴버에 관련된 런타임 에러입니다
 	 * @param runError
 	 * @return
