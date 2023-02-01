@@ -3,16 +3,16 @@ import DefaultImg from "../../assets/basicprofile.png";
 
 export default function Detail() {
   return (
-    <div className="bg-primary-blue mx-24 my-24">
+    <div className="w-full mx-4 my-4">
       <div className="grid grid-cols-3 gap-3 mb-8">
         <div className="flex justify-center h-full">
           <img src={DefaultImg} alt="none" />
         </div>
-        <div className="flex justify-center col-span-2 bg-primary-navy">
+        <div className="flex justify-center col-span-2">
           <div className="grid content-center">
             <div>
               <div className="grid grid-cols-2 gap-3 justify-items-center">
-                <div className="py-2 px-4"> NickName</div>
+                <div className="py-2 px-4 bg-prinavy"> NickName</div>
                 <div className="grid grid-cols-2 gap-3 justify-items-center">
                   <button
                     type="button"

@@ -3,7 +3,7 @@ import DefaultImg from "../assets/basicprofile.png";
 
 export default function Status() {
     return (
-        <div class="relative max-w-xs p-4 overflow-hidden bg-white shadow-lg rounded-xl dark:bg-gray-800 my-2">
+        <div class="relative max-w-xs p-4 overflow-hidden bg-white shadow-lg rounded-xl dark:bg-gray-800 ml-3">
             <div class='my-2'>
                 <span class='font-bold'>Contributors</span>
                 <div class="relative max-w-xs overflow-hidden my-2">

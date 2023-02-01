@@ -1,6 +1,6 @@
 export default function Repo() {
     return (
-            <div class="bg-white dark:bg-gray-800 w-100 shadow-lg mx-auto rounded-xl p-4">
+            <div class="bg-white dark:bg-gray-800 w-100 shadow-lg mx-auto rounded-xl p-4 mb-3">
                 <div class='grid grid-cols-4 gap-4'>
                     <span class='col-start-1 col-end-3 text-lg font-bold'>참여레포</span>
                     <div class="col-start-4">
