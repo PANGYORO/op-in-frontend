@@ -17,7 +17,7 @@ export default function Main() {
     <BrowserRouter>
       <div className="Main">
         <Header />
-        <main className="relative h-screen overflow-hidden bg-gray-100 dark:bg-gray-800 rounded-2xl">
+        <main className="relative h-screen overflow-hidden bg-gray-100 dark:bg-gray-800">
           <div className="flex items-start justify-between mx-44">
             <Routes>
               <Route exact path="/" element={<DashBoard />} />

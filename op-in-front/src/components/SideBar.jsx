@@ -1,22 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import BoxLogo from "../assets/box-logo.png";
 import { Link } from "react-router-dom";
 
+function selectMenu(e) {
+  console.log(e);
+}
+
 export default function Sidebar() {
+  const [currentMenu, setMenu] = useState("dashboard");
+  const menus = ["dashboard", "mypage", "repository", "education", "event"];
+  const deselected =
+    "flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500";
+  const selected =
+    "flex items-center justify-start w-full p-4 my-2 font-thin text-blue-500 uppercase transition-colors duration-200 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800";
+
   return (
     <div className="relative hidden h-screen my-4 ml-4 shadow-lg lg:block w-64">
       <div className="h-full bg-white rounded-2xl dark:bg-gray-700 w-64">
         <div className="flex items-center justify-center pt-6">
           <Link to="/" className="place-self-center">
-            <img src={BoxLogo} alt="none" className="object-contain h-30 w-48" />
+            <img
+              src={BoxLogo}
+              alt="none"
+              className="object-contain h-30 w-48"
+            />
           </Link>
         </div>
 
         <nav className="mt-6">
           <div>
             <a
-              className="flex items-center justify-start w-full p-4 my-2 font-thin text-blue-500 uppercase transition-colors duration-200 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800"
+              id="dashboard"
+              className={deselected}
               href="/"
+              onClick={(e) => {
+                selectMenu(e);
+              }}
             >
               <span className="text-left">
                 <svg
@@ -31,10 +50,7 @@ export default function Sidebar() {
               </span>
               <span className="mx-4 text-sm font-normal">Dashboard</span>
             </a>
-            <a
-              className="flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500"
-              href="/detail"
-            >
+            <a id="mypage" className={deselected} href="/detail">
               <span className="text-left">
                 <svg
                   width="20"
@@ -50,8 +66,12 @@ export default function Sidebar() {
               <span className="mx-4 text-sm font-normal">My Page</span>
             </a>
             <a
-              className="flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500"
+              id="repository"
+              className={deselected}
               href="repo"
+              onClick={(e) => {
+                selectMenu(e);
+              }}
             >
               <span className="text-left">
                 <svg
@@ -67,10 +87,7 @@ export default function Sidebar() {
               </span>
               <span className="mx-4 text-sm font-normal">Repository</span>
             </a>
-            <a
-              className="flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500"
-              href="/edu"
-            >
+            <a id="education" className={deselected} href="/edu">
               <span className="text-left">
                 <svg
                   width="20"
@@ -85,10 +102,7 @@ export default function Sidebar() {
               </span>
               <span className="mx-4 text-sm font-normal">Education</span>
             </a>
-            <a
-              className="flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500"
-              href="#"
-            >
+            <a id="events" className={deselected} href="#">
               <span className="text-left">
                 <svg
                   width="20"
@@ -103,11 +117,6 @@ export default function Sidebar() {
               </span>
               <span className="mx-4 text-sm font-normal">Events</span>
             </a>
-
-            <a
-              className="flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500"
-              href="#"
-            ></a>
           </div>
         </nav>
       </div>
