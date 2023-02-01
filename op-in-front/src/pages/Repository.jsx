@@ -1,5 +1,11 @@
 import React from "react";
+import Sidebar from "../components/SideBar";
 
 export default function Repository() {
-  return <div>Repository page</div>;
+  return (
+    <>
+      <Sidebar />
+      Repository page
+    </>
+  );
 }
