@@ -1,6 +1,5 @@
 package com.c211.opinbackend.auth.service;
 
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -66,17 +65,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public MemberDto getMemberInfo(String email) {
-		Member member = memberRepository.findByEmail(email).orElse(null);
-		if (member == null) {
-			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
-		}
-
-		return new MemberDto();
-	}
-
-	@Override
-	public Member signUp(MemberDto memberDto) {
+	public Member signUp(MemberDto memberDto) throws Exception {
 
 		// 이메일 중복 체크
 		boolean existEmail = memberRepository.existsByEmail(memberDto.getEmail());

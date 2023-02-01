@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.c211.opinbackend.auth.entity.Member;
-import com.c211.opinbackend.auth.model.MemberDto;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
