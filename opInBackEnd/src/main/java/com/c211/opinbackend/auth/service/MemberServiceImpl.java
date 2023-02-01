@@ -44,14 +44,8 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public TokenDto authorize(String email, String password) {
 
-		// 아이디, 비밀번호 비교해서
-		boolean exist = memberRepository.existsByEmail(email);
-		if (!exist) { // 테스트용 - id가 없으면,
-			return new TokenDto("N", "N");
-		}
-
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email,
-			password);
+		UsernamePasswordAuthenticationToken authenticationToken =
+			new UsernamePasswordAuthenticationToken(email, password);
 
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
@@ -97,9 +91,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public boolean existEmail(String email) {
-		return memberRepository.existsByEmail(email);
-	}
+	public boolean existEmail(String email) { return memberRepository.existsByEmail(email);	}
 
 	@Override
 	public boolean existNickname(String nickname) {
