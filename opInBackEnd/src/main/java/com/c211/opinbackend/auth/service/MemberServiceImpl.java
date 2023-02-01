@@ -15,8 +15,14 @@ import org.springframework.stereotype.Service;
 import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
+import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.auth.repository.MemberRepository;
+import com.c211.opinbackend.exception.member.MemberExceptionEnum;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.jwt.TokenProvider;
+import com.c211.opinbackend.repo.entitiy.Repository;
+import com.c211.opinbackend.repo.repository.RepoPostRepository;
+import com.c211.opinbackend.repo.repository.RepoRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,11 +36,19 @@ public class MemberServiceImpl implements MemberService {
 
 	MemberRepository memberRepository;
 
+	RepoRepository repoRepository;
+
+	RepoPostRepository repoPostRepository;
+
 	@Autowired
 	public MemberServiceImpl(MemberRepository memberRepository,
+		RepoRepository repoRepository,
+		RepoPostRepository repoPostRepository,
 		AuthenticationManagerBuilder authenticationManagerBuilder,
 		TokenProvider tokenProvider) {
 		this.memberRepository = memberRepository;
+		this.repoRepository = repoRepository;
+		this.repoPostRepository = repoPostRepository;
 		this.authenticationManagerBuilder = authenticationManagerBuilder;
 		this.tokenProvider = tokenProvider;
 	}
@@ -42,13 +56,8 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public TokenDto authorize(String email, String password) {
 
-		boolean exist = memberRepository.existsByEmail(email);
-		if (!exist) { // 테스트용 - id가 없으면,
-			return new TokenDto("N", "N");
-		}
-
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email,
-			password);
+		UsernamePasswordAuthenticationToken authenticationToken =
+			new UsernamePasswordAuthenticationToken(email, password);
 
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
@@ -70,6 +79,18 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public Member signUp(MemberDto memberDto) {
 
+		// 이메일 중복 체크
+		boolean existEmail = memberRepository.existsByEmail(memberDto.getEmail());
+		if (existEmail) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_EMAIL_EXCEPTION);
+		}
+
+		// 닉네임 중복 체크
+		boolean existNickname = memberRepository.existsByNickname(memberDto.getNickname());
+		if (existNickname) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_NICKNAME_EXCEPTION);
+		}
+
 		Member member = Member.builder()
 			.email(memberDto.getEmail())
 			.password(memberDto.getPassword())
@@ -79,5 +100,34 @@ public class MemberServiceImpl implements MemberService {
 			.build();
 
 		return memberRepository.save(member);
+	}
+
+	@Override
+	public boolean existEmail(String email) {
+		return memberRepository.existsByEmail(email);
+	}
+
+	@Override
+	public boolean existNickname(String nickname) {
+		return memberRepository.existsByNickname(nickname);
+	}
+
+	@Override
+	public MypageResponse getMemberInfo(String email) {
+
+		Member member = memberRepository.findByEmail(email).orElse(null);
+		if (member == null) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
+		}
+
+		Repository repo = repoRepository.findByMember(member).orElse(null);
+
+		MypageResponse mypageResponse = MypageResponse.builder()
+			.nickname(member.getNickname())
+			.avataUrl(member.getAvatarUrl())
+			.build();
+
+		return mypageResponse;
+
 	}
 }

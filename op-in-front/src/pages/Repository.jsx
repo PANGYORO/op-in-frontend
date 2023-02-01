@@ -1,6 +1,6 @@
 import React from "react";
-import Status from "../components/Status"
-import Repo from "../components/Repo"
+import Status from "../components/Status";
+import Repo from "../components/Repo";
 import Sidebar from "../components/SideBar";
 
 export default function Repository() {
@@ -28,10 +28,7 @@ export default function Repository() {
           </div> */}
 
         </div>
-
       </div>
-
-
-  </>
-  )
+    </>
+  );
 }
