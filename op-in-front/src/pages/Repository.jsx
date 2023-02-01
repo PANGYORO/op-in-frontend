@@ -1,5 +1,5 @@
 import React from "react";
-import Status from "../components/Status";
+// import Status from "../components/Status";
 import Repo from "../components/Repo";
 import Sidebar from "../components/SideBar";
 
@@ -9,6 +9,7 @@ export default function Repository() {
       <Sidebar />
       
       <div className="flex flex-col w-full pl-0 md:p-4">
+        
 
         <div className="flex items-top w-full">
           <div class="grid grid-cols-2  gap-4 w-full">

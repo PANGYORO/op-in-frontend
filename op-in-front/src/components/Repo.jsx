@@ -6,13 +6,6 @@ export default function Repo() {
             <div class="bg-white dark:bg-gray-800 w-full shadow-lg rounded-xl p-4">
                 <div class='grid grid-cols-4 gap-4'>
                     <span class='col-start-1 col-end-3 text-lg font-bold'>참여레포</span>
-                    <div class="col-start-4">
-
-                        <span class="px-4 flex items-center text-base rounded-full text-indigo-500 border border-indigo-500 undefined ">
-                            public
-                        </span>
-
-                    </div>
                 </div>
 
                 <p class="text-gray-600 dark:text-white my-5 pl-2">
