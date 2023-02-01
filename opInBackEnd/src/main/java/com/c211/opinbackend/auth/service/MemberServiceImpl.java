@@ -1,5 +1,6 @@
 package com.c211.opinbackend.auth.service;
 
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -42,6 +43,7 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public TokenDto authorize(String email, String password) {
 
+		// 아이디, 비밀번호 비교해서
 		boolean exist = memberRepository.existsByEmail(email);
 		if (!exist) { // 테스트용 - id가 없으면,
 			return new TokenDto("N", "N");
@@ -68,7 +70,21 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public Member signUp(MemberDto memberDto) {
+	public Member signUp(MemberDto memberDto) throws Exception {
+
+		// 이메일 중복 체크
+		boolean existEmail = memberRepository.existsByEmail(memberDto.getEmail());
+		if (existEmail) {
+			// todo exception
+			throw new Exception("이메일 중복");
+		}
+
+		// 닉네임 중복 체크
+		boolean existNickname = memberRepository.existsByNickname(memberDto.getNickname());
+		if (existNickname) {
+			// todo exception
+			throw new Exception("닉네임 중복");
+		}
 
 		Member member = Member.builder()
 			.email(memberDto.getEmail())
@@ -80,4 +96,12 @@ public class MemberServiceImpl implements MemberService {
 
 		return memberRepository.save(member);
 	}
+
+	@Override
+	public boolean existEmail(String email) {
+		return memberRepository.existsByEmail(email);
+	}
+
+	@Override
+	public boolean existNickname(String nickname) {	return memberRepository.existsByNickname(nickname);	}
 }
