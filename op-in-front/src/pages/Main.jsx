@@ -9,7 +9,7 @@ import SignIn from "./user/SignIn";
 import SignUp from "./user/SignUp";
 import Detail from "./user/Detail";
 import UserFind from "./user/UserFind";
-
+import NotFound from "./NotFound";
 
 export default function Main() {
   // const [subDomain] = useLocation();
@@ -18,7 +18,7 @@ export default function Main() {
       <div className="Main">
         <Header />
         <main className="relative h-screen overflow-hidden bg-gray-100 dark:bg-gray-800 rounded-2xl">
-          <div className="flex items-start justify-between">
+          <div className="flex items-start justify-between mx-44">
             <Routes>
               <Route exact path="/" element={<DashBoard />} />
               <Route path="/repo" element={<Repository />} />
@@ -28,6 +28,7 @@ export default function Main() {
               <Route path="/signup" element={<SignUp />} />
               <Route path="/detail" element={<Detail />} />
               <Route path="/userfind" element={<UserFind />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
         </main>
