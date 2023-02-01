@@ -1,4 +1,4 @@
-package com.c211.opinbackend.exceoption.member;
+package com.c211.opinbackend.exception.member;
 
 import org.springframework.http.HttpStatus;
 

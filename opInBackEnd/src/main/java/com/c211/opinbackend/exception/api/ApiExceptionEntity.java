@@ -1,4 +1,4 @@
-package com.c211.opinbackend.exceoption.member;
+package com.c211.opinbackend.exception.api;
 
 import org.springframework.http.HttpStatus;
 
@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class MemberExceptionEntity {
+public class ApiExceptionEntity {
 	private HttpStatus httpCode;
 	private String errorMessage;
 

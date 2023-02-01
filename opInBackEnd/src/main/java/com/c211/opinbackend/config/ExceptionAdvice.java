@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import com.c211.opinbackend.exceoption.api.ApiExceptionEnum;
-import com.c211.opinbackend.exceoption.api.ApiRuntimeException;
-import com.c211.opinbackend.exceoption.auth.AuthRuntimeException;
-import com.c211.opinbackend.exceoption.member.MemberExceptionEntity;
-import com.c211.opinbackend.exceoption.member.MemberRuntimeException;
+import com.c211.opinbackend.exception.api.ApiExceptionEnum;
+import com.c211.opinbackend.exception.api.ApiRuntimeException;
+import com.c211.opinbackend.exception.auth.AuthRuntimeException;
+import com.c211.opinbackend.exception.member.MemberExceptionEntity;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
 
 /**
  * The type Exception advice.

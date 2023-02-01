@@ -22,8 +22,8 @@ import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.request.MemberJoinRequest;
 import com.c211.opinbackend.auth.model.request.MemberLoginRequest;
 import com.c211.opinbackend.auth.service.MemberService;
-import com.c211.opinbackend.exceoption.member.MemberExceptionEnum;
-import com.c211.opinbackend.exceoption.member.MemberRuntimeException;
+import com.c211.opinbackend.exception.member.MemberExceptionEnum;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.jwt.JwtFilter;
 import com.c211.opinbackend.jwt.TokenProvider;
 

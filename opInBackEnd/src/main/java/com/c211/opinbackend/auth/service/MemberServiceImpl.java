@@ -16,8 +16,8 @@ import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.repository.MemberRepository;
-import com.c211.opinbackend.exceoption.member.MemberExceptionEnum;
-import com.c211.opinbackend.exceoption.member.MemberRuntimeException;
+import com.c211.opinbackend.exception.member.MemberExceptionEnum;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.jwt.TokenProvider;
 
 import lombok.extern.slf4j.Slf4j;

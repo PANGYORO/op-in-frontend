@@ -1,4 +1,4 @@
-package com.c211.opinbackend.exceoption.api;
+package com.c211.opinbackend.exception.api;
 
 import lombok.Getter;
 
