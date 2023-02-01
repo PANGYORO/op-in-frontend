@@ -1,11 +1,15 @@
 package com.c211.opinbackend.auth.controller;
 
+import java.util.regex.Pattern;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,12 +48,17 @@ public class MemberController {
 		this.authenticationManagerBuilder = authenticationManagerBuilder;
 	}
 
-	@PostMapping("/testauth")
-	public ResponseEntity<?> testauth(@RequestBody MemberLoginRequest request) {
-
-		return ResponseEntity.ok(null);
+	@GetMapping("/existEmail/{email}")
+	public ResponseEntity<?> existEmail(@PathVariable("email") String email) throws Exception {
+		boolean exist = memberService.existEmail(email);
+		return new ResponseEntity<Boolean>(exist, HttpStatus.OK);
 	}
 
+	@GetMapping("/existNickname/{nickname}")
+	public ResponseEntity<?> existNickname(@PathVariable("nickname") String nickname) throws Exception {
+		boolean exist = memberService.existNickname(nickname);
+		return new ResponseEntity<Boolean>(exist, HttpStatus.OK);
+	}
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody MemberLoginRequest request) {
@@ -62,14 +71,32 @@ public class MemberController {
 	}
 
 	@PostMapping("/signup")
-	public ResponseEntity<Boolean> signUp(@RequestBody MemberJoinRequest request) {
+	public ResponseEntity<Boolean> signUp(@RequestBody MemberJoinRequest request) throws Exception {
 
+		// 이메일 형식에 맞는지 체크 (형식 : @, . 을 포함하는지 확인)
+		// 이메일 정규식 => /\S+@\S+.\S+/
+		String email = request.getEmail();
+		String emailPattern = "\\w+@\\w+\\.\\w+(\\.\\w+)?";
+		boolean emailRegex = Pattern.matches(emailPattern, email);
+		if (!emailRegex) {
+			// todo exception
+			throw new Exception("이메일 형식 오류");
+		}
+
+		// 비밀번호 : 8~16자 영문 대 소문자, 숫자, 특수문자를 모두 포함
+		String password = request.getPassword();
+		String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#?!@$%^&*-]).{8,16}$";
+		boolean passwordRegex = Pattern.matches(passwordPattern, password);
+		if (!passwordRegex) {
+			// todo exception
+			throw new Exception("비밀번호 형식 오류");
+		}
 
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 		MemberDto joinMember = MemberDto.builder()
-			.email(request.getEmail())
-			.password(passwordEncoder.encode(request.getPassword()))
+			.email(email)
+			.password(passwordEncoder.encode(password))
 			.nickname(request.getNickname())
 			.role(Role.ROLE_USER)
 			.build();
