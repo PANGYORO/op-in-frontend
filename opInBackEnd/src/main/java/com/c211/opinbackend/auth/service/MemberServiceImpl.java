@@ -1,6 +1,5 @@
 package com.c211.opinbackend.auth.service;
 
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -17,6 +16,8 @@ import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.repository.MemberRepository;
+import com.c211.opinbackend.exception.member.MemberExceptionEnum;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.jwt.TokenProvider;
 
 import lombok.extern.slf4j.Slf4j;
@@ -75,15 +76,13 @@ public class MemberServiceImpl implements MemberService {
 		// 이메일 중복 체크
 		boolean existEmail = memberRepository.existsByEmail(memberDto.getEmail());
 		if (existEmail) {
-			// todo exception
-			throw new Exception("이메일 중복");
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_EMAIL_EXCEPTION);
 		}
 
 		// 닉네임 중복 체크
 		boolean existNickname = memberRepository.existsByNickname(memberDto.getNickname());
 		if (existNickname) {
-			// todo exception
-			throw new Exception("닉네임 중복");
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_NICKNAME_EXCEPTION);
 		}
 
 		Member member = Member.builder()
@@ -103,5 +102,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public boolean existNickname(String nickname) {	return memberRepository.existsByNickname(nickname);	}
+	public boolean existNickname(String nickname) {
+		return memberRepository.existsByNickname(nickname);
+	}
 }

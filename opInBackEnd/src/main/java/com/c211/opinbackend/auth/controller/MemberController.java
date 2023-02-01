@@ -22,6 +22,8 @@ import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.request.MemberJoinRequest;
 import com.c211.opinbackend.auth.model.request.MemberLoginRequest;
 import com.c211.opinbackend.auth.service.MemberService;
+import com.c211.opinbackend.exception.member.MemberExceptionEnum;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.jwt.JwtFilter;
 import com.c211.opinbackend.jwt.TokenProvider;
 
@@ -79,8 +81,7 @@ public class MemberController {
 		String emailPattern = "\\w+@\\w+\\.\\w+(\\.\\w+)?";
 		boolean emailRegex = Pattern.matches(emailPattern, email);
 		if (!emailRegex) {
-			// todo exception
-			throw new Exception("이메일 형식 오류");
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_TYPE_EXCEPTION);
 		}
 
 		// 비밀번호 : 8~16자 영문 대 소문자, 숫자, 특수문자를 모두 포함
@@ -88,8 +89,7 @@ public class MemberController {
 		String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#?!@$%^&*-]).{8,16}$";
 		boolean passwordRegex = Pattern.matches(passwordPattern, password);
 		if (!passwordRegex) {
-			// todo exception
-			throw new Exception("비밀번호 형식 오류");
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_PASSWORD_TYPE_EXCEPTION);
 		}
 
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
