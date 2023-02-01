@@ -23,6 +23,7 @@ import com.c211.opinbackend.auth.model.request.MemberEmailRequest;
 import com.c211.opinbackend.auth.model.request.MemberJoinRequest;
 import com.c211.opinbackend.auth.model.request.MemberLoginRequest;
 import com.c211.opinbackend.auth.model.request.MemberNicknameRequest;
+import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.auth.service.MemberService;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
@@ -50,6 +51,12 @@ public class MemberController {
 		this.memberService = memberService;
 		this.tokenProvider = tokenProvider;
 		this.authenticationManagerBuilder = authenticationManagerBuilder;
+	}
+
+	@PostMapping("/getMember")
+	public ResponseEntity<?> getMemberInfo(@RequestBody MemberEmailRequest request) throws Exception {
+		MypageResponse mypageResponse = memberService.getMemberInfo(request.getEmail());
+		return new ResponseEntity<MypageResponse>(mypageResponse, HttpStatus.OK);
 	}
 
 	@PostMapping("/email/check")

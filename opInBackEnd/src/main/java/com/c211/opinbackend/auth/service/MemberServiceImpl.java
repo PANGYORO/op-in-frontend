@@ -15,10 +15,14 @@ import org.springframework.stereotype.Service;
 import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
+import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.auth.repository.MemberRepository;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.jwt.TokenProvider;
+import com.c211.opinbackend.repo.entitiy.Repository;
+import com.c211.opinbackend.repo.repository.RepoPostRepository;
+import com.c211.opinbackend.repo.repository.RepoRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,11 +36,19 @@ public class MemberServiceImpl implements MemberService {
 
 	MemberRepository memberRepository;
 
+	RepoRepository repoRepository;
+
+	RepoPostRepository repoPostRepository;
+
 	@Autowired
 	public MemberServiceImpl(MemberRepository memberRepository,
+		RepoRepository repoRepository,
+		RepoPostRepository repoPostRepository,
 		AuthenticationManagerBuilder authenticationManagerBuilder,
 		TokenProvider tokenProvider) {
 		this.memberRepository = memberRepository;
+		this.repoRepository = repoRepository;
+		this.repoPostRepository = repoPostRepository;
 		this.authenticationManagerBuilder = authenticationManagerBuilder;
 		this.tokenProvider = tokenProvider;
 	}
@@ -65,7 +77,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public Member signUp(MemberDto memberDto) throws Exception {
+	public Member signUp(MemberDto memberDto) {
 
 		// 이메일 중복 체크
 		boolean existEmail = memberRepository.existsByEmail(memberDto.getEmail());
@@ -98,5 +110,24 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public boolean existNickname(String nickname) {
 		return memberRepository.existsByNickname(nickname);
+	}
+
+	@Override
+	public MypageResponse getMemberInfo(String email) {
+
+		Member member = memberRepository.findByEmail(email).orElse(null);
+		if (member == null) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
+		}
+
+		Repository repo = repoRepository.findByMember(member).orElse(null);
+
+		MypageResponse mypageResponse = MypageResponse.builder()
+			.nickname(member.getNickname())
+			.avataUrl(member.getAvatarUrl())
+			.build();
+
+		return mypageResponse;
+
 	}
 }
