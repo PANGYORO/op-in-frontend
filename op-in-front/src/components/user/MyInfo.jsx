@@ -247,7 +247,40 @@ export default function MyInfo() {
         </div>
         <hr />
         <p className="p-4 font-bold text-black text-md dark:text-white">
-          Contributes
+          Completed Contributes
+          <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
+            (??)
+          </span>
+        </p>
+        <ul>
+          <li className="flex items-center justify-between py-3 text-gray-600 border-b-2 border-gray-100 dark:text-gray-200 dark:border-gray-800">
+            <div className="flex items-center justify-start text-sm">
+              <span className="mx-4">01</span>
+              <span>Facebook</span>
+            </div>
+          </li>
+          <li className="flex items-center justify-between py-3 text-gray-600 border-b-2 border-gray-100 dark:text-gray-200 dark:border-gray-800">
+            <div className="flex items-center justify-start text-sm">
+              <span className="mx-4">02</span>
+              <span>Git</span>
+            </div>
+          </li>
+          <li className="flex items-center justify-between py-3 text-gray-600 border-b-2 border-gray-100 dark:text-gray-200 dark:border-gray-800">
+            <div className="flex items-center justify-start text-sm">
+              <span className="mx-4">03</span>
+              <span>naver</span>
+            </div>
+          </li>
+          <li className="flex items-center justify-between py-3 text-gray-600 border-b-2 border-gray-100 dark:text-gray-200 dark:border-gray-800">
+            <div className="flex items-center justify-start text-sm">
+              <span className="mx-4">04</span>
+              <span>google</span>
+            </div>
+          </li>
+        </ul>
+        <hr />
+        <p className="p-4 font-bold text-black text-md dark:text-white">
+          following Respsitories
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
             (??)
           </span>
