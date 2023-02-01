@@ -7,19 +7,26 @@ export default function Repository() {
   return (
     <>
       <Sidebar />
+      
+      <div className="flex flex-col w-full pl-0 md:p-4">
 
-      <div className="flex flex-col w-full pl-0 md:p-4 md:space-y-4">
-        <div className="relative flex items-center w-full">
-          <div className="inline-flex grid-rows-2 gap-1 w-2/3">
-            <div className="col-start-1 col-end-3">
+        <div className="flex items-top w-full">
+          <div class="grid grid-cols-2  gap-4 w-full">
               <Repo />
               <Repo />
               <Repo />
-            </div>
+              <Repo />
+              <Repo />
+              <Repo />
+              <Repo />
+              <Repo />
+              <Repo />
           </div>
-          <div className="col-start-4 col-end-5 w-1/3">
+          
+          {/* <div class="w-1/3">
             <Status />
-          </div>
+          </div> */}
+
         </div>
       </div>
     </>
