@@ -1,12 +1,11 @@
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import React, {useCallback, useState} from "react";
-import { debounce } from 'lodash';
-
+import React from "react";
+// import { debounce } from 'lodash';
 
 import Logo from "../../components/Logo";
-import http from "../../api/http"
-function Button({ onClick = () => {}, loading = false,  children }) {
+import http from "../../api/http";
+function Button({ onClick = () => {}, loading = false, children }) {
   return (
     <button
       type="submit"
@@ -41,9 +40,6 @@ function Button({ onClick = () => {}, loading = false,  children }) {
   );
 }
 function Nickname({ register, error, name }) {
-  
-  
-
   return (
     <div className="col-span-6 sm:col-span-3">
       <label htmlFor={name} className="block text-sm font-medium text-gray-700">
@@ -65,9 +61,7 @@ function Nickname({ register, error, name }) {
             value: 40,
             message: "닉네임은 최대 40자까지 가능합니다.",
           },
-          validate: () => {
-            
-          },
+          validate: () => {},
         })}
         // onChange = {onChange}
       />
@@ -97,7 +91,6 @@ function Password({ register, error, name, label }) {
             value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$/,
             message: "비밀번호는 대문자, 소문자, 특수문자, 숫자를 포함해야합니다 (8~16 글자)",
           },
-
         })}
       />
       {error && <p className="text-red-500 text-xs">{error.message}</p>}
@@ -138,7 +131,7 @@ function PasswordConfirm({ register, error, name, label, password }) {
     </div>
   );
 }
-function EmailInput({ register, error, name, }) {
+function EmailInput({ register, error, name }) {
   return (
     <div className="col-span-6 sm:col-span-3">
       <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -199,25 +192,21 @@ function SignUpForm() {
   //   setIsValid((prevState) => ({ ...prevState, email: result }));
   // }, 500)
 
-  
-
   const onSubmit = async (data) => {
-    await http.post('auth/signup', {
-      email: data.email,
-      password: data.password,
-      nickname: data.nickname 
-    })
-    .then((res) => {
-      console.log(res)
-      navigate("/signin")
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-      
+    await http
+      .post("auth/signup", {
+        email: data.email,
+        password: data.password,
+        nickname: data.nickname,
+      })
+      .then((res) => {
+        console.log(res);
+        navigate("/signin");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-
-  
 
   return (
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -236,7 +225,6 @@ function SignUpForm() {
               name="nickname"
               label="Nickname"
               // onChange={onChangeNick}
-              
             />
             <EmailInput
               register={register}
@@ -258,7 +246,7 @@ function SignUpForm() {
               password={watch("password")}
             />
             <div>
-              <Button onClick={handleSubmit(onSubmit)} loading={isSubmitting} >
+              <Button onClick={handleSubmit(onSubmit)} loading={isSubmitting}>
                 Sign up
               </Button>
             </div>
