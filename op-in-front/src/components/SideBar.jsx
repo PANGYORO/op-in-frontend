@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import BoxLogo from "../assets/box-logo.png";
 import { Link } from "react-router-dom";
 
 function selectMenu(e) {
+  alert(e.data);
   console.log(e);
+  e.preventdefault();
 }
 
 export default function Sidebar() {
@@ -19,11 +21,7 @@ export default function Sidebar() {
       <div className="h-full bg-white rounded-2xl dark:bg-gray-700 w-64">
         <div className="flex items-center justify-center pt-6">
           <Link to="/" className="place-self-center">
-            <img
-              src={BoxLogo}
-              alt="none"
-              className="object-contain h-30 w-48"
-            />
+            <img src={BoxLogo} alt="none" className="object-contain h-30 w-48" />
           </Link>
         </div>
 
@@ -31,7 +29,7 @@ export default function Sidebar() {
           <div>
             <a
               id="dashboard"
-              className={deselected}
+              className={selected}
               href="/"
               onClick={(e) => {
                 selectMenu(e);
@@ -118,6 +116,7 @@ export default function Sidebar() {
               <span className="mx-4 text-sm font-normal">Events</span>
             </a>
           </div>
+          <p>{currentMenu}</p>
         </nav>
       </div>
     </div>

@@ -37,7 +37,7 @@ public class Comment {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REPOSITORY_POST_ID")
-	private RepositoryPost post;
+	private RepositoryPost repositoryPost;
 	private String content;
 
 	@Enumerated(EnumType.STRING)
