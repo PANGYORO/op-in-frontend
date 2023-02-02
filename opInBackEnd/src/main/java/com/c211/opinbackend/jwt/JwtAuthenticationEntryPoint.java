@@ -10,13 +10,17 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
+import com.c211.opinbackend.exception.member.MemberExceptionEnum;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
+
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
 	@Override
-	public void commence(HttpServletRequest request, HttpServletResponse response,
-		AuthenticationException authException) throws IOException, ServletException {
-		response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) {
+		// 401
+		throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
+		// response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication Failed");
 	}
 
 }

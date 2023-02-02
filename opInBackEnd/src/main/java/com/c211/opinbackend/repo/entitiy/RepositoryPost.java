@@ -43,4 +43,7 @@ public class RepositoryPost {
 	private LocalDateTime date;
 	@NotNull
 	private Boolean closeState;
+
+	@NotNull
+	private String imageUrl;
 }
