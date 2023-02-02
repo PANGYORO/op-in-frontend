@@ -1,6 +1,5 @@
 import React from "react";
 import News from "./dashboard/news";
-import Hots from "./dashboard/Hots";
 
 export default function DashBoard() {
   return (
@@ -32,3 +31,4 @@ export default function DashBoard() {
     </div>
   );
 }
+
