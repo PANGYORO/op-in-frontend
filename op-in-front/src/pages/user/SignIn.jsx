@@ -99,15 +99,16 @@ function LoginForm() {
     formState: { isSubmitting, errors },
   } = useForm();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     await http.post('auth/login', {
       email: data.email,
       password: data.password
     })
-    .then(() => {
-      navigate("/")
+    .then((res) => {
+      console.log(res)
+      // navigate("/")
     })
     .catch((err) => {
       console.log(err)
