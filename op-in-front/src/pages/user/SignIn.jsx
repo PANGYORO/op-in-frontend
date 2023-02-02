@@ -106,8 +106,9 @@ function LoginForm() {
       email: data.email,
       password: data.password
     })
-    .then(() => {
+    .then((res) => {
       navigate("/")
+      console.log(res);
     })
     .catch((err) => {
       console.log(err)
