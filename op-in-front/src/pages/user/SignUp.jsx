@@ -1,12 +1,11 @@
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import React, { useState } from "react";
-import { debounce } from 'lodash';
-
+import { debounce } from "lodash";
 
 import Logo from "../../components/Logo";
-import http from "../../api/http"
-function Button({ onClick = () => {}, loading = false,  children }) {
+import http from "../../api/http";
+function Button({ onClick = () => {}, loading = false, children }) {
   return (
     <button
       type="submit"
@@ -41,32 +40,30 @@ function Button({ onClick = () => {}, loading = false,  children }) {
   );
 }
 function Nickname({ register, error, name }) {
-  const [check, checkState] = useState(false)
-  const [available, availableState ] = useState(false)
-  const [overlap, overlapState] = useState(false)
+  const [check, checkState] = useState(false);
+  const [available, availableState] = useState(false);
+  const [overlap, overlapState] = useState(false);
 
-  const callApi = debounce(async(value) => {
+  const callApi = debounce(async (value) => {
+    await http
+      .post("auth/nickname/check", {
+        nickname: value,
+      })
+      .then((res) => {
+        checkState(false);
 
-    await http.post('auth/nickname/check', {
-      nickname : value
-    })
-    .then((res) => {
-      checkState(false)
-      
-      if(!res.data){
-        availableState(true)
-        overlapState(false)
-      }
-      else if(res.data){
-        overlapState(true)
-        availableState(false)
-      }
-      
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-  }, 2000)
+        if (!res.data) {
+          availableState(true);
+          overlapState(false);
+        } else if (res.data) {
+          overlapState(true);
+          availableState(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, 2000);
 
   return (
     <div className="col-span-6 sm:col-span-3">
@@ -90,22 +87,22 @@ function Nickname({ register, error, name }) {
             message: "Nickname은 최대 40자까지 가능합니다.",
           },
           validate: (value) => {
-            if(!error){
-              checkState(true)
-              callApi(value)
+            if (!error) {
+              checkState(true);
+              callApi(value);
             }
           },
         })}
       />
       {error && <p className="text-red-500 text-xs">{error.message}</p>}
       {!error && check && (
-        <div className='flex justify-start'>
+        <div className="flex justify-start">
           <p className="text-indigo-500 text-xs ">Nickname check..</p>
           <svg
-          className="animate-spin -ml-1 mr-3 h-4 w-8 text-white"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
+            className="animate-spin -ml-1 mr-3 h-4 w-8 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
           >
             <circle
               className="opacity-25"
@@ -121,10 +118,14 @@ function Nickname({ register, error, name }) {
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             ></path>
           </svg>
-        </div>       
+        </div>
       )}
-      {!error && !check && available && <p className="text-indigo-700 text-xs">사용가능한 Nickname 입니다!</p>}
-      {!error && !check && overlap && <p className="text-red-700 text-xs">중복된 Nickname이 존재합니다!</p>}
+      {!error && !check && available && (
+        <p className="text-indigo-700 text-xs">사용가능한 Nickname 입니다!</p>
+      )}
+      {!error && !check && overlap && (
+        <p className="text-red-700 text-xs">중복된 Nickname이 존재합니다!</p>
+      )}
     </div>
   );
 }
@@ -150,7 +151,6 @@ function Password({ register, error, name, label }) {
             value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$/,
             message: "비밀번호는 대문자, 소문자, 특수문자, 숫자를 포함해야합니다 (8~16 글자)",
           },
-
         })}
       />
       {error && <p className="text-red-500 text-xs">{error.message}</p>}
@@ -191,34 +191,31 @@ function PasswordConfirm({ register, error, name, label, password }) {
     </div>
   );
 }
-function EmailInput({ register, error, name, }) {
-  const [check, checkState] = useState(false)
-  const [available, availableState ] = useState(false)
-  const [overlap, overlapState] = useState(false)
-  
-  const callApi = debounce(async(value) => {
-    await http.post('auth/email/check', {
-      email : value
-    })
-    .then((res) => {
-      checkState(false)
-      
-      if(!res.data){
-        availableState(true)
-        overlapState(false)
-      }
-      else if(res.data){
-        overlapState(true)
-        availableState(false)
-      }
-      
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-  }, 2000)
+function EmailInput({ register, error, name }) {
+  const [check, checkState] = useState(false);
+  const [available, availableState] = useState(false);
+  const [overlap, overlapState] = useState(false);
 
+  const callApi = debounce(async (value) => {
+    await http
+      .post("auth/email/check", {
+        email: value,
+      })
+      .then((res) => {
+        checkState(false);
 
+        if (!res.data) {
+          availableState(true);
+          overlapState(false);
+        } else if (res.data) {
+          overlapState(true);
+          availableState(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, 2000);
 
   return (
     <div className="col-span-6 sm:col-span-3">
@@ -242,22 +239,22 @@ function EmailInput({ register, error, name, }) {
           },
 
           validate: (value) => {
-            if(!error){
-              checkState(true)
-              callApi(value)
+            if (!error) {
+              checkState(true);
+              callApi(value);
             }
           },
         })}
       />
       {error && <p className="text-red-500 text-xs">{error.message}</p>}
       {!error && check && (
-        <div className='flex justify-start'>
+        <div className="flex justify-start">
           <p className="text-indigo-500 text-xs ">Email check..</p>
           <svg
-          className="animate-spin -ml-1 mr-3 h-4 w-8 text-white"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
+            className="animate-spin -ml-1 mr-3 h-4 w-8 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
           >
             <circle
               className="opacity-25"
@@ -273,10 +270,14 @@ function EmailInput({ register, error, name, }) {
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             ></path>
           </svg>
-        </div>       
+        </div>
       )}
-      {!error && !check && available && <p className="text-indigo-700 text-xs">사용가능한 Email입니다!</p>}
-      {!error && !check && overlap && <p className="text-red-700 text-xs">중복된 Email이 존재합니다!</p>}
+      {!error && !check && available && (
+        <p className="text-indigo-700 text-xs">사용가능한 Email입니다!</p>
+      )}
+      {!error && !check && overlap && (
+        <p className="text-red-700 text-xs">중복된 Email이 존재합니다!</p>
+      )}
     </div>
   );
 }
@@ -286,30 +287,24 @@ function SignUpForm() {
     handleSubmit,
     watch,
     formState: { isSubmitting, errors },
-  } = useForm({mode: 'onChange'});
+  } = useForm({ mode: "onChange" });
 
   const navigate = useNavigate();
 
-
-  
-
   const onSubmit = async (data) => {
-    await http.post('auth/signup', {
-      email: data.email,
-      password: data.password,
-      nickname: data.nickname 
-    })
-    .then(() => {
-
-      navigate("/signin")
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-      
+    await http
+      .post("auth/signup", {
+        email: data.email,
+        password: data.password,
+        nickname: data.nickname,
+      })
+      .then(() => {
+        navigate("/signin");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-
-  
 
   return (
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -327,17 +322,8 @@ function SignUpForm() {
               error={errors?.nickname}
               name="nickname"
               label="Nickname"
-              
-              
-              
             />
-            <EmailInput
-              register={register}
-              error={errors?.email}
-              name="email"
-              check={false}
-              
-            />
+            <EmailInput register={register} error={errors?.email} name="email" check={false} />
             <Password
               register={register}
               error={errors?.password}
@@ -352,7 +338,7 @@ function SignUpForm() {
               password={watch("password")}
             />
             <div>
-              <Button onClick={handleSubmit(onSubmit)} loading={isSubmitting} >
+              <Button onClick={handleSubmit(onSubmit)} loading={isSubmitting}>
                 Sign up
               </Button>
             </div>
