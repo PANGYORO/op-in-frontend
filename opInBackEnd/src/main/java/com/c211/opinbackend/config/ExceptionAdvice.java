@@ -1,15 +1,14 @@
 package com.c211.opinbackend.config;
 
-import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import com.c211.opinbackend.exception.ExceptionResponseEntity;
 import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.exception.auth.AuthRuntimeException;
-import com.c211.opinbackend.exception.member.MemberExceptionEntity;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 
 /**
@@ -25,10 +24,14 @@ public class ExceptionAdvice {
 	 * @return
 	 */
 	@ExceptionHandler({MemberRuntimeException.class})
-	private ResponseEntity<MemberExceptionEntity> memberExceptionHandler(
+	private ResponseEntity<ExceptionResponseEntity> memberExceptionHandler(
 		final MemberRuntimeException runError) {
 		return new ResponseEntity<>(
-			new MemberExceptionEntity(runError.getErrorEnum().getHttpStatus(), runError.getMessage()),
+			new ExceptionResponseEntity(
+				runError.getErrorEnum().getHttpStatus().value(),
+				runError.getErrorEnum().getHttpCode(),
+				runError.getMessage()
+			),
 			runError.getErrorEnum().getHttpStatus());
 	}
 
@@ -37,11 +40,15 @@ public class ExceptionAdvice {
 	 * 존재하지 않는 API에 대한 기본 메세지 처리입니다.
 	 */
 	@ExceptionHandler({NoHandlerFoundException.class})
-	private ResponseEntity<MemberExceptionEntity> apiExceptionHandler(
+	private ResponseEntity<ExceptionResponseEntity> apiExceptionHandler(
 		final Exception exception) {
 		ApiRuntimeException runError = new ApiRuntimeException(ApiExceptionEnum.API_NOT_EXIST_EXCEPTION);
 		return new ResponseEntity<>(
-			new MemberExceptionEntity(runError.getErrorEnum().getHttpStatus(), runError.getMessage()),
+			new ExceptionResponseEntity(
+				runError.getErrorEnum().getHttpStatus().value(),
+				runError.getErrorEnum().getHttpCode(),
+				runError.getMessage()
+			),
 			runError.getErrorEnum().getHttpStatus());
 	}
 
@@ -50,11 +57,15 @@ public class ExceptionAdvice {
 	 * @param runError
 	 * @return
 	 */
-	@ExceptionHandler({AuthenticationException.class})
-	private ResponseEntity<MemberExceptionEntity> authExceptionHandler(
+	@ExceptionHandler({AuthRuntimeException.class})
+	private ResponseEntity<ExceptionResponseEntity> authExceptionHandler(
 		final AuthRuntimeException runError) {
 		return new ResponseEntity<>(
-			new MemberExceptionEntity(runError.getErrorEnum().getHttpStatus(), runError.getMessage()),
+			new ExceptionResponseEntity(
+				runError.getErrorEnum().getHttpStatus().value(),
+				runError.getErrorEnum().getHttpCode(),
+				runError.getMessage()
+			),
 			runError.getErrorEnum().getHttpStatus());
 	}
 }
