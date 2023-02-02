@@ -1,5 +1,5 @@
 import React from "react";
-import News from "./dashboard/news";
+import News from "./dashboard/News";
 
 export default function DashBoard() {
   return (
