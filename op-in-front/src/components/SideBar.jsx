@@ -3,9 +3,8 @@ import BoxLogo from "../assets/box-logo.png";
 import { Link } from "react-router-dom";
 
 function selectMenu(e) {
-  alert(e.data);
-  console.log(e);
-  e.preventdefault();
+  // alert(e.target.id);
+  console.log(e.target.id);
 }
 
 export default function Sidebar() {
@@ -27,10 +26,10 @@ export default function Sidebar() {
 
         <nav className="mt-6">
           <div>
-            <a
+            <Link
               id="dashboard"
               className={selected}
-              href="/"
+              to="/main"
               onClick={(e) => {
                 selectMenu(e);
               }}
@@ -47,8 +46,15 @@ export default function Sidebar() {
                 </svg>
               </span>
               <span className="mx-4 text-sm font-normal">Dashboard</span>
-            </a>
-            <a id="mypage" className={deselected} href="/detail">
+            </Link>
+            <Link
+              id="mypage"
+              className={deselected}
+              to="/detail"
+              onClick={(e) => {
+                selectMenu(e);
+              }}
+            >
               <span className="text-left">
                 <svg
                   width="20"
@@ -62,11 +68,11 @@ export default function Sidebar() {
                 </svg>
               </span>
               <span className="mx-4 text-sm font-normal">My Page</span>
-            </a>
-            <a
+            </Link>
+            <Link
               id="repository"
               className={deselected}
-              href="repo"
+              to="/main/repo"
               onClick={(e) => {
                 selectMenu(e);
               }}
@@ -84,8 +90,15 @@ export default function Sidebar() {
                 </svg>
               </span>
               <span className="mx-4 text-sm font-normal">Repository</span>
-            </a>
-            <a id="education" className={deselected} href="/edu">
+            </Link>
+            <Link
+              id="education"
+              className={deselected}
+              to="/main/edu"
+              onClick={(e) => {
+                selectMenu(e);
+              }}
+            >
               <span className="text-left">
                 <svg
                   width="20"
@@ -99,8 +112,15 @@ export default function Sidebar() {
                 </svg>
               </span>
               <span className="mx-4 text-sm font-normal">Education</span>
-            </a>
-            <a id="events" className={deselected} href="#">
+            </Link>
+            <Link
+              id="events"
+              className={deselected}
+              to="/main/events"
+              onClick={(e) => {
+                selectMenu(e);
+              }}
+            >
               <span className="text-left">
                 <svg
                   width="20"
@@ -114,7 +134,7 @@ export default function Sidebar() {
                 </svg>
               </span>
               <span className="mx-4 text-sm font-normal">Events</span>
-            </a>
+            </Link>
           </div>
           <p>{currentMenu}</p>
         </nav>
