@@ -57,5 +57,4 @@ public class ExceptionAdvice {
 			new MemberExceptionEntity(runError.getErrorEnum().getHttpStatus(), runError.getMessage()),
 			runError.getErrorEnum().getHttpStatus());
 	}
-
 }

@@ -1,7 +1,6 @@
 import React from "react";
 import Status from "../components/Status";
 import Repo from "../components/Repo";
-import Sidebar from "../components/SideBar";
 import QnA from "../components/QnA"
 import TestRR from "../components/TestRR"
 
@@ -25,8 +24,6 @@ export default function Repository({
 }) {
   return (
     <>
-      <Sidebar />
-      
       <div className="flex flex-col w-full pl-0 md:p-4">
         
 
