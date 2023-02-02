@@ -34,6 +34,8 @@ public class Repository {
 	private Member member;
 
 	@OneToMany(mappedBy = "repository")
+	List<RepositoryTechLanguage> repositoryTechLanguages = new ArrayList<>();
+	@OneToMany(mappedBy = "repository")
 	List<Issue> issueList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "repository")

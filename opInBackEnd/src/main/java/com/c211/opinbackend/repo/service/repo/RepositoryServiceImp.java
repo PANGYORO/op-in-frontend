@@ -1,7 +1,9 @@
-package com.c211.opinbackend.repo.service;
+package com.c211.opinbackend.repo.service.repo;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -25,9 +27,10 @@ public class RepositoryServiceImp implements RepositoryService {
 	private final MemberRepository memberRepository;
 
 	@Override
+	@Transactional
 	public List<RepositoryDto> finRepositoryListByMember(String email) {
 		List<RepositoryDto> repositoryDtoList = new ArrayList<>();
-		
+
 		if (email == null)
 			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
 		Member findMember = memberRepository.findByEmail(email).orElseThrow(() -> new MemberRuntimeException(

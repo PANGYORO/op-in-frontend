@@ -13,6 +13,8 @@ import com.c211.opinbackend.exception.member.MemberExceptionEntity;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEntity;
 import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
+import com.c211.opinbackend.exception.repotechlan.RepoTechLangExceptionEntity;
+import com.c211.opinbackend.exception.repotechlan.RepoTechLangRuntimeException;
 
 /**
  * The type Exception advice.
@@ -26,7 +28,6 @@ public class ExceptionAdvice {
 	 * @param runError
 	 * @return
 	 */
-	// TODO: 2023-02-01 이부분 수정해야합니다 맴버 어디갔누?
 	@ExceptionHandler({RepositoryRuntimeException.class})
 	private ResponseEntity<RepositoryExceptionEntity> repoExceptionHandler(
 		final RepositoryRuntimeException runError) {
@@ -66,6 +67,14 @@ public class ExceptionAdvice {
 		final AuthRuntimeException runError) {
 		return new ResponseEntity<>(
 			new RepositoryExceptionEntity(runError.getErrorEnum().getHttpStatus(), runError.getMessage()),
+			runError.getErrorEnum().getHttpStatus());
+	}
+
+	@ExceptionHandler({RepoTechLangRuntimeException.class})
+	private ResponseEntity<RepoTechLangExceptionEntity> exceptionHandler(
+		final RepoTechLangRuntimeException runError) {
+		return new ResponseEntity<>(
+			new RepoTechLangExceptionEntity(runError.getErrorEnum().getHttpStatus(), runError.getMessage()),
 			runError.getErrorEnum().getHttpStatus());
 	}
 }

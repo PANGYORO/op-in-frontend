@@ -1,33 +1,35 @@
 package com.c211.opinbackend.repo.controller;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.c211.opinbackend.auth.model.request.MemberEmailRequest;
+import com.c211.opinbackend.repo.model.repository.RepositoryDto;
+import com.c211.opinbackend.repo.service.repo.RepositoryService;
+import com.c211.opinbackend.repo.service.repoTechlag.RepoTechLanguageService;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/repo")
 @Slf4j
+@AllArgsConstructor
 public class RepoController {
+	private final RepositoryService repositoryService;
+	private final RepoTechLanguageService repoTechLanguageService;
+
 	@PostMapping
 	public ResponseEntity<?> getReposByEmail(@RequestBody MemberEmailRequest emailRequest) {
-		log.info(emailRequest.getEmail());
-		return null;
-	}
-
-	@GetMapping("/{email:.+}")
-	// TODO: 2023/02/01 config추가
-	
-	public ResponseEntity<?> getReposByEmailTest(@PathVariable String email) {
-		log.info(email);
-		return null;
+		String email = emailRequest.getEmail();
+		List<RepositoryDto> repositoryDtoList = repositoryService.finRepositoryListByMember(email);
+		return new ResponseEntity<>(repositoryDtoList, HttpStatus.OK);
 	}
 
 }

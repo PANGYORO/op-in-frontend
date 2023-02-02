@@ -52,8 +52,7 @@ public class SecurityConfig {
 			.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 			.antMatchers("/admin/**").hasRole("ADMIN")
 			.antMatchers("/auth/**").permitAll()
-			// TODO: 2023/02/01 모든 요청은 헤더에 토큰을 담아주세요 일단 풀어놓으
-			.antMatchers("/repo").permitAll()
+			.antMatchers("/repo/**").hasRole("USER")
 			.and()
 			.cors()
 

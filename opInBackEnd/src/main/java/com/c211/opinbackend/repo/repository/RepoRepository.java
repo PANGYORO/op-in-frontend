@@ -13,4 +13,5 @@ public interface RepoRepository extends JpaRepository<Repository, Long> {
 	Optional<Repository> findById(String id);
 
 	List<Repository> findByMember(Member member);
+
 }

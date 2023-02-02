@@ -1,4 +1,4 @@
-package com.c211.opinbackend.repo.service;
+package com.c211.opinbackend.repo.service.repo;
 
 import java.util.List;
 
