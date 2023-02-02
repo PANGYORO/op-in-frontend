@@ -140,7 +140,11 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public boolean existEmail(String email) {
-		return memberRepository.existsByEmail(email);
+		boolean existEmail = memberRepository.existsByEmail(email);
+		if (existEmail) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_EMAIL_EXCEPTION);
+		}
+		return existEmail;
 	}
 
 	@Override

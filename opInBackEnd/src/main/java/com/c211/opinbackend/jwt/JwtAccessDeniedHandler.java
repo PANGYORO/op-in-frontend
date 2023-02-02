@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.c211.opinbackend.exception.auth.AuthExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
 
 @Component
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
@@ -19,8 +20,8 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 	@Override
 	public void handle(HttpServletRequest request, HttpServletResponse response,
 		AccessDeniedException accessDeniedException) throws IOException, ServletException {
-		response.sendError(HttpServletResponse.SC_FORBIDDEN, MemberExceptionEnum.MEMBER_ACCESS_EXCEPTION.getErrorMessage());
-
+		// response.sendError(HttpServletResponse.SC_FORBIDDEN, MemberExceptionEnum.MEMBER_ACCESS_EXCEPTION.getErrorMessage());
+		throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_WRONG_EXCEPTION);
 	}
 
 }
