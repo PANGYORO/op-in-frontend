@@ -95,11 +95,13 @@ public class MemberServiceImpl implements MemberService {
 
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
+		Member member = memberRepository.findByEmail(authentication.getName()).orElse(null);
+
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		String authorities = getAuthorities(authentication);
 
-		return tokenProvider.createToken(authentication.getName(), authorities);
+		return tokenProvider.createToken(member, authorities);
 	}
 
 	// 권한 가져오기
