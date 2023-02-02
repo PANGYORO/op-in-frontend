@@ -6,6 +6,7 @@ import SignUp from "./user/SignUp";
 import UserFind from "./user/UserFind";
 import Menus from "./Menus";
 import Detail from "./user/Detail";
+import SelectTag from './user/SelectTag';
 
 // import DashBoard from "./DashBoard";
 // import Repository from "./Repository";
@@ -27,6 +28,7 @@ export default function Main() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/userfind" element={<UserFind />} />
             <Route path="/detail" element={<Detail />} />
+            <Route path="/selecttag" element={<SelectTag/>} />
             <Route exact path="/" element={<Navigate to="/main" />} />
             <Route exact path="/main/*" element={<Menus />}></Route>
             <Route path="*" element={<NotFound />} />
