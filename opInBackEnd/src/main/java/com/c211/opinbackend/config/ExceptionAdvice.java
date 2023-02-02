@@ -68,5 +68,4 @@ public class ExceptionAdvice {
 			new RepositoryExceptionEntity(runError.getErrorEnum().getHttpStatus(), runError.getMessage()),
 			runError.getErrorEnum().getHttpStatus());
 	}
-
 }
