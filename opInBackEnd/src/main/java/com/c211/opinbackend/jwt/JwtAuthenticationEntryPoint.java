@@ -23,6 +23,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 		IOException {
 		// 401
 		response.sendError(401, "존재하지않는 유저입니다.");
+
 	}
 
 }
