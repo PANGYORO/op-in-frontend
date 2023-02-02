@@ -11,5 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RepositoryTitleResponse {
 
+	private long id;
+
 	private String title;
 }

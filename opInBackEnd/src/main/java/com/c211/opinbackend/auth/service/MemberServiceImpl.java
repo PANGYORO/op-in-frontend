@@ -160,6 +160,7 @@ public class MemberServiceImpl implements MemberService {
 
 		for (Repository myRepo: myRepos) {
 			RepositoryTitleResponse repositoryTitleResponse = RepositoryTitleResponse.builder()
+				.id(myRepo.getId())
 				.title(myRepo.getTitleContent().getTitle())
 				.build();
 
@@ -172,6 +173,7 @@ public class MemberServiceImpl implements MemberService {
 
 		for (RepositoryPost myPost: myPosts) {
 			RepositoryPostResponse repositoryPostResponse = RepositoryPostResponse.builder()
+				.id(myPost.getId())
 				.title(myPost.getTitleContent().getTitle())
 				.content(myPost.getTitleContent().getContent())
 				.imageUrl(myPost.getImageUrl())
