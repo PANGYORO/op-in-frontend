@@ -1,8 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import BoxLogo from "../assets/box-logo.png";
 import { Link } from "react-router-dom";
 
+function selectMenu(e) {
+  // alert(e.target.id);
+  console.log(e.target.id);
+}
+
 export default function Sidebar() {
+  const [currentMenu, setMenu] = useState("dashboard");
+  const menus = ["dashboard", "mypage", "repository", "education", "event"];
+  const deselected =
+    "flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500";
+  const selected =
+    "flex items-center justify-start w-full p-4 my-2 font-thin text-blue-500 uppercase transition-colors duration-200 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800";
+
   return (
     <div className="relative hidden h-screen my-4 ml-4 shadow-lg lg:block w-64">
       <div className="h-full bg-white rounded-2xl dark:bg-gray-700 w-64">
@@ -14,9 +26,13 @@ export default function Sidebar() {
 
         <nav className="mt-6">
           <div>
-            <a
-              className="flex items-center justify-start w-full p-4 my-2 font-thin text-blue-500 uppercase transition-colors duration-200 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800"
-              href="/"
+            <Link
+              id="dashboard"
+              className={selected}
+              to="/main"
+              onClick={(e) => {
+                selectMenu(e);
+              }}
             >
               <span className="text-left">
                 <svg
@@ -30,10 +46,14 @@ export default function Sidebar() {
                 </svg>
               </span>
               <span className="mx-4 text-sm font-normal">Dashboard</span>
-            </a>
-            <a
-              className="flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500"
-              href="/detail"
+            </Link>
+            <Link
+              id="mypage"
+              className={deselected}
+              to="/detail"
+              onClick={(e) => {
+                selectMenu(e);
+              }}
             >
               <span className="text-left">
                 <svg
@@ -48,10 +68,14 @@ export default function Sidebar() {
                 </svg>
               </span>
               <span className="mx-4 text-sm font-normal">My Page</span>
-            </a>
-            <a
-              className="flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500"
-              href="repo"
+            </Link>
+            <Link
+              id="repository"
+              className={deselected}
+              to="/main/repo"
+              onClick={(e) => {
+                selectMenu(e);
+              }}
             >
               <span className="text-left">
                 <svg
@@ -66,10 +90,14 @@ export default function Sidebar() {
                 </svg>
               </span>
               <span className="mx-4 text-sm font-normal">Repository</span>
-            </a>
-            <a
-              className="flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500"
-              href="/edu"
+            </Link>
+            <Link
+              id="education"
+              className={deselected}
+              to="/main/edu"
+              onClick={(e) => {
+                selectMenu(e);
+              }}
             >
               <span className="text-left">
                 <svg
@@ -84,10 +112,14 @@ export default function Sidebar() {
                 </svg>
               </span>
               <span className="mx-4 text-sm font-normal">Education</span>
-            </a>
-            <a
-              className="flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500"
-              href="#"
+            </Link>
+            <Link
+              id="events"
+              className={deselected}
+              to="/main/events"
+              onClick={(e) => {
+                selectMenu(e);
+              }}
             >
               <span className="text-left">
                 <svg
@@ -102,13 +134,9 @@ export default function Sidebar() {
                 </svg>
               </span>
               <span className="mx-4 text-sm font-normal">Events</span>
-            </a>
-
-            <a
-              className="flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500"
-              href="#"
-            ></a>
+            </Link>
           </div>
+          <p>{currentMenu}</p>
         </nav>
       </div>
     </div>
