@@ -1,6 +1,6 @@
 package com.c211.opinbackend.auth.jwt;
 
-import static com.c211.opinbackend.exception.auth.AuthExceptionEnum.AUTH_AUTHENTICATION_EXCEPTION;
+import static com.c211.opinbackend.exception.auth.AuthExceptionEnum.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -24,11 +24,11 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 	 */
 	@Override
 	public void handle(HttpServletRequest request, HttpServletResponse response,
-		AccessDeniedException e) throws IOException {
+		AccessDeniedException exception) throws IOException {
 		response.setStatus(AUTH_AUTHENTICATION_EXCEPTION.getHttpStatus().value());
 		try (OutputStream os = response.getOutputStream()) {
 			ObjectMapper objectMapper = new ObjectMapper();
-			objectMapper.writeValue(os,  AuthExceptionEnum.convertMap(AUTH_AUTHENTICATION_EXCEPTION));
+			objectMapper.writeValue(os, AuthExceptionEnum.convertMap(AUTH_AUTHENTICATION_EXCEPTION));
 			os.flush();
 		}
 	}

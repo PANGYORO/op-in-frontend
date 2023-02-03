@@ -25,4 +25,6 @@ public class MemberTechLanguage {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MEMBER_ID")
 	private Member member;
+
+	private String Color;
 }
