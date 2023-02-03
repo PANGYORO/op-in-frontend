@@ -1,7 +1,7 @@
 import React from "react";
 import Recommend from "../../../components/Recommend";
 
-export default function RecommendIndex() {
+function RecommendIndex() {
   <div>
     <Recommend />
     <Recommend />
@@ -10,3 +10,4 @@ export default function RecommendIndex() {
     <Recommend />
   </div>;
 }
+export default RecommendIndex;

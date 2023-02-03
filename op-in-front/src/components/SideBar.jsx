@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import BoxLogo from "../assets/box-logo.png";
 import { Link } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { menuState } from "../recoil/sidebar/atoms";
 
 export default function Sidebar() {
-  const [currentMenu, setMenu] = useState("dashboard");
-  // const menus = ["dashboard", "mypage", "repository", "education", "event"];
+  const [currentMenu, setMenu] = useRecoilState(menuState);
   const deselected =
     "flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500";
   const selected =
     "flex items-center justify-start w-full p-4 my-2 font-thin text-blue-500 uppercase transition-colors duration-200 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800";
   function selectMenu(id) {
-    // alert(e.target.id);
-    // console.log(id);
     document.getElementById(currentMenu).className = deselected;
     document.getElementById(id).className = selected;
     setMenu(id);

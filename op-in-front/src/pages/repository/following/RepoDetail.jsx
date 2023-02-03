@@ -27,7 +27,7 @@ export default function Question() {
                 className={tab == POSTS_TAB ? selected : deselected}
                 onClick={() => onClick(POSTS_TAB)}
               >
-                New
+                Post
               </div>
             </li>
             <li className="mr-2">
@@ -35,7 +35,7 @@ export default function Question() {
                 className={tab == QNAS_TAB ? selected : deselected}
                 onClick={() => onClick(QNAS_TAB)}
               >
-                Hot
+                Qna
               </div>
             </li>
           </ul>
