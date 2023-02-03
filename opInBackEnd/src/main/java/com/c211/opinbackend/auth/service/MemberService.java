@@ -19,4 +19,6 @@ public interface MemberService {
 	Member modifyNickname(String nickname, String email);
 
 	boolean modifyPassword(String email, String password);
+
+	Member getMemberByEmail(String email);
 }
