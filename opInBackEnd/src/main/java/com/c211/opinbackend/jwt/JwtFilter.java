@@ -7,15 +7,18 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-public class JwtFilter extends GenericFilterBean {
+@Component
+public class JwtFilter extends OncePerRequestFilter {
 
 	private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
 
@@ -28,14 +31,14 @@ public class JwtFilter extends GenericFilterBean {
 	}
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 		throws IOException, ServletException {
-		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-		if (httpServletRequest.getMethod().equals("OPTIONS")) {
+		// HttpServletRequest httpServletRequest = (HttpServletRequest)request;
+		if (request.getMethod().equals("OPTIONS")) {
 			return;
 		}
-		String jwt = resolveToken(httpServletRequest);
-		String requestUri = httpServletRequest.getRequestURI();
+		String jwt = resolveToken(request);
+		String requestUri = request.getRequestURI();
 		logger.debug("doFilter 들어옴");
 
 		if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
@@ -50,7 +53,7 @@ public class JwtFilter extends GenericFilterBean {
 
 	private String resolveToken(HttpServletRequest request) {
 		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer " )) {
+		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
 			return bearerToken.substring(7);
 		}
 		return null;

@@ -1,27 +1,10 @@
 import React from "react";
 import Status from "../components/Status";
 import Repo from "../components/Repo";
-import QnA from "../components/QnA"
-import TestRR from "../components/TestRR"
+import QnA from "../components/QnA";
+import TestRR from "../components/TestRR";
 
-
-
-
-
-
-export default function Repository({
-  // repos = [{
-  //   title: '우리레포는요...',
-  //   content: '내용이 어쩌구 저쩌고',
-  //   language: 'python',
-  //   contributor: [{ nickname: '짱짱맨' },{id:''}, {profileimg:''}],
-  //   star: 341110,
-  //   forknum : 321,
-  //   topic: 'react',
-  //   updatedate: '2021-01-02'
-  // }]
-
-}) {
+export default function Repository() {
   return (
     <>
       <div className="flex flex-col w-full pl-0 md:p-4">
@@ -46,8 +29,12 @@ export default function Repository({
             <Status />
           </div> */}
 
+          <div className="w-1/3">
+            <Status />
+          </div>
         </div>
       </div>
     </>
   );
 }
+

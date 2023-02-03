@@ -22,8 +22,14 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws
 		IOException {
 		// 401
-		response.sendError(401, "존재하지않는 유저입니다.");
+		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, MemberExceptionEnum.MEMBER_WRONG_EXCEPTION.getErrorMessage());
+	}
 
+	@ExceptionHandler (value = {Exception.class})
+	public void commence(HttpServletRequest request, HttpServletResponse response,
+		Exception exception) throws IOException {
+		// 500
+		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, MemberExceptionEnum.MEMBER_WRONG_EXCEPTION.getErrorMessage());
 	}
 
 }
