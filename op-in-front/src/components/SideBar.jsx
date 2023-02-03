@@ -30,7 +30,7 @@ export default function Sidebar() {
             <Link
               id="dashboard"
               className={selected}
-              to="/main"
+              to=""
               onClick={() => {
                 selectMenu("dashboard");
               }}
@@ -73,7 +73,7 @@ export default function Sidebar() {
             <Link
               id="repository"
               className={deselected}
-              to="/main/repo"
+              to="/repo"
               onClick={() => {
                 selectMenu("repository");
               }}
@@ -95,7 +95,7 @@ export default function Sidebar() {
             <Link
               id="education"
               className={deselected}
-              to="/main/edu"
+              to="/edu"
               onClick={() => {
                 selectMenu("education");
               }}
@@ -117,7 +117,7 @@ export default function Sidebar() {
             <Link
               id="events"
               className={deselected}
-              to="/main/events"
+              to="/events"
               onClick={() => {
                 selectMenu("events");
               }}
