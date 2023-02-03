@@ -1,4 +1,6 @@
-package com.c211.opinbackend.jwt;
+package com.c211.opinbackend.auth.jwt;
+
+import static com.c211.opinbackend.exception.auth.AuthExceptionEnum.*;
 
 import java.security.Key;
 import java.util.Arrays;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.model.TokenDto;
+import com.c211.opinbackend.exception.auth.AuthRuntimeException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -113,12 +116,16 @@ public class TokenProvider implements InitializingBean {
 			val = true;
 		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
 			log.info("잘못된 JWT 서명입니다.");
+			throw new AuthRuntimeException(AUTH_JWT_SIGNATURE_EXCEPTION);
 		} catch (ExpiredJwtException e) {
 			log.info("만료된 JWT 토큰입니다.");
+			throw new AuthRuntimeException(AUTH_JWT_EXPIRED_EXCEPTION);
 		} catch (UnsupportedJwtException e) {
 			log.info("지원하지 않는 JWT토큰입니다.");
+			throw new AuthRuntimeException(AUTH_JWT_SUPPORT_EXCEPTION);
 		} catch (IllegalArgumentException e) {
 			log.info("JWT토큰이 잘못되었습니다.");
+			throw new AuthRuntimeException(AUTH_JWT_SIGNATURE_EXCEPTION);
 		}
 		return val;
 	}

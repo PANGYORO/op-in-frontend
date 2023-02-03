@@ -1,11 +1,9 @@
-package com.c211.opinbackend.jwt;
+package com.c211.opinbackend.auth.jwt;
 
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 

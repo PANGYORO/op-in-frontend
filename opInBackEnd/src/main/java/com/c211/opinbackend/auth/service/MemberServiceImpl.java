@@ -2,7 +2,6 @@ package com.c211.opinbackend.auth.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -28,7 +27,7 @@ import com.c211.opinbackend.auth.repository.MemberFollowRepository;
 import com.c211.opinbackend.auth.repository.MemberRepository;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
-import com.c211.opinbackend.jwt.TokenProvider;
+import com.c211.opinbackend.auth.jwt.TokenProvider;
 import com.c211.opinbackend.repo.entitiy.Repository;
 import com.c211.opinbackend.repo.entitiy.RepositoryPost;
 import com.c211.opinbackend.repo.model.response.RepositoryPostResponse;
