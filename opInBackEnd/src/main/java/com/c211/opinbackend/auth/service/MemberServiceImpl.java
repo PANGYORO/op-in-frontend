@@ -408,4 +408,9 @@ public class MemberServiceImpl implements MemberService {
 
 		return true;
 	}
+
+	@Override
+	public Member getMemberByEmail(String email) {
+		return memberRepository.findByEmail(email).orElse(null);
+	}
 }
