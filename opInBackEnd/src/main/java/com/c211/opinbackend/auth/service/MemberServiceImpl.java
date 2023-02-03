@@ -243,7 +243,7 @@ public class MemberServiceImpl implements MemberService {
 		List<MemberBadge> memBadRelations = memberBadgeRepository.findByMember(member);
 		List<BadgeResponse> myBadges = new ArrayList<BadgeResponse>();
 		for (MemberBadge mb : memBadRelations) {
-			Badge badge = badgeRepository.findById(mb.getBadge().getId()).orElse(null);
+			Badge badge = mb.getBadge();
 
 			BadgeResponse badgeResponse = BadgeResponse.builder()
 				.title(badge.getTitle())
@@ -263,7 +263,7 @@ public class MemberServiceImpl implements MemberService {
 		List<MemberTechLanguage> memTechRelations = memberTechLanguageRepository.findByMember(member);
 		List<TechLanguageResponse> myTechLanguages = new ArrayList<TechLanguageResponse>();
 		for (MemberTechLanguage mt : memTechRelations) {
-			TechLanguage tech = techLanguageRepository.findById(mt.getTechLanguage().getId()).orElse(null);
+			TechLanguage tech = mt.getTechLanguage();
 
 			TechLanguageResponse techLanguageResponse = TechLanguageResponse.builder()
 				.id(tech.getId())
@@ -282,7 +282,7 @@ public class MemberServiceImpl implements MemberService {
 		List<MemberTopic> memTopicRelations = memberTopicRepository.findByMember(member);
 		List<TopicResponse> myTopics = new ArrayList<TopicResponse>();
 		for (MemberTopic mtp : memTopicRelations) {
-			Topic topic = topicRepository.findById(mtp.getTopic().getId()).orElse(null);
+			Topic topic = mtp.getTopic();
 
 			TopicResponse topicResponse = TopicResponse.builder()
 				.id(topic.getId())
@@ -302,7 +302,7 @@ public class MemberServiceImpl implements MemberService {
 		List<RepositoryContributor> repositoryContributors = repoContributorRepository.findByMember(member);
 		List<RepositoryTitleResponse> contributeRepos = new ArrayList<RepositoryTitleResponse>();
 		for (RepositoryContributor rc : repositoryContributors) {
-			Repository repo = repoRepository.findById(rc.getRepository().getId()).orElse(null);
+			Repository repo = rc.getRepository();
 
 			RepositoryTitleResponse repositoryTitleResponse = RepositoryTitleResponse.builder()
 				.id(repo.getId())
@@ -322,7 +322,7 @@ public class MemberServiceImpl implements MemberService {
 		List<RepositoryFollow> repositoryFollows = repositoryFollowRepository.findByMember(member);
 		List<RepositoryTitleResponse> followRepos = new ArrayList<RepositoryTitleResponse>();
 		for (RepositoryFollow rf : repositoryFollows) {
-			Repository repo = repoRepository.findById(rf.getRepository().getId()).orElse(null);
+			Repository repo = rf.getRepository();
 
 			RepositoryTitleResponse repositoryTitleResponse = RepositoryTitleResponse.builder()
 				.id(repo.getId())
