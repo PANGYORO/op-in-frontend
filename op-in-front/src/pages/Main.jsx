@@ -21,18 +21,6 @@ import NotFound from "./NotFound";
 
 export default function Main() {
   // const [subDomain] = useLocation();
-  // const [user, setUser] = useRecoilState(userStored);
-  // useEffect(() => {
-  //   setUser([
-  //     {
-  //       id: 100,
-  //       name: "Keane Sykes",
-  //       address: "Ap #765-5550 A, Av.",
-  //       phone: "010-1152-3825",
-  //       memo: "luctus, ipsum leo elementum sem, vitae aliquam eros turpis non",
-  //     },
-  //   ]);
-  // }, []);
 
   return (
     <BrowserRouter>
