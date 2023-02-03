@@ -1,12 +1,12 @@
-import React, { useCallback, useState } from "react";
-import News from "./dashboard/News";
-import Hots from "./dashboard/Hots";
+import React, { useState, useCallback } from "react";
+import FollowingPosts from "./FollowingPosts";
+import FollowingQnas from "./FollowingQnas";
 
-const NEWS_TAB = "news";
-const HOTS_TAB = "hots";
+const POSTS_TAB = "posts";
+const QNAS_TAB = "qnas";
 
-export default function DashBoard() {
-  const [tab, setTab] = useState(NEWS_TAB);
+export default function Question() {
+  const [tab, setTab] = useState(POSTS_TAB);
 
   const onClick = useCallback((item) => {
     setTab(item);
@@ -24,25 +24,25 @@ export default function DashBoard() {
           <ul className="pt-3 pl-3 flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
             <li className="mr-2">
               <div
-                className={tab == NEWS_TAB ? selected : deselected}
-                onClick={() => onClick(NEWS_TAB)}
+                className={tab == POSTS_TAB ? selected : deselected}
+                onClick={() => onClick(POSTS_TAB)}
               >
-                New
+                Post
               </div>
             </li>
             <li className="mr-2">
               <div
-                className={tab == HOTS_TAB ? selected : deselected}
-                onClick={() => onClick(HOTS_TAB)}
+                className={tab == QNAS_TAB ? selected : deselected}
+                onClick={() => onClick(QNAS_TAB)}
               >
-                Hot
+                Qna
               </div>
             </li>
           </ul>
         </header>
       </div>
-      <div id="dashboardcontent" className="h-screen overflow-auto">
-        {tab == "news" ? <News /> : <Hots />}
+      <div className="h-screen overflow-auto">
+        {tab == POSTS_TAB ? <FollowingPosts /> : <FollowingQnas />}
       </div>
     </div>
   );
