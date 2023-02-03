@@ -26,9 +26,13 @@ public class RepoController {
 	private final RepoTechLanguageService repoTechLanguageService;
 
 	@PostMapping
-	public ResponseEntity<?> getReposByEmail(@RequestBody MemberEmailRequest emailRequest) {
+	public ResponseEntity<?> getReposByEmail(@RequestBody MemberEmailRequest emailRequest) throws Exception {
 		String email = emailRequest.getEmail();
 		List<RepositoryDto> repositoryDtoList = repositoryService.finRepositoryListByMember(email);
+		log.info("size:", repositoryDtoList.size());
+		for (RepositoryDto dto : repositoryDtoList) {
+			log.info(dto.toString());
+		}
 		return new ResponseEntity<>(repositoryDtoList, HttpStatus.OK);
 	}
 

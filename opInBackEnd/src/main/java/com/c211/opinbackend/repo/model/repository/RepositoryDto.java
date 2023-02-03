@@ -8,11 +8,11 @@ import com.c211.opinbackend.repo.model.repoTechLang.RepoTechLangDTO;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Builder
-@Setter
+@ToString
 public class RepositoryDto {
 	// TODO: 2023-02-02
 	/**
@@ -29,8 +29,8 @@ public class RepositoryDto {
 	private Long id;
 	private String title;
 	private String content;
-	private List<RepoTechLangDTO> techLangList;
-	private List<RepositoryContributorDto> repositoryContributorDtoList;
+	private List<RepoTechLangDTO> techLangs;
+	private List<RepositoryContributorDto> contributors;
 	private String star;
 	private String forkNum;
 	private List<String> topicList;
