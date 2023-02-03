@@ -25,5 +25,8 @@ public class MemberDto {
 
 	private boolean githubSyncFl;
 
+	private String githubToken;
+	private String githubId;
+
 	private Role role;
 }
