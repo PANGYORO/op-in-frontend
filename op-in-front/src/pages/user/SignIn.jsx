@@ -103,7 +103,7 @@ function LoginForm() {
     formState: { isSubmitting, errors },
   } = useForm();
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [user,setUser] = useRecoilState(userStored);
 

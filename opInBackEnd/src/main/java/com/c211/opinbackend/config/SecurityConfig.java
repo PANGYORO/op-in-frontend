@@ -15,10 +15,9 @@ import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.c211.opinbackend.jwt.JwtAccessDeniedHandler;
-import com.c211.opinbackend.jwt.JwtAuthenticationEntryPoint;
-import com.c211.opinbackend.jwt.JwtSecurityConfig;
-import com.c211.opinbackend.jwt.TokenProvider;
+import com.c211.opinbackend.auth.jwt.JwtAccessDeniedHandler;
+import com.c211.opinbackend.auth.jwt.JwtAuthenticationEntryPoint;
+import com.c211.opinbackend.auth.jwt.TokenProvider;
 
 @Configuration
 @EnableWebSecurity
@@ -50,9 +49,8 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-			.antMatchers("/admin/**").hasRole("ADMIN")
 			.antMatchers("/auth/**").permitAll()
-
+			.anyRequest().permitAll()
 			.and()
 			.cors()
 

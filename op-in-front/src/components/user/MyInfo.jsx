@@ -139,7 +139,7 @@ export default function MyInfo() {
         </div>
         <hr />
         <p className="p-4 font-bold text-black text-md dark:text-white">
-          Interests
+          Topics
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
             (??)
           </span>
