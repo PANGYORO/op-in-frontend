@@ -85,9 +85,9 @@ export default function Example() {
 
                 {/* Profile dropdown */}
                 {navigation.map((item) => (
-                  <a
+                  <Link
                     key={item.name}
-                    href={item.href}
+                    to={item.href}
                     className={classNames(
                       item.current
                         ? "bg-[#ffffff] text-[#000000] mx-2"
@@ -97,7 +97,7 @@ export default function Example() {
                     aria-current={item.current ? "page" : undefined}
                   >
                     {item.name}
-                  </a>
+                  </Link>
                 ))}
                 <Menu as="div" className="relative ml-3">
                   <Transition
@@ -151,4 +151,3 @@ export default function Example() {
     </Disclosure>
   );
 }
-
