@@ -59,4 +59,13 @@ public class Member {
 
 	@OneToMany(mappedBy = "member")
 	List<Repository> memberList = new ArrayList<>();
+
+	public void setNickname(String name) {
+		this.nickname = name;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 }
