@@ -30,7 +30,7 @@ public class RepositoryDto {
 	private String title;
 	private String content;
 	private List<RepoTechLangDTO> techLangList;
-	private List<RepositoryContributorDto> repositoryContributorDto;
+	private List<RepositoryContributorDto> repositoryContributorDtoList;
 	private String star;
 	private String forkNum;
 	private List<String> topicList;

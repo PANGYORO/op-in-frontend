@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.c211.opinbackend.auth.entity.Member;
+import com.c211.opinbackend.auth.entity.RepositoryContributor;
 
 import lombok.Getter;
 
@@ -44,4 +45,9 @@ public class Repository {
 	@OneToMany(mappedBy = "repository")
 	List<RepositoryQnA> repositoryQnAList = new ArrayList<>();
 
+	@OneToMany(mappedBy = "repository")
+	List<RepositoryContributor> repositoryContributorList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "repository")
+	List<RepositoryTopic> topicList = new ArrayList<>();
 }
