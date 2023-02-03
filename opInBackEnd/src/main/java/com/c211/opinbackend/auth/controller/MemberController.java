@@ -1,5 +1,7 @@
 package com.c211.opinbackend.auth.controller;
 
+import static com.c211.opinbackend.exception.member.MemberExceptionEnum.*;
+
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,8 +27,8 @@ import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.auth.service.MemberService;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
-import com.c211.opinbackend.jwt.JwtFilter;
-import com.c211.opinbackend.jwt.TokenProvider;
+import com.c211.opinbackend.auth.jwt.JwtFilter;
+import com.c211.opinbackend.auth.jwt.TokenProvider;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -73,12 +73,16 @@ public class MemberController {
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody MemberLoginRequest request) {
-		TokenDto token = memberService.authorize(request.getEmail(), request.getPassword());
+		try {
+			TokenDto token = memberService.authorize(request.getEmail(), request.getPassword());
 
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
+			HttpHeaders httpHeaders = new HttpHeaders();
+			httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
 
-		return new ResponseEntity<TokenDto>(token, httpHeaders, HttpStatus.OK);
+			return new ResponseEntity<TokenDto>(token, httpHeaders, HttpStatus.OK);
+		} catch(Exception e) {
+			throw new MemberRuntimeException(MEMBER_WRONG_EXCEPTION);
+		}
 	}
 
 	@PostMapping("/signup")
