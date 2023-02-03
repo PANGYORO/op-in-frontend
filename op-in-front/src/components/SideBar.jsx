@@ -11,7 +11,7 @@ export default function Sidebar() {
     "flex items-center justify-start w-full p-4 my-2 font-thin text-blue-500 uppercase transition-colors duration-200 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800";
   function selectMenu(id) {
     // alert(e.target.id);
-    console.log(id);
+    // console.log(id);
     document.getElementById(currentMenu).className = deselected;
     document.getElementById(id).className = selected;
     setMenu(id);

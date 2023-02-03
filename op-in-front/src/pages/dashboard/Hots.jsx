@@ -5,17 +5,15 @@ export default function Hots() {
   return (
     <>
       Hots
-      <div className="grid grid-rows-1 ">
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-      </div>
+      <Post />
+      <Post />
+      <Post />
+      <Post />
+      <Post />
+      <Post />
+      <Post />
+      <Post />
+      <Post />
     </>
   );
 }
