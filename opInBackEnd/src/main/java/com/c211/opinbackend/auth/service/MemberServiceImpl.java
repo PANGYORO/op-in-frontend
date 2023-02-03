@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.c211.opinbackend.auth.entity.Badge;
 import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.entity.MemberBadge;
+import com.c211.opinbackend.auth.entity.MemberTechLanguage;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.response.BadgeResponse;
@@ -26,6 +27,7 @@ import com.c211.opinbackend.auth.repository.BadgeRepository;
 import com.c211.opinbackend.auth.repository.MemberBadgeRepository;
 import com.c211.opinbackend.auth.repository.MemberFollowRepository;
 import com.c211.opinbackend.auth.repository.MemberRepository;
+import com.c211.opinbackend.auth.repository.MemberTechLanguageRepository;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.jwt.TokenProvider;
@@ -54,6 +56,8 @@ public class MemberServiceImpl implements MemberService {
 
 	MemberBadgeRepository memberBadgeRepository;
 
+	MemberTechLanguageRepository memberTechLanguageRepository;
+
 	BadgeRepository badgeRepository;
 
 	RepoRepository repoRepository;
@@ -68,6 +72,7 @@ public class MemberServiceImpl implements MemberService {
 	public MemberServiceImpl(MemberRepository memberRepository,
 		MemberFollowRepository memberFollowRepository,
 		MemberBadgeRepository memberBadgeRepository,
+		MemberTechLanguageRepository memberTechLanguageRepository,
 		BadgeRepository badgeRepository,
 		RepoRepository repoRepository,
 		RepoPostRepository repoPostRepository,
@@ -78,6 +83,7 @@ public class MemberServiceImpl implements MemberService {
 		this.memberRepository = memberRepository;
 		this.memberFollowRepository = memberFollowRepository;
 		this.memberBadgeRepository = memberBadgeRepository;
+		this.memberTechLanguageRepository = memberTechLanguageRepository;
 		this.repoRepository = repoRepository;
 		this.repoPostRepository = repoPostRepository;
 		this.repositoryPostMemberLikeRepository = repositoryPostMemberLikeRepository;
@@ -206,6 +212,9 @@ public class MemberServiceImpl implements MemberService {
 
 			myBadges.add(badgeResponse);
 		}
+
+		List<MemberTechLanguage> memTechRelations = memberTechLanguageRepository.findByMember(member);
+		// List<BadgeResponse> myBadges = new ArrayList<BadgeResponse>();
 
 		MypageResponse mypageResponse = MypageResponse.builder()
 			.nickname(member.getNickname())
