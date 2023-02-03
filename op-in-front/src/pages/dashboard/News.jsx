@@ -4,8 +4,7 @@ import Post from "../../components/Post";
 export default function News() {
   return (
     <>
-      {/* News */}
-      <div className="grid grid-rows-1 ">
+      <div className="h-screen overflow-auto">
         <Post />
         <Post />
         <Post />
