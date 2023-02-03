@@ -8,6 +8,10 @@ import Menus from "./Menus";
 import Detail from "./user/Detail";
 import SelectTag from './user/SelectTag';
 
+import { useRecoilState } from "recoil";
+import { userStored } from "../recoil/user/atoms";
+import { useEffect } from "react";
+
 // import DashBoard from "./DashBoard";
 // import Repository from "./Repository";
 // import Education from "./Education";
@@ -17,6 +21,19 @@ import NotFound from "./NotFound";
 
 export default function Main() {
   // const [subDomain] = useLocation();
+  const [user, setUser] = useRecoilState(userStored);
+  useEffect(() => {
+    setUser([
+      {
+        id: 100,
+        name: "Keane Sykes",
+        address: "Ap #765-5550 A, Av.",
+        phone: "010-1152-3825",
+        memo: "luctus, ipsum leo elementum sem, vitae aliquam eros turpis non",
+      },
+    ]);
+  }, []);
+
   return (
     <BrowserRouter>
       <div className="Main">
