@@ -11,17 +11,23 @@ import Search from "./Search";
 import NotFound from "./NotFound";
 import Sidebar from "../components/SideBar";
 import DashBoard from "./DashBoard";
-import Repository from "./repository/Repository";
 import Education from "./Education";
 import Events from "./Events";
+import RepoSelection from "./repository/main/RepoSelection";
+import Recommend from "./repository/recommend";
+import RepoDetail from "./repository/following/RepoDetail";
 
-function Template() {
+function MainTemplate() {
   return (
     <div className="flex items-start justify-between mx-44">
       <Sidebar />
       <Outlet />
     </div>
   );
+}
+
+function RepoTemplate() {
+  return <Outlet />;
 }
 
 export default function Main() {
@@ -37,9 +43,13 @@ export default function Main() {
             <Route path="userfind" element={<UserFind />} />
             <Route path="detail" element={<Detail />} />
             <Route path="selecttag" element={<SelectTag />} />
-            <Route exact path="/" element={<Template />}>
+            <Route exact path="/" element={<MainTemplate />}>
               <Route exact index element={<DashBoard />} />
-              <Route path="repo" element={<Repository />} />
+              <Route path="repo" element={<RepoTemplate />}>
+                <Route index element={<RepoSelection />} />
+                <Route exact path=":repoNum" element={<RepoDetail />} />
+                <Route exact path="recommand" element={<Recommend />} />
+              </Route>
               <Route path="edu" element={<Education />} />
               <Route path="events" element={<Events />} />
             </Route>
