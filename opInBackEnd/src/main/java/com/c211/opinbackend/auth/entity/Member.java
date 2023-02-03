@@ -64,4 +64,8 @@ public class Member {
 		this.nickname = name;
 	}
 
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 }

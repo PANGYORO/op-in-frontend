@@ -24,6 +24,7 @@ import com.c211.opinbackend.auth.model.request.MemberEmailRequest;
 import com.c211.opinbackend.auth.model.request.MemberJoinRequest;
 import com.c211.opinbackend.auth.model.request.MemberLoginRequest;
 import com.c211.opinbackend.auth.model.request.MemberNicknameRequest;
+import com.c211.opinbackend.auth.model.request.MemberPasswordRequest;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.auth.service.MemberService;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
@@ -79,19 +80,14 @@ public class MemberController {
 			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_NICKNAME_EXCEPTION);
 		}
 
-		Member member = memberService.modifyNickname(request.getNickname(), request.getId());
+		Member member = memberService.modifyNickname(request.getNickname(), request.getEmail());
 		return new ResponseEntity<String>(member.getNickname(), HttpStatus.OK);
 	}
 
 	@PostMapping("/password/put")
-	public ResponseEntity<?> modifyPassword(@RequestBody MemberNicknameRequest request) throws Exception {
-		boolean exist = memberService.existNickname(request.getNickname());
-		if (exist) {
-			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_NICKNAME_EXCEPTION);
-		}
-
-		Member member = memberService.modifyNickname(request.getNickname(), request.getId());
-		return new ResponseEntity<String>(member.getNickname(), HttpStatus.OK);
+	public ResponseEntity<?> modifyPassword(@RequestBody MemberPasswordRequest request) throws Exception {
+		boolean val = memberService.modifyPassword(request.getEmail(), request.getPassword());
+		return new ResponseEntity<Boolean>(val, HttpStatus.OK);
 	}
 
 	@PostMapping("/login")

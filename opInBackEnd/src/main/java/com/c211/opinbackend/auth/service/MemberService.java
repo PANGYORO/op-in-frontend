@@ -16,5 +16,7 @@ public interface MemberService {
 
 	boolean existNickname(String nickname);
 
-	Member modifyNickname(String nickname, long id);
+	Member modifyNickname(String nickname, String email);
+
+	boolean modifyPassword(String email, String password);
 }

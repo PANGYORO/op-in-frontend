@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.c211.opinbackend.auth.entity.Badge;
@@ -383,8 +384,8 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional
-	public Member modifyNickname(String nickname, long id) {
-		Member member = memberRepository.findById(id).orElse(null);
+	public Member modifyNickname(String nickname, String email) {
+		Member member = memberRepository.findByEmail(email).orElse(null);
 		if (member == null) {
 			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
 		}
@@ -392,5 +393,19 @@ public class MemberServiceImpl implements MemberService {
 		member.setNickname(nickname);
 
 		return member;
+	}
+
+	@Override
+	@Transactional
+	public boolean modifyPassword(String email, String password) {
+		Member member = memberRepository.findByEmail(email).orElse(null);
+		if (member == null) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
+		}
+
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		member.setPassword(passwordEncoder.encode(password));
+
+		return true;
 	}
 }
