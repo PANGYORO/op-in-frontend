@@ -1,59 +1,41 @@
 package com.c211.opinbackend.auth.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import javax.naming.Context;
-
 import java.util.Random;
 
-import com.c211.opinbackend.auth.entity.Member;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
 
-@Slf4j
+import com.c211.opinbackend.exception.api.ApiExceptionEnum;
+import com.c211.opinbackend.exception.api.ApiRuntimeException;
+
+import lombok.RequiredArgsConstructor;
+
 @Service
 @RequiredArgsConstructor
 public class MailService {
 
 	private final JavaMailSender javaMailSender;
-	private final MemberService memberService;
 
-	public String sendMail(String email) {
-		log.info("들어옴~!!!!");
-		log.info(email);
+	public String mailSend(String email) {
+		String temporaryPassword = createCode();
 
-		String authNum = createCode();
 
-		log.info(authNum);
+		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+		simpleMailMessage.setTo(email);
+		simpleMailMessage.setSubject("Op-in 임시 비밀번호 발급 안내");
+		simpleMailMessage.setText(" Op-in 임시 비밀번호 발급 안내 \n "+temporaryPassword);
 
-		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
 		try {
-			SimpleMailMessage message = new SimpleMailMessage();
-			message.setTo(email);
-			message.setFrom("krocd@naver.com");
-			message.setSubject("Op-in 임시 비밀번호 발급 안내");
-			message.setText(authNum);
-			javaMailSender.send(message);
-
-			log.info("Success");
-
-			return authNum;
-
-		} catch (Exception e) {
-			log.info("fail");
-			throw new RuntimeException(e);
+			javaMailSender.send(simpleMailMessage);
+		} catch (Exception ex) {
+			throw new ApiRuntimeException(ApiExceptionEnum.API_CENTER_CALL_EXCEPTION);
 		}
+
+		return temporaryPassword;
 	}
 
-	// 인증번호 및 임시 비밀번호 생성 메서드
 	public String createCode() {
 		Random random = new Random();
 		StringBuffer key = new StringBuffer();
@@ -67,6 +49,11 @@ public class MailService {
 				default: key.append(random.nextInt(9));
 			}
 		}
+
+		// #?!@$%^&*-
+		char pwCollection[] = new char[] {'#','?','!','@','$','%','^','&','*','-' };
+		key.append(pwCollection[(int) random.nextInt(10)]);
+
 		return key.toString();
 	}
 

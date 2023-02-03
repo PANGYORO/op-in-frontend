@@ -2,7 +2,6 @@ package com.c211.opinbackend.auth.controller;
 
 import static com.c211.opinbackend.exception.member.MemberExceptionEnum.*;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,12 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.entity.Role;
-import com.c211.opinbackend.auth.model.MailDto;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.request.MemberEmailRequest;
@@ -53,6 +48,7 @@ public class MemberController {
 	MemberService memberService;
 
 	MailService mailService;
+
 
 	@Autowired
 	public MemberController(MemberService memberService,
@@ -151,10 +147,12 @@ public class MemberController {
 
 	}
 
-	@PostMapping ("/account/changePwEmail")
-	public ResponseEntity<?> sendEmail(@RequestBody Map<String, String> email) {
-		String p = mailService.sendMail(email.get("email"));
-		log.info("conn" , p);
+	@PostMapping ("/changePwEmail")
+	public ResponseEntity<?> changePwEmail(@RequestBody Map<String, String> email) {
+		String temporaryPassword = mailService.mailSend(email.get("email"));
+
+		boolean val = memberService.modifyPassword(email.get("email"), temporaryPassword);
+
 		return ResponseEntity.ok(true);
 	}
 
