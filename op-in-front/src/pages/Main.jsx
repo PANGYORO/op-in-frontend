@@ -14,8 +14,8 @@ import DashBoard from "./DashBoard";
 import Education from "./Education";
 import Events from "./Events";
 import RepoSelection from "./repository/main/RepoSelection";
-import Recommend from "./repository/recommend";
-import RepoDetail from "./repository/following/RepoDetail";
+// import Recommend from "./repository/recommend";
+// import RepoDetail from "./repository/following/RepoDetail";
 
 function MainTemplate() {
   return (
