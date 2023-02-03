@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,13 +17,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class JwtExceptionFilter extends OncePerRequestFilter {
 
 	@Override
-	protected void doFilterInternal (HttpServletRequest req, HttpServletResponse res, FilterChain chain)
+	protected void doFilterInternal(HttpServletRequest req,
+		HttpServletResponse res, FilterChain chain)
 		throws IOException {
 		try {
 			chain.doFilter(req, res);
 		} catch (Exception ex) {
-			if(ex instanceof AuthRuntimeException)
-				setErrorResponse(res, (AuthRuntimeException) ex);
+			if (ex instanceof AuthRuntimeException)
+				setErrorResponse(res, (AuthRuntimeException)ex);
 		}
 	}
 
