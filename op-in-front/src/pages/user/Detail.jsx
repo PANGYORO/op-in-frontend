@@ -1,10 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import DefaultImg from "../../assets/basicprofile.png";
 import Setting from "../../assets/settings.png";
 import Post from "../../components/Post";
 import MyInfo from "../../components/user/MyInfo";
+import http from "../../api/http";
 
 export default function Detail() {
+  const [myinfo, setMyInfo] = useState("");
+
+  useEffect(() => {
+    async () => {
+      await http
+        .get(`auth/getMember`, {
+          email: "swany0509@naver.com",
+        })
+        .then((data) => {
+          alert(data);
+          console.log(data);
+          setMyInfo(data);
+        })
+        .catch(() => alert("error"));
+    };
+    console.log(myinfo);
+  }, []);
   return (
     <div className="flex items-start justify-between mx-44">
       <div className="w-full mx-4 my-4">

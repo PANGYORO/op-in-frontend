@@ -7,5 +7,6 @@ export default defineConfig({
   build: {
     outDir: "../opInBackEnd/src/main/resources/static/",
   },
+
 });
 
