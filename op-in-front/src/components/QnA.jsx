@@ -57,7 +57,7 @@ export default function QnA() {
                 </svg>
             </div> */}
             <div className="mt-3">
-              <p className="max-w-2xl mt-1 dark:text-white">
+              <p className="mt-1 dark:text-white">
                 My first job of scanning photos at the Memories 2 Digital Photo
                 Scanning was fantastic. She completed the work quickly while I
                 was waiting. Thanks for a great service..
@@ -66,6 +66,7 @@ export default function QnA() {
 
             <div className="mt-3">
               <form className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
+                
                 <div className=" relative w-full">
                   <input
                     type="text"
