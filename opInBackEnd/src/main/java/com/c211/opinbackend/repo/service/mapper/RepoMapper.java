@@ -26,6 +26,7 @@ public class RepoMapper {
 			.star("1233455565")
 			.forkNum("123214141")
 			.topicList(topics)
+			.gitContributors(null)
 			.build();
 		return repositoryDto;
 	}
