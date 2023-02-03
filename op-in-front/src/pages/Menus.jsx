@@ -2,12 +2,12 @@ import React from "react";
 import Sidebar from "../components/SideBar";
 import { Route, Routes } from "react-router-dom";
 import DashBoard from "./DashBoard";
-import Repository from "./Repository";
+import Repository from "./repository/Repository";
 import Education from "./Education";
 import Search from "./Search";
 import Events from "./Events";
 import NotFound from "./NotFound";
-import Question from './repository/main/Question';
+import Question from './repository/following/Question';
 
 export default function Menus() {
   return (

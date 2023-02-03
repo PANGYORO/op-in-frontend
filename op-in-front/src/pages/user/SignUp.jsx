@@ -176,10 +176,10 @@ function PasswordConfirm({ register, error, name, label, password }) {
             value: true,
             message: "비밀번호를 입력해주세요.",
           },
-          pattern: {
-            value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$/,
-            message: "비밀번호는 대문자, 소문자, 특수문자, 숫자를 포함해야합니다 (8~16 글자)",
-          },
+          // pattern: {
+          //   value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$/,
+          //   message: "비밀번호는 대문자, 소문자, 특수문자, 숫자를 포함해야합니다 (8~16 글자)",
+          // },
           validate: (value) => {
             if (value != password) {
               return "비밀번호가 일치하지 않습니다.";

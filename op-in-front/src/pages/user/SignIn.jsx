@@ -4,6 +4,10 @@ import React from "react";
 
 import Logo from "../../components/Logo";
 import http from '../../api/http';
+import { useEffect } from 'react';
+import { useRecoilState } from "recoil";
+import { userStored } from "../../recoil/user/atoms";
+
 
 
 function Button({ onClick = () => {}, loading = false, children }) {
@@ -101,14 +105,25 @@ function LoginForm() {
 
   const navigate = useNavigate();
 
+  const [user,setUser] = useRecoilState(userStored);
+
   const onSubmit = async (data) => {
     await http.post('auth/login', {
       email: data.email,
       password: data.password
     })
     .then((res) => {
-      navigate("/")
-      console.log(res);
+      console.log(res.data)
+      // const token = res.data
+      // useEffect(() => {
+      //   setUser([
+      //     {
+      //       token
+      //     }
+      //   ])
+
+      // }, [])
+      
     })
     .catch((err) => {
       console.log(err)
