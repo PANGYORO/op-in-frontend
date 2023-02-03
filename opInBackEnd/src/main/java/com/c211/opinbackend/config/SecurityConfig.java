@@ -49,6 +49,7 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+			.antMatchers("/", "/error").permitAll()
 			.antMatchers("/auth/**").permitAll()
 			.anyRequest().authenticated()
 			.and()
