@@ -47,8 +47,8 @@ export default function Main() {
               <Route exact index element={<DashBoard />} />
               <Route path="repo" element={<RepoTemplate />}>
                 <Route index element={<RepoSelection />} />
-                <Route exact path=":repoNum" element={<RepoDetail />} />
-                <Route exact path="recommand" element={<Recommend />} />
+                <Route exact path="recommand" element={<div>123</div>} />
+                <Route exact path=":repoNum" element={<div>125125</div>} />
               </Route>
               <Route path="edu" element={<Education />} />
               <Route path="events" element={<Events />} />
