@@ -380,4 +380,17 @@ public class MemberServiceImpl implements MemberService {
 
 		return mypageResponse;
 	}
+
+	@Override
+	@Transactional
+	public Member modifyNickname(String nickname, long id) {
+		Member member = memberRepository.findById(id).orElse(null);
+		if (member == null) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
+		}
+
+		member.setNickname(nickname);
+
+		return member;
+	}
 }

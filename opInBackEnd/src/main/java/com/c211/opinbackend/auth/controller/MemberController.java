@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.entity.Role;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
@@ -69,6 +70,28 @@ public class MemberController {
 	public ResponseEntity<?> existNickname(@RequestBody MemberNicknameRequest request) throws Exception {
 		boolean exist = memberService.existNickname(request.getNickname());
 		return new ResponseEntity<Boolean>(exist, HttpStatus.OK);
+	}
+
+	@PostMapping("/nickname/put")
+	public ResponseEntity<?> modifyNickname(@RequestBody MemberNicknameRequest request) throws Exception {
+		boolean exist = memberService.existNickname(request.getNickname());
+		if (exist) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_NICKNAME_EXCEPTION);
+		}
+
+		Member member = memberService.modifyNickname(request.getNickname(), request.getId());
+		return new ResponseEntity<String>(member.getNickname(), HttpStatus.OK);
+	}
+
+	@PostMapping("/password/put")
+	public ResponseEntity<?> modifyPassword(@RequestBody MemberNicknameRequest request) throws Exception {
+		boolean exist = memberService.existNickname(request.getNickname());
+		if (exist) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_NICKNAME_EXCEPTION);
+		}
+
+		Member member = memberService.modifyNickname(request.getNickname(), request.getId());
+		return new ResponseEntity<String>(member.getNickname(), HttpStatus.OK);
 	}
 
 	@PostMapping("/login")
