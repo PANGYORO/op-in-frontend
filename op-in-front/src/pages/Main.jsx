@@ -6,7 +6,7 @@ import SignUp from "./user/SignUp";
 import UserFind from "./user/UserFind";
 import Menus from "./Menus";
 import Detail from "./user/Detail";
-import SelectTag from './user/SelectTag';
+import SelectTag from "./user/SelectTag";
 
 // import { useRecoilState } from "recoil";
 // import { userStored } from "../recoil/user/atoms";
@@ -40,14 +40,13 @@ export default function Main() {
         <Header />
         <main className="relative h-screen overflow-hidden bg-gray-100 dark:bg-gray-800">
           <Routes>
-            <Route path="/search" element={<Search />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/userfind" element={<UserFind />} />
-            <Route path="/detail" element={<Detail />} />
-            <Route path="/selecttag" element={<SelectTag/>} />
-            <Route exact path="/" element={<Navigate to="/main" />} />
-            <Route exact path="/main/*" element={<Menus />}></Route>
+            <Route path="search" element={<Search />} />
+            <Route path="signin" element={<SignIn />} />
+            <Route path="signup" element={<SignUp />} />
+            <Route path="userfind" element={<UserFind />} />
+            <Route path="detail" element={<Detail />} />
+            <Route path="selecttag" element={<SelectTag />} />
+            <Route exact path="/*" element={<Menus />}></Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
