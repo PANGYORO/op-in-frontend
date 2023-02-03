@@ -7,6 +7,7 @@ import Education from "./Education";
 import Search from "./Search";
 import Events from "./Events";
 import NotFound from "./NotFound";
+import Question from './repository/main/Question';
 
 export default function Menus() {
   return (
@@ -19,6 +20,7 @@ export default function Menus() {
           <Route path="/edu" element={<Education />} />
           <Route path="/search" element={<Search />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/repo/qna" element={<Question />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

@@ -1,4 +1,6 @@
-package com.c211.opinbackend.jwt;
+package com.c211.opinbackend.auth.jwt;
+
+import static com.c211.opinbackend.exception.auth.AuthExceptionEnum.*;
 
 import java.security.Key;
 import java.util.Arrays;
@@ -16,7 +18,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.model.TokenDto;
+import com.c211.opinbackend.exception.auth.AuthRuntimeException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -64,13 +68,13 @@ public class TokenProvider implements InitializingBean {
 	 * 검증된 이메일에 대해 토큰을 생성하는 메서드
 	 * AccessToken의 Claim으로는 email과 nickname을 넣습니다.
 	 */
-	public TokenDto createToken(String email,
+	public TokenDto createToken(Member member,
 		String authorities) {
 		long now = (new Date()).getTime();
 
 		String accessToken = Jwts.builder()
-			.claim("email", email)
-			// .claim("nickname", user.getNickname())
+			.claim("email", member.getEmail())
+			.claim("nickname", member.getNickname())
 			.claim(AUTHORITIES_KEY, authorities)
 			.setExpiration(new Date(now + accessTokenValidityInMilliseconds))
 			.signWith(key, SignatureAlgorithm.HS512)
@@ -78,8 +82,8 @@ public class TokenProvider implements InitializingBean {
 
 		String refreshToken = Jwts.builder()
 			.claim(AUTHORITIES_KEY, authorities)
-			.claim("email", email)
-			// .claim("nickname", user.getNickname())
+			.claim("email", member.getEmail())
+			.claim("nickname", member.getNickname())
 			.setExpiration(new Date(now + refreshTokenValidityInMilliseconds))
 			.signWith(key, SignatureAlgorithm.HS512)
 			.compact();
@@ -104,19 +108,26 @@ public class TokenProvider implements InitializingBean {
 	 * 토큰 유효성 검사하는 메서드
 	 */
 	public boolean validateToken(String token) {
+
+		boolean val = false;
+
 		try {
 			Jwts.parser().setSigningKey(key).parseClaimsJws(token);
-			return true;
+			val = true;
 		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
 			log.info("잘못된 JWT 서명입니다.");
+			throw new AuthRuntimeException(AUTH_JWT_SIGNATURE_EXCEPTION);
 		} catch (ExpiredJwtException e) {
 			log.info("만료된 JWT 토큰입니다.");
+			throw new AuthRuntimeException(AUTH_JWT_EXPIRED_EXCEPTION);
 		} catch (UnsupportedJwtException e) {
 			log.info("지원하지 않는 JWT토큰입니다.");
+			throw new AuthRuntimeException(AUTH_JWT_SUPPORT_EXCEPTION);
 		} catch (IllegalArgumentException e) {
 			log.info("JWT토큰이 잘못되었습니다.");
+			throw new AuthRuntimeException(AUTH_JWT_SIGNATURE_EXCEPTION);
 		}
-		return false;
+		return val;
 	}
 
 	/*

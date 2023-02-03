@@ -11,7 +11,10 @@ import javax.persistence.ManyToOne;
 
 import com.c211.opinbackend.repo.entitiy.Topic;
 
+import lombok.Getter;
+
 @Entity
+@Getter
 public class MemberTopic {
 	@Id
 	@GeneratedValue
