@@ -31,6 +31,7 @@ public class RepositoryDto {
 	private String content;
 	private List<RepoTechLangDTO> techLangs;
 	private List<RepositoryContributorDto> contributors;
+	private List<RepositoryContributorDto> gitContributors;
 	private String star;
 	private String forkNum;
 	private List<String> topicList;
