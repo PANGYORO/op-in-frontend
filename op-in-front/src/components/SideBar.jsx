@@ -2,19 +2,20 @@ import React, { useState } from "react";
 import BoxLogo from "../assets/box-logo.png";
 import { Link } from "react-router-dom";
 
-function selectMenu(e) {
-  // alert(e.target.id);
-  console.log(e.target.id);
-}
-
 export default function Sidebar() {
   const [currentMenu, setMenu] = useState("dashboard");
-  const menus = ["dashboard", "mypage", "repository", "education", "event"];
+  // const menus = ["dashboard", "mypage", "repository", "education", "event"];
   const deselected =
     "flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500";
   const selected =
     "flex items-center justify-start w-full p-4 my-2 font-thin text-blue-500 uppercase transition-colors duration-200 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800";
-
+  function selectMenu(id) {
+    // alert(e.target.id);
+    console.log(id);
+    document.getElementById(currentMenu).className = deselected;
+    document.getElementById(id).className = selected;
+    setMenu(id);
+  }
   return (
     <div className="relative hidden h-screen my-4 ml-4 shadow-lg lg:block w-64">
       <div className="h-full bg-white rounded-2xl dark:bg-gray-700 w-64">
@@ -30,8 +31,8 @@ export default function Sidebar() {
               id="dashboard"
               className={selected}
               to="/main"
-              onClick={(e) => {
-                selectMenu(e);
+              onClick={() => {
+                selectMenu("dashboard");
               }}
             >
               <span className="text-left">
@@ -51,8 +52,8 @@ export default function Sidebar() {
               id="mypage"
               className={deselected}
               to="/detail"
-              onClick={(e) => {
-                selectMenu(e);
+              onClick={() => {
+                selectMenu("mypage");
               }}
             >
               <span className="text-left">
@@ -73,8 +74,8 @@ export default function Sidebar() {
               id="repository"
               className={deselected}
               to="/main/repo"
-              onClick={(e) => {
-                selectMenu(e);
+              onClick={() => {
+                selectMenu("repository");
               }}
             >
               <span className="text-left">
@@ -95,8 +96,8 @@ export default function Sidebar() {
               id="education"
               className={deselected}
               to="/main/edu"
-              onClick={(e) => {
-                selectMenu(e);
+              onClick={() => {
+                selectMenu("education");
               }}
             >
               <span className="text-left">
@@ -117,8 +118,8 @@ export default function Sidebar() {
               id="events"
               className={deselected}
               to="/main/events"
-              onClick={(e) => {
-                selectMenu(e);
+              onClick={() => {
+                selectMenu("events");
               }}
             >
               <span className="text-left">
@@ -136,7 +137,6 @@ export default function Sidebar() {
               <span className="mx-4 text-sm font-normal">Events</span>
             </Link>
           </div>
-          <p>{currentMenu}</p>
         </nav>
       </div>
     </div>

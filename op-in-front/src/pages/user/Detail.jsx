@@ -43,14 +43,14 @@ export default function Detail() {
         </div>
 
         <div className="flex flex-col w-full pl-0 md:p-4 md:space-y-4">
-          <div className="h-screen pt-2 pb-24 pl-2 pr-2 overflow-auto md:pt-0 md:pr-0 md:pl-0">
+          <div className="pt-2 pb-24 pl-2 pr-2  md:pt-0 md:pr-0 md:pl-0">
             <div className="flex flex-col flex-wrap sm:flex-row h-full">
               <div className="w-full w-1/3 h-full ">
                 <MyInfo />
               </div>
 
-              <div className="w-full w-2/3">
-                <div className="ml-4 mb-4">
+              <div className="w-full w-2/3  h-screen overflow-auto">
+                <div className="ml-4 mb-4 ">
                   <header className="z-40 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl">
                     <div className="relative z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">
                       <div className="relative flex items-center w-full pl-1 lg:max-w-68 sm:pr-2 sm:ml-0">

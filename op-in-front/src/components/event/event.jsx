@@ -1,4 +1,5 @@
 import React from "react";
+import OpenSource from "../../assets/opensource.png";
 
 export default function post() {
   return (
@@ -63,7 +64,7 @@ export default function post() {
             className="mx-auto w-full block w-4/12 h-40 rounded-lg"
             alt="art cover"
             loading="lazy"
-            src="https://picsum.photos/seed/2/2000/1000"
+            src={OpenSource}
           />
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React from "react";
-import News from "./dashboard/news";
-import Hots from "./dashboard/Hots";
+import News from "./dashboard/News";
+// import Hots from "./dashboard/Hots";
 
 export default function DashBoard() {
   return (
