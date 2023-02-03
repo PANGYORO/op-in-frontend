@@ -10,7 +10,7 @@ export default function Repository() {
   return (
     <Routes>
       <Route path="/" element={<RepoSelection />} />
-      <Route path="/*" element={<RepoDetail />} />
+      <Route path="/repdetail" element={<RepoDetail />} />
       <Route path="/recommand" element={<Recommend />} />
     </Routes>
   );
