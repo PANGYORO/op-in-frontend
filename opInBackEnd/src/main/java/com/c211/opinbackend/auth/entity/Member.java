@@ -3,21 +3,16 @@ package com.c211.opinbackend.auth.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.c211.opinbackend.repo.entitiy.Repository;
-import com.c211.opinbackend.repo.entitiy.RepositoryTechLanguage;
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -56,16 +51,21 @@ public class Member {
 	@NotNull
 	private boolean githubSyncFl;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "GITHUB_SYNC_ID", nullable = true)
-	private GithubSync githubSync;
-
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
-	@OneToMany(mappedBy = "member")
-	List<Repository> repositoryList = new ArrayList<>();
+	private String githubToken;
+	private String githubId;
 
-	@OneToMany(mappedBy = "repository")
-	List<RepositoryTechLanguage> repositoryTechLanguages = new ArrayList<>();
+	@OneToMany(mappedBy = "member")
+	List<Repository> memberList = new ArrayList<>();
+
+	public void setNickname(String name) {
+		this.nickname = name;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 }

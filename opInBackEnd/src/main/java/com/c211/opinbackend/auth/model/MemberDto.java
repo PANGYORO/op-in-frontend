@@ -1,6 +1,5 @@
 package com.c211.opinbackend.auth.model;
 
-import com.c211.opinbackend.auth.entity.GithubSync;
 import com.c211.opinbackend.auth.entity.Role;
 
 import lombok.AllArgsConstructor;
@@ -25,8 +24,6 @@ public class MemberDto {
 	private String avataUrl;
 
 	private boolean githubSyncFl;
-
-	private GithubSync githubSync;
 
 	private Role role;
 }

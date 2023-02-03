@@ -6,6 +6,7 @@ import com.c211.opinbackend.auth.entity.Badge;
 import com.c211.opinbackend.repo.entitiy.RepositoryPost;
 import com.c211.opinbackend.repo.model.response.RepositoryPostResponse;
 import com.c211.opinbackend.repo.model.response.RepositoryTitleResponse;
+import com.c211.opinbackend.repo.model.response.TopicResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,4 +32,12 @@ public class MypageResponse {
 	private long countFollower;
 
 	private List<BadgeResponse> badges;
+
+	private List<TechLanguageResponse> techLanguages;
+
+	private List<TopicResponse> topicResponses;
+
+	private List<RepositoryTitleResponse> contributeRepo;
+
+	private List<RepositoryTitleResponse> followRepos;
 }
