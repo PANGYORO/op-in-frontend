@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes, Outlet } from "react-router-dom";
+import { Route, Routes, Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import SignIn from "./user/SignIn";
 import SignUp from "./user/SignUp";
@@ -14,8 +14,6 @@ import DashBoard from "./DashBoard";
 import Education from "./Education";
 import Events from "./Events";
 import RepoSelection from "./repository/main/RepoSelection";
-// import Recommend from "./repository/recommend";
-// import RepoDetail from "./repository/following/RepoDetail";
 
 function MainTemplate() {
   return (
@@ -32,31 +30,29 @@ function RepoTemplate() {
 
 export default function Main() {
   return (
-    <BrowserRouter>
-      <div className="Main">
-        <Header />
-        <main className="relative h-screen overflow-hidden bg-gray-100 dark:bg-gray-800">
-          <Routes>
-            <Route path="search" element={<Search />} />
-            <Route path="signin" element={<SignIn />} />
-            <Route path="signup" element={<SignUp />} />
-            <Route path="userfind" element={<UserFind />} />
-            <Route path="detail" element={<Detail />} />
-            <Route path="selecttag" element={<SelectTag />} />
-            <Route exact path="/" element={<MainTemplate />}>
-              <Route exact index element={<DashBoard />} />
-              <Route path="repo" element={<RepoTemplate />}>
-                <Route index element={<RepoSelection />} />
-                <Route exact path="recommand" element={<div>123</div>} />
-                <Route exact path=":repoNum" element={<div>125125</div>} />
-              </Route>
-              <Route path="edu" element={<Education />} />
-              <Route path="events" element={<Events />} />
+    <div className="Main">
+      <Header />
+      <main className="relative h-screen overflow-hidden bg-gray-100 dark:bg-gray-800">
+        <Routes>
+          <Route path="search" element={<Search />} />
+          <Route path="signin" element={<SignIn />} />
+          <Route path="signup" element={<SignUp />} />
+          <Route path="userfind" element={<UserFind />} />
+          <Route path="detail" element={<Detail />} />
+          <Route path="selecttag" element={<SelectTag />} />
+          <Route exact path="/" element={<MainTemplate />}>
+            <Route exact index element={<DashBoard />} />
+            <Route path="repo" element={<RepoTemplate />}>
+              <Route index element={<RepoSelection />} />
+              <Route exact path="recommand" element={<div>123</div>} />
+              <Route exact path=":repoNum" element={<div>125125</div>} />
             </Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
-      </div>
-    </BrowserRouter>
+            <Route path="edu" element={<Education />} />
+            <Route path="events" element={<Events />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+    </div>
   );
 }

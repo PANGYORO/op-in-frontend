@@ -1,20 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import BoxLogo from "../assets/box-logo.png";
-import { Link } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { Link, useMatch } from "react-router-dom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { menuState } from "../recoil/sidebar/atoms";
 
+const ITEMS = {
+  DASHBOARD: "dashboard",
+  MYPAGE: "mypage",
+  REPOSITORY: "repository",
+  EDUCATION: "education",
+  EVENTS: "events",
+};
 export default function Sidebar() {
-  const [currentMenu, setMenu] = useRecoilState(menuState);
+  const currentMenu = useRecoilValue(menuState);
+  const setCurrentMenu = useSetRecoilState(menuState);
   const deselected =
     "flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500";
   const selected =
     "flex items-center justify-start w-full p-4 my-2 font-thin text-blue-500 uppercase transition-colors duration-200 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800";
   function selectMenu(id) {
-    document.getElementById(currentMenu).className = deselected;
-    document.getElementById(id).className = selected;
-    setMenu(id);
+    setCurrentMenu(id);
   }
+
   return (
     <div className="relative hidden h-screen my-4 ml-4 shadow-lg lg:block w-64">
       <div className="h-full bg-white rounded-2xl dark:bg-gray-700 w-64">
@@ -28,10 +35,10 @@ export default function Sidebar() {
           <div>
             <Link
               id="dashboard"
-              className={selected}
-              to=""
+              className={useMatch("/") ? selected : deselected}
+              to="/"
               onClick={() => {
-                selectMenu("dashboard");
+                selectMenu(ITEMS.DASHBOARD);
               }}
             >
               <span className="text-left">
@@ -52,7 +59,7 @@ export default function Sidebar() {
               className={deselected}
               to="/detail"
               onClick={() => {
-                selectMenu("mypage");
+                selectMenu(ITEMS.MYPAGE);
               }}
             >
               <span className="text-left">
@@ -71,10 +78,10 @@ export default function Sidebar() {
             </Link>
             <Link
               id="repository"
-              className={deselected}
+              className={useMatch("repo") ? selected : deselected}
               to="/repo"
               onClick={() => {
-                selectMenu("repository");
+                selectMenu(ITEMS.REPOSITORY);
               }}
             >
               <span className="text-left">
@@ -93,10 +100,10 @@ export default function Sidebar() {
             </Link>
             <Link
               id="education"
-              className={deselected}
+              className={useMatch("edu") ? selected : deselected}
               to="/edu"
               onClick={() => {
-                selectMenu("education");
+                selectMenu(ITEMS.EDUCATION);
               }}
             >
               <span className="text-left">
@@ -115,10 +122,10 @@ export default function Sidebar() {
             </Link>
             <Link
               id="events"
-              className={deselected}
+              className={useMatch("events") ? selected : deselected}
               to="/events"
               onClick={() => {
-                selectMenu("events");
+                selectMenu(ITEMS.EVENTS);
               }}
             >
               <span className="text-left">
