@@ -1,14 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import React from "react";
+import jwt_decode from "jwt-decode";
 
 import Logo from "../../components/Logo";
 import http from '../../api/http';
-import { useEffect } from 'react';
-import { useRecoilState } from "recoil";
-import { userStored } from "../../recoil/user/atoms";
+import { useEffect, useState } from 'react';
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { userInfo } from '@recoil/user/atoms'
 
-
+import useToken from '@hooks/useToken';
 
 function Button({ onClick = () => {}, loading = false, children }) {
   return (
@@ -96,39 +97,38 @@ function EmailInput({ register, error }) {
 
   
 
-function LoginForm() {
+function LoginForm({ token, saveToken }) {
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm();
 
-  const navigate = useNavigate();
+  const setUser = useSetRecoilState(userInfo);
+  const user = useRecoilValue(userInfo);
+  // const navigate = useNavigate();
 
-  const [user,setUser] = useRecoilState(userStored);
-
+  useEffect(() => {
+    console.log(user)
+  }, [user])
   const onSubmit = async (data) => {
-    await http.post('auth/login', {
-      email: data.email,
-      password: data.password
-    })
-    .then((res) => {
-      console.log(res.data)
-      // const token = res.data
-      // useEffect(() => {
-      //   setUser([
-      //     {
-      //       token
-      //     }
-      //   ])
-
-      // }, [])
-      
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-
+    
+    
+    try {
+      let res = await http.post('auth/login', {
+        email: data.email,
+        password: data.password
+      });
+      const decodedUserInfo = jwt_decode(res.data.accessToken)
+      setUser((before) => ({
+        ...before,
+        ...decodedUserInfo,
+        logined: true,
+      }))
+      saveToken(res.data)
+    } catch (error) {
+      console.log(error)
+    }
     
   };
   
@@ -204,7 +204,12 @@ function LoginForm() {
 }
 
 function SignIn() {
-  return <LoginForm />;
+  const { token, saveToken } = useToken();
+  
+  useEffect(() => {
+  }, [token]);
+
+  return <LoginForm token={token}  saveToken={saveToken} />;
 }
 
 export default SignIn;

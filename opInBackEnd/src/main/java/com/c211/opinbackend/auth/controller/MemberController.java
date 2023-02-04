@@ -2,6 +2,7 @@ package com.c211.opinbackend.auth.controller;
 
 import static com.c211.opinbackend.exception.member.MemberExceptionEnum.*;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import com.c211.opinbackend.auth.model.request.MemberLoginRequest;
 import com.c211.opinbackend.auth.model.request.MemberNicknameRequest;
 import com.c211.opinbackend.auth.model.request.MemberPasswordRequest;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
+import com.c211.opinbackend.auth.service.MailService;
 import com.c211.opinbackend.auth.service.MemberService;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
@@ -45,18 +47,24 @@ public class MemberController {
 
 	MemberService memberService;
 
+	MailService mailService;
+
+
 	@Autowired
 	public MemberController(MemberService memberService,
+		MailService mailService,
 		TokenProvider tokenProvider,
 		AuthenticationManagerBuilder authenticationManagerBuilder
 	) {
 		this.memberService = memberService;
+		this.mailService = mailService;
 		this.tokenProvider = tokenProvider;
 		this.authenticationManagerBuilder = authenticationManagerBuilder;
 	}
 
 	@PostMapping("/getMember")
 	public ResponseEntity<?> getMemberInfo(@RequestBody MemberEmailRequest request) throws Exception {
+		log.info(request.getEmail());
 		MypageResponse mypageResponse = memberService.getMemberInfo(request.getEmail());
 		return new ResponseEntity<MypageResponse>(mypageResponse, HttpStatus.OK);
 	}
@@ -137,6 +145,15 @@ public class MemberController {
 
 		return ResponseEntity.ok(true);
 
+	}
+
+	@PostMapping ("/changePwEmail")
+	public ResponseEntity<?> changePwEmail(@RequestBody Map<String, String> email) {
+		String temporaryPassword = mailService.mailSend(email.get("email"));
+
+		boolean val = memberService.modifyPassword(email.get("email"), temporaryPassword);
+
+		return ResponseEntity.ok(true);
 	}
 
 }
