@@ -31,6 +31,8 @@ import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.response.OAuthAccessTokenResponse;
 import com.c211.opinbackend.auth.repository.MemberRepository;
+import com.c211.opinbackend.exception.member.MemberExceptionEnum;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.util.RandomString;
 
 @Service
@@ -78,14 +80,10 @@ public class OAuthServiceImpl implements OAuthService {
 	}
 
 	public TokenDto authorize(Member member) {
-		logger.info("in authorsize");
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 			member.getEmail(), member.getPassword());
-		logger.info("in authorsize 1");
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-		logger.info("in authorsize2");
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		logger.info("in authorsize3");
 		String authorities = getAuthorities(authentication);
 
 		return tokenProvider.createToken(member, authorities);
@@ -101,6 +99,11 @@ public class OAuthServiceImpl implements OAuthService {
 	@Transactional
 	public Member saveOrUpdate(MemberDto memberDto) {
 		// [TODO]: member 정보 업데이트
+		// TODO: 2023/02/06 중복 체크
+		if (memberRepository.existsByEmail(memberDto.getEmail())) {
+			logger.info("fail on exist");
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_EMAIL_EXCEPTION);
+		}
 		//Member member = memberRepository.findByGithubId(memberDto.getGithubId())
 		//	.orElseGet(memberDto::toMember);
 		//logger.info("member saveOrUpdate {}", member);
@@ -109,12 +112,16 @@ public class OAuthServiceImpl implements OAuthService {
 
 	private MemberDto getUserProfile(OAuthAccessTokenResponse tokenResponse) {
 		Map<String, Object> userAttributes = getUserAttributes(tokenResponse);
+		logger.info(userAttributes.entrySet().toString());// 어떤 정보 가져오는지 확인
+		// TODO: 2023/02/06 데브 올릴때 로그 지우기
+		// TODO: 2023/02/06 더미 데이터 채우기
 		return MemberDto.builder()
 			.githubId(String.valueOf(userAttributes.get("id")))
 			.githubToken(tokenResponse.getAccessToken())
 			.githubSyncFl(true)
-			.email((String)userAttributes.get("email"))
+			.email((String)userAttributes.get("login") + "@gitHub.com")
 			.password(passwordEncoder.encode("SsafyOut!123"))
+			// TODO: 2023/02/06 로그인 이메일이 아니라 login 으로 변경필요 이메일이 없는 경우가 있다 - 일단 처리 했으나 프론트와 비밀번호 찾기같은거..
 			.nickname(userAttributes.get("login") + "." + RandomString.generateNumber())
 			.avatarUrl((String)userAttributes.get("avatar_url"))
 			.role(Role.ROLE_USER)
