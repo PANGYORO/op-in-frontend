@@ -1,10 +1,16 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function post() {
+export default function RepoPost() {
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="mb-4">
-        <div className=" w-full p-4 bg-white shadow-lg rounded-2xl dark:bg-gray-700 items-center justify-center group sm:flex space-x-6 ">
+        <div
+          className=" w-full p-4 bg-white shadow-lg rounded-2xl dark:bg-gray-700 items-center justify-center group sm:flex space-x-6 "
+          onClick={() => navigate(`/repo/postview`)}
+        >
           <div className="grid grid-row gap-3">
             <img
               className="mx-auto w-full block w-full h-40 rounded-lg"
@@ -41,9 +47,10 @@ export default function post() {
                 <div className="flex items-center space-x-4 justify-between">
                   <div className="flex gap-3 space-y-1">
                     <span className="text-md">
-                      It is a daunting task to manage a project from start to finish – or any number
-                      of tasks for that matter. Usually, such problems arise as a result of a person
-                      not being equipped with project management certifications...
+                      It is a daunting task to manage a project from start to
+                      finish – or any number of tasks for that matter. Usually,
+                      such problems arise as a result of a person not being
+                      equipped with project management certifications...
                     </span>
                   </div>
                 </div>

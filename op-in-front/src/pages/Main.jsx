@@ -16,6 +16,8 @@ import Events from "@pages/Events";
 import RepoSelection from "@pages/repository/main/RepoSelection";
 import RecommandIndex from "@pages/repository/Recommand";
 import RepoDetail from "./repository/following/RepoDetail";
+import PostView from "@components/PostView";
+import Status from "@components/Status";
 
 function MainTemplate() {
   return (
@@ -29,6 +31,19 @@ function MainTemplate() {
 function RepoTemplate() {
   return <Outlet />;
 }
+
+// function RepoDetailTemplate(){
+//   return(
+//     <div className="flex flex-auto w-full mt-4">
+//       <div className="w-2/3">
+//         <RepoDetail />
+//       </div>
+//       <div className="w-1/3">
+//         <Status />
+//       </div>
+//     </div>
+//   );
+// }
 
 export default function Main() {
   return (
@@ -48,7 +63,9 @@ export default function Main() {
               <Route index element={<RepoSelection />} />
               <Route exact path="recommand" element={<RecommandIndex />} />
               <Route exact path=":repoNum" element={<RepoDetail />} />
+              <Route path="postview" element={<PostView />} />
             </Route>
+            <Route path="postview" element={<PostView />} />
             <Route path="edu" element={<Education />} />
             <Route path="events" element={<Events />} />
           </Route>
