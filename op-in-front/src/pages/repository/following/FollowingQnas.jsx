@@ -1,12 +1,14 @@
 import React from "react";
-import QnA from "../../../components/QnA";
+import QnA from "@components/repository/QnA";
 
 export default function FollowingQnas() {
-  <div>
-    <QnA />
-    <QnA />
-    <QnA />
-    <QnA />
-    <QnA />
-  </div>;
+  return (
+    <div className="ml-4">
+      <QnA />
+      <QnA />
+      <QnA />
+      <QnA />
+      <QnA />
+    </div>
+  );
 }

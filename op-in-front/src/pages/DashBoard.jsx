@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
-import News from "./dashboard/News";
-import Hots from "./dashboard/Hots";
+import News from "@pages/dashboard/News";
+import Hots from "@pages/dashboard/Hots";
 
 const NEWS_TAB = "news";
 const HOTS_TAB = "hots";

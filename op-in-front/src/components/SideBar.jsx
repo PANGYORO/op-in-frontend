@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
-import BoxLogo from "../assets/box-logo.png";
+import BoxLogo from "@assets/box-logo.png";
 import { Link, useMatch } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { menuState } from "../recoil/sidebar/atoms";
+import { menuState } from "@recoil/sidebar/atoms";
+import { repoMenuState } from "@recoil/sidebar/atoms2";
 
 const ITEMS = {
   DASHBOARD: "dashboard",
@@ -14,20 +15,36 @@ const ITEMS = {
 export default function Sidebar() {
   const currentMenu = useRecoilValue(menuState);
   const setCurrentMenu = useSetRecoilState(menuState);
+  const repoCurrentMenu = useRecoilValue(repoMenuState);
+  const setRepoCurrentMenu = useSetRecoilState(repoMenuState);
   const deselected =
     "flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500";
   const selected =
     "flex items-center justify-start w-full p-4 my-2 font-thin text-blue-500 uppercase transition-colors duration-200 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800";
   function selectMenu(id) {
     setCurrentMenu(id);
+    setRepoCurrentMenu("myrepo");
+  }
+  function selectRepoMenu(id) {
+    setRepoCurrentMenu(id);
   }
 
   return (
     <div className="relative hidden h-screen my-4 ml-4 shadow-lg lg:block w-64">
       <div className="h-full bg-white rounded-2xl dark:bg-gray-700 w-64">
         <div className="flex items-center justify-center pt-6">
-          <Link to="/" className="place-self-center">
-            <img src={BoxLogo} alt="none" className="object-contain h-30 w-48" />
+          <Link
+            to="/"
+            className="place-self-center"
+            onClick={() => {
+              selectMenu(ITEMS.DASHBOARD);
+            }}
+          >
+            <img
+              src={BoxLogo}
+              alt="none"
+              className="object-contain h-30 w-48"
+            />
           </Link>
         </div>
 
@@ -78,7 +95,7 @@ export default function Sidebar() {
             </Link>
             <Link
               id="repository"
-              className={useMatch("repo") ? selected : deselected}
+              className={useMatch("repo/*") ? selected : deselected}
               to="/repo"
               onClick={() => {
                 selectMenu(ITEMS.REPOSITORY);
@@ -98,6 +115,44 @@ export default function Sidebar() {
               </span>
               <span className="mx-4 text-sm font-normal">Repository</span>
             </Link>
+            <div>
+              {currentMenu == ITEMS.REPOSITORY ? (
+                <div className="ml-14">
+                  <ul>
+                    <li className="mb-3">
+                      <Link
+                        id="myrepo"
+                        className={
+                          repoCurrentMenu == "myrepo" ? "text-blue-500" : ""
+                        }
+                        to="/repo"
+                        onClick={() => {
+                          selectRepoMenu("myrepo");
+                        }}
+                      >
+                        <span>My repo</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        id="recommand"
+                        className={
+                          repoCurrentMenu == "recommand" ? "text-blue-500" : ""
+                        }
+                        to="/repo/recommand"
+                        onClick={() => {
+                          selectRepoMenu("recommand");
+                        }}
+                      >
+                        <span>Recommand</span>
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              ) : (
+                <div></div>
+              )}
+            </div>
             <Link
               id="education"
               className={useMatch("edu") ? selected : deselected}

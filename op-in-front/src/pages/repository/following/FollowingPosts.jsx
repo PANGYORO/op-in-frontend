@@ -1,16 +1,14 @@
 import React from "react";
-import RepoPost from "../../../components/repository/RepoPost";
+import Post from "@components/repository/RepoPost";
 
 export default function FollowingPosts() {
-  <div className="grid grid-cols-3 gap-4 w-full">
-    <RepoPost />
-    <RepoPost />
-    <RepoPost />
-    <RepoPost />
-    <RepoPost />
-    <RepoPost />
-    <RepoPost />
-    <RepoPost />
-    <RepoPost />
-  </div>;
+  return (
+    <div className="grid grid-cols-2 gap-4 w-full ml-4">
+      <Post />
+      <Post />
+      <Post />
+      <Post />
+      <Post />
+    </div>
+  );
 }

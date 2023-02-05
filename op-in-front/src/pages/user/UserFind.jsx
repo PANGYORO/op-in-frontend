@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-import Logo from "../../components/Logo";
+import Logo from "@components/Logo";
 
 function Button({ onClick = () => {}, loading = false, children }) {
   return (
@@ -41,7 +41,10 @@ function Button({ onClick = () => {}, loading = false, children }) {
 function EmailInput({ register, error }) {
   return (
     <div className="col-span-6 sm:col-span-3">
-      <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+      <label
+        htmlFor="email"
+        className="block text-sm font-medium text-gray-700"
+      >
         Email Address
       </label>
       <input

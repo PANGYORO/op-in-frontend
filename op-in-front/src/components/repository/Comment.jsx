@@ -1,5 +1,5 @@
 import React from "react";
-import DefaultImg from "../assets/basicprofile.png";
+import DefaultImg from "@assets/basicprofile.png";
 
 export default function Comment() {
   return (
@@ -17,4 +17,3 @@ export default function Comment() {
     </div>
   );
 }
-

@@ -1,5 +1,5 @@
-import DefaultImg from "../assets/basicprofile.png";
-import Comment from "./Comment";
+import DefaultImg from "@assets/basicprofile.png";
+import Comment from "@components/repository/Comment";
 import React from "react";
 
 export default function QnA() {
@@ -66,7 +66,6 @@ export default function QnA() {
 
             <div className="mt-3">
               <form className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
-                
                 <div className=" relative w-full">
                   <input
                     type="text"

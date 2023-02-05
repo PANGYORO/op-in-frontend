@@ -1,5 +1,5 @@
 import React from "react";
-import BasicBadge from "../../assets/basicbadge.png";
+import BasicBadge from "@assets/basicbadge.png";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 

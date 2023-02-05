@@ -1,8 +1,12 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import Logo from "../components/Logo";
-import { Link } from "react-router-dom";
+import Logo from "@components/Logo";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { menuState } from "@recoil/sidebar/atoms";
+import { repoMenuState } from "@recoil/sidebar/atoms2";
+
+import { useSetRecoilState } from "recoil";
 
 import "./headerfunc";
 
@@ -17,6 +21,14 @@ function classNames(...classes) {
 }
 
 export default function Example() {
+  const setCurrentMenu = useSetRecoilState(menuState);
+  const setRepoCurrentMenu = useSetRecoilState(repoMenuState);
+  const [searchValue, setSearchValue] = useState("");
+  const navigate = useNavigate();
+  function selectMenu(id) {
+    setCurrentMenu(id);
+    setRepoCurrentMenu("myrepo");
+  }
   return (
     <Disclosure as="nav" className="bg-gray-800 sticky top-0 z-50">
       {({ open }) => (
@@ -38,18 +50,54 @@ export default function Example() {
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
                   {/* 로고자리 */}
-                  <Link to="/">
-                    <Logo className="hidden h-10 w-auto lg:block" />
+                  <Link
+                    to="/"
+                    onClick={() => {
+                      selectMenu("dashboard");
+                    }}
+                  >
+                    <Logo className="h-10 w-auto lg:block" />
                   </Link>
                 </div>
 
-                <div className="hidden sm:ml-6 sm:block">
+                <div className="hidden sm:ml-6 sm:block w-1/3">
                   <div className="flex space-x-4">
-                    <input
-                      type="text"
-                      className="block w-full py-1.5 pl-10 pr-4 leading-normal rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-400 aa-input"
-                      placeholder="Search"
-                    />
+                    <div className="relative flex items-center w-full h-full lg:w-64 group">
+                      <div className="absolute z-50 flex items-center justify-center block w-auto h-10 p-3 pr-2 text-sm text-gray-500 uppercase cursor-pointer sm:hidden">
+                        <svg
+                          fill="none"
+                          className="relative w-5 h-5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                      </div>
+                      <svg
+                        className="absolute left-0 z-20 hidden w-4 h-4 ml-4 text-gray-500 pointer-events-none fill-current group-hover:text-gray-400 sm:block"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
+                      </svg>
+                      <input
+                        type="text"
+                        className="block w-full py-1.5 pl-10 pr-4 leading-normal rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-400 aa-input"
+                        placeholder="Search"
+                        onKeyUp={(e) => {
+                          if (e.key == "Enter") {
+                            navigate(`/search`, { state: e.target.value });
+                            e.target.value = "";
+                          }
+                        }}
+                        onChange={(e) => {
+                          setSearchValue(e.target.value);
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
