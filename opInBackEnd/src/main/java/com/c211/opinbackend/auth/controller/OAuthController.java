@@ -1,5 +1,7 @@
 package com.c211.opinbackend.auth.controller;
 
+import static com.c211.opinbackend.exception.member.MemberExceptionEnum.*;
+
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +30,7 @@ import com.c211.opinbackend.auth.model.request.OAuthAccessTokenRequest;
 import com.c211.opinbackend.auth.model.response.OAuthAccessTokenResponse;
 import com.c211.opinbackend.auth.service.OAuthService;
 import com.c211.opinbackend.auth.service.OAuthServiceImpl;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.util.RandomString;
 
 @RestController
@@ -49,11 +52,16 @@ public class OAuthController {
 
 	@GetMapping("/login/github")
 	public ResponseEntity<TokenDto> getUserInfo(@RequestParam String code) {
+		try {
+			TokenDto token = oAuthService.login(code);
+			HttpHeaders httpHeaders = new HttpHeaders();
+			httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
+			logger.info(token.getAccessToken());
+			return new ResponseEntity<>(token, httpHeaders, HttpStatus.OK);
+		} catch(Exception e) {
+			logger.error(e.toString());
+			throw new MemberRuntimeException(MEMBER_WRONG_EXCEPTION);
+		}
 
-		TokenDto token = oAuthService.login(code);
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
-
-		return new ResponseEntity<>(token, httpHeaders, HttpStatus.OK);
 	}
 }

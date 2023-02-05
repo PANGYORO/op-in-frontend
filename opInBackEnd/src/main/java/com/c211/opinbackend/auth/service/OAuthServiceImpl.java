@@ -3,6 +3,7 @@ package com.c211.opinbackend.auth.service;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
@@ -19,6 +27,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.c211.opinbackend.auth.constant.GitHub;
 import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.entity.Role;
+import com.c211.opinbackend.auth.jwt.TokenProvider;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.response.OAuthAccessTokenResponse;
@@ -26,22 +35,31 @@ import com.c211.opinbackend.auth.repository.MemberRepository;
 import com.c211.opinbackend.util.RandomString;
 
 @Service
-@Transactional
 public class OAuthServiceImpl implements OAuthService {
-
+	private final TokenProvider tokenProvider;
+	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 	private static final Logger logger = LoggerFactory.getLogger(OAuthServiceImpl.class);
 	private final String clientId;
 	private final String clientSecret;
 	MemberRepository memberRepository;
-	MemberService memberService;
+
+	private final PasswordEncoder passwordEncoder;
+
 
 	@Autowired
-	public OAuthServiceImpl(MemberRepository memberRepository,MemberServiceImpl memberService,@Value("${security.oauth.github.client-id}") String clientId,
+	public OAuthServiceImpl(
+		PasswordEncoder passwordEncoder,
+		TokenProvider tokenProvider,
+		AuthenticationManagerBuilder authenticationManagerBuilder,
+		MemberRepository memberRepository,
+		@Value("${security.oauth.github.client-id}") String clientId,
 		@Value("${security.oauth.github.client-secret}") String clientSecret) {
 		this.memberRepository = memberRepository;
-		this.memberService = memberService;
 		this.clientId = clientId;
 		this.clientSecret = clientSecret;
+		this.tokenProvider = tokenProvider;
+		this.authenticationManagerBuilder = authenticationManagerBuilder;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
@@ -53,14 +71,32 @@ public class OAuthServiceImpl implements OAuthService {
 		OAuthAccessTokenResponse tokenResponse = getToken(code);
 		MemberDto memberDto = getUserProfile(tokenResponse);
 		logger.info("memberDTO: {}", memberDto);
-		Member member = memberRepository.save(memberDto.toMember());
-		logger.info("member: {}", member);
-		TokenDto token = memberService.authorize(member.getEmail(), member.getPassword());
+		Member member = saveOrUpdate(memberDto);
+
+		TokenDto token = authorize(member);
 
 		return token;
 	}
 
-	private Member saveOrUpdate(MemberDto memberDto) {
+	public TokenDto authorize(Member member) {
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(member.getEmail(), member.getPassword());
+		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		String authorities = getAuthorities(authentication);
+
+		return tokenProvider.createToken(member, authorities);
+	}
+
+	public String getAuthorities(Authentication authentication) {
+		return authentication.getAuthorities()
+			.stream()
+			.map(GrantedAuthority::getAuthority)
+			.collect(Collectors.joining(","));
+	}
+
+	@Transactional
+	public Member saveOrUpdate(MemberDto memberDto) {
 		// [TODO]: member 정보 업데이트
 		//Member member = memberRepository.findByGithubId(memberDto.getGithubId())
 		//	.orElseGet(memberDto::toMember);
@@ -74,6 +110,7 @@ public class OAuthServiceImpl implements OAuthService {
 			.githubToken(tokenResponse.getAccessToken())
 			.githubSyncFl(true)
 			.email((String) userAttributes.get("email"))
+			.password(passwordEncoder.encode("SsafyOut!123"))
 			.nickname(userAttributes.get("login") + "." + RandomString.generateNumber())
 			.avatarUrl((String) userAttributes.get("avatar_url"))
 			.role(Role.ROLE_USER)
