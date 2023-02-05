@@ -2,6 +2,7 @@ package com.c211.opinbackend.auth.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -126,27 +127,26 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public TokenDto authorize(String email, String password) {
-		log.info("in");
-		log.info(email);
-		log.info(password);
 
 		UsernamePasswordAuthenticationToken authenticationToken =
 			new UsernamePasswordAuthenticationToken(email, password);
-		try {
-			System.out.println(authenticationManagerBuilder.getObject());
-			Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-			log.info("in2");
-			Member member = memberRepository.findByEmail(authentication.getName()).orElse(null);
-			log.info(member.getEmail());
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+		// TODO: 2023/02/06 여기 에러 처리 부탁드립니다 ㅜ
+		log.info(authenticationToken.getCredentials().toString());
+		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+		Member member = memberRepository.findByEmail(authentication.getName()).orElse(null);
+		log.info(member.getEmail());
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 
-			String authorities = getAuthorities(authentication);
+		String authorities = getAuthorities(authentication);
 
-			return tokenProvider.createToken(member, authorities);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+		return tokenProvider.createToken(member, authorities);
+
+	}
+
+	@Override
+	public Optional<Member> findByEmail(String email) {
+		Optional<Member> byEmail = memberRepository.findByEmail(email);
+		return byEmail;
 	}
 
 	// 권한 가져오기
