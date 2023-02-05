@@ -1,7 +1,5 @@
 package com.c211.opinbackend.auth.controller;
 
-import static com.c211.opinbackend.exception.member.MemberExceptionEnum.*;
-
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,16 +63,12 @@ public class MemberController {
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody MemberLoginRequest request) {
-		try {
-			TokenDto token = memberService.authorize(request.getEmail(), request.getPassword());
 
-			HttpHeaders httpHeaders = new HttpHeaders();
-			httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
+		TokenDto token = memberService.authorize(request.getEmail(), request.getPassword());
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
+		return new ResponseEntity<TokenDto>(token, httpHeaders, HttpStatus.OK);
 
-			return new ResponseEntity<TokenDto>(token, httpHeaders, HttpStatus.OK);
-		} catch(Exception e) {
-			throw new MemberRuntimeException(MEMBER_WRONG_EXCEPTION);
-		}
 	}
 
 	@PostMapping("/signup")

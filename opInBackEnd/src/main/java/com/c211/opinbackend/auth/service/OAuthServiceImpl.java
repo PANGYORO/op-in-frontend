@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +44,6 @@ public class OAuthServiceImpl implements OAuthService {
 
 	private final PasswordEncoder passwordEncoder;
 
-
 	@Autowired
 	public OAuthServiceImpl(
 		PasswordEncoder passwordEncoder,
@@ -66,6 +64,7 @@ public class OAuthServiceImpl implements OAuthService {
 	public String getRedirectURL() {
 		return GitHub.AUTHORIZE_URL + "?client_id=" + clientId;
 	}
+
 	@Override
 	public TokenDto login(String code) {
 		OAuthAccessTokenResponse tokenResponse = getToken(code);
@@ -79,10 +78,14 @@ public class OAuthServiceImpl implements OAuthService {
 	}
 
 	public TokenDto authorize(Member member) {
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(member.getEmail(), member.getPassword());
+		logger.info("in authorsize");
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+			member.getEmail(), member.getPassword());
+		logger.info("in authorsize 1");
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
+		logger.info("in authorsize2");
 		SecurityContextHolder.getContext().setAuthentication(authentication);
+		logger.info("in authorsize3");
 		String authorities = getAuthorities(authentication);
 
 		return tokenProvider.createToken(member, authorities);
@@ -103,16 +106,17 @@ public class OAuthServiceImpl implements OAuthService {
 		//logger.info("member saveOrUpdate {}", member);
 		return memberRepository.save(memberDto.toMember());
 	}
+
 	private MemberDto getUserProfile(OAuthAccessTokenResponse tokenResponse) {
 		Map<String, Object> userAttributes = getUserAttributes(tokenResponse);
 		return MemberDto.builder()
 			.githubId(String.valueOf(userAttributes.get("id")))
 			.githubToken(tokenResponse.getAccessToken())
 			.githubSyncFl(true)
-			.email((String) userAttributes.get("email"))
+			.email((String)userAttributes.get("email"))
 			.password(passwordEncoder.encode("SsafyOut!123"))
 			.nickname(userAttributes.get("login") + "." + RandomString.generateNumber())
-			.avatarUrl((String) userAttributes.get("avatar_url"))
+			.avatarUrl((String)userAttributes.get("avatar_url"))
 			.role(Role.ROLE_USER)
 			.build();
 	}
@@ -146,7 +150,7 @@ public class OAuthServiceImpl implements OAuthService {
 	private MultiValueMap<String, String> tokenRequest(String code) {
 		MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
 		formData.add("code", code);
-//		formData.add("redirect_uri", "/");
+		//		formData.add("redirect_uri", "/");
 
 		return formData;
 	}
