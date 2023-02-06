@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -32,15 +30,15 @@ import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.response.OAuthAccessTokenResponse;
 import com.c211.opinbackend.auth.repository.MemberRepository;
-import com.c211.opinbackend.exception.member.MemberExceptionEnum;
-import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.util.RandomString;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class OAuthServiceImpl implements OAuthService {
 	private final TokenProvider tokenProvider;
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
-	private static final Logger logger = LoggerFactory.getLogger(OAuthServiceImpl.class);
 	private final String clientId;
 	private final String clientSecret;
 	MemberRepository memberRepository;
@@ -71,13 +69,12 @@ public class OAuthServiceImpl implements OAuthService {
 	public String getRedirectURL(String redirectUri) {
 
 		return GitHub.AUTHORIZE_URL + "?client_id=" + clientId +
-			(redirectUri != null ? "&redirect_uri="+ redirectUri : "");
+			(redirectUri != null ? "&redirect_uri=" + redirectUri : "");
 	}
 
 	@Override
 	public TokenDto login(String code, String redirectUri) {
 		OAuthAccessTokenResponse tokenResponse = getToken(code, redirectUri);
-		logger.info(tokenResponse.getAccessToken());
 		MemberDto memberDto = getUserProfile(tokenResponse);
 		Member member = saveOrUpdate(memberDto);
 
@@ -133,7 +130,7 @@ public class OAuthServiceImpl implements OAuthService {
 			.password(new BCryptPasswordEncoder().encode(""))
 			.email(userAttributes.get("id") + "@github.io")
 			.nickname(userAttributes.get("login") + "." + RandomString.generateNumber())
-			.avatarUrl((String) userAttributes.get("avatar_url"))
+			.avatarUrl((String)userAttributes.get("avatar_url"))
 			.role(Role.ROLE_USER)
 			.build();
 	}
@@ -144,7 +141,8 @@ public class OAuthServiceImpl implements OAuthService {
 			.uri(GitHub.USER_INFO_URL)
 			.headers(header -> header.setBearerAuth(response.getAccessToken()))
 			.retrieve()
-			.bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+			.bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
+			})
 
 			.block();
 	}
@@ -175,7 +173,6 @@ public class OAuthServiceImpl implements OAuthService {
 		// if(redirectUri != null) {
 		// 	formData.add("redirect_uri", redirectUri);
 		// }
-		logger.info(formData.toString());
 		return formData;
 	}
 }
