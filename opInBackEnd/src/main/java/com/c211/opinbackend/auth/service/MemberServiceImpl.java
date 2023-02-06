@@ -2,6 +2,7 @@ package com.c211.opinbackend.auth.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -23,6 +24,7 @@ import com.c211.opinbackend.auth.entity.MemberTechLanguage;
 import com.c211.opinbackend.auth.entity.MemberTopic;
 import com.c211.opinbackend.auth.entity.RepositoryContributor;
 import com.c211.opinbackend.auth.entity.TechLanguage;
+import com.c211.opinbackend.auth.jwt.TokenProvider;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.response.BadgeResponse;
@@ -36,11 +38,11 @@ import com.c211.opinbackend.auth.repository.MemberTechLanguageRepository;
 import com.c211.opinbackend.auth.repository.MemberTopicRepository;
 import com.c211.opinbackend.auth.repository.RepoContributorRepository;
 import com.c211.opinbackend.auth.repository.TechLanguageRepository;
+import com.c211.opinbackend.auth.util.SecurityUtil;
 import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
-import com.c211.opinbackend.auth.jwt.TokenProvider;
 import com.c211.opinbackend.repo.entitiy.Repository;
 import com.c211.opinbackend.repo.entitiy.RepositoryFollow;
 import com.c211.opinbackend.repo.entitiy.RepositoryPost;
@@ -88,16 +90,21 @@ public class MemberServiceImpl implements MemberService {
 
 		UsernamePasswordAuthenticationToken authenticationToken =
 			new UsernamePasswordAuthenticationToken(email, password);
-
+		// TODO: 2023/02/06 여기 에러 처리 부탁드립니다 ㅜ
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-		Member member = memberRepository.findByEmail(authentication.getName()).orElse(null);
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		String authorities = getAuthorities(authentication);
 
-		return tokenProvider.createToken(member, authorities);
+		return tokenProvider.createToken(email, authorities);
+
+	}
+
+	@Override
+	public Optional<Member> findByEmail(String email) {
+		Optional<Member> byEmail = memberRepository.findByEmail(email);
+		return byEmail;
 	}
 
 	// 권한 가져오기
@@ -135,7 +142,9 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public boolean existEmail(String email) { return memberRepository.existsByEmail(email);	}
+	public boolean existEmail(String email) {
+		return memberRepository.existsByEmail(email);
+	}
 
 	@Override
 	public boolean existNickname(String nickname) {
@@ -143,7 +152,11 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public boolean deleteMember (String email, String password) {
+	public boolean isOAuthMember(String email) {
+		return memberRepository.existsByEmailAndAndGithubSyncFl(email, true);
+	}
+
+	public boolean deleteMember(String email, String password) {
 
 		Member member = memberRepository.findByEmail(email).orElse(null);
 		if (!passwordEncoder.matches(password, member.getPassword())) {
@@ -160,7 +173,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public boolean deleteGithubMember (String email) {
+	public boolean deleteGithubMember(String email) {
 
 		Member member = memberRepository.findByEmail(email).orElse(null);
 
@@ -174,14 +187,14 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	/*
-	* GET 사용자의 레포지토리 이름 목록
-	*/
+	 * GET 사용자의 레포지토리 이름 목록
+	 */
 	public List<RepositoryTitleResponse> getMemberRepo(Member member) {
 
 		List<Repository> myRepos = repoRepository.findByMember(member);
 		List<RepositoryTitleResponse> myRepoTitles = new ArrayList<RepositoryTitleResponse>();
 
-		for (Repository myRepo: myRepos) {
+		for (Repository myRepo : myRepos) {
 			RepositoryTitleResponse repositoryTitleResponse = RepositoryTitleResponse.builder()
 				.id(myRepo.getId())
 				.title(myRepo.getTitleContent().getTitle())
@@ -194,13 +207,13 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	/*
-	* GET 사용자가 쓴 포스트 목록
-	* */
+	 * GET 사용자가 쓴 포스트 목록
+	 * */
 	public List<RepositoryPostResponse> getMemberRepoPost(Member member) {
 		List<RepositoryPost> myPosts = repoPostRepository.findByMember(member);
 		List<RepositoryPostResponse> myRepoPosts = new ArrayList<RepositoryPostResponse>();
 
-		for (RepositoryPost myPost: myPosts) {
+		for (RepositoryPost myPost : myPosts) {
 			RepositoryPostResponse repositoryPostResponse = RepositoryPostResponse.builder()
 				.id(myPost.getId())
 				.title(myPost.getTitleContent().getTitle())
@@ -221,8 +234,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	/*
-	* GET 사용자 뱃지 목록
-	* */
+	 * GET 사용자 뱃지 목록
+	 * */
 	public List<BadgeResponse> getMemberBadge(Member member) {
 		List<MemberBadge> memBadRelations = memberBadgeRepository.findByMember(member);
 		List<BadgeResponse> myBadges = new ArrayList<BadgeResponse>();
@@ -241,8 +254,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	/*
-	* GET 사용자 언어 목록
-	* */
+	 * GET 사용자 언어 목록
+	 * */
 	public List<TechLanguageResponse> getMemberTechLanguage(Member member) {
 		List<MemberTechLanguage> memTechRelations = memberTechLanguageRepository.findByMember(member);
 		List<TechLanguageResponse> myTechLanguages = new ArrayList<TechLanguageResponse>();
@@ -260,8 +273,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	/*
-	* GET 사용자 토픽 목록
-	* */
+	 * GET 사용자 토픽 목록
+	 * */
 	public List<TopicResponse> getMemberTopic(Member member) {
 		List<MemberTopic> memTopicRelations = memberTopicRepository.findByMember(member);
 		List<TopicResponse> myTopics = new ArrayList<TopicResponse>();
@@ -280,8 +293,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	/*
-	* GET 사용자 기여 레포지토리 목록
-	* */
+	 * GET 사용자 기여 레포지토리 목록
+	 * */
 	public List<RepositoryTitleResponse> getMemberContributes(Member member) {
 		List<RepositoryContributor> repositoryContributors = repoContributorRepository.findByMember(member);
 		List<RepositoryTitleResponse> contributeRepos = new ArrayList<RepositoryTitleResponse>();
@@ -300,8 +313,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	/*
-	* GET 사용자 팔로우 레포지토리 목록
-	* */
+	 * GET 사용자 팔로우 레포지토리 목록
+	 * */
 	public List<RepositoryTitleResponse> getMemberFollows(Member member) {
 		List<RepositoryFollow> repositoryFollows = repositoryFollowRepository.findByMember(member);
 		List<RepositoryTitleResponse> followRepos = new ArrayList<RepositoryTitleResponse>();
@@ -393,7 +406,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public Member getMemberByEmail(String email) {
-		return memberRepository.findByEmail(email).orElse(null);
+	public Member getMember() {
+		return memberRepository.findById(Long.valueOf(SecurityUtil.getCurrentUserId().get())).orElse(null);
 	}
+
 }

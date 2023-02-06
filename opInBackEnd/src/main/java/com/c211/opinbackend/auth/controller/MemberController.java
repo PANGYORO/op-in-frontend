@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.entity.Role;
+import com.c211.opinbackend.auth.jwt.JwtFilter;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.request.MemberEmailRequest;
@@ -36,6 +36,7 @@ import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.auth.jwt.JwtFilter;
 import com.c211.opinbackend.auth.jwt.TokenProvider;
+import com.c211.opinbackend.repo.repository.RepoPostRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,26 +44,17 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/auth")
 public class MemberController {
-	private final TokenProvider tokenProvider;
-	private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
-	private static final RestTemplate restTemplate = new RestTemplate();
 
 	MemberService memberService;
 
 	MailService mailService;
 
-
 	@Autowired
 	public MemberController(MemberService memberService,
-		MailService mailService,
-		TokenProvider tokenProvider,
-		AuthenticationManagerBuilder authenticationManagerBuilder
+		MailService mailService
 	) {
 		this.memberService = memberService;
 		this.mailService = mailService;
-		this.tokenProvider = tokenProvider;
-		this.authenticationManagerBuilder = authenticationManagerBuilder;
 	}
 
 	@PostMapping("/getMember")
@@ -102,18 +94,22 @@ public class MemberController {
 		return new ResponseEntity<Boolean>(val, HttpStatus.OK);
 	}
 
+	@PostMapping("/member/info")
+	public ResponseEntity<?> getMemberLogin() {
+		Member member = memberService.getMember();
+		return new ResponseEntity<Member>(member, HttpStatus.OK);
+	}
+
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody MemberLoginRequest request) {
-		try {
-			TokenDto token = memberService.authorize(request.getEmail(), request.getPassword());
-
-			HttpHeaders httpHeaders = new HttpHeaders();
-			httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
-
-			return new ResponseEntity<TokenDto>(token, httpHeaders, HttpStatus.OK);
-		} catch(Exception e) {
-			throw new MemberRuntimeException(MEMBER_WRONG_EXCEPTION);
+		if (memberService.isOAuthMember(request.getEmail())) {
+			throw new MemberRuntimeException(MemberExceptionEnum.OAUTH_SIGNUP_USER_EXCEPTION);
 		}
+		TokenDto token = memberService.authorize(request.getEmail(), request.getPassword());
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
+		return new ResponseEntity<TokenDto>(token, httpHeaders, HttpStatus.OK);
+
 	}
 
 	@PostMapping("/signup")
@@ -162,6 +158,7 @@ public class MemberController {
 
 	@PostMapping ("/gitMem/delete")
 	public ResponseEntity<?> deleteGithubMember(@RequestBody MemberLoginRequest request) {
+		log.info(request.getEmail());
 		return ResponseEntity.ok(memberService.deleteGithubMember(request.getEmail()));
 	}
 

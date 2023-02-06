@@ -1,5 +1,7 @@
 package com.c211.opinbackend.auth.service;
 
+import java.util.Optional;
+
 import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
@@ -10,11 +12,14 @@ public interface MemberService {
 
 	Member signUp(MemberDto memberDto);
 
+	Optional<Member> findByEmail(String email);
+
 	MypageResponse getMemberInfo(String email);
 
 	boolean existEmail(String email);
 
 	boolean existNickname(String nickname);
+	boolean isOAuthMember(String email);
 
 	Member modifyNickname(String nickname, String email);
 
@@ -24,5 +29,6 @@ public interface MemberService {
 
 	boolean deleteGithubMember(String email);
 
-	Member getMemberByEmail(String email);
+	Member getMember();
+
 }
