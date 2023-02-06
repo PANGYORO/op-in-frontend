@@ -5,13 +5,14 @@ import Logo from "@components/Logo";
 import { Link, useNavigate } from "react-router-dom";
 import { menuState } from "@recoil/sidebar/atoms";
 import { repoMenuState } from "@recoil/sidebar/atoms2";
+import { userInfo } from '@recoil/user/atoms'
 
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
 import "./headerfunc";
 
-// import { useRecoilValue } from "recoil";
-// import { userInfo } from '@recoil/user/atoms'
+
+
 
 const navigation = [
   //메뉴 목록
@@ -19,16 +20,19 @@ const navigation = [
   { name: "SignUp", href: "/signup", current: true },
 ];
 
-// const user = useRecoilValue(userInfo)
-// const [userLogined, setUserLogined] = useState()
-// const user = useRecoilValue(userInfo); 
-// setUserLogined(user.logined)
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Example() {
+
+  const user = useRecoilValue(userInfo)
+  const setUser = useSetRecoilState(userInfo)  
+  
+
+
   const setCurrentMenu = useSetRecoilState(menuState);
   const setRepoCurrentMenu = useSetRecoilState(repoMenuState);
   const [searchValue, setSearchValue] = useState("");
@@ -140,7 +144,7 @@ export default function Example() {
                   </svg>
                 </button>
 
-                <Menu as="div" className="relative ml-3">
+                {user.logined && <Menu as="div" className="relative ml-3">
                   <div>
                     <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="sr-only">Open user menu</span>
@@ -163,40 +167,41 @@ export default function Example() {
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                          <Link
+                            to = "/detail"
+                            className={classNames(active ? 'flex flex-col bg-gray-100 items-center' : '', 'flex flex-col items-center block px-4 py-2 text-sm text-gray-700')}
                           >
                             Your Profile
-                          </a>
+                          </Link>
                         )}
                       </Menu.Item>
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Settings
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                          <button
+                            className={classNames(active ? 'w-full bg-gray-100' : '', 'w-full block px-4 py-2 text-sm text-gray-700')}
+                            onClick={() => {
+                              localStorage.clear()
+                              setUser((before) => ({
+                                ...before,
+                                nickname: '',
+                                email: '',
+                                img_url: '',
+                                logined: false
+                              }))
+                              navigate('/')
+
+                            }}
                           >
                             Sign out
-                          </a>
+                          </button>
                         )}
                       </Menu.Item>
                     </Menu.Items>
                   </Transition>
                 </Menu>
-      
+                }
 
-                {navigation.map((item) => (
+                {!user.logined && navigation.map((item) => (
                   <Link
                     key={item.name}
                     to={item.href}
