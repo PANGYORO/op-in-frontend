@@ -195,6 +195,11 @@ public class MemberServiceImpl implements MemberService {
 		return memberRepository.existsByNickname(nickname);
 	}
 
+	@Override
+	public boolean isOAuthMember(String email) {
+		return memberRepository.existsByEmailAndAndGithubSyncFl(email, true);
+	}
+
 	/*
 	 * GET 사용자의 레포지토리 이름 목록
 	 */

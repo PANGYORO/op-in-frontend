@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.c211.opinbackend.auth.entity.Role;
 import com.c211.opinbackend.auth.jwt.JwtFilter;
+import com.c211.opinbackend.auth.jwt.TokenProvider;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.request.MemberEmailRequest;
@@ -32,11 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/auth")
 public class MemberController {
-<<<<<<< Updated upstream
-=======
-	private final TokenProvider tokenProvider;
-	private final AuthenticationManagerBuilder authenticationManagerBuilder;
->>>>>>> Stashed changes
 
 	MemberService memberService;
 
@@ -68,7 +65,9 @@ public class MemberController {
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody MemberLoginRequest request) {
-
+		if(memberService.isOAuthMember(request.getEmail())) {
+			throw new MemberRuntimeException(MemberExceptionEnum.OAUTH_SIGNUP_USER_EXCEPTION);
+		}
 		TokenDto token = memberService.authorize(request.getEmail(), request.getPassword());
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
