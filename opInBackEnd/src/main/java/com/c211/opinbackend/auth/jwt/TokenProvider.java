@@ -145,4 +145,10 @@ public class TokenProvider implements InitializingBean {
 			return e.getClaims();
 		}
 	}
+
+	// RefreshToken 존재유무 확인
+	public boolean existsRefreshToken(String refreshToken) {
+		// return tokenRepository.existsByRefreshToken(refreshToken);
+		return true;
+	}
 }
