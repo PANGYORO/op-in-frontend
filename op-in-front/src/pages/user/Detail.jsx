@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import DefaultImg from "../../assets/basicprofile.png";
-import Setting from "../../assets/settings.png";
-import Post from "../../components/Post";
-import MyInfo from "../../components/user/MyInfo";
-import http from "../../api/http";
+import DefaultImg from "@assets/basicprofile.png";
+import Setting from "@assets/settings.png";
+import Post from "@components/Post";
+import MyInfo from "@components/user/MyInfo";
+import http from "@api/http";
 
 export default function Detail() {
   const [myinfo, setMyInfo] = useState("");
@@ -25,7 +25,7 @@ export default function Detail() {
   }, []);
   return (
     <div className="flex items-start justify-between mx-44">
-      <div className="w-full mx-4 my-4">
+      <div className="w-full mx-4 my-4 h-screen overflow-auto">
         <div className="grid grid-cols-3 gap-3 mb-8">
           <div className="flex justify-center h-full ">
             <img src={DefaultImg} alt="none" />
@@ -47,7 +47,11 @@ export default function Detail() {
                       Follow
                     </button>
 
-                    <img src={Setting} alt="setting" className="h-16 justify-self-end" />
+                    <img
+                      src={Setting}
+                      alt="setting"
+                      className="h-16 justify-self-end"
+                    />
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4 justify-items-between mt-6">
@@ -63,11 +67,11 @@ export default function Detail() {
         <div className="flex flex-col w-full pl-0 md:p-4 md:space-y-4">
           <div className="pt-2 pb-24 pl-2 pr-2  md:pt-0 md:pr-0 md:pl-0">
             <div className="flex flex-col flex-wrap sm:flex-row h-full">
-              <div className="w-full w-1/3 h-full ">
+              <div className="w-1/3 h-full ">
                 <MyInfo />
               </div>
 
-              <div className="w-full w-2/3  h-screen overflow-auto">
+              <div className=" w-2/3  h-screen overflow-auto">
                 <div className="ml-4 mb-4 ">
                   <header className="z-40 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl">
                     <div className="relative z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">

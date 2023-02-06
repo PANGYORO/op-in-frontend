@@ -3,13 +3,13 @@ import { useForm } from "react-hook-form";
 import React from "react";
 import jwt_decode from "jwt-decode";
 
-import Logo from "../../components/Logo";
-import http from '../../api/http';
-import { useEffect, useState } from 'react';
+import Logo from "@components/Logo";
+import http from "@api/http";
+import { useEffect, useState } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
-import { userInfo } from '@recoil/user/atoms'
+import { userInfo } from "@recoil/user/atoms";
 
-import useToken from '@hooks/useToken';
+import useToken from "@hooks/useToken";
 
 function Button({ onClick = () => {}, loading = false, children }) {
   return (
@@ -74,7 +74,10 @@ function Password({ register, error, name, label }) {
 function EmailInput({ register, error }) {
   return (
     <div className="col-span-6 sm:col-span-3">
-      <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+      <label
+        htmlFor="email"
+        className="block text-sm font-medium text-gray-700"
+      >
         Email Address
       </label>
       <input
@@ -95,8 +98,6 @@ function EmailInput({ register, error }) {
   );
 }
 
-  
-
 function LoginForm({ token, saveToken }) {
   const {
     register,
@@ -109,29 +110,26 @@ function LoginForm({ token, saveToken }) {
   // const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(user)
-  }, [user])
+    console.log(user);
+  }, [user]);
   const onSubmit = async (data) => {
-    
-    
     try {
-      let res = await http.post('auth/login', {
+      let res = await http.post("auth/login", {
         email: data.email,
-        password: data.password
+        password: data.password,
       });
-      const decodedUserInfo = jwt_decode(res.data.accessToken)
+      const decodedUserInfo = jwt_decode(res.data.accessToken);
       setUser((before) => ({
         ...before,
         ...decodedUserInfo,
         logined: true,
-      }))
-      saveToken(res.data)
+      }));
+      saveToken(res.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-    
   };
-  
+
   return (
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8 bg-gray-50 p-5">
@@ -142,7 +140,10 @@ function LoginForm({ token, saveToken }) {
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Or{" "}
-            <Link to="/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
+            <Link
+              to="/signup"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
               Sign up
             </Link>
           </p>
@@ -150,11 +151,11 @@ function LoginForm({ token, saveToken }) {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <EmailInput register={register} error={errors?.email} />
           <Password
-                register={register}
-                error={errors?.password}
-                name="password"
-                label="Password"
-              />
+            register={register}
+            error={errors?.password}
+            name="password"
+            label="Password"
+          />
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input
@@ -163,22 +164,28 @@ function LoginForm({ token, saveToken }) {
                 type="checkbox"
                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+              <label
+                htmlFor="remember-me"
+                className="ml-2 block text-sm text-gray-900"
+              >
                 Remember me
               </label>
             </div>
 
             <div className="text-sm">
-              <Link to="/userfind" className="font-medium text-indigo-600 hover:text-indigo-500">
+              <Link
+                to="/userfind"
+                className="font-medium text-indigo-600 hover:text-indigo-500"
+              >
                 Forgot your password?
               </Link>
             </div>
           </div>
 
           <div>
-              <Button onClick={handleSubmit(onSubmit)} loading={isSubmitting}>
-                Sign In
-              </Button>
+            <Button onClick={handleSubmit(onSubmit)} loading={isSubmitting}>
+              Sign In
+            </Button>
           </div>
           <div>
             <Link to="/auth/github">
@@ -205,11 +212,10 @@ function LoginForm({ token, saveToken }) {
 
 function SignIn() {
   const { token, saveToken } = useToken();
-  
-  useEffect(() => {
-  }, [token]);
 
-  return <LoginForm token={token}  saveToken={saveToken} />;
+  useEffect(() => {}, [token]);
+
+  return <LoginForm token={token} saveToken={saveToken} />;
 }
 
 export default SignIn;

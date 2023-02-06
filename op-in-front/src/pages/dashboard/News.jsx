@@ -1,10 +1,10 @@
 import React from "react";
-import Post from "../../components/Post";
+import Post from "@components/Post";
 
 export default function News() {
   return (
     <>
-      News
+      <div className="pl-4">News</div>
       <Post />
       <Post />
       <Post />
