@@ -112,7 +112,7 @@ public class MemberController {
 	}
 
 	@PostMapping("/signup")
-	public ResponseEntity<Boolean> signUp(@RequestBody MemberJoinRequest request) throws Exception {
+	public ResponseEntity<String> signUp(@RequestBody MemberJoinRequest request) throws Exception {
 
 		// 이메일 형식에 맞는지 체크 (형식 : @, . 을 포함하는지 확인)
 		// 이메일 정규식 => /\S+@\S+.\S+/
@@ -131,8 +131,6 @@ public class MemberController {
 			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_PASSWORD_TYPE_EXCEPTION);
 		}
 
-		// BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
 		MemberDto joinMember = MemberDto.builder()
 			.email(email)
 			.password(password)
@@ -142,7 +140,7 @@ public class MemberController {
 
 		memberService.signUp(joinMember);
 
-		return ResponseEntity.ok(true);
+		return new ResponseEntity<String>(email, HttpStatus.OK);
 
 	}
 
@@ -159,8 +157,9 @@ public class MemberController {
 
 	@PostMapping ("/gitMem/delete")
 	public ResponseEntity<?> deleteGithubMember(@RequestBody MemberLoginRequest request) {
-		log.info(request.getEmail());
 		return ResponseEntity.ok(memberService.deleteGithubMember(request.getEmail()));
 	}
+
+
 
 }
