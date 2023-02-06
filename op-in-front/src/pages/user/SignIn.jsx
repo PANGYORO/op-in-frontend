@@ -1,11 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import React from "react";
+import React, { useEffect }from "react";
 import jwt_decode from "jwt-decode";
 
 import Logo from "@components/Logo";
 import http from "@api/http";
-import { useEffect, useState } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { userInfo } from "@recoil/user/atoms";
 
@@ -98,7 +97,9 @@ function EmailInput({ register, error }) {
   );
 }
 
-function LoginForm({ token, saveToken }) {
+  
+
+function LoginForm({ saveToken }) {
   const {
     register,
     handleSubmit,
@@ -107,11 +108,11 @@ function LoginForm({ token, saveToken }) {
 
   const setUser = useSetRecoilState(userInfo);
   const user = useRecoilValue(userInfo);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(user);
-  }, [user]);
+    
+  }, [user])
   const onSubmit = async (data) => {
     try {
       let res = await http.post("auth/login", {
@@ -123,8 +124,11 @@ function LoginForm({ token, saveToken }) {
         ...before,
         ...decodedUserInfo,
         logined: true,
-      }));
-      saveToken(res.data);
+      }))
+      saveToken(res.data)
+      navigate('/')
+      
+      
     } catch (error) {
       console.log(error);
     }
@@ -211,11 +215,9 @@ function LoginForm({ token, saveToken }) {
 }
 
 function SignIn() {
-  const { token, saveToken } = useToken();
+  const {  saveToken } = useToken();
 
-  useEffect(() => {}, [token]);
-
-  return <LoginForm token={token} saveToken={saveToken} />;
+  return <LoginForm  saveToken={saveToken} />;
 }
 
 export default SignIn;

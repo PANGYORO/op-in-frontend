@@ -18,6 +18,9 @@ import RecommandIndex from "@pages/repository/Recommand";
 import RepoDetail from "./repository/following/RepoDetail";
 import PostView from "@components/PostView";
 
+
+
+
 function MainTemplate() {
   return (
     <div className="flex items-start justify-between mx-44">
@@ -45,6 +48,9 @@ function RepoTemplate() {
 // }
 
 export default function Main() {
+
+
+
   return (
     <div className="Main h-screen overflow-auto">
       <Header />
