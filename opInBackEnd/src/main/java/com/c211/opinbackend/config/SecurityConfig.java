@@ -4,10 +4,12 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -27,8 +29,10 @@ public class SecurityConfig {
 	private final TokenProvider tokenProvider;
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+	private final UserDetailsService userDetailsService;
 
 	public SecurityConfig(
+		UserDetailsService userDetailsService,
 		TokenProvider tokenProvider,
 		JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
 		JwtAccessDeniedHandler jwtAccessDeniedHandler
@@ -36,6 +40,7 @@ public class SecurityConfig {
 		this.tokenProvider = tokenProvider;
 		this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
 		this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
+		this.userDetailsService = userDetailsService;
 
 	}
 
@@ -49,7 +54,7 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-			.antMatchers("/auth/**").permitAll()
+			.antMatchers("/auth/**", "/oauth/**").permitAll()
 			.anyRequest().permitAll()
 			.and()
 			.cors()
@@ -77,6 +82,14 @@ public class SecurityConfig {
 			.apply(new JwtSecurityConfig(tokenProvider));
 
 		return http.build();
+	}
+
+	@Bean
+	public DaoAuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setPasswordEncoder(passwordEncoder());
+		authenticationProvider.setUserDetailsService(userDetailsService);
+		return authenticationProvider;
 	}
 
 	@Bean

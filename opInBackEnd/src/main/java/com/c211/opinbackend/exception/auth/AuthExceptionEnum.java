@@ -12,8 +12,7 @@ import lombok.Getter;
 @Getter
 public enum AuthExceptionEnum {
 
-	AUTH_AUTHORIZATION_EXCEPTION(HttpStatus.UNAUTHORIZED, "A0000", "인증되지 않았습니다."),
-	//권한 관련
+	AUTH_AUTHORIZATION_EXCEPTION(HttpStatus.UNAUTHORIZED, "A0000", "인증되지 않았습니다."), //권한 관련
 	AUTH_AUTHENTICATION_EXCEPTION(HttpStatus.FORBIDDEN, "A0001", "권한이 없습니다."),
 
 	AUTH_JWT_EXPIRED_EXCEPTION(HttpStatus.UNAUTHORIZED, "A0002", "JWT 토큰이 만료됐습니다."),
@@ -25,7 +24,6 @@ public enum AuthExceptionEnum {
 	private final HttpStatus httpStatus;
 	private final String httpCode;
 	private final String errorMessage;
-
 
 	public static Map<String, Object> convertMap(AuthExceptionEnum ex) {
 		Map<String, Object> map = new HashMap<>();
