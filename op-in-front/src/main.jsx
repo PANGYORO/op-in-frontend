@@ -1,12 +1,19 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { RouterProvider } from 'react-router-dom';
-import './index.css'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 
-import pages from "./pages";
+import "./index.css";
+import { RecoilRoot } from "recoil";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+import Main from "./pages/Main";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={pages} />
-  </React.StrictMode>,
-)
+    <RecoilRoot>
+      <BrowserRouter>
+        {/* <RouterProvider router={pages} /> */}
+        <Main />
+      </BrowserRouter>
+    </RecoilRoot>
+  </React.StrictMode>
+);
