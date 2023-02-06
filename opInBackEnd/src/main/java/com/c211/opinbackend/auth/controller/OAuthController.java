@@ -4,6 +4,7 @@ import static com.c211.opinbackend.exception.member.MemberExceptionEnum.*;
 
 import java.io.IOException;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -46,20 +47,28 @@ public class OAuthController {
 	}
 
 	@GetMapping("/redirect/github")
-	public void redirectGithub(HttpServletResponse response) throws IOException {
-		response.sendRedirect(oAuthService.getRedirectURL());
+	public void redirectGithub(HttpServletResponse response, @RequestParam(value = "redirect_uri", required = false) String redirectUri) throws IOException {
+		response.sendRedirect(oAuthService.getRedirectURL(redirectUri));
 	}
 
 	@GetMapping("/login/github")
-	public ResponseEntity<TokenDto> getUserInfo(@RequestParam String code) {
+	public void getUserInfo(@RequestParam String code, @RequestParam(value = "redirect_uri", required = false) String redirectUri, HttpServletResponse response) {
 		try {
-			TokenDto token = oAuthService.login(code);
+			TokenDto token = oAuthService.login(code, redirectUri);
 			HttpHeaders httpHeaders = new HttpHeaders();
 			httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
-			logger.info(token.getAccessToken());
-			return new ResponseEntity<>(token, httpHeaders, HttpStatus.OK);
+
+			Cookie accessTokenCookie = new Cookie("access_token", token.getAccessToken());
+			Cookie refreshTokenCookie = new Cookie("refresh_token", token.getRefreshToken());
+			accessTokenCookie.setPath("/");
+			refreshTokenCookie.setPath("/");
+
+			response.addCookie(accessTokenCookie);
+			response.addCookie(refreshTokenCookie);
+
+			response.sendRedirect(redirectUri);
 		} catch(Exception e) {
-			logger.error(e.toString());
+			e.printStackTrace();
 			throw new MemberRuntimeException(MEMBER_WRONG_EXCEPTION);
 		}
 

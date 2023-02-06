@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,16 +63,22 @@ public class OAuthServiceImpl implements OAuthService {
 		this.passwordEncoder = passwordEncoder;
 	}
 
+	/**
+	 * github OAuth를 위한 Redirect 주소를 리턴합니다.
+	 * @return
+	 */
 	@Override
-	public String getRedirectURL() {
-		return GitHub.AUTHORIZE_URL + "?client_id=" + clientId;
+	public String getRedirectURL(String redirectUri) {
+
+		return GitHub.AUTHORIZE_URL + "?client_id=" + clientId +
+			(redirectUri != null ? "&redirect_uri="+ redirectUri : "");
 	}
 
 	@Override
-	public TokenDto login(String code) {
-		OAuthAccessTokenResponse tokenResponse = getToken(code);
+	public TokenDto login(String code, String redirectUri) {
+		OAuthAccessTokenResponse tokenResponse = getToken(code, redirectUri);
+		logger.info(tokenResponse.getAccessToken());
 		MemberDto memberDto = getUserProfile(tokenResponse);
-		logger.info("memberDTO: {}", memberDto);
 		Member member = saveOrUpdate(memberDto);
 
 		TokenDto token = authorize(member);
@@ -81,7 +88,7 @@ public class OAuthServiceImpl implements OAuthService {
 
 	public TokenDto authorize(Member member) {
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-			member.getEmail(), member.getPassword());
+			member.getEmail(), "");
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String authorities = getAuthorities(authentication);
@@ -96,34 +103,37 @@ public class OAuthServiceImpl implements OAuthService {
 			.collect(Collectors.joining(","));
 	}
 
+	/**
+	 * 깃헙 아이디가 이미 등록되어 있다면, 깃헙의 정보를 업데이트 시켜줍니다.
+	 * @param memberDto
+	 * @return member
+	 */
 	@Transactional
 	public Member saveOrUpdate(MemberDto memberDto) {
-		// [TODO]: member 정보 업데이트
-		// TODO: 2023/02/06 중복 체크
-		if (memberRepository.existsByEmail(memberDto.getEmail())) {
-			logger.info("fail on exist");
-			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_EMAIL_EXCEPTION);
-		}
-		//Member member = memberRepository.findByGithubId(memberDto.getGithubId())
-		//	.orElseGet(memberDto::toMember);
-		//logger.info("member saveOrUpdate {}", member);
-		return memberRepository.save(memberDto.toMember());
+		Member member = memberRepository.findByGithubId(memberDto.getGithubId())
+			.map(entity -> entity.fetch(memberDto.getGithubToken(), memberDto.getAvatarUrl()))
+			.orElseGet(memberDto::toMember);
+
+		return memberRepository.save(member);
 	}
 
+	/**
+	 * Github으로부터 Member의 정보를 가져와 MemberDto로 넣어줍니다.
+	 * email은 {github_id}@github.io 로 설정합니다 -> 이메일이 unique해야 하므로!
+	 * nickname은 {github_id}.{random숫자 6자리}로 설정합니다.
+	 * @param tokenResponse
+	 * @return MemberDto
+	 */
 	private MemberDto getUserProfile(OAuthAccessTokenResponse tokenResponse) {
 		Map<String, Object> userAttributes = getUserAttributes(tokenResponse);
-		logger.info(userAttributes.entrySet().toString());// 어떤 정보 가져오는지 확인
-		// TODO: 2023/02/06 데브 올릴때 로그 지우기
-		// TODO: 2023/02/06 더미 데이터 채우기
 		return MemberDto.builder()
 			.githubId(String.valueOf(userAttributes.get("id")))
 			.githubToken(tokenResponse.getAccessToken())
 			.githubSyncFl(true)
-			.email((String)userAttributes.get("login") + "@gitHub.com")
-			.password(passwordEncoder.encode("SsafyOut!123"))
-			// TODO: 2023/02/06 로그인 이메일이 아니라 login 으로 변경필요 이메일이 없는 경우가 있다 - 일단 처리 했으나 프론트와 비밀번호 찾기같은거..
+			.password(new BCryptPasswordEncoder().encode(""))
+			.email(userAttributes.get("id") + "@github.io")
 			.nickname(userAttributes.get("login") + "." + RandomString.generateNumber())
-			.avatarUrl((String)userAttributes.get("avatar_url"))
+			.avatarUrl((String) userAttributes.get("avatar_url"))
 			.role(Role.ROLE_USER)
 			.build();
 	}
@@ -134,12 +144,12 @@ public class OAuthServiceImpl implements OAuthService {
 			.uri(GitHub.USER_INFO_URL)
 			.headers(header -> header.setBearerAuth(response.getAccessToken()))
 			.retrieve()
-			.bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
-			})
+			.bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+
 			.block();
 	}
 
-	private OAuthAccessTokenResponse getToken(String code) {
+	private OAuthAccessTokenResponse getToken(String code, String redirectUri) {
 		return WebClient.create()
 			.post()
 			.uri(GitHub.ACCESS_TOKEN_URL)
@@ -148,17 +158,24 @@ public class OAuthServiceImpl implements OAuthService {
 				header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 				header.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 				header.setAcceptCharset(Collections.singletonList(StandardCharsets.UTF_8));
-			}).bodyValue(tokenRequest(code))
+			}).bodyValue(tokenRequest(code, redirectUri))
 			.retrieve()
 			.bodyToMono(OAuthAccessTokenResponse.class)
 			.block();
 	}
 
-	private MultiValueMap<String, String> tokenRequest(String code) {
+	/**
+	 * OAuth 처리 과정에서 token을 가져올 때, formData를 전송합니다.
+	 * @param code
+	 * @return
+	 */
+	private MultiValueMap<String, String> tokenRequest(String code, String redirectUri) {
 		MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
 		formData.add("code", code);
-		//		formData.add("redirect_uri", "/");
-
+		// if(redirectUri != null) {
+		// 	formData.add("redirect_uri", redirectUri);
+		// }
+		logger.info(formData.toString());
 		return formData;
 	}
 }

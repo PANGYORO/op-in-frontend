@@ -35,15 +35,15 @@ public class MemberDto {
 
 	public Member toMember() {
 		return Member.builder()
+			.id(id)
+			.password(password)
 			.githubId(githubId)
 			.email(email)
 			.nickname(nickname)
 			.avatarUrl(avatarUrl)
-			.role(Role.ROLE_USER)
 			.githubToken(githubToken)
 			.githubSyncFl(githubSyncFl)
-			.password(password)
-			.id(id)
+			.role(role)
 			.build();
 	}
 }

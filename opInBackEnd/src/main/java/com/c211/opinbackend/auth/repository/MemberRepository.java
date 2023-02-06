@@ -18,6 +18,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	boolean existsByEmail(String email);
 
 	boolean existsByNickname(String nickname);
-
+	boolean existsByGithubId(String githubId);
+	boolean existsByEmailAndAndGithubSyncFl(String email, boolean sync);
 	Member save(Member member);
 }

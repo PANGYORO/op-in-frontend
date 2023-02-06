@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.c211.opinbackend.repo.entitiy.Repository;
 import com.sun.istack.NotNull;
 
@@ -38,7 +40,6 @@ public class Member {
 	private String email;
 
 	@Column(name = "PASSWORD")
-	@NotNull
 	private String password;
 
 	@Column(name = "NICKNAME")
@@ -61,4 +62,7 @@ public class Member {
 	@OneToMany(mappedBy = "member")
 	List<Repository> memberList = new ArrayList<>();
 
+	public Member fetch(String githubToken, String avatarUrl) {
+		return this;
+	}
 }

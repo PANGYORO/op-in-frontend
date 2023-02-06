@@ -7,8 +7,8 @@ import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.response.OAuthAccessTokenResponse;
 
 public interface OAuthService {
-	String getRedirectURL();
+	String getRedirectURL(String redirectUri);
 
-	TokenDto login(String code);
+	TokenDto login(String code, String redirectUri);
 
 }

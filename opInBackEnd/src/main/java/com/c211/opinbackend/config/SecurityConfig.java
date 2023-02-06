@@ -20,6 +20,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.c211.opinbackend.auth.jwt.JwtAccessDeniedHandler;
 import com.c211.opinbackend.auth.jwt.JwtAuthenticationEntryPoint;
 import com.c211.opinbackend.auth.jwt.TokenProvider;
+import com.c211.opinbackend.auth.service.CustomUserDetailService;
 
 @Configuration
 @EnableWebSecurity
@@ -32,7 +33,7 @@ public class SecurityConfig {
 	private final UserDetailsService userDetailsService;
 
 	public SecurityConfig(
-		UserDetailsService userDetailsService,
+		CustomUserDetailService userDetailsService,
 		TokenProvider tokenProvider,
 		JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
 		JwtAccessDeniedHandler jwtAccessDeniedHandler
