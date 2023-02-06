@@ -51,9 +51,7 @@ export default function RepoDetail() {
             </ul>
           </header>
         </div>
-        <div className="mr-4">
-          {tab == POSTS_TAB ? <FollowingPosts /> : <FollowingQnas />}
-        </div>
+        <div className="mr-4">{tab == POSTS_TAB ? <FollowingPosts /> : <FollowingQnas />}</div>
       </div>
       <div className="w-1/3 h-full">
         <Status />

@@ -1,4 +1,5 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useRef } from "react";
+import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
 
 export default function QnaModal({ open, setOpen }) {
@@ -6,12 +7,7 @@ export default function QnaModal({ open, setOpen }) {
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog
-        as="div"
-        className="relative z-40"
-        initialFocus={cancelButtonRef}
-        onClose={setOpen}
-      >
+      <Dialog as="div" className="relative z-40" initialFocus={cancelButtonRef} onClose={setOpen}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -49,7 +45,7 @@ export default function QnaModal({ open, setOpen }) {
                         <textarea
                           id="message"
                           rows="8"
-                          class="block p-2.5 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          className="block p-2.5 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           placeholder="Insert Qna..."
                         ></textarea>
                       </div>

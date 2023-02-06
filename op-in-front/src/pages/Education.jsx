@@ -1,5 +1,4 @@
 import React from "react";
-import QnaModal from "@components/modals/QnaModal";
 
 export default function Education() {
   return (

@@ -1,4 +1,5 @@
-import { Fragment, useRef, useState } from "react";
+import React from "react";
+import { Fragment, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
@@ -13,12 +14,7 @@ export default function PostModal({ open, setOpen }) {
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog
-        as="div"
-        className="relative z-40"
-        initialFocus={cancelButtonRef}
-        onClose={setOpen}
-      >
+      <Dialog as="div" className="relative z-40" initialFocus={cancelButtonRef} onClose={setOpen}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -47,14 +43,7 @@ export default function PostModal({ open, setOpen }) {
                   height="500px"
                   initialValue="hello"
                   previewStyle="vertical"
-                  plugins={[
-                    [
-                      codeSyntaxHighlight,
-                      { highlighter: Prism },
-                      colorSyntax,
-                      fontSize,
-                    ],
-                  ]}
+                  plugins={[[codeSyntaxHighlight, { highlighter: Prism }, colorSyntax, fontSize]]}
                 />
                 <div className="bg-gray-50 px-4 p-4 sm:flex sm:flex-row-reverse sm:px-6">
                   <button

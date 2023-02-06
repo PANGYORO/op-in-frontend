@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Logo from "@components/Logo";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { menuState } from "@recoil/sidebar/atoms";
 import { repoMenuState } from "@recoil/sidebar/atoms2";
 

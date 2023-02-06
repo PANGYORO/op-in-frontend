@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import BoxLogo from "@assets/box-logo.png";
 import { Link, useMatch } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
@@ -40,11 +40,7 @@ export default function Sidebar() {
               selectMenu(ITEMS.DASHBOARD);
             }}
           >
-            <img
-              src={BoxLogo}
-              alt="none"
-              className="object-contain h-30 w-48"
-            />
+            <img src={BoxLogo} alt="none" className="object-contain h-30 w-48" />
           </Link>
         </div>
 
@@ -122,9 +118,7 @@ export default function Sidebar() {
                     <li className="mb-3">
                       <Link
                         id="myrepo"
-                        className={
-                          repoCurrentMenu == "myrepo" ? "text-blue-500" : ""
-                        }
+                        className={repoCurrentMenu == "myrepo" ? "text-blue-500" : ""}
                         to="/repo"
                         onClick={() => {
                           selectRepoMenu("myrepo");
@@ -136,9 +130,7 @@ export default function Sidebar() {
                     <li>
                       <Link
                         id="recommand"
-                        className={
-                          repoCurrentMenu == "recommand" ? "text-blue-500" : ""
-                        }
+                        className={repoCurrentMenu == "recommand" ? "text-blue-500" : ""}
                         to="/repo/recommand"
                         onClick={() => {
                           selectRepoMenu("recommand");

@@ -17,7 +17,6 @@ import RepoSelection from "@pages/repository/main/RepoSelection";
 import RecommandIndex from "@pages/repository/Recommand";
 import RepoDetail from "./repository/following/RepoDetail";
 import PostView from "@components/PostView";
-import Status from "@components/Status";
 
 function MainTemplate() {
   return (
