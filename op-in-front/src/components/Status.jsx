@@ -1,12 +1,12 @@
-import DefaultImg from "../assets/basicprofile.png";
+import DefaultImg from "@assets/basicprofile.png";
 import React from "react";
 
 export default function Status() {
   return (
-    <div className="relative max-w-xs p-4 overflow-hidden bg-white shadow-lg rounded-xl dark:bg-gray-800 ml-3">
+    <div className="relative max-w-xs p-4 h-screen bg-white shadow-lg rounded-xl dark:bg-gray-800 ml-3 ">
       <div className="my-2">
         <span className="font-bold">Contributors</span>
-        <div className="relative max-w-xs overflow-hidden my-2">
+        <div className="relative max-w-xs  my-2 h-full">
           <a href="#" className="block w-full h-full">
             <div className="w-full">
               <div className="flex items-center">
@@ -40,7 +40,9 @@ export default function Status() {
                     />
                   </a>
                 </div>
-                <span className="ml-2 text-blue-500 dark:text-gray-300">+ 4 more</span>
+                <span className="ml-2 text-blue-500 dark:text-gray-300">
+                  + 4 more
+                </span>
               </div>
             </div>
           </a>

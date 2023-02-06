@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 // import axios from "axios";
 
 // const Reopitem = ({ repos }) => {
@@ -8,23 +9,28 @@ import React from "react";
 //     )
 //   }
 export default function Repo() {
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="w-full inset-x-0 bottom-0 bg-white dark:bg-gray-800 shadow-lg rounded-xl p-4 flex flex-col">
-        <div>
+        <div onClick={() => navigate(`/repo/123123`, { state: "123123" })}>
           <div className="truncate">
             <span className="text-lg font-bold">
-              참여레포 이 말이 지워지는지 확인하고 싶은데 어떻게 생각하세요dydydydydydy
+              참여레포 이 말이 지워지는지 확인하고 싶은데 어떻게
+              생각하세요dydydydydydy
             </span>
           </div>
           <div className="w-full h-24 text-clip overflow-hidden">
             <p className="text-gray-600 dark:text-white my-5 pl-2">
-              내용칸 입니다. 내용칸 입니다. 이 말이 지워지는지 확인하고 싶은데 어떻게 생각하세요 이
-              말이 지워지는지 확인하고 싶은데 어떻게 생각하세요 이 말이 지워지는지 확인하고 싶은데
-              어떻게 생각하세요 이 말이 지워지는지 확인하고 싶은데 어떻게 생각하세요 이 말이
-              지워지는지 확인하고 싶은데 어떻게 생각하세요 이 말이 지워지는지 확인하고 싶은데 어떻게
-              생각하세요 이 말이 지워지는지 확인하고 싶은데 어떻게 생각하세요 이 말이 지워지는지
-              확인하고 싶은데 어떻게 생각하세요
+              내용칸 입니다. 내용칸 입니다. 이 말이 지워지는지 확인하고 싶은데
+              어떻게 생각하세요 이 말이 지워지는지 확인하고 싶은데 어떻게
+              생각하세요 이 말이 지워지는지 확인하고 싶은데 어떻게 생각하세요 이
+              말이 지워지는지 확인하고 싶은데 어떻게 생각하세요 이 말이
+              지워지는지 확인하고 싶은데 어떻게 생각하세요 이 말이 지워지는지
+              확인하고 싶은데 어떻게 생각하세요 이 말이 지워지는지 확인하고
+              싶은데 어떻게 생각하세요 이 말이 지워지는지 확인하고 싶은데 어떻게
+              생각하세요
             </p>
           </div>
         </div>

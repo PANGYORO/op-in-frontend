@@ -1,5 +1,5 @@
 import React from "react";
-import Event from "../components/event/event";
+import Event from "@components/event/event";
 
 export default function Events() {
   return (

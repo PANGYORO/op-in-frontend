@@ -1,6 +1,6 @@
 import React from "react";
-import Repo from "../../../components/Repo";
-import RepoPost from "../../../components/repository/RepoPost";
+import Repo from "@components/Repo";
+// import RepoPost from "@components/repository/RepoPost";
 
 export default function RepoSelection() {
   return (
@@ -15,8 +15,6 @@ export default function RepoSelection() {
           <Repo />
           <Repo />
           <Repo />
-          <RepoPost />
-          <RepoPost />
         </div>
       </div>
     </div>

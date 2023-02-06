@@ -1,20 +1,22 @@
 import React from "react";
 import { Route, Routes, Outlet } from "react-router-dom";
+import Header from "@components/Header";
+import SignIn from "@pages/user/SignIn";
+import SignUp from "@pages/user/SignUp";
+import UserFind from "@pages/user/UserFind";
+import Detail from "@pages/user/Detail";
+import SelectTag from "@pages/user/SelectTag";
 
-import Header from "../components/Header";
-import SignIn from "./user/SignIn";
-import SignUp from "./user/SignUp";
-import UserFind from "./user/UserFind";
-import Detail from "./user/Detail";
-import SelectTag from "./user/SelectTag";
-
-import Search from "./Search";
-import NotFound from "./NotFound";
-import Sidebar from "../components/SideBar";
-import DashBoard from "./DashBoard";
-import Education from "./Education";
-import Events from "./Events";
-import RepoSelection from "./repository/main/RepoSelection";
+import Search from "@pages/Search";
+import NotFound from "@pages/NotFound";
+import Sidebar from "@components/SideBar";
+import DashBoard from "@pages/DashBoard";
+import Education from "@pages/Education";
+import Events from "@pages/Events";
+import RepoSelection from "@pages/repository/main/RepoSelection";
+import RecommandIndex from "@pages/repository/Recommand";
+import RepoDetail from "./repository/following/RepoDetail";
+import PostView from "@components/PostView";
 
 
 
@@ -32,12 +34,25 @@ function RepoTemplate() {
   return <Outlet />;
 }
 
+// function RepoDetailTemplate(){
+//   return(
+//     <div className="flex flex-auto w-full mt-4">
+//       <div className="w-2/3">
+//         <RepoDetail />
+//       </div>
+//       <div className="w-1/3">
+//         <Status />
+//       </div>
+//     </div>
+//   );
+// }
+
 export default function Main() {
 
 
 
   return (
-    <div className="Main">
+    <div className="Main h-screen overflow-auto">
       <Header />
       <main className="relative h-screen overflow-hidden bg-gray-100 dark:bg-gray-800">
         <Routes>
@@ -51,9 +66,11 @@ export default function Main() {
             <Route exact index element={<DashBoard />} />
             <Route path="repo" element={<RepoTemplate />}>
               <Route index element={<RepoSelection />} />
-              <Route exact path="recommand" element={<div>123</div>} />
-              <Route exact path=":repoNum" element={<div>125125</div>} />
+              <Route exact path="recommand" element={<RecommandIndex />} />
+              <Route exact path=":repoNum" element={<RepoDetail />} />
+              <Route path="postview" element={<PostView />} />
             </Route>
+            <Route path="postview" element={<PostView />} />
             <Route path="edu" element={<Education />} />
             <Route path="events" element={<Events />} />
           </Route>
