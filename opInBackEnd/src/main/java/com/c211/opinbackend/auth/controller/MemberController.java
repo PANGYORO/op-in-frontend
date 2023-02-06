@@ -34,6 +34,11 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/auth")
 public class MemberController {
+<<<<<<< Updated upstream
+=======
+	private final TokenProvider tokenProvider;
+	private final AuthenticationManagerBuilder authenticationManagerBuilder;
+>>>>>>> Stashed changes
 
 	MemberService memberService;
 
