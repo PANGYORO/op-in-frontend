@@ -18,5 +18,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	boolean existsByNickname(String nickname);
 
+	@Override
+	void delete(Member entity);
+
 	Member save(Member member);
 }

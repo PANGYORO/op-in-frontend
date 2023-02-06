@@ -64,7 +64,6 @@ public class MemberController {
 
 	@PostMapping("/getMember")
 	public ResponseEntity<?> getMemberInfo(@RequestBody MemberEmailRequest request) throws Exception {
-		log.info(request.getEmail());
 		MypageResponse mypageResponse = memberService.getMemberInfo(request.getEmail());
 		return new ResponseEntity<MypageResponse>(mypageResponse, HttpStatus.OK);
 	}
@@ -132,11 +131,11 @@ public class MemberController {
 			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_PASSWORD_TYPE_EXCEPTION);
 		}
 
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		// BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 		MemberDto joinMember = MemberDto.builder()
 			.email(email)
-			.password(passwordEncoder.encode(password))
+			.password(password)
 			.nickname(request.getNickname())
 			.role(Role.ROLE_USER)
 			.build();
@@ -147,13 +146,16 @@ public class MemberController {
 
 	}
 
-	@PostMapping ("/changePwEmail")
+	@PostMapping ("/password/email")
 	public ResponseEntity<?> changePwEmail(@RequestBody Map<String, String> email) {
 		String temporaryPassword = mailService.mailSend(email.get("email"));
+		return ResponseEntity.ok(memberService.modifyPassword(email.get("email"), temporaryPassword));
+	}
 
-		boolean val = memberService.modifyPassword(email.get("email"), temporaryPassword);
-
-		return ResponseEntity.ok(true);
+	@PostMapping ("/member/delete")
+	public ResponseEntity<?> deleteMember(@RequestBody MemberLoginRequest request) {
+		log.info(request.getEmail());
+		return ResponseEntity.ok(memberService.deleteMember(request.getEmail(), request.getPassword()));
 	}
 
 }
