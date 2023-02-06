@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +31,8 @@ import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.response.OAuthAccessTokenResponse;
 import com.c211.opinbackend.auth.repository.MemberRepository;
+import com.c211.opinbackend.exception.member.MemberExceptionEnum;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.util.RandomString;
 
 @Service
@@ -44,7 +45,6 @@ public class OAuthServiceImpl implements OAuthService {
 	MemberRepository memberRepository;
 
 	private final PasswordEncoder passwordEncoder;
-
 
 	@Autowired
 	public OAuthServiceImpl(
@@ -66,6 +66,7 @@ public class OAuthServiceImpl implements OAuthService {
 	public String getRedirectURL() {
 		return GitHub.AUTHORIZE_URL + "?client_id=" + clientId;
 	}
+
 	@Override
 	public TokenDto login(String code) {
 		OAuthAccessTokenResponse tokenResponse = getToken(code);
@@ -79,9 +80,9 @@ public class OAuthServiceImpl implements OAuthService {
 	}
 
 	public TokenDto authorize(Member member) {
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(member.getEmail(), member.getPassword());
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+			member.getEmail(), member.getPassword());
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String authorities = getAuthorities(authentication);
 
@@ -98,21 +99,31 @@ public class OAuthServiceImpl implements OAuthService {
 	@Transactional
 	public Member saveOrUpdate(MemberDto memberDto) {
 		// [TODO]: member 정보 업데이트
+		// TODO: 2023/02/06 중복 체크
+		if (memberRepository.existsByEmail(memberDto.getEmail())) {
+			logger.info("fail on exist");
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_EMAIL_EXCEPTION);
+		}
 		//Member member = memberRepository.findByGithubId(memberDto.getGithubId())
 		//	.orElseGet(memberDto::toMember);
 		//logger.info("member saveOrUpdate {}", member);
 		return memberRepository.save(memberDto.toMember());
 	}
+
 	private MemberDto getUserProfile(OAuthAccessTokenResponse tokenResponse) {
 		Map<String, Object> userAttributes = getUserAttributes(tokenResponse);
+		logger.info(userAttributes.entrySet().toString());// 어떤 정보 가져오는지 확인
+		// TODO: 2023/02/06 데브 올릴때 로그 지우기
+		// TODO: 2023/02/06 더미 데이터 채우기
 		return MemberDto.builder()
 			.githubId(String.valueOf(userAttributes.get("id")))
 			.githubToken(tokenResponse.getAccessToken())
 			.githubSyncFl(true)
-			.email((String) userAttributes.get("email"))
+			.email((String)userAttributes.get("login") + "@gitHub.com")
 			.password(passwordEncoder.encode("SsafyOut!123"))
+			// TODO: 2023/02/06 로그인 이메일이 아니라 login 으로 변경필요 이메일이 없는 경우가 있다 - 일단 처리 했으나 프론트와 비밀번호 찾기같은거..
 			.nickname(userAttributes.get("login") + "." + RandomString.generateNumber())
-			.avatarUrl((String) userAttributes.get("avatar_url"))
+			.avatarUrl((String)userAttributes.get("avatar_url"))
 			.role(Role.ROLE_USER)
 			.build();
 	}
@@ -146,7 +157,7 @@ public class OAuthServiceImpl implements OAuthService {
 	private MultiValueMap<String, String> tokenRequest(String code) {
 		MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
 		formData.add("code", code);
-//		formData.add("redirect_uri", "/");
+		//		formData.add("redirect_uri", "/");
 
 		return formData;
 	}
