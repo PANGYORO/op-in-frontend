@@ -10,6 +10,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +31,7 @@ import com.c211.opinbackend.auth.model.request.MemberPasswordRequest;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.auth.service.MailService;
 import com.c211.opinbackend.auth.service.MemberService;
+import com.c211.opinbackend.auth.util.SecurityUtil;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.auth.jwt.JwtFilter;
@@ -87,13 +90,15 @@ public class MemberController {
 			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_NICKNAME_EXCEPTION);
 		}
 
-		Member member = memberService.modifyNickname(request.getNickname(), request.getEmail());
+		String username = SecurityUtil.getCurrentUserId().orElse(null);
+		Member member = memberService.modifyNickname(request.getNickname(), username);
 		return new ResponseEntity<String>(member.getNickname(), HttpStatus.OK);
 	}
 
 	@PostMapping("/password/put")
-	public ResponseEntity<?> modifyPassword(@RequestBody MemberPasswordRequest request) throws Exception {
-		boolean val = memberService.modifyPassword(request.getEmail(), request.getPassword());
+	public ResponseEntity<?> modifyPassword(@RequestBody MemberPasswordRequest request) {
+		String username = SecurityUtil.getCurrentUserId().orElse(null);
+		boolean val = memberService.modifyPassword(username, request.getPassword());
 		return new ResponseEntity<Boolean>(val, HttpStatus.OK);
 	}
 
@@ -160,6 +165,11 @@ public class MemberController {
 		return ResponseEntity.ok(memberService.deleteGithubMember(request.getEmail()));
 	}
 
-
+	@PostMapping("/logout")
+	public void logout() {
+		SecurityContext context = SecurityContextHolder.getContext();
+		SecurityContextHolder.clearContext();
+		context.setAuthentication(null);
+	}
 
 }
