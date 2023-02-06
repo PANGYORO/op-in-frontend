@@ -18,19 +18,18 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-	private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
-
 	public static final String AUTHORIZATION_HEADER = "Authorization";
-
-	private TokenProvider tokenProvider;
+	private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
+	private final TokenProvider tokenProvider;
 
 	public JwtFilter(TokenProvider tokenProvider) {
 		this.tokenProvider = tokenProvider;
 	}
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-		throws IOException, ServletException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws
+		IOException,
+		ServletException {
 		// HttpServletRequest httpServletRequest = (HttpServletRequest)request;
 		if (request.getMethod().equals("OPTIONS")) {
 			return;

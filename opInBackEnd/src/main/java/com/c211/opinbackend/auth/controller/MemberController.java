@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.c211.opinbackend.auth.entity.Role;
 import com.c211.opinbackend.auth.jwt.JwtFilter;
-import com.c211.opinbackend.auth.jwt.TokenProvider;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.request.MemberEmailRequest;
@@ -38,10 +36,8 @@ public class MemberController {
 	MemberService memberService;
 
 	@Autowired
-	public MemberController(MemberService memberService,
-		@Value("${security.oauth.github.client-id}") String clientId,
-		@Value("${security.oauth.github.client-secret}") String clientSecret
-	) {
+	public MemberController(MemberService memberService, @Value("${security.oauth.github.client-id}") String clientId,
+		@Value("${security.oauth.github.client-secret}") String clientSecret) {
 		this.memberService = memberService;
 	}
 
@@ -65,7 +61,7 @@ public class MemberController {
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody MemberLoginRequest request) {
-		if(memberService.isOAuthMember(request.getEmail())) {
+		if (memberService.isOAuthMember(request.getEmail())) {
 			throw new MemberRuntimeException(MemberExceptionEnum.OAUTH_SIGNUP_USER_EXCEPTION);
 		}
 		TokenDto token = memberService.authorize(request.getEmail(), request.getPassword());
