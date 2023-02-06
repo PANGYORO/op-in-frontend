@@ -15,6 +15,7 @@ import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
 import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
 import com.c211.opinbackend.repo.entitiy.Repository;
 import com.c211.opinbackend.repo.model.repository.RepositoryDto;
+import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.repository.RepoRepository;
 import com.c211.opinbackend.repo.service.mapper.RepoMapper;
 
@@ -32,7 +33,6 @@ public class RepositoryServiceImp implements RepositoryService {
 	@Transactional
 	public List<RepositoryDto> finRepositoryListByMember(String email) {
 		List<RepositoryDto> repositoryDtoList = new ArrayList<>();
-		log.info("out");
 		if (email == null)
 			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
 		Member findMember = memberRepository.findByEmail(email).orElseThrow(() -> new MemberRuntimeException(
@@ -49,7 +49,13 @@ public class RepositoryServiceImp implements RepositoryService {
 			RepositoryDto repositoryDto = RepoMapper.toDto(repo);
 			repositoryDtoList.add(repositoryDto);
 		}
-		log.info("out3");
 		return repositoryDtoList;
+	}
+
+	@Override
+	public Boolean createPost(CreatePostRequest createPostRequest, String email) {
+		
+		return true;
+
 	}
 }
