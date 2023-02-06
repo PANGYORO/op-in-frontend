@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import FollowingPosts from "./FollowingPosts";
 import FollowingQnas from "./FollowingQnas";
-import Status from "@components/Status";
+import Status from "@components/repository/Status";
 import { useLocation } from "react-router-dom";
 
 const POSTS_TAB = "posts";
