@@ -22,7 +22,7 @@ public interface MemberService {
 
 	boolean deleteMember(String email, String password);
 
-	boolean deleteGithubMember(String email, String password);
+	boolean deleteGithubMember(String email);
 
 	Member getMemberByEmail(String email);
 }

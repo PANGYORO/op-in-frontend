@@ -160,12 +160,9 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public boolean deleteGithubMember (String email, String password) {
+	public boolean deleteGithubMember (String email) {
 
 		Member member = memberRepository.findByEmail(email).orElse(null);
-		if (!passwordEncoder.matches(password, member.getPassword())) {
-			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
-		}
 
 		try {
 			memberRepository.delete(member);

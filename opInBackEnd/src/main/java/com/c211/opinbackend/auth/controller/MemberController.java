@@ -154,8 +154,13 @@ public class MemberController {
 
 	@PostMapping ("/member/delete")
 	public ResponseEntity<?> deleteMember(@RequestBody MemberLoginRequest request) {
-		log.info(request.getEmail());
 		return ResponseEntity.ok(memberService.deleteMember(request.getEmail(), request.getPassword()));
+	}
+
+	@PostMapping ("/gitMem/delete")
+	public ResponseEntity<?> deleteGithubMember(@RequestBody MemberLoginRequest request) {
+		log.info(request.getEmail());
+		return ResponseEntity.ok(memberService.deleteGithubMember(request.getEmail()));
 	}
 
 }
