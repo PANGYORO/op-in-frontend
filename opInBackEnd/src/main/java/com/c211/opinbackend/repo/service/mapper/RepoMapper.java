@@ -8,19 +8,19 @@ import com.c211.opinbackend.repo.entitiy.Repository;
 import com.c211.opinbackend.repo.entitiy.RepositoryTechLanguage;
 import com.c211.opinbackend.repo.entitiy.RepositoryTopic;
 import com.c211.opinbackend.repo.model.contributor.RepositoryContributorDto;
-import com.c211.opinbackend.repo.model.repoTechLang.RepoTechLangDTO;
-import com.c211.opinbackend.repo.model.repository.RepositoryDto;
+import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
+import com.c211.opinbackend.repo.model.response.repoTechLang.RepoTechLangDTO;
 
 public class RepoMapper {
 
-	public static RepositoryDto toDto(Repository repository) {
+	public static RepositoryResponseDto toDto(Repository repository) {
 		List<RepoTechLangDTO> repoTechLangDTOList = getRepoTechLangDtoList(repository);
 		List<RepositoryContributorDto> repositoryContributorDtoList = getRepoTechContributorDtoList(repository);
 		List<String> topics = getTopicList(repository);
-		RepositoryDto repositoryDto = RepositoryDto.builder()
+		RepositoryResponseDto repositoryResponseDto = RepositoryResponseDto.builder()
 			.id(repository.getId())
-			.title(repository.getTitleContent().getTitle())
-			.content(repository.getTitleContent().getContent())
+			.title(repository.getName())
+			.content(repository.getName())
 			.techLangs(repoTechLangDTOList)
 			.contributors(repositoryContributorDtoList)
 			.star("1233455565")
@@ -28,7 +28,7 @@ public class RepoMapper {
 			.topicList(topics)
 			.gitContributors(null)
 			.build();
-		return repositoryDto;
+		return repositoryResponseDto;
 	}
 
 	private static List<String> getTopicList(Repository repository) {

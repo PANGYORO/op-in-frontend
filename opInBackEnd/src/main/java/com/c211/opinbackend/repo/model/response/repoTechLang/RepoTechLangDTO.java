@@ -1,4 +1,4 @@
-package com.c211.opinbackend.repo.model.repoTechLang;
+package com.c211.opinbackend.repo.model.response.repoTechLang;
 
 import lombok.Builder;
 import lombok.Getter;

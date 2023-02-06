@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.c211.opinbackend.auth.model.request.MemberEmailRequest;
-import com.c211.opinbackend.repo.model.repository.RepositoryDto;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
+import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
 import com.c211.opinbackend.repo.service.repo.RepositoryService;
 import com.c211.opinbackend.repo.service.repoTechlag.RepoTechLanguageService;
 
@@ -32,12 +32,12 @@ public class RepoController {
 	@PostMapping
 	public ResponseEntity<?> getReposByEmail(@RequestBody MemberEmailRequest emailRequest) throws Exception {
 		String email = emailRequest.getEmail();
-		List<RepositoryDto> repositoryDtoList = repositoryService.finRepositoryListByMember(email);
-		log.info("size:", repositoryDtoList.size());
-		for (RepositoryDto dto : repositoryDtoList) {
+		List<RepositoryResponseDto> repositoryResponseDtoList = repositoryService.finRepositoryListByMember(email);
+		log.info("size:", repositoryResponseDtoList.size());
+		for (RepositoryResponseDto dto : repositoryResponseDtoList) {
 			log.info(dto.toString());
 		}
-		return new ResponseEntity<>(repositoryDtoList, HttpStatus.OK);
+		return new ResponseEntity<>(repositoryResponseDtoList, HttpStatus.OK);
 	}
 
 	@PostMapping("/post")
