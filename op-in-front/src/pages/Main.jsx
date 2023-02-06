@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes, Outlet } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import { Cookies } from 'react-cookie'
 import Header from "@components/Header";
 import SignIn from "@pages/user/SignIn";
 import SignUp from "@pages/user/SignUp";
@@ -17,6 +19,9 @@ import RepoSelection from "@pages/repository/main/RepoSelection";
 import RecommandIndex from "@pages/repository/Recommand";
 import RepoDetail from "./repository/following/RepoDetail";
 import PostView from "@components/PostView";
+import useToken from '@hooks/useToken';
+import { useSetRecoilState} from "recoil";
+import { userInfo } from "@recoil/user/atoms";
 
 function MainTemplate() {
   return (
@@ -32,6 +37,36 @@ function RepoTemplate() {
 }
 
 export default function Main() {
+<<<<<<< HEAD
+=======
+
+
+  const { token } = useToken()
+  const cookies = new Cookies()
+  const setUser = useSetRecoilState(userInfo);
+
+  useEffect(() => {
+    const accessToken = (cookies.get('accessToken'))
+    if (accessToken) {
+      const decodedUserInfo = jwt_decode(accessToken);
+      setUser((before) => ({
+        ...before,
+        ...decodedUserInfo,
+        logined: true,
+      }))
+
+    }
+    else {
+      //async refreshToken 보내서 accessToken 갱신해서 recoil 저장 
+      // refreshToken 시간 만료시 다시 로그인하라는 알림 띄우기
+    }
+
+  }, [token])
+  
+
+
+
+>>>>>>> d1d544b15180a3f84e47acb0800080f6bd5a1940
   return (
     <div className="Main h-screen overflow-auto">
       <Header />
