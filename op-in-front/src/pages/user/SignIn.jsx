@@ -5,7 +5,7 @@ import jwt_decode from "jwt-decode";
 
 import Logo from "../../components/Logo";
 import http from '../../api/http';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { userInfo } from '@recoil/user/atoms'
 
@@ -97,7 +97,7 @@ function EmailInput({ register, error }) {
 
   
 
-function LoginForm({ token, saveToken }) {
+function LoginForm({ saveToken }) {
   const {
     register,
     handleSubmit,
@@ -106,10 +106,10 @@ function LoginForm({ token, saveToken }) {
 
   const setUser = useSetRecoilState(userInfo);
   const user = useRecoilValue(userInfo);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(user)
+    
   }, [user])
   const onSubmit = async (data) => {
     
@@ -126,6 +126,9 @@ function LoginForm({ token, saveToken }) {
         logined: true,
       }))
       saveToken(res.data)
+      navigate('/')
+      
+      
     } catch (error) {
       console.log(error)
     }
@@ -209,7 +212,7 @@ function SignIn() {
   useEffect(() => {
   }, [token]);
 
-  return <LoginForm token={token}  saveToken={saveToken} />;
+  return <LoginForm  saveToken={saveToken} />;
 }
 
 export default SignIn;

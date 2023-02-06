@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Routes, Outlet } from "react-router-dom";
+
 import Header from "../components/Header";
 import SignIn from "./user/SignIn";
 import SignUp from "./user/SignUp";
@@ -15,6 +16,9 @@ import Education from "./Education";
 import Events from "./Events";
 import RepoSelection from "./repository/main/RepoSelection";
 
+
+
+
 function MainTemplate() {
   return (
     <div className="flex items-start justify-between mx-44">
@@ -29,6 +33,9 @@ function RepoTemplate() {
 }
 
 export default function Main() {
+
+
+
   return (
     <div className="Main">
       <Header />

@@ -2,16 +2,19 @@ import React, { useCallback, useState } from "react";
 import News from "./dashboard/News";
 import Hots from "./dashboard/Hots";
 
+
+
 const NEWS_TAB = "news";
 const HOTS_TAB = "hots";
 
 export default function DashBoard() {
   const [tab, setTab] = useState(NEWS_TAB);
+  
+
 
   const onClick = useCallback((item) => {
     setTab(item);
   }, []);
-
   const selected =
     "inline-block p-4 text-blue-600 bg-gray-100 rounded-t-lg active dark:bg-gray-800 dark:text-blue-500";
   const deselected =
