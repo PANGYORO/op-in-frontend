@@ -20,7 +20,7 @@ import RecommandIndex from "@pages/repository/Recommand";
 import RepoDetail from "./repository/following/RepoDetail";
 import PostView from "@components/PostView";
 import useToken from '@hooks/useToken';
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState} from "recoil";
 import { userInfo } from "@recoil/user/atoms";
 
 
@@ -58,8 +58,7 @@ export default function Main() {
   const { token } = useToken()
   const cookies = new Cookies()
   const setUser = useSetRecoilState(userInfo);
-  const user = useRecoilValue(userInfo);
-  
+
   useEffect(() => {
     const accessToken = (cookies.get('accessToken'))
     if (accessToken) {
