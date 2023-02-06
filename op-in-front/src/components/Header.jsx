@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { menuState } from "@recoil/sidebar/atoms";
 import { repoMenuState } from "@recoil/sidebar/atoms2";
 import { userInfo } from '@recoil/user/atoms'
+import useToken from "@hooks/useToken";
 
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
@@ -29,7 +30,9 @@ function classNames(...classes) {
 export default function Example() {
 
   const user = useRecoilValue(userInfo)
-  const setUser = useSetRecoilState(userInfo)  
+  const setUser = useSetRecoilState(userInfo)
+  const { removeToken } = useToken()  
+  
   
 
 
@@ -189,6 +192,7 @@ export default function Example() {
                                 logined: false
                               }))
                               navigate('/')
+                              removeToken()
 
                             }}
                           >
