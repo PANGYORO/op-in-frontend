@@ -20,5 +20,9 @@ public interface MemberService {
 
 	boolean modifyPassword(String email, String password);
 
+	boolean deleteMember(String email, String password);
+
+	boolean deleteGithubMember(String email);
+
 	Member getMemberByEmail(String email);
 }

@@ -20,12 +20,10 @@ public class MailService {
 	public String mailSend(String email) {
 		String temporaryPassword = createCode();
 
-
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		simpleMailMessage.setTo(email);
 		simpleMailMessage.setSubject("Op-in 임시 비밀번호 발급 안내");
 		simpleMailMessage.setText(" Op-in 임시 비밀번호 발급 안내 \n "+temporaryPassword);
-
 
 		try {
 			javaMailSender.send(simpleMailMessage);
