@@ -4,7 +4,7 @@ import Header from "@components/Header";
 import SignIn from "@pages/user/SignIn";
 import SignUp from "@pages/user/SignUp";
 import UserFind from "@pages/user/UserFind";
-import Detail from "@pages/user/Detail";
+import UserDetail from "@pages/user/UserDetail";
 import SelectTag from "@pages/user/SelectTag";
 
 import Search from "@pages/Search";
@@ -17,9 +17,6 @@ import RepoSelection from "@pages/repository/main/RepoSelection";
 import RecommandIndex from "@pages/repository/Recommand";
 import RepoDetail from "./repository/following/RepoDetail";
 import PostView from "@components/PostView";
-
-
-
 
 function MainTemplate() {
   return (
@@ -34,23 +31,7 @@ function RepoTemplate() {
   return <Outlet />;
 }
 
-// function RepoDetailTemplate(){
-//   return(
-//     <div className="flex flex-auto w-full mt-4">
-//       <div className="w-2/3">
-//         <RepoDetail />
-//       </div>
-//       <div className="w-1/3">
-//         <Status />
-//       </div>
-//     </div>
-//   );
-// }
-
 export default function Main() {
-
-
-
   return (
     <div className="Main h-screen overflow-auto">
       <Header />
@@ -60,7 +41,7 @@ export default function Main() {
           <Route path="signin" element={<SignIn />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="userfind" element={<UserFind />} />
-          <Route path="detail" element={<Detail />} />
+          <Route path="userdetail" element={<UserDetail />} />
           <Route path="selecttag" element={<SelectTag />} />
           <Route exact path="/" element={<MainTemplate />}>
             <Route exact index element={<DashBoard />} />
