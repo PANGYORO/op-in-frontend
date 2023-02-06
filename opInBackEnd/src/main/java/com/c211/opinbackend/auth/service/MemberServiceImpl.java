@@ -131,10 +131,8 @@ public class MemberServiceImpl implements MemberService {
 		UsernamePasswordAuthenticationToken authenticationToken =
 			new UsernamePasswordAuthenticationToken(email, password);
 		// TODO: 2023/02/06 여기 에러 처리 부탁드립니다 ㅜ
-		log.info(authenticationToken.getCredentials().toString());
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 		Member member = memberRepository.findByEmail(authentication.getName()).orElse(null);
-		log.info(member.getEmail());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		String authorities = getAuthorities(authentication);
