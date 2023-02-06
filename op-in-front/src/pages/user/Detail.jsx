@@ -8,20 +8,22 @@ import http from "@api/http";
 export default function Detail() {
   const [myinfo, setMyInfo] = useState("");
 
+  async function getMember(currentEmail) {
+    await http
+      .post(`auth/getMember`, {
+        email: currentEmail,
+      })
+      .then((response) => {
+        // alert(response.data.nickname);
+        console.log(response.data);
+        setMyInfo(response.data);
+      })
+      .catch(() => alert("error"));
+    // console.log(myinfo);
+  }
+
   useEffect(() => {
-    async () => {
-      await http
-        .get(`auth/getMember`, {
-          email: "swany0509@naver.com",
-        })
-        .then((data) => {
-          alert(data);
-          console.log(data);
-          setMyInfo(data);
-        })
-        .catch(() => alert("error"));
-    };
-    console.log(myinfo);
+    getMember("saeloun8797@naver.com");
   }, []);
   return (
     <div className="flex items-start justify-between mx-44">
@@ -34,7 +36,7 @@ export default function Detail() {
             <div className="grid content-center">
               <div>
                 <div className="grid grid-cols-2 gap-2 justify-items-between">
-                  <div className="bg-prinavy self-center"> NickName</div>
+                  <div className="bg-prinavy self-center"> {myinfo.nickname}</div>
                   <div className="grid grid-cols-2 gap-2 justify-items-center">
                     <button
                       type="button"
@@ -47,17 +49,13 @@ export default function Detail() {
                       Follow
                     </button>
 
-                    <img
-                      src={Setting}
-                      alt="setting"
-                      className="h-16 justify-self-end"
-                    />
+                    <img src={Setting} alt="setting" className="h-16 justify-self-end" />
                   </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4 justify-items-between mt-6">
-                  <div> posts 0</div>
-                  <div> follower 5</div>
-                  <div> following 10</div>
+                  <div> posts {myinfo.posts == null ? 0 : myinfo.posts.length}</div>
+                  <div> follower {myinfo.countFollower}</div>
+                  <div> following {myinfo.countFollowing}</div>
                 </div>
               </div>
             </div>
@@ -68,7 +66,7 @@ export default function Detail() {
           <div className="pt-2 pb-24 pl-2 pr-2  md:pt-0 md:pr-0 md:pl-0">
             <div className="flex flex-col flex-wrap sm:flex-row h-full">
               <div className="w-1/3 h-full ">
-                <MyInfo />
+                <MyInfo userInfo={myinfo} />
               </div>
 
               <div className=" w-2/3  h-screen overflow-auto">
