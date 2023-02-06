@@ -1,12 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import React from "react";
+import React, { useEffect } from "react";
+import jwt_decode from "jwt-decode";
 
-import Logo from "../../components/Logo";
-import http from "../../api/http";
-import { useEffect } from "react";
-import { useRecoilState } from "recoil";
-import { userStored } from "../../recoil/user/atoms";
+import Logo from "@components/Logo";
+import http from "@api/http";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { userInfo } from "@recoil/user/atoms";
+
+import useToken from "@hooks/useToken";
 
 function Button({ onClick = () => {}, loading = false, children }) {
   return (
@@ -95,38 +97,35 @@ function EmailInput({ register, error }) {
   );
 }
 
-function LoginForm() {
+function LoginForm({ saveToken }) {
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm();
 
+  const setUser = useSetRecoilState(userInfo);
+  const user = useRecoilValue(userInfo);
   const navigate = useNavigate();
 
-  const [user, setUser] = useRecoilState(userStored);
-
+  useEffect(() => {}, [user]);
   const onSubmit = async (data) => {
-    await http
-      .post("auth/login", {
+    try {
+      let res = await http.post("auth/login", {
         email: data.email,
         password: data.password,
-      })
-      .then((res) => {
-        console.log(res.data);
-        // const token = res.data
-        // useEffect(() => {
-        //   setUser([
-        //     {
-        //       token
-        //     }
-        //   ])
-
-        // }, [])
-      })
-      .catch((err) => {
-        console.log(err);
       });
+      const decodedUserInfo = jwt_decode(res.data.accessToken);
+      setUser((before) => ({
+        ...before,
+        ...decodedUserInfo,
+        logined: true,
+      }));
+      saveToken(res.data);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -211,7 +210,9 @@ function LoginForm() {
 }
 
 function SignIn() {
-  return <LoginForm />;
+  const { saveToken } = useToken();
+
+  return <LoginForm saveToken={saveToken} />;
 }
 
 export default SignIn;

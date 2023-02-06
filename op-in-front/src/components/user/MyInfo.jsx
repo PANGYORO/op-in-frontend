@@ -1,16 +1,16 @@
 import React from "react";
-import BasicBadge from "../../assets/basicbadge.png";
+import BasicBadge from "@assets/basicbadge.png";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 
-export default function MyInfo() {
+export default function MyInfo(props) {
   return (
     <div className="mx-0 mb-4 h-full ">
       <div className="w-full h-full bg-white shadow-lg rounded-2xl dark:bg-gray-700">
         <p className="p-4 font-bold text-black text-md dark:text-white">
           Badges
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
-            (??)
+            ({props.badges == null ? 0 : props.badges.length})
           </span>
         </p>
         <div className="grid grid-cols-8 gap-4 px-3 mb-3">
@@ -33,7 +33,7 @@ export default function MyInfo() {
         <p className="p-4 font-bold text-black text-md dark:text-white">
           Languages
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
-            (??)
+            ({props.techLanguages == null ? 0 : props.techLanguages.length})
           </span>
         </p>
         <div className="mb-3">
@@ -141,7 +141,7 @@ export default function MyInfo() {
         <p className="p-4 font-bold text-black text-md dark:text-white">
           Topics
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
-            (??)
+            ({props.topicResponses == null ? 0 : props.topicResponses.length})
           </span>
         </p>
         <div className="mb-3">
@@ -249,7 +249,7 @@ export default function MyInfo() {
         <p className="p-4 font-bold text-black text-md dark:text-white">
           Completed Contributes
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
-            (??)
+            ({props.contributeRepo == null ? 0 : props.contributeRepo.length})
           </span>
         </p>
         <ul>
@@ -282,7 +282,7 @@ export default function MyInfo() {
         <p className="p-4 font-bold text-black text-md dark:text-white">
           following Respsitories
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
-            (??)
+            ({props.followRepo == null ? 0 : props.followRepo.length})
           </span>
         </p>
         <ul>

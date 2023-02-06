@@ -1,18 +1,18 @@
 package com.c211.opinbackend.auth.controller;
 
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.entity.Role;
 import com.c211.opinbackend.auth.jwt.JwtFilter;
 import com.c211.opinbackend.auth.model.MemberDto;
@@ -21,7 +21,9 @@ import com.c211.opinbackend.auth.model.request.MemberEmailRequest;
 import com.c211.opinbackend.auth.model.request.MemberJoinRequest;
 import com.c211.opinbackend.auth.model.request.MemberLoginRequest;
 import com.c211.opinbackend.auth.model.request.MemberNicknameRequest;
+import com.c211.opinbackend.auth.model.request.MemberPasswordRequest;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
+import com.c211.opinbackend.auth.service.MailService;
 import com.c211.opinbackend.auth.service.MemberService;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
@@ -35,10 +37,14 @@ public class MemberController {
 
 	MemberService memberService;
 
+	MailService mailService;
+
 	@Autowired
-	public MemberController(MemberService memberService, @Value("${security.oauth.github.client-id}") String clientId,
-		@Value("${security.oauth.github.client-secret}") String clientSecret) {
+	public MemberController(MemberService memberService,
+		MailService mailService
+	) {
 		this.memberService = memberService;
+		this.mailService = mailService;
 	}
 
 	@PostMapping("/getMember")
@@ -57,6 +63,23 @@ public class MemberController {
 	public ResponseEntity<?> existNickname(@RequestBody MemberNicknameRequest request) throws Exception {
 		boolean exist = memberService.existNickname(request.getNickname());
 		return new ResponseEntity<Boolean>(exist, HttpStatus.OK);
+	}
+
+	@PostMapping("/nickname/put")
+	public ResponseEntity<?> modifyNickname(@RequestBody MemberNicknameRequest request) throws Exception {
+		boolean exist = memberService.existNickname(request.getNickname());
+		if (exist) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_NICKNAME_EXCEPTION);
+		}
+
+		Member member = memberService.modifyNickname(request.getNickname(), request.getEmail());
+		return new ResponseEntity<String>(member.getNickname(), HttpStatus.OK);
+	}
+
+	@PostMapping("/password/put")
+	public ResponseEntity<?> modifyPassword(@RequestBody MemberPasswordRequest request) throws Exception {
+		boolean val = memberService.modifyPassword(request.getEmail(), request.getPassword());
+		return new ResponseEntity<Boolean>(val, HttpStatus.OK);
 	}
 
 	@PostMapping("/login")
@@ -91,11 +114,11 @@ public class MemberController {
 			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_PASSWORD_TYPE_EXCEPTION);
 		}
 
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		// BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 		MemberDto joinMember = MemberDto.builder()
 			.email(email)
-			.password(passwordEncoder.encode(password))
+			.password(password)
 			.nickname(request.getNickname())
 			.role(Role.ROLE_USER)
 			.build();
@@ -104,4 +127,22 @@ public class MemberController {
 
 		return ResponseEntity.ok(true);
 	}
+
+	@PostMapping("/password/email")
+	public ResponseEntity<?> changePwEmail(@RequestBody Map<String, String> email) {
+		String temporaryPassword = mailService.mailSend(email.get("email"));
+		return ResponseEntity.ok(memberService.modifyPassword(email.get("email"), temporaryPassword));
+	}
+
+	@PostMapping("/member/delete")
+	public ResponseEntity<?> deleteMember(@RequestBody MemberLoginRequest request) {
+		return ResponseEntity.ok(memberService.deleteMember(request.getEmail(), request.getPassword()));
+	}
+
+	@PostMapping("/gitMem/delete")
+	public ResponseEntity<?> deleteGithubMember(@RequestBody MemberLoginRequest request) {
+		log.info(request.getEmail());
+		return ResponseEntity.ok(memberService.deleteGithubMember(request.getEmail()));
+	}
+
 }

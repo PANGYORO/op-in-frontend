@@ -1,5 +1,5 @@
 import React from "react";
-import OpenSource from "../../assets/opensource.png";
+import OpenSource from "@assets/opensource.png";
 
 export default function post() {
   return (

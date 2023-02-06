@@ -13,6 +13,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.c211.opinbackend.auth.entity.Badge;
@@ -36,6 +38,8 @@ import com.c211.opinbackend.auth.repository.MemberTechLanguageRepository;
 import com.c211.opinbackend.auth.repository.MemberTopicRepository;
 import com.c211.opinbackend.auth.repository.RepoContributorRepository;
 import com.c211.opinbackend.auth.repository.TechLanguageRepository;
+import com.c211.opinbackend.exception.api.ApiExceptionEnum;
+import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.repo.entitiy.Repository;
@@ -52,78 +56,33 @@ import com.c211.opinbackend.repo.repository.RepositoryFollowRepository;
 import com.c211.opinbackend.repo.repository.RepositoryPostMemberLikeRepository;
 import com.c211.opinbackend.repo.repository.TopicRepository;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 	private final TokenProvider tokenProvider;
-
-	MemberRepository memberRepository;
-
-	MemberFollowRepository memberFollowRepository;
-
-	MemberBadgeRepository memberBadgeRepository;
-
-	MemberTechLanguageRepository memberTechLanguageRepository;
-
-	MemberTopicRepository memberTopicRepository;
-
-	BadgeRepository badgeRepository;
-
-	TopicRepository topicRepository;
-
-	TechLanguageRepository techLanguageRepository;
-
-	RepoRepository repoRepository;
-
-	RepoPostRepository repoPostRepository;
-
-	CommentRepository commentRepository;
-
-	RepositoryPostMemberLikeRepository repositoryPostMemberLikeRepository;
-
-	RepositoryFollowRepository repositoryFollowRepository;
-
-	RepoContributorRepository repoContributorRepository;
-
+	private final MemberRepository memberRepository;
+	private final MemberFollowRepository memberFollowRepository;
+	private final MemberBadgeRepository memberBadgeRepository;
+	private final MemberTechLanguageRepository memberTechLanguageRepository;
+	private final MemberTopicRepository memberTopicRepository;
+	private final BadgeRepository badgeRepository;
+	private final TopicRepository topicRepository;
+	private final TechLanguageRepository techLanguageRepository;
+	private final RepoRepository repoRepository;
+	private final RepoPostRepository repoPostRepository;
+	private final CommentRepository commentRepository;
+	private final RepositoryPostMemberLikeRepository repositoryPostMemberLikeRepository;
+	private final RepositoryFollowRepository repositoryFollowRepository;
+	private final RepoContributorRepository repoContributorRepository;
 	@Autowired
-	public MemberServiceImpl(MemberRepository memberRepository,
-		MemberFollowRepository memberFollowRepository,
-		MemberBadgeRepository memberBadgeRepository,
-		MemberTechLanguageRepository memberTechLanguageRepository,
-		MemberTopicRepository memberTopicRepository,
-		BadgeRepository badgeRepository,
-		RepositoryFollowRepository repositoryFollowRepository,
-		TechLanguageRepository techLanguageRepository,
-		TopicRepository topicRepository,
-		RepoRepository repoRepository,
-		RepoContributorRepository repoContributorRepository,
-		RepoPostRepository repoPostRepository,
-		CommentRepository commentRepository,
-		RepositoryPostMemberLikeRepository repositoryPostMemberLikeRepository,
-		AuthenticationManagerBuilder authenticationManagerBuilder,
-		TokenProvider tokenProvider) {
-		this.memberRepository = memberRepository;
-		this.memberFollowRepository = memberFollowRepository;
-		this.memberBadgeRepository = memberBadgeRepository;
-		this.memberTechLanguageRepository = memberTechLanguageRepository;
-		this.memberTopicRepository = memberTopicRepository;
-		this.repoRepository = repoRepository;
-		this.repoContributorRepository = repoContributorRepository;
-		this.repoPostRepository = repoPostRepository;
-		this.repositoryPostMemberLikeRepository = repositoryPostMemberLikeRepository;
-		this.authenticationManagerBuilder = authenticationManagerBuilder;
-		this.tokenProvider = tokenProvider;
-		this.repositoryFollowRepository = repositoryFollowRepository;
-		this.commentRepository = commentRepository;
-		this.badgeRepository = badgeRepository;
-		this.topicRepository = topicRepository;
-		this.techLanguageRepository = techLanguageRepository;
-	}
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public TokenDto authorize(String email, String password) {
@@ -172,7 +131,7 @@ public class MemberServiceImpl implements MemberService {
 
 		Member member = Member.builder()
 			.email(memberDto.getEmail())
-			.password(memberDto.getPassword())
+			.password(passwordEncoder.encode(memberDto.getPassword()))
 			.nickname(memberDto.getNickname())
 			.githubSyncFl(false)
 			.role(memberDto.getRole())
@@ -183,11 +142,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public boolean existEmail(String email) {
-		boolean existEmail = memberRepository.existsByEmail(email);
-		if (existEmail) {
-			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_EMAIL_EXCEPTION);
-		}
-		return existEmail;
+		return memberRepository.existsByEmail(email);
 	}
 
 	@Override
@@ -198,6 +153,36 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public boolean isOAuthMember(String email) {
 		return memberRepository.existsByEmailAndAndGithubSyncFl(email, true);
+	}
+
+	public boolean deleteMember(String email, String password) {
+
+		Member member = memberRepository.findByEmail(email).orElse(null);
+		if (!passwordEncoder.matches(password, member.getPassword())) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
+		}
+
+		try {
+			memberRepository.delete(member);
+		} catch (Exception ex) {
+			throw new ApiRuntimeException(ApiExceptionEnum.API_CENTER_CALL_EXCEPTION);
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean deleteGithubMember(String email) {
+
+		Member member = memberRepository.findByEmail(email).orElse(null);
+
+		try {
+			memberRepository.delete(member);
+		} catch (Exception ex) {
+			throw new ApiRuntimeException(ApiExceptionEnum.API_CENTER_CALL_EXCEPTION);
+		}
+
+		return true;
 	}
 
 	/*
@@ -390,5 +375,37 @@ public class MemberServiceImpl implements MemberService {
 			.build();
 
 		return mypageResponse;
+	}
+
+	@Override
+	@Transactional
+	public Member modifyNickname(String nickname, String email) {
+		Member member = memberRepository.findByEmail(email).orElse(null);
+		if (member == null) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
+		}
+
+		member.setNickname(nickname);
+
+		return member;
+	}
+
+	@Override
+	@Transactional
+	public boolean modifyPassword(String email, String password) {
+		Member member = memberRepository.findByEmail(email).orElse(null);
+		if (member == null) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
+		}
+
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		member.setPassword(passwordEncoder.encode(password));
+
+		return true;
+	}
+
+	@Override
+	public Member getMemberByEmail(String email) {
+		return memberRepository.findByEmail(email).orElse(null);
 	}
 }

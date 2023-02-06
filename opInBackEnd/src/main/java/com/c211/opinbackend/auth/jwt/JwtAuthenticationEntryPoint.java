@@ -1,6 +1,6 @@
 package com.c211.opinbackend.auth.jwt;
 
-import static com.c211.opinbackend.exception.auth.AuthExceptionEnum.AUTH_AUTHORIZATION_EXCEPTION;
+import static com.c211.opinbackend.exception.auth.AuthExceptionEnum.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -25,7 +24,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	 * status 401
 	 */
 	@Override
-	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws
+	public void commence(HttpServletRequest request, HttpServletResponse response,
+		AuthenticationException authException) throws
 		IOException {
 		response.setStatus(AUTH_AUTHORIZATION_EXCEPTION.getHttpStatus().value());
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);

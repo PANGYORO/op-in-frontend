@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import React, { useState } from "react";
 import { debounce } from "lodash";
 
-import Logo from "../../components/Logo";
-import http from "../../api/http";
+import Logo from "@components/Logo";
+import http from "@api/http";
 function Button({ onClick = () => {}, loading = false, children }) {
   return (
     <button

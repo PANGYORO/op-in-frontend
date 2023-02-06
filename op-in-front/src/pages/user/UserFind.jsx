@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-import Logo from "../../components/Logo";
+import Logo from "@components/Logo";
 
 function Button({ onClick = () => {}, loading = false, children }) {
   return (

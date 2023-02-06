@@ -18,4 +18,7 @@ public class TechLanguage {
 	private Long id;
 	@NotNull
 	private String title;
+
+	@NotNull
+	private String color;
 }

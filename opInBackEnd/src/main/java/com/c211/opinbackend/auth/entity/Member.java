@@ -27,8 +27,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member {
-	@OneToMany(mappedBy = "member")
-	List<Repository> memberList = new ArrayList<>();
 	@Id
 	@GeneratedValue
 	@Column(name = "MEMBER_ID")
@@ -54,4 +52,15 @@ public class Member {
 	public Member fetch(String githubToken, String avatarUrl) {
 		return this;
 	}
+	@OneToMany(mappedBy = "member")
+	List<Repository> memberList = new ArrayList<>();
+
+	public void setNickname(String name) {
+		this.nickname = name;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 }

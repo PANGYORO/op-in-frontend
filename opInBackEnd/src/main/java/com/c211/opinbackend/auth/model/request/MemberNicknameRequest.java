@@ -5,5 +5,7 @@ import lombok.Getter;
 @Getter
 public class MemberNicknameRequest {
 
+	private String email;
+
 	private String nickname;
 }
