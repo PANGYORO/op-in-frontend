@@ -22,7 +22,7 @@ public class PullRequest {
 	@Id
 	@GeneratedValue
 	private Long id;
-	private String html_url;
+	private String htmUrl;
 	private String sha;
 	private String state;
 	private String title;

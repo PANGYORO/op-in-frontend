@@ -16,7 +16,7 @@ public class RepositoryResponseDto {
 	private Long id;
 	private String title;
 	private String content;
-	private List<RepoTechLangDTO> techLangs;
+	private List<RepoTechLangDto> techLangs;
 	private List<RepositoryContributorDto> contributors;
 	private List<RepositoryContributorDto> gitContributors;
 	private String star;

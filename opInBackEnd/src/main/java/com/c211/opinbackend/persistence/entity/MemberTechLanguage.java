@@ -26,5 +26,5 @@ public class MemberTechLanguage {
 	@JoinColumn(name = "MEMBER_ID")
 	private Member member;
 
-	private String Color;
+	private String color;
 }

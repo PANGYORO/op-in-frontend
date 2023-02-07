@@ -52,7 +52,7 @@ public class RepoPostController {
 	@GetMapping
 	public ResponseEntity<?> getPosts() {
 		try {
-			List<RepoPostSimpleResponse> allPostList = repositoryPostService.getALLPostList();
+			List<RepoPostSimpleResponse> allPostList = repositoryPostService.getAllPostList();
 			return new ResponseEntity<Object>(allPostList, HttpStatus.OK);
 		} catch (Exception exception) {
 			return ResponseEntity.badRequest().body("조회에 실패 했습니다.");

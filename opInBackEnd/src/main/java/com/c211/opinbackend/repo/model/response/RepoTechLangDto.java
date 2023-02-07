@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Builder
 @Setter
-public class RepoTechLangDTO {
+public class RepoTechLangDto {
 	String title;
 	String color;
 }

@@ -32,8 +32,9 @@ public class RepositoryServiceImp implements RepositoryService {
 	@Transactional
 	public List<RepositoryResponseDto> finRepositoryListByMember(String email) {
 		List<RepositoryResponseDto> repositoryResponseDtoList = new ArrayList<>();
-		if (email == null)
+		if (email == null) {
 			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
+		}
 		Member findMember = memberRepository.findByEmail(email).orElseThrow(() -> new MemberRuntimeException(
 			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 		log.info(findMember.getNickname());
@@ -41,8 +42,9 @@ public class RepositoryServiceImp implements RepositoryService {
 		for (Repository repo : findMemberRepo) {
 			log.info(String.valueOf(repo.getId()));
 		}
-		if (findMemberRepo.size() == 0)
+		if (findMemberRepo.size() == 0) {
 			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION);
+		}
 
 		for (Repository repo : findMemberRepo) {
 			RepositoryResponseDto repositoryResponseDto = RepoMapper.toMyRepoDto(repo);

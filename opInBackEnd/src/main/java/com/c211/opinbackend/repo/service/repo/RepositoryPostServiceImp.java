@@ -88,7 +88,7 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 
 	@Override
 	@Transactional
-	public List<RepoPostSimpleResponse> getALLPostList() {
+	public List<RepoPostSimpleResponse> getAllPostList() {
 		List<RepositoryPost> repositoryPostList = repoPostRepository.findAll();
 		List<RepoPostSimpleResponse> mappingResult = new ArrayList<>();
 		for (RepositoryPost post : repositoryPostList) {

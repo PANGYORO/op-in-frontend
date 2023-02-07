@@ -63,9 +63,10 @@ public class RepositoryPost {
 	private String imageUrl;
 
 	public void createPostToRepo(Repository repository) {
-		if (repository != null)
+		if (repository != null) {
 			this.repository = repository;
-		else
+		} else {
 			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_NULL_EXCEPTION);
+		}
 	}
 }
