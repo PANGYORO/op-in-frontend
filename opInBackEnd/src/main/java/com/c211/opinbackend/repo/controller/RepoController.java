@@ -45,6 +45,7 @@ public class RepoController {
 	/**
 	 * 임시 로 레포지토리를 넣는 컨트롤러입니다
 	 * 추후 api 조회랑 배치가 돌면 서비스로 대체하겠습니다
+	 *
 	 * @return
 	 */
 	@PostMapping
@@ -60,11 +61,14 @@ public class RepoController {
 		log.info(createPostRequest.getContent());
 
 		// TODO: 2023-02-06 이부분 나중에 유틸 들어오면 유틸로 바꿔줘야합니다.
-		String currentUserId = SecurityUtil.getCurrentUserId().orElseThrow(
+		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(
 			() -> new MemberRuntimeException(
 				MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
 		);
-		log.info(currentUserId);
+		// 등록할 래포진토리 아이디필요
+		
+		log.info(memberEmail);
+		repositoryService.createPostToRepository(createPostRequest, memberEmail);
 		return null;
 	}
 

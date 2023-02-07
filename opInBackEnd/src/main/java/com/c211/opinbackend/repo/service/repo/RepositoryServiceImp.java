@@ -60,31 +60,36 @@ public class RepositoryServiceImp implements RepositoryService {
 
 	@Override
 	@Transactional
-	public Boolean createPostToRepository(Long repositoryId, CreatePostRequest createPostRequest, Long memberId) {
+	public Boolean createPostToRepository(CreatePostRequest createPostRequest, String memberEmail) {
+		// 등록할 래포지토리를 찾고
+
+		Long repositoryId = createPostRequest.getRepositoryId();
 		Repository repository = repoRepository.findById(repositoryId).orElseThrow(
 			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION)
 		);
-
-		Member member = memberRepository.findById(memberId)
+		// 등록하는 맴버를 찾는다.
+		Member member = memberRepository.findByEmail(memberEmail)
 			.orElseThrow(() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION));
-		// 래포지토리를 찾아오고 포스트를 래포지토리에 등록한다.
-		RepositoryPost repositoryPost = RepositoryPost.builder()
-			.repository(repository)
-			.member(member)
-			.titleContent(TitleContent.builder()
-				.content(createPostRequest.getContent())
-				.title(createPostRequest.getTitle())
-				.build())
-			.mergeFL(false) // TODO: 2023-02-07 나중에 api 로 바꿔줘야합니다
-			.date(LocalDateTime.now())
-			.closeState(false)
-			.imageUrl("http://testurl")
-			.build();
-
-		repositoryPost.createPostToRepo(repository);
-		repoPostRepository.save(repositoryPost);
+		// 포스트를 등록한다.
+		try {
+			RepositoryPost repositoryPost = RepositoryPost.builder()
+				.repository(repository)
+				.member(member)
+				.titleContent(TitleContent.builder()
+					.content(createPostRequest.getContent())
+					.title(createPostRequest.getTitle())
+					.build())
+				.mergeFL(false) // TODO: 2023-02-07 나중에 api 로 바꿔줘야합니다
+				.date(LocalDateTime.now())
+				.closeState(false)
+				.imageUrl("http://testurl")
+				.build();
+			repositoryPost.createPostToRepo(repository);
+			repoPostRepository.save(repositoryPost);
+		} catch (Exception exception) {
+			return false;
+		}
 		return true;
-
 	}
 
 	@Override

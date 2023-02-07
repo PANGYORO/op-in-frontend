@@ -9,7 +9,7 @@ import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
 public interface RepositoryService {
 	List<RepositoryResponseDto> finRepositoryListByMember(String email);
 
-	Boolean createPostToRepository(Long repositoryId, CreatePostRequest createPostRequest, Long memberId);
+	Boolean createPostToRepository(CreatePostRequest createPostRequest, String memberEmail);
 
 	/**
 	 * 래포지토리 등록
