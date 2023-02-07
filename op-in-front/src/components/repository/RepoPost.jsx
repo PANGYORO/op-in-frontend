@@ -25,7 +25,7 @@ export default function RepoPost() {
                     How to Manage Project
                   </h3>
                 </div>
-                <div>
+                {/* <div>
                   <div className="text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 bg-green-200 text-green-700 rounded-full">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -43,14 +43,13 @@ export default function RepoPost() {
                     </svg>
                     facebook-initail-user
                   </div>
-                </div>
+                </div> */}
                 <div className="flex items-center space-x-4 justify-between">
                   <div className="flex gap-3 space-y-1">
                     <span className="text-md">
-                      It is a daunting task to manage a project from start to
-                      finish – or any number of tasks for that matter. Usually,
-                      such problems arise as a result of a person not being
-                      equipped with project management certifications...
+                      It is a daunting task to manage a project from start to finish – or any number
+                      of tasks for that matter. Usually, such problems arise as a result of a person
+                      not being equipped with project management certifications...
                     </span>
                   </div>
                 </div>

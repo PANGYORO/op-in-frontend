@@ -2,6 +2,7 @@ import React from "react";
 import BasicBadge from "@assets/basicbadge.png";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
+import TagInfo from "./TagInfo";
 
 export default function MyInfo(props) {
   return (
@@ -30,7 +31,17 @@ export default function MyInfo(props) {
           <Tooltip anchorId="badge-7" content="normal badge" />
         </div>
         <hr />
-        <p className="p-4 font-bold text-black text-md dark:text-white">
+        {/* <TagInfo
+          title="language"
+          titlelength={props.techLanguages == null ? 0 : props.techLanguages.length}
+          taglist={["java", "javascript", "html&css", "python", "react"]}
+        /> */}
+        <TagInfo
+          title="language"
+          titlelength="5"
+          taglist={["java", "javascript", "html&css", "python", "react"]}
+        />
+        {/* <p className="p-4 font-bold text-black text-md dark:text-white">
           Languages
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
             ({props.techLanguages == null ? 0 : props.techLanguages.length})
@@ -136,7 +147,7 @@ export default function MyInfo(props) {
             </svg>
             React
           </div>
-        </div>
+        </div> */}
         <hr />
         <p className="p-4 font-bold text-black text-md dark:text-white">
           Topics
