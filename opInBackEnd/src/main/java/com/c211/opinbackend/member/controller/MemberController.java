@@ -41,7 +41,7 @@ public class MemberController {
 		this.mailService = mailService;
 	}
 
-	@PostMapping("/getMember")
+	@PostMapping("/mypage")
 	public ResponseEntity<?> getMemberInfo(@RequestBody MemberEmailRequest request) throws Exception {
 		MypageResponse mypageResponse = memberService.getMemberInfo(request.getEmail());
 		return new ResponseEntity<MypageResponse>(mypageResponse, HttpStatus.OK);
@@ -60,7 +60,7 @@ public class MemberController {
 	}
 
 	@PostMapping("/nickname/put")
-	public ResponseEntity<?> modifyNickname(@RequestBody MemberNicknameRequest request) throws Exception {
+	public ResponseEntity<?> modifyNickname(@RequestBody MemberNicknameRequest request) {
 		boolean exist = memberService.existNickname(request.getNickname());
 		if (exist) {
 			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_NICKNAME_EXCEPTION);
@@ -90,7 +90,7 @@ public class MemberController {
 		return ResponseEntity.ok(memberService.modifyPassword(email.get("email"), temporaryPassword));
 	}
 
-	@PostMapping("/member/delete")
+	@PostMapping("/delete")
 	public ResponseEntity<?> deleteMember(@RequestBody MemberLoginRequest request) {
 		return ResponseEntity.ok(memberService.deleteMember(request.getEmail(), request.getPassword()));
 	}
