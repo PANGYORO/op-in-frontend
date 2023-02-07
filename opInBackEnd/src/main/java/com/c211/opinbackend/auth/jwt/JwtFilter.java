@@ -68,9 +68,6 @@ public class JwtFilter extends OncePerRequestFilter {
 					// 컨텍스트에 넣기
 					Authentication authentication = tokenProvider.getAuthentication(newAccessToken);
 					SecurityContextHolder.getContext().setAuthentication(authentication);
-
-					Cookie cook = new Cookie("accessToken", newAccessToken); // choiceCookieName(쿠키 이름)에 대한 값을 지정
-					response.addCookie(cook); // 응답 헤더에 추가
 				}
 			}
 		}

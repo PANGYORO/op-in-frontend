@@ -1,12 +1,19 @@
 package com.c211.opinbackend.auth.controller;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +31,10 @@ import com.c211.opinbackend.member.service.MemberService;
 import com.c211.opinbackend.persistence.entity.Role;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
+@Slf4j
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -78,11 +87,45 @@ public class AuthController {
 	}
 
 	@PostMapping("/logout")
-	public void logout() {
+	public void logout(HttpServletResponse response) {
 		SecurityContext context = SecurityContextHolder.getContext();
 		SecurityContextHolder.clearContext();
 		context.setAuthentication(null);
 		// 쿠키 날려 버리기
 
+	}
+
+	@GetMapping("/tests")
+	public void test(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+			log.info("hi~");
+
+			Cookie[] cookies = request.getCookies();
+			// for(Cookie a :cookies) {
+			// 	if(a != null)
+			// 		System.out.println(a.toString());
+			// }
+
+			log.info("test in~!");
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		// ResponseCookie cookie = ResponseCookie.from("hi", "hi")
+		// 	.path("/")
+		// 	.secure(true)
+		// 	.sameSite("None")
+		// 	.httpOnly(false)
+		// 	.domain("127.0.0.1:5050")
+		// 	.build();
+		//
+		// response.setHeader("Set-Cookie", cookie.toString());
+
+		Cookie cookie = new Cookie("name", "value");
+		cookie.setPath("/");
+		cookie.setHttpOnly(false);
+		cookie.setSecure(false);
+
+		response.addCookie(cookie);
 	}
 }
