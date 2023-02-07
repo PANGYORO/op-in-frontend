@@ -44,26 +44,9 @@ public class JwtFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 		throws IOException, ServletException {
 
-		// String accessToken = null;
-		// String refreshToken = null;
-		//
-		// Cookie[] cookies = request.getCookies();
-		//
-		// if(cookies != null) {
-		// 	for(Cookie cookie : cookies) {
-		// 		if("accessToken".equals(cookie.getName())) {
-		// 			accessToken = cookie.getValue();
-		// 		}
-		// 		if("refreshToken".equals(cookie.getName())) {
-		// 			refreshToken = cookie.getValue();
-		// 		}
-		// 	}
-		// }
-
 		// 헤더에서 JWT 를 받아옵니다.
 		String accessToken = resolveAccessToken(request);
 		String refreshToken = resolveRefreshToken(request);
-
 
 		// 유효한 토큰인지 확인합니다.
 		if (accessToken != null) {
