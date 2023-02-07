@@ -7,8 +7,12 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.c211.opinbackend.auth.entity.Member;
+import com.c211.opinbackend.auth.repository.MemberRepository;
 import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
+import com.c211.opinbackend.exception.member.MemberExceptionEnum;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +22,15 @@ public class MailService {
 
 	private final JavaMailSender javaMailSender;
 
+	MemberRepository memberRepository;
+
 	public String mailSend(String email) {
+
+		Member member = memberRepository.findByEmail(email).orElse(null);
+		if (member == null) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
+		}
+
 		String temporaryPassword = createCode();
 
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
