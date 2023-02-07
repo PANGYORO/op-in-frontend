@@ -17,6 +17,7 @@ import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.entity.RepositoryPost;
 import com.c211.opinbackend.persistence.entity.TitleContent;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
+import com.c211.opinbackend.persistence.repository.RepoPostRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
 import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
@@ -32,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RepositoryServiceImp implements RepositoryService {
 	private final RepoRepository repoRepository;
 	private final MemberRepository memberRepository;
+	private final RepoPostRepository repoPostRepository;
 
 	@Override
 	@Transactional
@@ -80,7 +82,7 @@ public class RepositoryServiceImp implements RepositoryService {
 			.build();
 
 		repositoryPost.createPostToRepo(repository);
-
+		repoPostRepository.save(repositoryPost);
 		return true;
 
 	}
