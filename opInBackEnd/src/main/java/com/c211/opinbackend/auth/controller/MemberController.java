@@ -1,5 +1,7 @@
 package com.c211.opinbackend.auth.controller;
 
+import static com.c211.opinbackend.exception.member.MemberExceptionEnum.*;
+
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -7,6 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +31,12 @@ import com.c211.opinbackend.auth.model.request.MemberPasswordRequest;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.auth.service.MailService;
 import com.c211.opinbackend.auth.service.MemberService;
+import com.c211.opinbackend.auth.util.SecurityUtil;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
+import com.c211.opinbackend.auth.jwt.JwtFilter;
+import com.c211.opinbackend.auth.jwt.TokenProvider;
+import com.c211.opinbackend.repo.repository.RepoPostRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -72,14 +82,22 @@ public class MemberController {
 			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_NICKNAME_EXCEPTION);
 		}
 
-		Member member = memberService.modifyNickname(request.getNickname(), request.getEmail());
+		String username = SecurityUtil.getCurrentUserId().orElse(null);
+		Member member = memberService.modifyNickname(request.getNickname(), username);
 		return new ResponseEntity<String>(member.getNickname(), HttpStatus.OK);
 	}
 
 	@PostMapping("/password/put")
-	public ResponseEntity<?> modifyPassword(@RequestBody MemberPasswordRequest request) throws Exception {
-		boolean val = memberService.modifyPassword(request.getEmail(), request.getPassword());
+	public ResponseEntity<?> modifyPassword(@RequestBody MemberPasswordRequest request) {
+		String username = SecurityUtil.getCurrentUserId().orElse(null);
+		boolean val = memberService.modifyPassword(username, request.getPassword());
 		return new ResponseEntity<Boolean>(val, HttpStatus.OK);
+	}
+
+	@PostMapping("/member/info")
+	public ResponseEntity<?> getMemberLogin() {
+		Member member = memberService.getMember();
+		return new ResponseEntity<Member>(member, HttpStatus.OK);
 	}
 
 	@PostMapping("/login")
@@ -91,11 +109,10 @@ public class MemberController {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
 		return new ResponseEntity<TokenDto>(token, httpHeaders, HttpStatus.OK);
-
 	}
 
 	@PostMapping("/signup")
-	public ResponseEntity<Boolean> signUp(@RequestBody MemberJoinRequest request) throws Exception {
+	public ResponseEntity<String> signUp(@RequestBody MemberJoinRequest request) throws Exception {
 
 		// 이메일 형식에 맞는지 체크 (형식 : @, . 을 포함하는지 확인)
 		// 이메일 정규식 => /\S+@\S+.\S+/
@@ -114,8 +131,6 @@ public class MemberController {
 			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_PASSWORD_TYPE_EXCEPTION);
 		}
 
-		// BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
 		MemberDto joinMember = MemberDto.builder()
 			.email(email)
 			.password(password)
@@ -125,24 +140,34 @@ public class MemberController {
 
 		memberService.signUp(joinMember);
 
-		return ResponseEntity.ok(true);
+		return new ResponseEntity<String>(email, HttpStatus.OK);
+
 	}
 
-	@PostMapping("/password/email")
+	@PostMapping ("/password/email")
 	public ResponseEntity<?> changePwEmail(@RequestBody Map<String, String> email) {
 		String temporaryPassword = mailService.mailSend(email.get("email"));
 		return ResponseEntity.ok(memberService.modifyPassword(email.get("email"), temporaryPassword));
 	}
 
-	@PostMapping("/member/delete")
+	@PostMapping ("/member/delete")
 	public ResponseEntity<?> deleteMember(@RequestBody MemberLoginRequest request) {
 		return ResponseEntity.ok(memberService.deleteMember(request.getEmail(), request.getPassword()));
 	}
 
-	@PostMapping("/gitMem/delete")
+	@PostMapping ("/gitMem/delete")
 	public ResponseEntity<?> deleteGithubMember(@RequestBody MemberLoginRequest request) {
 		log.info(request.getEmail());
 		return ResponseEntity.ok(memberService.deleteGithubMember(request.getEmail()));
+	}
+
+	@PostMapping("/logout")
+	public void logout() {
+		SecurityContext context = SecurityContextHolder.getContext();
+		SecurityContextHolder.clearContext();
+		context.setAuthentication(null);
+		// 쿠키 날려 버리기
+
 	}
 
 }

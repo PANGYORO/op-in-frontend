@@ -38,6 +38,7 @@ import com.c211.opinbackend.auth.repository.MemberTechLanguageRepository;
 import com.c211.opinbackend.auth.repository.MemberTopicRepository;
 import com.c211.opinbackend.auth.repository.RepoContributorRepository;
 import com.c211.opinbackend.auth.repository.TechLanguageRepository;
+import com.c211.opinbackend.auth.util.SecurityUtil;
 import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
@@ -89,14 +90,22 @@ public class MemberServiceImpl implements MemberService {
 
 		UsernamePasswordAuthenticationToken authenticationToken =
 			new UsernamePasswordAuthenticationToken(email, password);
-		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-		Member member = memberRepository.findByEmail(authentication.getName()).orElse(null);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
 
-		String authorities = getAuthorities(authentication);
+		Authentication authentication = null;
 
-		return tokenProvider.createToken(member, authorities);
+		try {
+			authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+		} catch (Exception ex) {
+			throw new RuntimeException("authenticationManagerBuilder 에러");
+		}
 
+		if (authentication != null) {
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			String authorities = getAuthorities(authentication);
+			return tokenProvider.createToken(email, authorities);
+		} else {
+			throw new RuntimeException("authentication 에러");
+		}
 	}
 
 	@Override
@@ -404,7 +413,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public Member getMemberByEmail(String email) {
-		return memberRepository.findByEmail(email).orElse(null);
+	public Member getMember() {
+		return memberRepository.findById(Long.valueOf(SecurityUtil.getCurrentUserId().get())).orElse(null);
 	}
+
 }
