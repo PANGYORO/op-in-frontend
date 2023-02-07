@@ -2,15 +2,15 @@ package com.c211.opinbackend.repo.model.repository;
 
 import java.time.LocalDateTime;
 
-import com.c211.opinbackend.auth.model.MemberDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
-public class RepositoryDto {
-	private MemberDto memberDto;
+@ToString
+public class RepoDto {
+	private String memberEmail;
 	private String name;
 	private String githubAddress;
 	private String fullName;
@@ -27,6 +27,5 @@ public class RepositoryDto {
 	private Boolean disabled;
 	private Long forks;
 	private Long watchers;
-	private String language;
 
 }

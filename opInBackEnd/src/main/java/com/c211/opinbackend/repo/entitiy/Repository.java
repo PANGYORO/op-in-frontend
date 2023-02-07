@@ -17,7 +17,6 @@ import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.entity.RepositoryContributor;
 import com.sun.istack.NotNull;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @Builder()
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Repository {
 	@Id
 	@GeneratedValue
@@ -48,7 +47,6 @@ public class Repository {
 	@NotNull
 	private String htmlUrl;
 	@NotNull
-	@Column(name = "private")
 	private Boolean secret;
 	@NotNull
 	private Boolean fork;

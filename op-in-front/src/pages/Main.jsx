@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes, Outlet } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import { Cookies } from "react-cookie";
 import Header from "@components/Header";
 import SignIn from "@pages/user/SignIn";
 import SignUp from "@pages/user/SignUp";
 import UserFind from "@pages/user/UserFind";
-import Detail from "@pages/user/Detail";
+import UserDetail from "@pages/user/UserDetail";
 import SelectTag from "@pages/user/SelectTag";
 
 import Search from "@pages/Search";
@@ -17,9 +19,9 @@ import RepoSelection from "@pages/repository/main/RepoSelection";
 import RecommandIndex from "@pages/repository/Recommand";
 import RepoDetail from "./repository/following/RepoDetail";
 import PostView from "@components/PostView";
-
-
-
+import useToken from "@hooks/useToken";
+import { useSetRecoilState } from "recoil";
+import { userInfo } from "@recoil/user/atoms";
 
 function MainTemplate() {
   return (
@@ -34,22 +36,25 @@ function RepoTemplate() {
   return <Outlet />;
 }
 
-// function RepoDetailTemplate(){
-//   return(
-//     <div className="flex flex-auto w-full mt-4">
-//       <div className="w-2/3">
-//         <RepoDetail />
-//       </div>
-//       <div className="w-1/3">
-//         <Status />
-//       </div>
-//     </div>
-//   );
-// }
-
 export default function Main() {
+  const { token } = useToken();
+  const cookies = new Cookies();
+  const setUser = useSetRecoilState(userInfo);
 
-
+  useEffect(() => {
+    const accessToken = cookies.get("accessToken");
+    if (accessToken) {
+      const decodedUserInfo = jwt_decode(accessToken);
+      setUser((before) => ({
+        ...before,
+        ...decodedUserInfo,
+        logined: true,
+      }));
+    } else {
+      //async refreshToken 보내서 accessToken 갱신해서 recoil 저장
+      // refreshToken 시간 만료시 다시 로그인하라는 알림 띄우기
+    }
+  }, [token]);
 
   return (
     <div className="Main h-screen overflow-auto">
@@ -60,7 +65,7 @@ export default function Main() {
           <Route path="signin" element={<SignIn />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="userfind" element={<UserFind />} />
-          <Route path="detail" element={<Detail />} />
+          <Route path="userdetail" element={<UserDetail />} />
           <Route path="selecttag" element={<SelectTag />} />
           <Route exact path="/" element={<MainTemplate />}>
             <Route exact index element={<DashBoard />} />

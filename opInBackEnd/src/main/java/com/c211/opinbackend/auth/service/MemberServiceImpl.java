@@ -2,6 +2,7 @@ package com.c211.opinbackend.auth.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -88,16 +89,20 @@ public class MemberServiceImpl implements MemberService {
 
 		UsernamePasswordAuthenticationToken authenticationToken =
 			new UsernamePasswordAuthenticationToken(email, password);
-
 		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
 		Member member = memberRepository.findByEmail(authentication.getName()).orElse(null);
-
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		String authorities = getAuthorities(authentication);
 
 		return tokenProvider.createToken(member, authorities);
+
+	}
+
+	@Override
+	public Optional<Member> findByEmail(String email) {
+		Optional<Member> byEmail = memberRepository.findByEmail(email);
+		return byEmail;
 	}
 
 	// 권한 가져오기
@@ -145,6 +150,10 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	public boolean isOAuthMember(String email) {
+		return memberRepository.existsByEmailAndAndGithubSyncFl(email, true);
+	}
+
 	public boolean deleteMember(String email, String password) {
 
 		Member member = memberRepository.findByEmail(email).orElse(null);

@@ -8,14 +8,13 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.c211.opinbackend.auth.entity.Member;
-import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.repository.MemberRepository;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
 import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
 import com.c211.opinbackend.repo.entitiy.Repository;
-import com.c211.opinbackend.repo.model.repository.RepositoryDto;
+import com.c211.opinbackend.repo.model.repository.RepoDto;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
 import com.c211.opinbackend.repo.repository.RepoRepository;
@@ -62,12 +61,18 @@ public class RepositoryServiceImp implements RepositoryService {
 	}
 
 	@Override
-	public Boolean uploadRepository(MemberDto memberDto, RepositoryDto repositoryDto) {
-		Member member = memberRepository.findByEmail(memberDto.getEmail())
+	@Transactional
+	public Boolean uploadRepository(String memberEmail, RepoDto repoDto) {
+		Member member = memberRepository.findByEmail(memberEmail)
 			.orElse(null);
 		// 맴버 없이 래포지토리가 등록 가능해야한다
-		RepoMapper.toEntity(repositoryDto);
+		try {
 
+			Repository repository = RepoMapper.toEntity(member, repoDto);
+			repoRepository.save(repository);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
 		return null;
 	}
 

@@ -14,17 +14,6 @@ import lombok.ToString;
 @Builder
 @ToString
 public class RepositoryResponseDto {
-	// TODO: 2023-02-02
-	/**
-	 * title: '우리레포는요...',
-	 * content: '내용이 어쩌구 저쩌고',
-	 * language: 'python',
-	 * contributor: [{ nickname: '짱짱맨' },{id:''}, {profileimg:''}],
-	 * star: 341110,
-	 * forknum : 321,
-	 * topic: 'react',
-	 * updatedate: '2021-01-0
-	 */
 	private Long id;
 	private String title;
 	private String content;

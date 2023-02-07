@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.c211.opinbackend.auth.model.request.MemberEmailRequest;
+import com.c211.opinbackend.repo.model.repository.RepoDto;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
 import com.c211.opinbackend.repo.service.repo.RepositoryService;
@@ -29,7 +30,8 @@ public class RepoController {
 	private final RepositoryService repositoryService;
 	private final RepoTechLanguageService repoTechLanguageService;
 
-	@PostMapping
+	// TODO: 2023-02-07 프론트에게 변경되었다고 알리기
+	@PostMapping("/member")
 	public ResponseEntity<?> getReposByEmail(@RequestBody MemberEmailRequest emailRequest) throws Exception {
 		String email = emailRequest.getEmail();
 		List<RepositoryResponseDto> repositoryResponseDtoList = repositoryService.finRepositoryListByMember(email);
@@ -38,6 +40,19 @@ public class RepoController {
 			log.info(dto.toString());
 		}
 		return new ResponseEntity<>(repositoryResponseDtoList, HttpStatus.OK);
+	}
+
+	/**
+	 * 임시 로 레포지토리를 넣는 컨트롤러입니다
+	 * 추후 api 조회랑 배치가 돌면 서비스로 대체하겠습니다
+	 * @return
+	 */
+	@PostMapping
+	public ResponseEntity<?> testPost(@RequestBody RepoDto dto) {
+		log.info("input test");
+		log.info(dto.toString());
+		repositoryService.uploadRepository(dto.getMemberEmail(), dto);
+		return null;
 	}
 
 	@PostMapping("/post")
