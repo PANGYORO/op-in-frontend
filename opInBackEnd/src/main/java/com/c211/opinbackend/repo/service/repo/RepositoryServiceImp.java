@@ -1,5 +1,6 @@
 package com.c211.opinbackend.repo.service.repo;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,8 @@ import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
 import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.Repository;
+import com.c211.opinbackend.persistence.entity.RepositoryPost;
+import com.c211.opinbackend.persistence.entity.TitleContent;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
 import com.c211.opinbackend.repo.model.dto.RepoDto;
@@ -47,15 +50,37 @@ public class RepositoryServiceImp implements RepositoryService {
 			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION);
 
 		for (Repository repo : findMemberRepo) {
-			RepositoryResponseDto repositoryResponseDto = RepoMapper.toDto(repo);
+			RepositoryResponseDto repositoryResponseDto = RepoMapper.toMyRepoDto(repo);
 			repositoryResponseDtoList.add(repositoryResponseDto);
 		}
 		return repositoryResponseDtoList;
 	}
 
 	@Override
-	public Boolean createPostToRepository(Long repositoryId, CreatePostRequest createPostRequest, String email) {
-		// TODO: 2023/02/06 래포지토리 아이디를 가지고 래포지토리를 에 포스트를 등록해야한다
+	@Transactional
+	public Boolean createPostToRepository(Long repositoryId, CreatePostRequest createPostRequest, Long memberId) {
+		Repository repository = repoRepository.findById(repositoryId).orElseThrow(
+			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION)
+		);
+
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION));
+		// 래포지토리를 찾아오고 포스트를 래포지토리에 등록한다.
+		RepositoryPost repositoryPost = RepositoryPost.builder()
+			.repository(repository)
+			.member(member)
+			.titleContent(TitleContent.builder()
+				.content(createPostRequest.getContent())
+				.title(createPostRequest.getTitle())
+				.build())
+			.mergeFL(false) // TODO: 2023-02-07 나중에 api 로 바꿔줘야합니다
+			.date(LocalDateTime.now())
+			.closeState(false)
+			.imageUrl("http://testurl")
+			.build();
+
+		repositoryPost.createPostToRepo(repository);
+
 		return true;
 
 	}

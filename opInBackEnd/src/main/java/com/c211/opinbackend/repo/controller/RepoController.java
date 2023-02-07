@@ -4,20 +4,20 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.c211.opinbackend.auth.model.request.MemberEmailRequest;
+import com.c211.opinbackend.exception.member.MemberExceptionEnum;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
 import com.c211.opinbackend.repo.service.repo.RepositoryService;
 import com.c211.opinbackend.repo.service.repoTechlag.RepoTechLanguageService;
+import com.c211.opinbackend.util.SecurityUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,20 +60,11 @@ public class RepoController {
 		log.info(createPostRequest.getContent());
 
 		// TODO: 2023-02-06 이부분 나중에 유틸 들어오면 유틸로 바꿔줘야합니다.
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication == null) {
-			log.debug("Security Context에 인증정보가 없습니다.");
-		}
-
-		String email = null;
-		if (authentication.getPrincipal() instanceof UserDetails) {
-			UserDetails springSecurityUser = (UserDetails)authentication.getPrincipal();
-			System.out.println(springSecurityUser.getAuthorities());
-			email = springSecurityUser.getUsername();
-		} else if (authentication.getPrincipal() instanceof String) {
-			email = (String)authentication.getPrincipal();
-		}
-		log.info(email);
+		String currentUserId = SecurityUtil.getCurrentUserId().orElseThrow(
+			() -> new MemberRuntimeException(
+				MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+		);
+		log.info(currentUserId);
 		return null;
 	}
 

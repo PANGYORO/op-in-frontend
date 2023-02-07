@@ -15,7 +15,7 @@ import com.c211.opinbackend.repo.model.response.repoTechLang.RepoTechLangDTO;
 
 public class RepoMapper {
 
-	public static RepositoryResponseDto toDto(Repository repository) {
+	public static RepositoryResponseDto toMyRepoDto(Repository repository) {
 		List<RepoTechLangDTO> repoTechLangDTOList = getRepoTechLangDtoList(repository);
 		List<RepositoryContributorDto> repositoryContributorDtoList = getRepoTechContributorDtoList(repository);
 		List<String> topics = getTopicList(repository);

@@ -8,6 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum RepositoryExceptionEnum {
+	REPOSITORY_NULL_EXCEPTION(HttpStatus.BAD_REQUEST, "M0002", "래포지토리 가 null 입니다."),
 	REPOSITORY_EXIST_EXCEPTION(HttpStatus.BAD_REQUEST, "M0010", "존재하지 않는 래포입니다.");
 
 	private final HttpStatus httpStatus;
