@@ -27,8 +27,8 @@ export default function Detail() {
         email: currentEmail,
       })
       .then((response) => {
-        alert(currentEmail);
-        alert(response.data.nickname);
+        // alert(currentEmail);
+        // alert(response.data.nickname);
         console.log(response.data);
         setMyInfo(response.data);
       })
