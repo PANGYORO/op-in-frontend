@@ -43,13 +43,23 @@ public class AuthController {
 	private final MemberService memberService;
 
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody MemberLoginRequest request) {
+	public ResponseEntity<?> login(@RequestBody MemberLoginRequest request, HttpServletResponse response) {
 		if (memberService.isOAuthMember(request.getEmail())) {
 			throw new MemberRuntimeException(MemberExceptionEnum.OAUTH_SIGNUP_USER_EXCEPTION);
 		}
 		TokenDto token = authService.authorize(request.getEmail(), request.getPassword());
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
+
+		// 쿠키 생성
+		Cookie cookie = new Cookie("accessToken", token.getAccessToken());
+		cookie.setPath("/");
+		response.addCookie(cookie);
+
+		Cookie cookie2 = new Cookie("refreshToken", token.getRefreshToken());
+		cookie2.setPath("/");
+		response.addCookie(cookie2);
+
 		return new ResponseEntity<TokenDto>(token, httpHeaders, HttpStatus.OK);
 	}
 
@@ -91,41 +101,17 @@ public class AuthController {
 		SecurityContext context = SecurityContextHolder.getContext();
 		SecurityContextHolder.clearContext();
 		context.setAuthentication(null);
+
 		// 쿠키 날려 버리기
-
-	}
-
-	@GetMapping("/tests")
-	public void test(HttpServletRequest request, HttpServletResponse response) {
-
-		try {
-			log.info("hi~");
-
-			Cookie[] cookies = request.getCookies();
-			// for(Cookie a :cookies) {
-			// 	if(a != null)
-			// 		System.out.println(a.toString());
-			// }
-
-			log.info("test in~!");
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		// ResponseCookie cookie = ResponseCookie.from("hi", "hi")
-		// 	.path("/")
-		// 	.secure(true)
-		// 	.sameSite("None")
-		// 	.httpOnly(false)
-		// 	.domain("127.0.0.1:5050")
-		// 	.build();
-		//
-		// response.setHeader("Set-Cookie", cookie.toString());
-
-		Cookie cookie = new Cookie("name", "value");
+		Cookie cookie = new Cookie("accessToken", null);
+		cookie.setMaxAge(0);
 		cookie.setPath("/");
-		cookie.setHttpOnly(false);
-		cookie.setSecure(false);
-
 		response.addCookie(cookie);
+
+		Cookie cookie2 = new Cookie("refreshToken", null);
+		cookie2.setMaxAge(0);
+		cookie2.setPath("/");
+		response.addCookie(cookie2);
 	}
+
 }

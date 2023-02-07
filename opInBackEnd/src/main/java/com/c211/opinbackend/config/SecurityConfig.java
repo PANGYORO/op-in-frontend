@@ -109,14 +109,14 @@ public class SecurityConfig {
 		};
 	}
 
-	@Bean
-	public CookieSerializer cookieSerializer() {
-		DefaultCookieSerializer serializer = new DefaultCookieSerializer();
-		// serializer.setUseSecureCookie(true);
-		serializer.setDomainNamePattern("^.+?\\.(\\w+\\.[a-z]+)$");
-		serializer.setSameSite("");
-		return serializer;
-	}
+	// @Bean
+	// public CookieSerializer cookieSerializer() {
+	// 	DefaultCookieSerializer serializer = new DefaultCookieSerializer();
+	// 	// serializer.setUseSecureCookie(true);
+	// 	serializer.setDomainNamePattern("^.+?\\.(\\w+\\.[a-z]+)$");
+	// 	serializer.setSameSite("");
+	// 	return serializer;
+	// }
 
 }
 

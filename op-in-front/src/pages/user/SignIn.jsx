@@ -129,7 +129,7 @@ function LoginForm({ saveToken }) {
   };
 
   const test = () => {
-    http.get("auth/tests", {}).then(console.log).catch(console.error)
+    http.post("auth/logout", {}).then(console.log).catch(console.error)
   }
 
   return (
