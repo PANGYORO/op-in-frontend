@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 5050",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -21,6 +21,7 @@
     "prismjs": "^1.29.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
+    "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.0",
     "react-hot-toast": "^2.4.0",
@@ -29,7 +30,8 @@
     "react-tooltip": "^5.7.2",
     "react-use": "^17.4.0",
     "recoil": "^0.7.6",
-    "tui-editor-plugin-font-size": "^1.0.4"
+    "tui-editor-plugin-font-size": "^1.0.4",
+    "universal-cookie": "^4.0.4"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
