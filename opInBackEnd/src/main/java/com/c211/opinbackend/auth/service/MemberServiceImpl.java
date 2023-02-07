@@ -90,15 +90,22 @@ public class MemberServiceImpl implements MemberService {
 
 		UsernamePasswordAuthenticationToken authenticationToken =
 			new UsernamePasswordAuthenticationToken(email, password);
-		// TODO: 2023/02/06 여기 에러 처리 부탁드립니다 ㅜ
-		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+		Authentication authentication = null;
 
-		String authorities = getAuthorities(authentication);
+		try {
+			authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+		} catch (Exception ex) {
+			throw new RuntimeException("authenticationManagerBuilder 에러");
+		}
 
-		return tokenProvider.createToken(email, authorities);
-
+		if (authentication != null) {
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			String authorities = getAuthorities(authentication);
+			return tokenProvider.createToken(email, authorities);
+		} else {
+			throw new RuntimeException("authentication 에러");
+		}
 	}
 
 	@Override

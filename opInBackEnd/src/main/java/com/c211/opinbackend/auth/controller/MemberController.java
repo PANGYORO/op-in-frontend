@@ -109,7 +109,6 @@ public class MemberController {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
 		return new ResponseEntity<TokenDto>(token, httpHeaders, HttpStatus.OK);
-
 	}
 
 	@PostMapping("/signup")
@@ -167,6 +166,8 @@ public class MemberController {
 		SecurityContext context = SecurityContextHolder.getContext();
 		SecurityContextHolder.clearContext();
 		context.setAuthentication(null);
+		// 쿠키 날려 버리기
+
 	}
 
 }

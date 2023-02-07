@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,6 +19,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.c211.opinbackend.auth.entity.Member;
@@ -42,9 +44,26 @@ public class JwtFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 		throws IOException, ServletException {
 
+		// String accessToken = null;
+		// String refreshToken = null;
+		//
+		// Cookie[] cookies = request.getCookies();
+		//
+		// if(cookies != null) {
+		// 	for(Cookie cookie : cookies) {
+		// 		if("accessToken".equals(cookie.getName())) {
+		// 			accessToken = cookie.getValue();
+		// 		}
+		// 		if("refreshToken".equals(cookie.getName())) {
+		// 			refreshToken = cookie.getValue();
+		// 		}
+		// 	}
+		// }
+
 		// 헤더에서 JWT 를 받아옵니다.
 		String accessToken = resolveAccessToken(request);
 		String refreshToken = resolveRefreshToken(request);
+
 
 		// 유효한 토큰인지 확인합니다.
 		if (accessToken != null) {
@@ -75,6 +94,9 @@ public class JwtFilter extends OncePerRequestFilter {
 					// 컨텍스트에 넣기
 					Authentication authentication = tokenProvider.getAuthentication(newAccessToken);
 					SecurityContextHolder.getContext().setAuthentication(authentication);
+
+					Cookie cook = new Cookie("accessToken", newAccessToken); // choiceCookieName(쿠키 이름)에 대한 값을 지정
+					response.addCookie(cook); // 응답 헤더에 추가
 				}
 			}
 		}
