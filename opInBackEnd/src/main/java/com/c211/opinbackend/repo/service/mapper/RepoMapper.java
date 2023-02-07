@@ -8,6 +8,7 @@ import com.c211.opinbackend.repo.entitiy.Repository;
 import com.c211.opinbackend.repo.entitiy.RepositoryTechLanguage;
 import com.c211.opinbackend.repo.entitiy.RepositoryTopic;
 import com.c211.opinbackend.repo.model.contributor.RepositoryContributorDto;
+import com.c211.opinbackend.repo.model.repository.RepositoryDto;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
 import com.c211.opinbackend.repo.model.response.repoTechLang.RepoTechLangDTO;
 
@@ -66,5 +67,27 @@ public class RepoMapper {
 		}
 		return repoTechLangDtoList;
 
+	}
+
+	public static Repository toEntity(RepositoryDto repositoryDto) {
+		Repository repositoryToSave = Repository
+			.builder()
+			.name(repositoryDto.getName())
+			.githubAddress(repositoryDto.getGithubAddress())
+			.description(repositoryDto.getGithubAddress())
+			.htmlUrl(repositoryDto.getHtmlUrl())
+			.secret(repositoryDto.getSecret())
+			.fork(repositoryDto.getFork())
+			.createdAt(repositoryDto.getCreateAt())
+			.updatedAt(repositoryDto.getUpdatedAt())
+			.pushedAt(repositoryDto.getPushedAt())
+			.size(repositoryDto.getSize())
+			.stargazersCount(repositoryDto.getStargazersCount())
+			.watchersCount(repositoryDto.getWatcherCount())
+			.archived(repositoryDto.getArchived())
+			.disabled(repositoryDto.getDisabled())
+			.forks(repositoryDto.getForks())
+			.watchers(repositoryDto.getWatchers()).build();
+		return repositoryToSave;
 	}
 }

@@ -15,8 +15,8 @@ public class RepositoryDto {
 	private String githubAddress;
 	private String fullName;
 	private String htmlUrl;
-	private String secret;
-	private String fork;
+	private Boolean secret;
+	private Boolean fork;
 	private LocalDateTime createAt;
 	private LocalDateTime updatedAt;
 	private LocalDateTime pushedAt;

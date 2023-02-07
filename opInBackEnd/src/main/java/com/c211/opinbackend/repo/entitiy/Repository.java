@@ -17,10 +17,17 @@ import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.entity.RepositoryContributor;
 import com.sun.istack.NotNull;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@AllArgsConstructor
+@Builder()
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Repository {
 	@Id
 	@GeneratedValue

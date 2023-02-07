@@ -63,6 +63,12 @@ public class RepositoryServiceImp implements RepositoryService {
 
 	@Override
 	public Boolean uploadRepository(MemberDto memberDto, RepositoryDto repositoryDto) {
+		Member member = memberRepository.findByEmail(memberDto.getEmail())
+			.orElse(null);
+		// 맴버 없이 래포지토리가 등록 가능해야한다
+		RepoMapper.toEntity(repositoryDto);
+
 		return null;
 	}
+
 }
