@@ -1,6 +1,12 @@
 package com.c211.opinbackend.repo.service.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.c211.opinbackend.persistence.entity.Comment;
 import com.c211.opinbackend.persistence.entity.RepositoryPost;
+import com.c211.opinbackend.repo.model.response.CommentSimpleResponse;
+import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 
 public class RepoPostMapper {
@@ -14,5 +20,26 @@ public class RepoPostMapper {
 			.commentCount(post.getCommentsList().size())
 			.build();
 
+	}
+
+	public static RepoPostDetailResponse toDetailResponse(RepositoryPost repositoryPost) {
+		List<CommentSimpleResponse> simpleCommentList = new ArrayList<>();
+		for (Comment comment : repositoryPost.getCommentsList()) {
+			CommentSimpleResponse.builder()
+				.memberName(comment.getMember().getNickname())
+				.memberAvatarUrl(comment.getMember().getAvatarUrl())
+				.commentContent(comment.getContent())
+				.build();
+		}
+		return RepoPostDetailResponse.builder()
+			.authorMemberName(repositoryPost.getMember().getNickname())
+			.authorMemberAvatar(repositoryPost.getMember().getAvatarUrl())
+			.createTime(repositoryPost.getDate())
+			.title(repositoryPost.getTitleContent().getTitle())
+			.likeCount(repositoryPost.getLikeList().size())
+			.commentCount(repositoryPost.getCommentsList().size())
+			.commentList(simpleCommentList)
+			.content(repositoryPost.getTitleContent().getContent())
+			.build();
 	}
 }

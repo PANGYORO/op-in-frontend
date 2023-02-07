@@ -37,7 +37,7 @@ public class OAuthController {
 	@GetMapping("/redirect/github")
 	public void redirectGithub(HttpServletResponse response,
 		@RequestParam(value = "redirect_uri", required = false) String redirectUri) throws IOException {
-		response.sendRedirect(oAuthService.getRedirectURL(redirectUri));
+		response.sendRedirect(oAuthService.getRedirectUrl(redirectUri));
 	}
 
 	@GetMapping("/login/github")

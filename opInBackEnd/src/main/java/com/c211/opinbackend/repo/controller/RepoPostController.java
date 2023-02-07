@@ -16,6 +16,8 @@ import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
+import com.c211.opinbackend.repo.model.requeset.RequestCommentCreateToPost;
+import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 import com.c211.opinbackend.repo.service.repo.RepositoryPostService;
 import com.c211.opinbackend.util.SecurityUtil;
@@ -60,8 +62,15 @@ public class RepoPostController {
 	}
 
 	@GetMapping("/{postId}")
-	public ResponseEntity<?> getDetailPost(@PathVariable Long postId) {
+	public ResponseEntity<?> getDetailPost(@PathVariable("postId") Long postId) {
+		RepoPostDetailResponse repoDetail = repositoryPostService.getRepoDetail(postId);
+		return ResponseEntity.ok().body(repoDetail);
+	}
+
+	@PostMapping("/post/comment")
+	public ResponseEntity<?> createCommentToPost(@RequestBody RequestCommentCreateToPost requestCommentCreateToPost) {
 		return null;
+
 	}
 
 	@PutMapping

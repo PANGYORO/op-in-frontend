@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
+import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 
 public interface RepositoryPostService {
@@ -18,4 +19,5 @@ public interface RepositoryPostService {
 
 	List<RepoPostSimpleResponse> getAllPostList();
 
+	RepoPostDetailResponse getRepoDetail(Long postId);
 }
