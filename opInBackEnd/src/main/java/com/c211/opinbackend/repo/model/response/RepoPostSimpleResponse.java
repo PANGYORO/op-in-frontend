@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 public class RepoPostSimpleResponse {
+	private Long postId;
 	private String authorMemberName;
 	private String authorMemberAvatar;
 	private LocalDateTime createTime;

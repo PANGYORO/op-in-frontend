@@ -12,6 +12,7 @@ import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 public class RepoPostMapper {
 	public static RepoPostSimpleResponse toSimpleResponse(RepositoryPost post) {
 		return RepoPostSimpleResponse.builder()
+			.postId(post.getId())
 			.authorMemberName(post.getMember().getNickname())
 			.authorMemberAvatar(post.getMember().getAvatarUrl())
 			.createTime(post.getDate())

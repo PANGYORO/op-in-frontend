@@ -19,6 +19,7 @@ import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.model.requeset.RequestCommentCreateToPost;
 import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
+import com.c211.opinbackend.repo.service.commnet.CommentService;
 import com.c211.opinbackend.repo.service.repo.RepositoryPostService;
 import com.c211.opinbackend.util.SecurityUtil;
 
@@ -33,6 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RepoPostController {
 
 	private final RepositoryPostService repositoryPostService;
+	private final CommentService commentService;
 
 	// TODO: 2023/02/07 애러처리를 어떻게 해야할까
 	@PostMapping
@@ -67,9 +69,13 @@ public class RepoPostController {
 		return ResponseEntity.ok().body(repoDetail);
 	}
 
-	@PostMapping("/post/comment")
+	@PostMapping("/comment")
 	public ResponseEntity<?> createCommentToPost(@RequestBody RequestCommentCreateToPost requestCommentCreateToPost) {
-		return null;
+		String memberEmail = SecurityUtil.getCurrentUserId()
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_WRONG_EXCEPTION));
+		commentService.createCommentToPost(memberEmail, requestCommentCreateToPost);
+
+		return ResponseEntity.ok().body("댓글 저장 성공");
 
 	}
 
