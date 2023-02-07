@@ -15,8 +15,8 @@ import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
+import com.c211.opinbackend.repo.service.repo.RepositoryPostService;
 import com.c211.opinbackend.repo.service.repo.RepositoryService;
-import com.c211.opinbackend.repo.service.repoTechlag.RepoTechLanguageService;
 import com.c211.opinbackend.util.SecurityUtil;
 
 import lombok.AllArgsConstructor;
@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class RepoController {
 	private final RepositoryService repositoryService;
-	private final RepoTechLanguageService repoTechLanguageService;
+	private final RepositoryPostService repositoryPostService;
 
 	// TODO: 2023-02-07 프론트에게 변경되었다고 알리기
 	@PostMapping("/member")
@@ -52,7 +52,7 @@ public class RepoController {
 	public ResponseEntity<?> testPost(@RequestBody RepoDto dto) {
 		log.info("input test");
 		log.info(dto.toString());
-		repositoryService.uploadRepository(dto.getMemberEmail(), dto);
+		repositoryPostService.uploadRepository(dto.getMemberEmail(), dto);
 		return null;
 	}
 
@@ -66,9 +66,9 @@ public class RepoController {
 				MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
 		);
 		// 등록할 래포진토리 아이디필요
-		
+
 		log.info(memberEmail);
-		repositoryService.createPostToRepository(createPostRequest, memberEmail);
+		repositoryPostService.createPostToRepository(createPostRequest, memberEmail);
 		return null;
 	}
 
