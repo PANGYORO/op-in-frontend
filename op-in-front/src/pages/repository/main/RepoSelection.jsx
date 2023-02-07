@@ -1,9 +1,19 @@
 import React, { useEffect } from "react";
-import Repo from "@components/Repo";
+import Repo from "@components/repository/Repo";
 // import RepoPost from "@components/repository/RepoPost";
 import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
+
+// axios 사용하기
+// for or map 사용해서 여러가지 repo 하기
+
+const repoData = {
+  id: 1,
+  title: "테스트1",
+  content: "내용내용내용내용1",
+  techLangs: ["java", "jupiter notebook", "Python", "React"],
+};
 
 export default function RepoSelection() {
   const user = useRecoilValue(userInfo);
@@ -13,17 +23,77 @@ export default function RepoSelection() {
   }, []);
 
   return (
-    <div className="flex flex-col w-full pl-0 md:p-4">
-      <div className="flex items-top w-full h-screen pt-2 pb-24 pl-2 pr-2 overflow-auto md:pt-0 md:pr-0 md:pl-0">
+    <div className="flex flex-col w-full pl-0 md:p-4 h-screen">
+      <div className="flex items-top w-full  pt-2 pb-24 pl-2 pr-2 overflow-auto md:pt-0 md:pr-0 md:pl-0">
         <div className="grid grid-cols-2 gap-4 w-full">
+          <Repo
+            _id={repoData.id}
+            _title={repoData.title}
+            _content={repoData.content}
+            _techLangs={repoData.techLangs}
+          />
+          <Repo
+            _id={repoData.id}
+            _title={repoData.title}
+            _content={repoData.content}
+            _techLangs={repoData.techLangs}
+          />
+          <Repo
+            _id={repoData.id}
+            _title={repoData.title}
+            _content={repoData.content}
+            _techLangs={repoData.techLangs}
+          />
+          <Repo
+            _id={repoData.id}
+            _title={repoData.title}
+            _content={repoData.content}
+            _techLangs={repoData.techLangs}
+          />
+          <Repo
+            _id={repoData.id}
+            _title={repoData.title}
+            _content={repoData.content}
+            _techLangs={repoData.techLangs}
+          />
+          <Repo
+            _id={repoData.id}
+            _title={repoData.title}
+            _content={repoData.content}
+            _techLangs={repoData.techLangs}
+          />
+          <Repo
+            _id={repoData.id}
+            _title={repoData.title}
+            _content={repoData.content}
+            _techLangs={repoData.techLangs}
+          />
+          <Repo
+            _id={repoData.id}
+            _title={repoData.title}
+            _content={repoData.content}
+            _techLangs={repoData.techLangs}
+          />
+          <Repo
+            _id={repoData.id}
+            _title={repoData.title}
+            _content={repoData.content}
+            _techLangs={repoData.techLangs}
+          />
+          <Repo
+            _id={repoData.id}
+            _title={repoData.title}
+            _content={repoData.content}
+            _techLangs={repoData.techLangs}
+          />
+
+          {/* <Repo />
           <Repo />
           <Repo />
           <Repo />
           <Repo />
           <Repo />
-          <Repo />
-          <Repo />
-          <Repo />
+          <Repo /> */}
         </div>
       </div>
     </div>

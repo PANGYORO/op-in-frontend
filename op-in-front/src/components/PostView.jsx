@@ -32,24 +32,12 @@ export default function PostView() {
   //   getRepo();
   // }, []);
 
-  const arr = ['제목1', '제목2', 3, 4, 5];
-  
-  const arrLoop = () => {
-    const newArr = [];
-    for (let i = 0; i < arr.length; i++) {
-      newArr.push(<h2 key={i}>{ arr[i] }</h2>);
-    }
-    return newArr;
-  };
-  
   return (
     <div className="w-full m-4 p-6 bg-white h-screen shadow-lg rounded-2xl dark:bg-gray-700 ">
       <Viewer
         initialValue="### hellossafy ```const dev = 2```"
         plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
       />
-      <div> { arrLoop() } </div>
-
       {/* <div>{myrepo.length} </div>
       <div>{myrepo} </div> */}
     </div>
