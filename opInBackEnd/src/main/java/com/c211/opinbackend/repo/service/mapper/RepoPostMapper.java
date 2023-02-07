@@ -9,6 +9,9 @@ import com.c211.opinbackend.repo.model.response.CommentSimpleResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class RepoPostMapper {
 	public static RepoPostSimpleResponse toSimpleResponse(RepositoryPost post) {
 		return RepoPostSimpleResponse.builder()
@@ -26,13 +29,15 @@ public class RepoPostMapper {
 	public static RepoPostDetailResponse toDetailResponse(RepositoryPost repositoryPost) {
 		List<CommentSimpleResponse> simpleCommentList = new ArrayList<>();
 		for (Comment comment : repositoryPost.getCommentsList()) {
-			CommentSimpleResponse.builder()
+			CommentSimpleResponse commentResDto = CommentSimpleResponse.builder()
 				.memberName(comment.getMember().getNickname())
 				.memberAvatarUrl(comment.getMember().getAvatarUrl())
 				.commentContent(comment.getContent())
 				.build();
+			simpleCommentList.add(commentResDto);
 		}
 		return RepoPostDetailResponse.builder()
+			.postId(repositoryPost.getId())
 			.authorMemberName(repositoryPost.getMember().getNickname())
 			.authorMemberAvatar(repositoryPost.getMember().getAvatarUrl())
 			.createTime(repositoryPost.getDate())
