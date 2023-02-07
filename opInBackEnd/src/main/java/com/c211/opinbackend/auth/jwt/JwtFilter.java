@@ -1,9 +1,6 @@
 package com.c211.opinbackend.auth.jwt;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -14,16 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import com.c211.opinbackend.auth.entity.Member;
-import com.c211.opinbackend.auth.model.TokenDto;
 
 import io.jsonwebtoken.Claims;
 
@@ -72,7 +63,7 @@ public class JwtFilter extends OncePerRequestFilter {
 					String newAccessToken = tokenProvider.createAccessToken(email, authorities);
 
 					// 헤더에 어세스 토큰 추가
-					response.setHeader("authorization", "bearer "+ newAccessToken);
+					response.setHeader("authorization", "bearer " + newAccessToken);
 
 					// 컨텍스트에 넣기
 					Authentication authentication = tokenProvider.getAuthentication(newAccessToken);
@@ -96,13 +87,13 @@ public class JwtFilter extends OncePerRequestFilter {
 	}
 
 	public String resolveAccessToken(HttpServletRequest request) {
-		if(request.getHeader("authorization") != null )
+		if (request.getHeader("authorization") != null)
 			return request.getHeader("authorization").substring(7);
 		return null;
 	}
 
 	public String resolveRefreshToken(HttpServletRequest request) {
-		if(request.getHeader("refreshToken") != null )
+		if (request.getHeader("refreshToken") != null)
 			return request.getHeader("refreshToken").substring(7);
 		return null;
 	}

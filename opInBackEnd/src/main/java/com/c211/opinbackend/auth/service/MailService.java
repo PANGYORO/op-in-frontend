@@ -7,12 +7,12 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import com.c211.opinbackend.auth.entity.Member;
-import com.c211.opinbackend.auth.repository.MemberRepository;
 import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
+import com.c211.opinbackend.persistence.entity.Member;
+import com.c211.opinbackend.persistence.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 

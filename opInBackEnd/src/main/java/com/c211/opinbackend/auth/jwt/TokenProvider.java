@@ -8,8 +8,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -20,12 +18,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.model.TokenDto;
-import com.c211.opinbackend.auth.repository.MemberRepository;
 import com.c211.opinbackend.exception.auth.AuthRuntimeException;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
+import com.c211.opinbackend.persistence.entity.Member;
+import com.c211.opinbackend.persistence.repository.MemberRepository;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -101,8 +99,8 @@ public class TokenProvider implements InitializingBean {
 	}
 
 	/*
-	* accessToken 재발급
-	* */
+	 * accessToken 재발급
+	 * */
 	public String createAccessToken(String email, String authorities) {
 
 		Member member = memberRepository.findByEmail(email).orElse(null);

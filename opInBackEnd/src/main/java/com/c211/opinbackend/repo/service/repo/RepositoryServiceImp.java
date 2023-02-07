@@ -7,17 +7,17 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import com.c211.opinbackend.auth.entity.Member;
-import com.c211.opinbackend.auth.repository.MemberRepository;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
 import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
-import com.c211.opinbackend.repo.entitiy.Repository;
-import com.c211.opinbackend.repo.model.repository.RepoDto;
+import com.c211.opinbackend.persistence.entity.Member;
+import com.c211.opinbackend.persistence.entity.Repository;
+import com.c211.opinbackend.persistence.repository.MemberRepository;
+import com.c211.opinbackend.persistence.repository.RepoRepository;
+import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
-import com.c211.opinbackend.repo.repository.RepoRepository;
 import com.c211.opinbackend.repo.service.mapper.RepoMapper;
 
 import lombok.AllArgsConstructor;

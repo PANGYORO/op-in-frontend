@@ -22,14 +22,14 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.c211.opinbackend.auth.constant.GitHub;
-import com.c211.opinbackend.auth.entity.Member;
-import com.c211.opinbackend.auth.entity.Role;
 import com.c211.opinbackend.auth.jwt.TokenProvider;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.response.OAuthAccessTokenResponse;
-import com.c211.opinbackend.auth.repository.MemberRepository;
+import com.c211.opinbackend.constant.GitHub;
+import com.c211.opinbackend.persistence.entity.Member;
+import com.c211.opinbackend.persistence.entity.Role;
+import com.c211.opinbackend.persistence.repository.MemberRepository;
 import com.c211.opinbackend.util.RandomString;
 
 import lombok.extern.slf4j.Slf4j;
