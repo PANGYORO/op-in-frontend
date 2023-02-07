@@ -3,13 +3,13 @@ package com.c211.opinbackend.repo.service.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.c211.opinbackend.auth.entity.Member;
-import com.c211.opinbackend.auth.entity.RepositoryContributor;
-import com.c211.opinbackend.repo.entitiy.Repository;
-import com.c211.opinbackend.repo.entitiy.RepositoryTechLanguage;
-import com.c211.opinbackend.repo.entitiy.RepositoryTopic;
+import com.c211.opinbackend.persistence.entity.Member;
+import com.c211.opinbackend.persistence.entity.Repository;
+import com.c211.opinbackend.persistence.entity.RepositoryContributor;
+import com.c211.opinbackend.persistence.entity.RepositoryTechLanguage;
+import com.c211.opinbackend.persistence.entity.RepositoryTopic;
 import com.c211.opinbackend.repo.model.contributor.RepositoryContributorDto;
-import com.c211.opinbackend.repo.model.repository.RepoDto;
+import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
 import com.c211.opinbackend.repo.model.response.repoTechLang.RepoTechLangDTO;
 

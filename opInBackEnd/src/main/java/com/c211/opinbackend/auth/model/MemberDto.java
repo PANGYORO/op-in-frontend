@@ -1,7 +1,7 @@
 package com.c211.opinbackend.auth.model;
 
-import com.c211.opinbackend.auth.entity.Member;
-import com.c211.opinbackend.auth.entity.Role;
+import com.c211.opinbackend.persistence.entity.Member;
+import com.c211.opinbackend.persistence.entity.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

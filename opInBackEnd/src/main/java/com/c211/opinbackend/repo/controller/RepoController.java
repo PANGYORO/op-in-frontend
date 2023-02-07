@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.c211.opinbackend.auth.model.request.MemberEmailRequest;
-import com.c211.opinbackend.repo.model.repository.RepoDto;
+import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
 import com.c211.opinbackend.repo.service.repo.RepositoryService;

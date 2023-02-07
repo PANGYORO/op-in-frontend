@@ -5,11 +5,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.model.PrincipalDetails;
-import com.c211.opinbackend.auth.repository.MemberRepository;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
+import com.c211.opinbackend.persistence.entity.Member;
+import com.c211.opinbackend.persistence.repository.MemberRepository;
 
 @Service
 public class CustomUserDetailService implements UserDetailsService {
