@@ -1,20 +1,29 @@
 package com.c211.opinbackend.repo.controller;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
+import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
+import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 import com.c211.opinbackend.repo.service.repo.RepositoryPostService;
 import com.c211.opinbackend.util.SecurityUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+// TODO: 2023/02/07 권한 검사 필요
 @Slf4j
 @RequestMapping("/post")
 @RestController
@@ -23,20 +32,46 @@ public class RepoPostController {
 
 	private final RepositoryPostService repositoryPostService;
 
-	@PostMapping()
+	// TODO: 2023/02/07 애러처리를 어떻게 해야할까
+	@PostMapping
 	public ResponseEntity<?> writePost(@RequestBody CreatePostRequest createPostRequest) {
-		log.info(createPostRequest.getContent());
+		try {
+			String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(
+				() -> new MemberRuntimeException(
+					MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+			);
+			repositoryPostService.createPostToRepository(createPostRequest, memberEmail);
+			return ResponseEntity.ok(HttpStatus.ACCEPTED);
+		} catch (Exception exception) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(RepositoryExceptionEnum.REPOSITORY_POST_SAVE_EXCEPTION.getErrorMessage());
+		}
+	}
 
-		// TODO: 2023-02-06 이부분 나중에 유틸 들어오면 유틸로 바꿔줘야합니다.
-		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(
-			() -> new MemberRuntimeException(
-				MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
-		);
-		// 등록할 래포진토리 아이디필요
+	// 포스트 글들을 가져오는 api
+	@GetMapping
+	public ResponseEntity<?> getPosts() {
+		try {
+			List<RepoPostSimpleResponse> allPostList = repositoryPostService.getALLPostList();
+			return new ResponseEntity<Object>(allPostList, HttpStatus.OK);
+		} catch (Exception exception) {
+			return ResponseEntity.badRequest().body("조회에 실패 했습니다.");
+		}
+	}
 
-		log.info(memberEmail);
-		repositoryPostService.createPostToRepository(createPostRequest, memberEmail);
+	@GetMapping("/{postId}")
+	public ResponseEntity<?> getDetailPost(@PathVariable Long postId) {
 		return null;
 	}
-	
+
+	@PutMapping
+	public ResponseEntity<?> updatePosts() {
+		return null;
+	}
+
+	@PostMapping("/delete")
+	public ResponseEntity<?> deletePosts() {
+		return null;
+	}
+
 }

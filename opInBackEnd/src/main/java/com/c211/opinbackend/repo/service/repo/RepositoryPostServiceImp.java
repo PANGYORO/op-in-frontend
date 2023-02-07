@@ -1,6 +1,8 @@
 package com.c211.opinbackend.repo.service.repo;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -17,12 +19,16 @@ import com.c211.opinbackend.persistence.repository.RepoPostRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
 import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
+import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 import com.c211.opinbackend.repo.service.mapper.RepoMapper;
+import com.c211.opinbackend.repo.service.mapper.RepoPostMapper;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class RepositoryPostServiceImp implements RepositoryPostService {
 
 	private final MemberRepository memberRepository;
@@ -38,6 +44,7 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 		Repository repository = repoRepository.findById(repositoryId).orElseThrow(
 			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION)
 		);
+		log.info(repository.getName());
 		// 등록하는 맴버를 찾는다.
 		Member member = memberRepository.findByEmail(memberEmail)
 			.orElseThrow(() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION));
@@ -77,5 +84,16 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 			exception.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	@Transactional
+	public List<RepoPostSimpleResponse> getALLPostList() {
+		List<RepositoryPost> repositoryPostList = repoPostRepository.findAll();
+		List<RepoPostSimpleResponse> mappingResult = new ArrayList<>();
+		for (RepositoryPost post : repositoryPostList) {
+			mappingResult.add(RepoPostMapper.toSimpleResponse(post));
+		}
+		return mappingResult;
 	}
 }

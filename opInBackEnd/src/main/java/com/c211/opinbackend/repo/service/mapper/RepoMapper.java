@@ -10,8 +10,8 @@ import com.c211.opinbackend.persistence.entity.RepositoryTechLanguage;
 import com.c211.opinbackend.persistence.entity.RepositoryTopic;
 import com.c211.opinbackend.repo.model.contributor.RepositoryContributorDto;
 import com.c211.opinbackend.repo.model.dto.RepoDto;
+import com.c211.opinbackend.repo.model.response.RepoTechLangDTO;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
-import com.c211.opinbackend.repo.model.response.repoTechLang.RepoTechLangDTO;
 
 public class RepoMapper {
 
