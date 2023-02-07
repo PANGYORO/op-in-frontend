@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -20,7 +22,10 @@ import org.springframework.stereotype.Component;
 
 import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.model.TokenDto;
+import com.c211.opinbackend.auth.repository.MemberRepository;
 import com.c211.opinbackend.exception.auth.AuthRuntimeException;
+import com.c211.opinbackend.exception.member.MemberExceptionEnum;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -44,15 +49,19 @@ public class TokenProvider implements InitializingBean {
 	private final long accessTokenValidityInMilliseconds;
 	private final long refreshTokenValidityInMilliseconds;
 
+	MemberRepository memberRepository;
+
 	private Key key;
 
 	public TokenProvider(
 		@Value("${jwt.secret}") String secret,
 		@Value("${jwt.access-token-validity-in-seconds}") long accessTokenValidityInSeconds,
-		@Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInSeconds) {
+		@Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInSeconds,
+		MemberRepository memberRepository) {
 		this.secret = secret;
 		this.accessTokenValidityInMilliseconds = accessTokenValidityInSeconds;
 		this.refreshTokenValidityInMilliseconds = refreshTokenValidityInSeconds;
+		this.memberRepository = memberRepository;
 	}
 
 	/*
@@ -68,17 +77,17 @@ public class TokenProvider implements InitializingBean {
 	 * 검증된 이메일에 대해 토큰을 생성하는 메서드
 	 * AccessToken의 Claim으로는 email과 nickname을 넣습니다.
 	 */
-	public TokenDto createToken(Member member,
+	public TokenDto createToken(String email,
 		String authorities) {
+
+		Member member = memberRepository.findByEmail(email).orElse(null);
+		if (member == null) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
+		}
+
 		long now = (new Date()).getTime();
 
-		String accessToken = Jwts.builder()
-			.claim("email", member.getEmail())
-			.claim("nickname", member.getNickname())
-			.claim(AUTHORITIES_KEY, authorities)
-			.setExpiration(new Date(now + accessTokenValidityInMilliseconds))
-			.signWith(key, SignatureAlgorithm.HS512)
-			.compact();
+		String accessToken = createAccessToken(email, authorities);
 
 		String refreshToken = Jwts.builder()
 			.claim(AUTHORITIES_KEY, authorities)
@@ -89,6 +98,29 @@ public class TokenProvider implements InitializingBean {
 			.compact();
 
 		return new TokenDto(accessToken, refreshToken);
+	}
+
+	/*
+	* accessToken 재발급
+	* */
+	public String createAccessToken(String email, String authorities) {
+
+		Member member = memberRepository.findByEmail(email).orElse(null);
+		if (member == null) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
+		}
+
+		long now = (new Date()).getTime();
+
+		String accessToken = Jwts.builder()
+			.claim("email", member.getEmail())
+			.claim("nickname", member.getNickname())
+			.claim(AUTHORITIES_KEY, authorities)
+			.setExpiration(new Date(now + accessTokenValidityInMilliseconds))
+			.signWith(key, SignatureAlgorithm.HS512)
+			.compact();
+
+		return accessToken;
 	}
 
 	/*
@@ -119,7 +151,6 @@ public class TokenProvider implements InitializingBean {
 			throw new AuthRuntimeException(AUTH_JWT_SIGNATURE_EXCEPTION);
 		} catch (ExpiredJwtException e) {
 			log.info("만료된 JWT 토큰입니다.");
-			throw new AuthRuntimeException(AUTH_JWT_EXPIRED_EXCEPTION);
 		} catch (UnsupportedJwtException e) {
 			log.info("지원하지 않는 JWT토큰입니다.");
 			throw new AuthRuntimeException(AUTH_JWT_SUPPORT_EXCEPTION);
@@ -145,4 +176,5 @@ public class TokenProvider implements InitializingBean {
 			return e.getClaims();
 		}
 	}
+
 }

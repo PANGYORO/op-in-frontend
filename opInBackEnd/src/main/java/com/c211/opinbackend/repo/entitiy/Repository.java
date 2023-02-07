@@ -1,10 +1,10 @@
 package com.c211.opinbackend.repo.entitiy;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,24 +15,58 @@ import javax.persistence.OneToMany;
 
 import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.entity.RepositoryContributor;
+import com.sun.istack.NotNull;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@AllArgsConstructor
+@Builder()
+@NoArgsConstructor
 public class Repository {
 	@Id
 	@GeneratedValue
 	@Column(name = "REPOSITORY_ID")
 	private Long id;
-
-	@Embedded
-	private TitleContent titleContent;
-	private String githubAddress;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MEMBER_ID")
 	private Member member;
+
+	@NotNull
+	private String name;
+	@NotNull
+	private String githubAddress;
+
+	private String description;
+	@NotNull
+	private String fullName;
+	@NotNull
+	private String htmlUrl;
+	@NotNull
+	private Boolean secret;
+	@NotNull
+	private Boolean fork;
+	@NotNull
+	private LocalDateTime createdAt;
+	@NotNull
+	private LocalDateTime updatedAt;
+	@NotNull
+	private LocalDateTime pushedAt;
+	private Long size;
+	private Long stargazersCount;
+	private Long watchersCount;
+	@NotNull
+	private Boolean archived;
+	@NotNull
+	private Boolean disabled;
+	@NotNull
+	private Long forks;
+	@NotNull
+	private Long watchers;
 
 	@OneToMany(mappedBy = "repository")
 	List<RepositoryTechLanguage> repositoryTechLanguages = new ArrayList<>();
@@ -50,4 +84,5 @@ public class Repository {
 
 	@OneToMany(mappedBy = "repository")
 	List<RepositoryTopic> topicList = new ArrayList<>();
+
 }

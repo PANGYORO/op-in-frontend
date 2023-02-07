@@ -29,5 +29,6 @@ public interface MemberService {
 
 	boolean deleteGithubMember(String email);
 
-	Member getMemberByEmail(String email);
+	Member getMember();
+
 }

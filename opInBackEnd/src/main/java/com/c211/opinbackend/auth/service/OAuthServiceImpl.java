@@ -90,7 +90,7 @@ public class OAuthServiceImpl implements OAuthService {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String authorities = getAuthorities(authentication);
 
-		return tokenProvider.createToken(member, authorities);
+		return tokenProvider.createToken(member.getEmail(), authorities);
 	}
 
 	public String getAuthorities(Authentication authentication) {

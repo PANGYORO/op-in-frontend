@@ -3,24 +3,26 @@ package com.c211.opinbackend.repo.service.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.c211.opinbackend.auth.entity.Member;
 import com.c211.opinbackend.auth.entity.RepositoryContributor;
 import com.c211.opinbackend.repo.entitiy.Repository;
 import com.c211.opinbackend.repo.entitiy.RepositoryTechLanguage;
 import com.c211.opinbackend.repo.entitiy.RepositoryTopic;
 import com.c211.opinbackend.repo.model.contributor.RepositoryContributorDto;
-import com.c211.opinbackend.repo.model.repoTechLang.RepoTechLangDTO;
-import com.c211.opinbackend.repo.model.repository.RepositoryDto;
+import com.c211.opinbackend.repo.model.repository.RepoDto;
+import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
+import com.c211.opinbackend.repo.model.response.repoTechLang.RepoTechLangDTO;
 
 public class RepoMapper {
 
-	public static RepositoryDto toDto(Repository repository) {
+	public static RepositoryResponseDto toDto(Repository repository) {
 		List<RepoTechLangDTO> repoTechLangDTOList = getRepoTechLangDtoList(repository);
 		List<RepositoryContributorDto> repositoryContributorDtoList = getRepoTechContributorDtoList(repository);
 		List<String> topics = getTopicList(repository);
-		RepositoryDto repositoryDto = RepositoryDto.builder()
+		RepositoryResponseDto repositoryResponseDto = RepositoryResponseDto.builder()
 			.id(repository.getId())
-			.title(repository.getTitleContent().getTitle())
-			.content(repository.getTitleContent().getContent())
+			.title(repository.getName())
+			.content(repository.getName())
 			.techLangs(repoTechLangDTOList)
 			.contributors(repositoryContributorDtoList)
 			.star("1233455565")
@@ -28,7 +30,7 @@ public class RepoMapper {
 			.topicList(topics)
 			.gitContributors(null)
 			.build();
-		return repositoryDto;
+		return repositoryResponseDto;
 	}
 
 	private static List<String> getTopicList(Repository repository) {
@@ -36,7 +38,6 @@ public class RepoMapper {
 		List<RepositoryTopic> repositoryTopicList = repository.getTopicList();
 		for (RepositoryTopic topic : repositoryTopicList) {
 			res.add(topic.getTopic().getTitle());
-			// TODO: 2023-02-03 이거 for문 만큼 요청하는데 맞는지 판단하자
 		}
 		return res;
 
@@ -66,5 +67,29 @@ public class RepoMapper {
 		}
 		return repoTechLangDtoList;
 
+	}
+
+	public static Repository toEntity(Member member, RepoDto repoDto) {
+		Repository repositoryToSave = Repository
+			.builder()
+			.member(member)
+			.name(repoDto.getName())
+			.fullName(repoDto.getFullName())
+			.githubAddress(repoDto.getGithubAddress())
+			.description(repoDto.getGithubAddress())
+			.htmlUrl(repoDto.getHtmlUrl())
+			.secret(repoDto.getSecret())
+			.fork(repoDto.getFork())
+			.createdAt(repoDto.getCreateAt())
+			.updatedAt(repoDto.getUpdatedAt())
+			.pushedAt(repoDto.getPushedAt())
+			.size(repoDto.getSize())
+			.stargazersCount(repoDto.getStargazersCount())
+			.watchersCount(repoDto.getWatcherCount())
+			.archived(repoDto.getArchived())
+			.disabled(repoDto.getDisabled())
+			.forks(repoDto.getForks())
+			.watchers(repoDto.getWatchers()).build();
+		return repositoryToSave;
 	}
 }

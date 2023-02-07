@@ -1,30 +1,45 @@
 import React, { useState, useEffect } from "react";
 import DefaultImg from "@assets/basicprofile.png";
-import Setting from "@assets/settings.png";
+// import Setting from "@assets/settings.png";
 import Post from "@components/Post";
 import MyInfo from "@components/user/MyInfo";
 import http from "@api/http";
+import { useLocation } from "react-router-dom";
+import { userInfo } from "@recoil/user/atoms";
+import { useRecoilValue } from "recoil";
+import PasswordModifyModal from "@components/modals/PasswordModifyModal";
 
 export default function Detail() {
   const [myinfo, setMyInfo] = useState("");
+  const location = useLocation();
+  const currentEmail = location.state;
+  const [open, setOpen] = useState(false);
 
-  async function getMember(currentEmail) {
+  function toggleModal() {
+    setOpen(true);
+  }
+
+  const user = useRecoilValue(userInfo);
+
+  async function getMember() {
     await http
       .post(`auth/getMember`, {
         email: currentEmail,
       })
       .then((response) => {
-        // alert(response.data.nickname);
+        alert(currentEmail);
+        alert(response.data.nickname);
         console.log(response.data);
         setMyInfo(response.data);
       })
       .catch(() => alert("error"));
-    // console.log(myinfo);
+    console.log(myinfo);
   }
 
   useEffect(() => {
-    getMember("saeloun8797@naver.com");
+    getMember();
   }, []);
+
   return (
     <div className="flex items-start justify-between mx-44">
       <div className="w-full mx-4 my-4 h-screen overflow-auto">
@@ -37,20 +52,33 @@ export default function Detail() {
               <div>
                 <div className="grid grid-cols-2 gap-2 justify-items-between">
                   <div className="bg-prinavy self-center"> {myinfo.nickname}</div>
-                  <div className="grid grid-cols-2 gap-2 justify-items-center">
-                    <button
-                      type="button"
-                      disabled=""
-                      className="py-1 px-3 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500
+                  <div className="self-center">
+                    {user.email == currentEmail ? (
+                      <button
+                        type="button"
+                        disabled=""
+                        onClick={toggleModal}
+                        className="py-1 px-3 bg-green-600 hover:bg-green-700 focus:ring-green-500
                     focus:ring-offset-red-200 text-white  transition ease-in duration-200
                     text-center font-semibold shadow-md focus:outline-none focus:ring-2
                     focus:ring-offset-2  opacity-70 rounded-lg "
-                    >
-                      Follow
-                    </button>
-
-                    <img src={Setting} alt="setting" className="h-16 justify-self-end" />
+                      >
+                        Modify Password
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled=""
+                        className="py-1 px-3 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500
+                    focus:ring-offset-red-200 text-white  transition ease-in duration-200
+                    text-center font-semibold shadow-md focus:outline-none focus:ring-2
+                    focus:ring-offset-2  opacity-70 rounded-lg "
+                      >
+                        Follow
+                      </button>
+                    )}
                   </div>
+                  {/* <img src={Setting} alt="setting" className="h-16 justify-self-end" /> */}
                 </div>
                 <div className="grid grid-cols-3 gap-4 justify-items-between mt-6">
                   <div> posts {myinfo.posts == null ? 0 : myinfo.posts.length}</div>
@@ -66,7 +94,7 @@ export default function Detail() {
           <div className="pt-2 pb-24 pl-2 pr-2  md:pt-0 md:pr-0 md:pl-0">
             <div className="flex flex-col flex-wrap sm:flex-row h-full">
               <div className="w-1/3 h-full ">
-                <MyInfo userInfo={myinfo} />
+                <MyInfo userinfo={myinfo} />
               </div>
 
               <div className=" w-2/3  h-screen overflow-auto">
@@ -123,6 +151,7 @@ export default function Detail() {
           </div>
         </div>
       </div>
+      <PasswordModifyModal open={open} setOpen={setOpen} />
     </div>
   );
 }

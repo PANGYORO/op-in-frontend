@@ -39,6 +39,19 @@ export default function PostModal({ open, setOpen }) {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-4/5">
+                <Dialog.Title as="h2" className="text-3xl font-bold leading-6 text-gray-900 p-4">
+                  New Post
+                </Dialog.Title>
+                <div className=" relative  p-4">
+                  <input
+                    type="text"
+                    id="name-with-label"
+                    className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-400 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                    name="Title"
+                    placeholder="Insert Title..."
+                  />
+                </div>
+
                 <Editor
                   height="500px"
                   initialValue="hello"
