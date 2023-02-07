@@ -11,19 +11,19 @@ import com.c211.opinbackend.persistence.entity.RepositoryTopic;
 import com.c211.opinbackend.repo.model.contributor.RepositoryContributorDto;
 import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
-import com.c211.opinbackend.repo.model.response.repoTechLang.RepoTechLangDTO;
+import com.c211.opinbackend.repo.model.response.repoTechLang.RepoTechLangDto;
 
 public class RepoMapper {
-
-	public static RepositoryResponseDto toDto(Repository repository) {
-		List<RepoTechLangDTO> repoTechLangDTOList = getRepoTechLangDtoList(repository);
+	// TODO: 2023-02-07  to 명진 역활에 따른 이름을 구분 부탁
+	public static RepositoryResponseDto toMyRepoDto(Repository repository) {
+		List<RepoTechLangDto> repoTechLangDtoList = getRepoTechLangDtoList(repository);
 		List<RepositoryContributorDto> repositoryContributorDtoList = getRepoTechContributorDtoList(repository);
 		List<String> topics = getTopicList(repository);
 		RepositoryResponseDto repositoryResponseDto = RepositoryResponseDto.builder()
 			.id(repository.getId())
 			.title(repository.getName())
 			.content(repository.getName())
-			.techLangs(repoTechLangDTOList)
+			.techLangs(repoTechLangDtoList)
 			.contributors(repositoryContributorDtoList)
 			.star("1233455565")
 			.forkNum("123214141")
@@ -56,13 +56,14 @@ public class RepoMapper {
 		return res;
 	}
 
-	private static List<RepoTechLangDTO> getRepoTechLangDtoList(Repository repository) {
+	private static List<RepoTechLangDto> getRepoTechLangDtoList(Repository repository) {
 		List<RepositoryTechLanguage> repositoryTechLanguages = repository.getRepositoryTechLanguages();
-		List<RepoTechLangDTO> repoTechLangDtoList = new ArrayList<>();
+		List<RepoTechLangDto> repoTechLangDtoList = new ArrayList<>();
 		for (RepositoryTechLanguage language : repositoryTechLanguages) {
-			repoTechLangDtoList.add(RepoTechLangDTO.builder()
+			repoTechLangDtoList.add(RepoTechLangDto.builder()
 				.title(language.getTechLanguage().getTitle())
 				.color(language.getTechLanguage().getColor())
+				.count(language.getCount())
 				.build());
 		}
 		return repoTechLangDtoList;
@@ -70,13 +71,13 @@ public class RepoMapper {
 	}
 
 	public static Repository toEntity(Member member, RepoDto repoDto) {
-		Repository repositoryToSave = Repository
+		return Repository
 			.builder()
 			.member(member)
 			.name(repoDto.getName())
 			.fullName(repoDto.getFullName())
-			.githubAddress(repoDto.getGithubAddress())
-			.description(repoDto.getGithubAddress())
+			.htmlUrl(repoDto.getHtmlUrl())
+			.description(repoDto.getDescription())
 			.htmlUrl(repoDto.getHtmlUrl())
 			.secret(repoDto.getSecret())
 			.fork(repoDto.getFork())
@@ -90,6 +91,5 @@ public class RepoMapper {
 			.disabled(repoDto.getDisabled())
 			.forks(repoDto.getForks())
 			.watchers(repoDto.getWatchers()).build();
-		return repositoryToSave;
 	}
 }

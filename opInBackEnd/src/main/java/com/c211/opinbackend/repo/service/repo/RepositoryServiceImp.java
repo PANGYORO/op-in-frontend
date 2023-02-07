@@ -34,8 +34,9 @@ public class RepositoryServiceImp implements RepositoryService {
 	@Transactional
 	public List<RepositoryResponseDto> finRepositoryListByMember(String email) {
 		List<RepositoryResponseDto> repositoryResponseDtoList = new ArrayList<>();
-		if (email == null)
+		if (email == null) {
 			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
+		}
 		Member findMember = memberRepository.findByEmail(email).orElseThrow(() -> new MemberRuntimeException(
 			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 		log.info(findMember.getNickname());
@@ -43,11 +44,11 @@ public class RepositoryServiceImp implements RepositoryService {
 		for (Repository repo : findMemberRepo) {
 			log.info(String.valueOf(repo.getId()));
 		}
-		if (findMemberRepo.size() == 0)
+		if (findMemberRepo.size() == 0) {
 			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION);
-
+		}
 		for (Repository repo : findMemberRepo) {
-			RepositoryResponseDto repositoryResponseDto = RepoMapper.toDto(repo);
+			RepositoryResponseDto repositoryResponseDto = RepoMapper.toMyRepoDto(repo);
 			repositoryResponseDtoList.add(repositoryResponseDto);
 		}
 		return repositoryResponseDtoList;
@@ -62,8 +63,8 @@ public class RepositoryServiceImp implements RepositoryService {
 
 	@Override
 	@Transactional
-	public Boolean uploadRepository(String memberEmail, RepoDto repoDto) {
-		Member member = memberRepository.findByEmail(memberEmail)
+	public Boolean uploadRepository(Long memberId, RepoDto repoDto) {
+		Member member = memberRepository.findById(memberId)
 			.orElse(null);
 		// 맴버 없이 래포지토리가 등록 가능해야한다
 		try {

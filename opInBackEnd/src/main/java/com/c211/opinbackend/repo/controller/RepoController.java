@@ -51,7 +51,7 @@ public class RepoController {
 	public ResponseEntity<?> testPost(@RequestBody RepoDto dto) {
 		log.info("input test");
 		log.info(dto.toString());
-		repositoryService.uploadRepository(dto.getMemberEmail(), dto);
+		repositoryService.uploadRepository(dto.getMember().getId(), dto);
 		return null;
 	}
 

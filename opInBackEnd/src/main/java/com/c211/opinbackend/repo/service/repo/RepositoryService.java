@@ -15,5 +15,5 @@ public interface RepositoryService {
 	 * 래포지토리 등록
 	 * 래포지토리에 맴버 등록 가능하나 맴버는 널일수도 있다.
 	 */
-	Boolean uploadRepository(String memberEmail, RepoDto repoDto);
+	Boolean uploadRepository(Long memberId, RepoDto repoDto);
 }
