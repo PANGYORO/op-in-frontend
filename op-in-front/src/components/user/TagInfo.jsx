@@ -5,7 +5,10 @@ export default function TagInfo(props) {
     const result = [];
     for (let i = 0; i < props.titlelength; i++) {
       result.push(
-        <div className="ml-4 text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 bg-green-200 text-green-700 rounded-full">
+        <div
+          key={i}
+          className="ml-4 text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 bg-green-200 text-green-700 rounded-full"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -32,7 +35,7 @@ export default function TagInfo(props) {
       <p className="p-4 font-bold text-black text-md dark:text-white">
         {props.title}
         <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
-          {props.titlelength}
+          ({props.titlelength})
         </span>
       </p>
       <div className="mb-3">
