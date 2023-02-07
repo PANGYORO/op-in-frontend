@@ -204,7 +204,7 @@ public class MemberServiceImpl implements MemberService {
 		for (Repository myRepo : myRepos) {
 			RepositoryTitleResponse repositoryTitleResponse = RepositoryTitleResponse.builder()
 				.id(myRepo.getId())
-				.title(myRepo.getTitleContent().getTitle())
+				.title(myRepo.getName())
 				.build();
 
 			myRepoTitles.add(repositoryTitleResponse);
@@ -231,7 +231,7 @@ public class MemberServiceImpl implements MemberService {
 				.closeState(myPost.getCloseState())
 				.commentCount(commentRepository.countByRepositoryPost(myPost))
 				.likeCount(repositoryPostMemberLikeRepository.countByRepositoryPost(myPost))
-				.repoTitle(myPost.getRepository().getTitleContent().getTitle())
+				.repoTitle(myPost.getRepository().getName())
 				.build();
 
 			myRepoPosts.add(repositoryPostResponse);
@@ -310,7 +310,7 @@ public class MemberServiceImpl implements MemberService {
 
 			RepositoryTitleResponse repositoryTitleResponse = RepositoryTitleResponse.builder()
 				.id(repo.getId())
-				.title(repo.getTitleContent().getTitle())
+				.title(repo.getName())
 				.build();
 
 			contributeRepos.add(repositoryTitleResponse);
@@ -330,7 +330,7 @@ public class MemberServiceImpl implements MemberService {
 
 			RepositoryTitleResponse repositoryTitleResponse = RepositoryTitleResponse.builder()
 				.id(repo.getId())
-				.title(repo.getTitleContent().getTitle())
+				.title(repo.getName())
 				.build();
 
 			followRepos.add(repositoryTitleResponse);
