@@ -8,9 +8,6 @@ import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.persistence.entity.Member;
 
 public interface MemberService {
-	TokenDto authorize(String email, String password);
-
-	Member signUp(MemberDto memberDto);
 
 	Optional<Member> findByEmail(String email);
 
