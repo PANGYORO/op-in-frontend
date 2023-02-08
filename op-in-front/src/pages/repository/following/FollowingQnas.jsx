@@ -31,7 +31,7 @@ export default function FollowingQnas() {
     const result = [];
     for (let i = 0; i < (list.length == null ? 0 : list.length); i++) {
       result.push(
-        // <div> hello</div>
+        // <div>hello</div>
         <QnaDemo key={i} user_nickname={list[i].nickname} qna_content={list[i].content} />
       );
     }

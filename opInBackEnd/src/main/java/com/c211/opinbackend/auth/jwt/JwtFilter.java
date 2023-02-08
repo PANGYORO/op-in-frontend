@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,9 @@ public class JwtFilter extends OncePerRequestFilter {
 	public static final String AUTHORIZATION_HEADER = "Authorization";
 
 	private TokenProvider tokenProvider;
+
+	@Value("${jwt.access-token-validity-in-seconds}")
+	private long accessTokenValidityInSeconds;
 
 	public JwtFilter(TokenProvider tokenProvider) {
 		this.tokenProvider = tokenProvider;
@@ -54,21 +58,19 @@ public class JwtFilter extends OncePerRequestFilter {
 			throw new RemoteException("JwtFilter -> get Cookies error");
 		}
 
-		// 유효한 토큰인지 확인합니다.
-		if (accessToken != null) {
-			// 어세스 토큰이 유효한 상황
-			if (tokenProvider.validateToken(accessToken)) {
-				Authentication authentication = tokenProvider.getAuthentication(accessToken);
-				SecurityContextHolder.getContext().setAuthentication(authentication);
-			}
-			// 어세스 토큰이 만료된 상황 | 리프레시 토큰 또한 존재하는 상황
-			else if (!tokenProvider.validateToken(accessToken) && refreshToken != null) {
-				// 재발급 후, 컨텍스트에 다시 넣기
-				// 리프레시 토큰 검증
-				boolean validateRefreshToken = tokenProvider.validateToken(refreshToken);
-				// 리프레시 토큰 저장소 존재유무 확인
-				// boolean isRefreshToken = tokenProvider.existsRefreshToken(refreshToken);
-				if (validateRefreshToken) {
+		// 리프레쉬 토큰이 없으면 재로그인 요청이 필요함 -> 결국 인증 로직 안 탐
+		if (refreshToken != null) {
+			// 어세스 토큰이 있다면
+			if (accessToken != null) {
+				//어세스 토큰 유효성 검사
+				if (tokenProvider.validateToken(accessToken)) {
+					Authentication authentication = tokenProvider.getAuthentication(accessToken);
+					SecurityContextHolder.getContext().setAuthentication(authentication);
+				}
+			// 어세스 토큰이 없다면
+			} else {
+				// 리프레쉬 토큰 유효성 검사
+				if (tokenProvider.validateToken(refreshToken)) {
 					// 리프레시 토큰으로 이메일 & 권한 정보 가져오기
 					Claims claims = tokenProvider.getClaims(refreshToken);
 					String email = claims.get("email").toString();
@@ -83,6 +85,7 @@ public class JwtFilter extends OncePerRequestFilter {
 					//쿠키에 토큰 추가
 					Cookie cookie = new Cookie("accessToken", newAccessToken);
 					cookie.setPath("/");
+					cookie.setMaxAge(((int)accessTokenValidityInSeconds/1000)-1);
 					response.addCookie(cookie);
 
 					// 컨텍스트에 넣기

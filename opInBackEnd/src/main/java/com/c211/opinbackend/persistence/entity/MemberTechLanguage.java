@@ -8,9 +8,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
+@Builder
 @Getter
 public class MemberTechLanguage {
 	@Id
