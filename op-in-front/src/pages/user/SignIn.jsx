@@ -7,6 +7,7 @@ import Logo from "@components/Logo";
 import http from "@api/http";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { userInfo } from "@recoil/user/atoms";
+import { useToast } from '@hooks/useToast';
 
 import useToken from "@hooks/useToken";
 
@@ -97,7 +98,7 @@ function EmailInput({ register, error }) {
   );
 }
 
-function LoginForm({ saveToken }) {
+function LoginForm({ saveToken, setToast}) {
   const {
     register,
     handleSubmit,
@@ -108,7 +109,7 @@ function LoginForm({ saveToken }) {
   const user = useRecoilValue(userInfo);
   const navigate = useNavigate();
 
-  useEffect(() => {}, [user]);
+  
   const onSubmit = async (data) => {
     try {
       let res = await http.post("auth/login", {
@@ -122,8 +123,10 @@ function LoginForm({ saveToken }) {
         logined: true,
       }));
       saveToken(res.data);
+      setToast({message:'로그인 성공!'})
       navigate("/");
     } catch (error) {
+      console.log('hi')
       console.log(error);
     }
   };
@@ -212,8 +215,9 @@ function LoginForm({ saveToken }) {
 
 function SignIn() {
   const { saveToken } = useToken();
+  const { setToast } = useToast();
 
-  return <LoginForm saveToken={saveToken} />;
+  return <LoginForm saveToken={saveToken} setToast={setToast}/>;
 }
 
 export default SignIn;

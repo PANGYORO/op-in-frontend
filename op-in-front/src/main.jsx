@@ -12,7 +12,9 @@ import "react-toastify/dist/ReactToastify.css";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <RecoilRoot>
-      <ToastContainer />
+      <ToastContainer 
+        autoClose={3000} // 자동 off 시간
+      />
       <BrowserRouter>
         <Main />
       </BrowserRouter>

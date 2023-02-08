@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 
 import Logo from "@components/Logo";
+import http from "@api/http"
 
 function Button({ onClick = () => {}, loading = false, children }) {
   return (
@@ -72,16 +73,27 @@ function SignUpForm() {
     formState: { isSubmitting, errors },
   } = useForm();
 
+  // const onSubmit = async (data) => {
+  //   const result = await new Promise((res) => {
+  //     setTimeout(() => {
+  //       res(data);
+  //     }, 3000);
+  //   });
+
+  //   window.alert(JSON.stringify(result));
+  // };
   const onSubmit = async (data) => {
-    const result = await new Promise((res) => {
-      setTimeout(() => {
-        res(data);
-      }, 3000);
-    });
-
-    window.alert(JSON.stringify(result));
+    try {
+      let res = await http.post("member/password/email", {
+        email: data.email,
+      });
+      
+      console.log(res)
+    } catch (error) {
+      console.log('hi')
+      console.log(error);
+    }
   };
-
   return (
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8 bg-gray-50 p-5">

@@ -6,6 +6,10 @@ import { useToast } from "@hooks/useToast";
 
 import Logo from "@components/Logo";
 import http from "@api/http";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { userInfo } from "@recoil/user/atoms";
+
+
 function Button({ onClick = () => {}, loading = false, children }) {
   return (
     <button
@@ -290,6 +294,10 @@ function SignUpForm({ setToast }) {
     formState: { isSubmitting, errors },
   } = useForm({ mode: "onChange" });
 
+  const setUser = useSetRecoilState(userInfo);
+  const user = useRecoilValue(userInfo);
+
+
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
@@ -299,9 +307,13 @@ function SignUpForm({ setToast }) {
         password: data.password,
         nickname: data.nickname,
       })
-      .then(() => {
-        setToast({ message: "회원가입 성공!" });
-        navigate("/signin");
+      .then((res) => {
+        setUser((before) => ({
+          ...before,
+          email:res.data
+        }));
+        setToast({ message: "회원가입 성공! 관심있는 tag를 골라주세요!!" });
+        navigate("/selecttag");
       })
       .catch((err) => {
         console.log(err);

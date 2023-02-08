@@ -29,7 +29,7 @@ export default function FollowingQnas() {
 
   const rendering = (list) => {
     const result = [];
-    for (let i = 0; i < (list.length == null ? 0 : list.length); i++) {
+    for (let i = list.length == null ? -1 : list.length - 1; i >= 0; i--) {
       result.push(
         // <div>hello</div>
         <QnaDemo key={i} user_nickname={list[i].nickname} qna_content={list[i].content} />
@@ -115,8 +115,8 @@ export default function FollowingQnas() {
       </header>
 
       <div className="ml-4 w-full h-screen overflow-auto">
-        <QnA />
         {rendering(QnaDummy)}
+        <QnA />
       </div>
       <QnaModal open={open} setOpen={setOpen} propFunction={highFunction} />
     </>

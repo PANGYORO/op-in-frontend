@@ -4,7 +4,7 @@ export function useToast() {
   
 
   const setToast = (data) => {
-    toast(data.message, { position: 'bottom-center' })
+    toast(data.message, { position: 'bottom-right' })
 
   };
 
