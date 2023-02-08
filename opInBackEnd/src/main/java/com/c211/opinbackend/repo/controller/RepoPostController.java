@@ -54,7 +54,7 @@ public class RepoPostController {
 		}
 	}
 
-	@GetMapping("/")
+	@GetMapping
 	public ResponseEntity<?> getAllPosts() {
 		try {
 			List<RepoPostSimpleResponse> allPostList = repositoryPostService.getAllPost();
@@ -65,9 +65,10 @@ public class RepoPostController {
 	}
 
 	// 포스트 글들을 가져오는 api
-	@GetMapping("/{repoId}")
+	@GetMapping("/repo/{repoId}")
 	public ResponseEntity<?> getRepoPosts(@PathVariable("repoId") Long repoId) {
 		try {
+			log.info(String.valueOf(repoId));
 			List<RepoPostSimpleResponse> allPostList = repositoryPostService.getRepoAllPostList(repoId);
 			return new ResponseEntity<Object>(allPostList, HttpStatus.OK);
 		} catch (Exception exception) {
