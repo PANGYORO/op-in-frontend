@@ -1,0 +1,35 @@
+package com.c211.opinbackend.repo.controller;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.c211.opinbackend.exception.member.MemberExceptionEnum;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
+import com.c211.opinbackend.repo.model.requeset.RequestQnA;
+import com.c211.opinbackend.repo.service.repo.RepoQnAService;
+import com.c211.opinbackend.util.SecurityUtil;
+
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@RestController
+@Slf4j
+@RequestMapping("/qna")
+@AllArgsConstructor
+public class RepoQnAController {
+
+	private final RepoQnAService repoQnAService;
+
+	@PostMapping
+	public ResponseEntity<?> createQnA(@RequestBody RequestQnA requestQnA) {
+		String memberEmail = SecurityUtil.getCurrentUserId()
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+
+		repoQnAService.createRepoQnA(requestQnA, memberEmail);
+		return null;
+	}
+
+}
