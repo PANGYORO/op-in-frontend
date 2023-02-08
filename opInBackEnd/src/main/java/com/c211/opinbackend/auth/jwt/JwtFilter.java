@@ -66,7 +66,6 @@ public class JwtFilter extends OncePerRequestFilter {
 					response.setHeader("authorization", "bearer " + newAccessToken);
 
 					//쿠키에 토큰 추가
-					// 쿠키 생성
 					Cookie cookie = new Cookie("accessToken", newAccessToken);
 					cookie.setPath("/");
 					response.addCookie(cookie);

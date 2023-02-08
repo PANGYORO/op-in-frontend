@@ -103,20 +103,9 @@ public class SecurityConfig {
 					.allowedOrigins("http://127.0.0.1:5050")
 					.allowedMethods("GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS")
 					.allowCredentials(true);
-					// .allowedHeaders("*");
-					// .exposedHeaders("Set-Cookie")
 			}
 		};
 	}
-
-	// @Bean
-	// public CookieSerializer cookieSerializer() {
-	// 	DefaultCookieSerializer serializer = new DefaultCookieSerializer();
-	// 	// serializer.setUseSecureCookie(true);
-	// 	serializer.setDomainNamePattern("^.+?\\.(\\w+\\.[a-z]+)$");
-	// 	serializer.setSameSite("");
-	// 	return serializer;
-	// }
 
 }
 
