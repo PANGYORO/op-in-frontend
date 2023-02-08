@@ -89,8 +89,24 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 
 	@Override
 	@Transactional
-	public List<RepoPostSimpleResponse> getAllPostList() {
+	public List<RepoPostSimpleResponse> getAllPost() {
+
 		List<RepositoryPost> repositoryPostList = repoPostRepository.findAll();
+		List<RepoPostSimpleResponse> mappingResult = new ArrayList<>();
+		for (RepositoryPost post : repositoryPostList) {
+			mappingResult.add(RepoPostMapper.toSimpleResponse(post));
+		}
+		return mappingResult;
+	}
+
+	@Override
+	@Transactional
+	public List<RepoPostSimpleResponse> getRepoAllPostList(Long repoId) {
+		// TODO: 2023-02-08 이거 안됨 
+		Repository repository = repoRepository.findById(repoId).orElseThrow(
+			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION)
+		);
+		List<RepositoryPost> repositoryPostList = repoPostRepository.findByRepositoryId(repository.getId());
 		List<RepoPostSimpleResponse> mappingResult = new ArrayList<>();
 		for (RepositoryPost post : repositoryPostList) {
 			mappingResult.add(RepoPostMapper.toSimpleResponse(post));

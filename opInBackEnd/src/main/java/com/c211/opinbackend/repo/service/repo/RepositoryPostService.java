@@ -18,7 +18,9 @@ public interface RepositoryPostService {
 	 */
 	Boolean uploadRepository(String memberEmail, RepoDto repoDto);
 
-	List<RepoPostSimpleResponse> getAllPostList();
+	List<RepoPostSimpleResponse> getRepoAllPostList(Long repoId);
+
+	List<RepoPostSimpleResponse> getAllPost();
 
 	RepoPostDetailResponse getRepoDetail(Long postId);
 

@@ -54,11 +54,21 @@ public class RepoPostController {
 		}
 	}
 
-	// 포스트 글들을 가져오는 api
-	@GetMapping
-	public ResponseEntity<?> getPosts() {
+	@GetMapping("/")
+	public ResponseEntity<?> getAllPosts() {
 		try {
-			List<RepoPostSimpleResponse> allPostList = repositoryPostService.getAllPostList();
+			List<RepoPostSimpleResponse> allPostList = repositoryPostService.getAllPost();
+			return new ResponseEntity<Object>(allPostList, HttpStatus.OK);
+		} catch (Exception exception) {
+			return ResponseEntity.badRequest().body("조회에 실패 했습니다.");
+		}
+	}
+
+	// 포스트 글들을 가져오는 api
+	@GetMapping("/{repoId}")
+	public ResponseEntity<?> getRepoPosts(@PathVariable("repoId") Long repoId) {
+		try {
+			List<RepoPostSimpleResponse> allPostList = repositoryPostService.getRepoAllPostList(repoId);
 			return new ResponseEntity<Object>(allPostList, HttpStatus.OK);
 		} catch (Exception exception) {
 			return ResponseEntity.badRequest().body("조회에 실패 했습니다.");
