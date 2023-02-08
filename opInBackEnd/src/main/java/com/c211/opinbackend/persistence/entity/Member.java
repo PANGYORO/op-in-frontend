@@ -53,7 +53,7 @@ public class Member {
 	}
 
 	@OneToMany(mappedBy = "member")
-	List<Repository> memberList = new ArrayList<>();
+	List<Repository> repositoryLists = new ArrayList<>();
 
 	public void setNickname(String name) {
 		this.nickname = name;

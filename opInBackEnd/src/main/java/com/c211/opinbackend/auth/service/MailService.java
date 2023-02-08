@@ -67,7 +67,7 @@ public class MailService {
 		}
 
 		// #?!@$%^&*-
-		char pwCollection[] = new char[] {'#', '?', '!', '@', '$', '%', '^', '&', '*', '-'};
+		char[] pwCollection = new char[] {'#', '?', '!', '@', '$', '%', '^', '&', '*', '-'};
 		key.append(pwCollection[(int)random.nextInt(10)]);
 
 		return key.toString();
