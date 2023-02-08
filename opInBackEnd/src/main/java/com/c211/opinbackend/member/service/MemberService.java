@@ -1,15 +1,16 @@
 package com.c211.opinbackend.member.service;
 
+import java.util.List;
 import java.util.Optional;
 
-import com.c211.opinbackend.auth.model.MemberDto;
-import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.persistence.entity.Member;
 
 public interface MemberService {
 
 	Optional<Member> findByEmail(String email);
+
+	List<Member> getGitHubSyncMembers();
 
 	MypageResponse getMemberInfo(String email);
 

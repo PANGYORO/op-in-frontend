@@ -3,23 +3,16 @@ package com.c211.opinbackend.member.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.c211.opinbackend.auth.jwt.TokenProvider;
-import com.c211.opinbackend.auth.model.MemberDto;
-import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.response.BadgeResponse;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.auth.model.response.TechLanguageResponse;
@@ -89,6 +82,11 @@ public class MemberServiceImpl implements MemberService {
 	public Optional<Member> findByEmail(String email) {
 		Optional<Member> byEmail = memberRepository.findByEmail(email);
 		return byEmail;
+	}
+
+	@Override
+	public List<Member> getGitHubSyncMembers() {
+		return memberRepository.findAllByGithubIdIsNotNull();
 	}
 
 	@Override
