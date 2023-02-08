@@ -89,8 +89,23 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 
 	@Override
 	@Transactional
-	public List<RepoPostSimpleResponse> getAllPostList() {
+	public List<RepoPostSimpleResponse> getAllPost() {
+
 		List<RepositoryPost> repositoryPostList = repoPostRepository.findAll();
+		List<RepoPostSimpleResponse> mappingResult = new ArrayList<>();
+		for (RepositoryPost post : repositoryPostList) {
+			mappingResult.add(RepoPostMapper.toSimpleResponse(post));
+		}
+		return mappingResult;
+	}
+
+	@Override
+	@Transactional
+	public List<RepoPostSimpleResponse> getRepoAllPostList(Long repoId) {
+		Repository repository = repoRepository.findById(repoId).orElseThrow(
+			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION)
+		);
+		List<RepositoryPost> repositoryPostList = repoPostRepository.findByRepositoryId(repository.getId());
 		List<RepoPostSimpleResponse> mappingResult = new ArrayList<>();
 		for (RepositoryPost post : repositoryPostList) {
 			mappingResult.add(RepoPostMapper.toSimpleResponse(post));
@@ -123,5 +138,17 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 		repositoryPost.fetchTile(post.getPostTile());
 		repositoryPost.fetchContent(post.getPostContent());
 		return true;
+	}
+
+	@Override
+	public List<RepoPostSimpleResponse> getMembersRepoPost(String nickName) {
+		List<RepositoryPost> byMemberId = repoPostRepository.findByMember_Nickname(nickName);
+		log.info(String.valueOf(byMemberId.size()));
+		List<RepoPostSimpleResponse> resultMapper = new ArrayList<>();
+		for (RepositoryPost post : byMemberId) {
+			RepoPostSimpleResponse repoPostSimpleResponse = RepoPostMapper.toSimpleResponse(post);
+			resultMapper.add(repoPostSimpleResponse);
+		}
+		return resultMapper;
 	}
 }

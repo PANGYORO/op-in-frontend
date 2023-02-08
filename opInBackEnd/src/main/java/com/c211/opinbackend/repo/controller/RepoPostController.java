@@ -37,7 +37,12 @@ public class RepoPostController {
 	private final RepositoryPostService repositoryPostService;
 	private final CommentService commentService;
 
-	// TODO: 2023/02/07 애러처리를 어떻게 해야할까
+	/**
+	 * 포스트 만들기
+	 *
+	 * @param createPostRequest
+	 * @return
+	 */
 	@PostMapping
 	public ResponseEntity<?> writePost(@RequestBody CreatePostRequest createPostRequest) {
 		try {
@@ -54,23 +59,67 @@ public class RepoPostController {
 		}
 	}
 
-	// 포스트 글들을 가져오는 api
+	/**
+	 * 모든 포스트 조회
+	 *
+	 * @return
+	 */
 	@GetMapping
-	public ResponseEntity<?> getPosts() {
+	public ResponseEntity<?> getAllPosts() {
 		try {
-			List<RepoPostSimpleResponse> allPostList = repositoryPostService.getAllPostList();
+			List<RepoPostSimpleResponse> allPostList = repositoryPostService.getAllPost();
 			return new ResponseEntity<Object>(allPostList, HttpStatus.OK);
 		} catch (Exception exception) {
 			return ResponseEntity.badRequest().body("조회에 실패 했습니다.");
 		}
 	}
 
+	/**
+	 * 래포지토리에 속한 포스트 가져오기
+	 *
+	 * @param repoId
+	 * @return
+	 */
+	@GetMapping("/repo/{repoId}")
+	public ResponseEntity<?> getRepoPosts(@PathVariable("repoId") Long repoId) {
+		try {
+			log.info(String.valueOf(repoId));
+			List<RepoPostSimpleResponse> allPostList = repositoryPostService.getRepoAllPostList(repoId);
+			return new ResponseEntity<Object>(allPostList, HttpStatus.OK);
+		} catch (Exception exception) {
+			return ResponseEntity.badRequest().body("조회에 실패 했습니다.");
+		}
+	}
+
+	/**
+	 * 맴버에 속한 포스트들 조회
+	 *
+	 * @param memberId
+	 * @return
+	 */
+	@GetMapping("member/{nickName}")
+	public ResponseEntity<?> getMembersRepo(@PathVariable String nickName) {
+		return ResponseEntity.ok().body(repositoryPostService.getMembersRepoPost(nickName));
+	}
+
+	/**
+	 * 특정 포스트 1개 자세하게 조회
+	 *
+	 * @param postId
+	 * @return
+	 */
 	@GetMapping("/{postId}")
 	public ResponseEntity<?> getDetailPost(@PathVariable("postId") Long postId) {
 		RepoPostDetailResponse repoDetail = repositoryPostService.getRepoDetail(postId);
 		return ResponseEntity.ok().body(repoDetail);
 	}
 
+	/**
+	 * 댓글 저장
+	 *
+	 * @param requestCommentCreateToPost
+	 * @return
+	 */
 	@PostMapping("/comment")
 	public ResponseEntity<?> createCommentToPost(@RequestBody RequestCommentCreateToPost requestCommentCreateToPost) {
 		String memberEmail = SecurityUtil.getCurrentUserId()
@@ -81,12 +130,24 @@ public class RepoPostController {
 
 	}
 
+	/**
+	 * 포스트 업데이트
+	 *
+	 * @param post
+	 * @return
+	 */
 	@PutMapping
 	public ResponseEntity<?> updatePosts(@RequestBody RequestUpdatePost post) {
 		repositoryPostService.update(post);
 		return ResponseEntity.ok().body(true);
 	}
 
+	/**
+	 * 포스트 지우기
+	 *
+	 * @param postId
+	 * @return
+	 */
 	@PostMapping("/delete/{postId}")
 	public ResponseEntity<?> deletePost(@PathVariable("postId") Long postId) {
 		if (repositoryPostService.deleteRepo(postId)) {
