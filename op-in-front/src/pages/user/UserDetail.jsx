@@ -23,7 +23,7 @@ export default function Detail() {
 
   async function getMember() {
     await http
-      .post(`auth/getMember`, {
+      .post(`member/mypage`, {
         email: currentEmail,
       })
       .then((response) => {
