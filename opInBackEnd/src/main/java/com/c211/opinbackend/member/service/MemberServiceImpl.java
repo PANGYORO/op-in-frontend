@@ -82,8 +82,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public Optional<Member> findByEmail(String email) {
-		Optional<Member> byEmail = memberRepository.findByEmail(email);
-		return byEmail;
+		return memberRepository.findByEmail(email);
 	}
 
 	@Override
@@ -420,21 +419,28 @@ public class MemberServiceImpl implements MemberService {
 	 * */
 	@Override
 	public boolean saveTopic(List<String> topics) {
+		Member member = getMember();
+
 		for (String topic : topics) {
 			Topic isTopic = topicRepository.findByTitle(topic).orElse(null);
 
+			//topic이 있는지 확인
 			if (isTopic == null) {
 				Topic newTopic = Topic.builder()
 					.title(topic)
 					.build();
 
 				isTopic = topicRepository.save(newTopic);
+			}else {
+				// topic 과 member 의 관계가 있는지 확인
+				MemberTopic memberTopic = memberTopicRepository.findByMemberAndTopic(member, isTopic).orElse(null);
+				if (memberTopic != null) continue;
 			}
 
 			//member topic 으로 이어주기
 			MemberTopic memberTopic = MemberTopic.builder()
 				.topic(isTopic)
-				.member(getMember())
+				.member(member)
 				.build();
 
 			memberTopicRepository.save(memberTopic);
@@ -448,6 +454,8 @@ public class MemberServiceImpl implements MemberService {
 	 * */
 	@Override
 	public boolean saveTechLanguage(List<String> languages) {
+		Member member = getMember();
+
 		for (String lan : languages) {
 			TechLanguage language = techLanguageRepository.findByTitle(lan).orElse(null);
 
@@ -457,6 +465,10 @@ public class MemberServiceImpl implements MemberService {
 					.build();
 
 				language = techLanguageRepository.save(newLanguage);
+			}else {
+				// topic 과 member 의 관계가 있는지 확인
+				MemberTechLanguage memberTechLanguage = memberTechLanguageRepository.findByMemberAndTechLanguage(member, language).orElse(null);
+				if (memberTechLanguage != null) continue;
 			}
 
 			//member topic 으로 이어주기
@@ -473,5 +485,20 @@ public class MemberServiceImpl implements MemberService {
 	/*
 	 * GET Tech Language 전체 목록
 	 * */
+	@Override
+	public List<TechLanguageResponse> getListTechLanguage() {
+		List<TechLanguage> lanList = techLanguageRepository.findAll();
+		List<TechLanguageResponse> responses = new ArrayList<TechLanguageResponse>();
 
+		for(TechLanguage lan : lanList) {
+			TechLanguageResponse techLanguageResponse = TechLanguageResponse.builder()
+				.id(lan.getId())
+				.title(lan.getTitle())
+				.build();
+
+			responses.add(techLanguageResponse);
+		}
+
+		return responses;
+	}
 }

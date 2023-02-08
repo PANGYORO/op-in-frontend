@@ -10,7 +10,6 @@ import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 
 public interface RepositoryPostService {
 	Boolean createPostToRepository(CreatePostRequest createPostRequest, String memberEmail);
-	// TODO: 2023/02/07 서비스 명 작성중
 
 	/**
 	 * 임시 래포지토리 등록
@@ -18,12 +17,16 @@ public interface RepositoryPostService {
 	 */
 	Boolean uploadRepository(String memberEmail, RepoDto repoDto);
 
-	List<RepoPostSimpleResponse> getAllPostList();
+	List<RepoPostSimpleResponse> getRepoAllPostList(Long repoId);
+
+	List<RepoPostSimpleResponse> getAllPost();
 
 	RepoPostDetailResponse getRepoDetail(Long postId);
 
 	Boolean deleteRepo(Long postId);
 
 	Boolean update(RequestUpdatePost post);
+
+	List<RepoPostSimpleResponse> getMembersRepoPost(String nickName);
 
 }

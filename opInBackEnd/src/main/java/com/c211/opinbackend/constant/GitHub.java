@@ -11,6 +11,8 @@ public class GitHub {
 	public static final String PUBLIC_REPOSITORY_LANGUAGE_URL = "https://api.github.com/repos/{REPOSITORY_FULLNAME}/languages";
 	public static final String PUBLIC_REPOSITORY_COMMIT_URL = "https://api.github.com/repos/{REPOSITORY_FULLNAME}/commits";
 
+	public static final String PUBLIC_REPOSITORY_PULLS_URL = "https://api.github.com/repos/{REPOSITORY_FULLNAME}/pulls";
+
 	public static String getUserInfoUrl(String githubUserName) {
 		return PUBLIC_USER_INFO_URL.replace("{USERNAME}", githubUserName);
 	}
@@ -33,5 +35,8 @@ public class GitHub {
 
 	public static String getPublicRepositoryCommitUrl(String repositoryName, String githubUserName) {
 		return PUBLIC_REPOSITORY_COMMIT_URL.replace("{REPOSITORY_FULLNAME}", githubUserName + "/" + repositoryName);
+	}
+	public static String getPublicRepositoryPullsUrl(String repositoryFullName) {
+		return PUBLIC_REPOSITORY_PULLS_URL.replace("{REPOSITORY_FULLNAME}", repositoryFullName);
 	}
 }

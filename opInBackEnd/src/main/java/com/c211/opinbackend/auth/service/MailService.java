@@ -1,5 +1,6 @@
 package com.c211.opinbackend.auth.service;
 
+import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.mail.MailException;
@@ -15,28 +16,26 @@ import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MailService {
 
 	private final JavaMailSender javaMailSender;
 
-	MemberRepository memberRepository;
+	private final MemberRepository memberRepository;
 
 	public String mailSend(String email) {
-
-		Member member = memberRepository.findByEmail(email).orElse(null);
-		if (member == null) {
-			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
-		}
+		Member member = memberRepository.findByEmail(email).orElseThrow(()-> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 
 		String temporaryPassword = createCode();
 
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		simpleMailMessage.setTo(email);
 		simpleMailMessage.setSubject("Op-in 임시 비밀번호 발급 안내");
-		simpleMailMessage.setText(" Op-in 임시 비밀번호 발급 안내 \n " + temporaryPassword);
+		simpleMailMessage.setText("Op-in 임시 비밀번호 발급 안내 \n " + temporaryPassword);
 
 		try {
 			javaMailSender.send(simpleMailMessage);
