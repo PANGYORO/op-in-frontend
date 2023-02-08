@@ -2,8 +2,6 @@ package com.c211.opinbackend.repo.model.dto;
 
 import java.time.LocalDateTime;
 
-import com.c211.opinbackend.auth.model.MemberDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -12,7 +10,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class RepoDto {
-	private MemberDto member;
+	private Long repoId;
+	private String memberEmail;
 	private String name;
 	private String fullName;
 	private String description;
