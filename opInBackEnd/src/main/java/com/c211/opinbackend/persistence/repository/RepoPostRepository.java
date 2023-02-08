@@ -13,4 +13,6 @@ public interface RepoPostRepository extends JpaRepository<RepositoryPost, Long> 
 
 	List<RepositoryPost> findByRepositoryId(Long repoId);
 
+	List<RepositoryPost> findByMember_Nickname(String memberId);
+
 }

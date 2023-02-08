@@ -140,4 +140,16 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 		repositoryPost.fetchContent(post.getPostContent());
 		return true;
 	}
+
+	@Override
+	public List<RepoPostSimpleResponse> getMembersRepoPost(String nickName) {
+		List<RepositoryPost> byMemberId = repoPostRepository.findByMember_Nickname(nickName);
+		log.info(String.valueOf(byMemberId.size()));
+		List<RepoPostSimpleResponse> resultMapper = new ArrayList<>();
+		for (RepositoryPost post : byMemberId) {
+			RepoPostSimpleResponse repoPostSimpleResponse = RepoPostMapper.toSimpleResponse(post);
+			resultMapper.add(repoPostSimpleResponse);
+		}
+		return resultMapper;
+	}
 }

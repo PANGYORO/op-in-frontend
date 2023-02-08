@@ -27,4 +27,6 @@ public interface RepositoryPostService {
 
 	Boolean update(RequestUpdatePost post);
 
+	List<RepoPostSimpleResponse> getMembersRepoPost(String nickName);
+
 }
