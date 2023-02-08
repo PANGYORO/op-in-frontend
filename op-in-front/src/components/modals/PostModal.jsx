@@ -54,8 +54,12 @@ export default function PostModal({ open, setOpen }) {
 
                 <Editor
                   height="500px"
-                  initialValue="hello"
+                  initialValue=" "
                   previewStyle="vertical"
+                  toolbarItems={[
+                    ["heading", "bold", "italic", "strike"],
+                    ["hr", "quote"],
+                  ]}
                   plugins={[[codeSyntaxHighlight, { highlighter: Prism }, colorSyntax, fontSize]]}
                 />
                 <div className="bg-gray-50 px-4 p-4 sm:flex sm:flex-row-reverse sm:px-6">
