@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -99,8 +100,7 @@ public class MemberController {
 	// 임시 비밀번호 발급 이메일
 	@PostMapping("/password/email")
 	public ResponseEntity<?> changePwEmail(@RequestBody Map<String, String> email) {
-		String temporaryPassword = mailService.mailSend(email.get("email"));
-		return ResponseEntity.ok(memberService.modifyPassword(email.get("email"), temporaryPassword));
+		return new ResponseEntity<String>(mailService.mailSend(email.get("email")), HttpStatus.OK);
 	}
 
 	// 회원 탈퇴
