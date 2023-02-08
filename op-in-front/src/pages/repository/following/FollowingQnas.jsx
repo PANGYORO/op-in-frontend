@@ -39,8 +39,10 @@ export default function FollowingQnas() {
   };
 
   const highFunction = (text) => {
-    console.log(user.nickname);
-    console.log(text);
+    QnaDummy.push({
+      nickname: user.nickname,
+      content: text,
+    });
   };
 
   function toggleModal() {
