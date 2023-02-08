@@ -84,9 +84,13 @@ public class RepoPostController {
 		return null;
 	}
 
-	@PostMapping("/delete")
-	public ResponseEntity<?> deletePosts() {
-		return null;
+	@PostMapping("/delete/{postId}")
+	public ResponseEntity<?> deletePost(@PathVariable("postId") Long postId) {
+		if (repositoryPostService.deleteRepo(postId)) {
+			return ResponseEntity.ok().body(postId);
+		} else {
+			return ResponseEntity.badRequest().body(postId);
+		}
 	}
 
 }

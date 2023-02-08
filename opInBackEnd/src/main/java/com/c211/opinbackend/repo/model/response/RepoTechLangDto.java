@@ -10,4 +10,5 @@ import lombok.Setter;
 public class RepoTechLangDto {
 	String title;
 	String color;
+	Long count;
 }

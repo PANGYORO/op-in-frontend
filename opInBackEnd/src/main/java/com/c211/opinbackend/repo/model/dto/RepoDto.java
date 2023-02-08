@@ -12,8 +12,8 @@ import lombok.ToString;
 public class RepoDto {
 	private String memberEmail;
 	private String name;
-	private String githubAddress;
 	private String fullName;
+	private String description;
 	private String htmlUrl;
 	private Boolean secret;
 	private Boolean fork;

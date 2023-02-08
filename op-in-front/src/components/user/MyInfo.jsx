@@ -31,16 +31,13 @@ export default function MyInfo(props) {
           <Tooltip anchorId="badge-7" content="normal badge" />
         </div>
         <hr />
-        {/* <TagInfo
-          title="language"
-          titlelength={props.techLanguages == null ? 0 : props.techLanguages.length}
-          taglist={["java", "javascript", "html&css", "python", "react"]}
-        /> */}
-        <TagInfo
-          title="language"
-          titlelength="5"
-          taglist={["java", "javascript", "html&css", "python", "react"]}
-        />
+        <div className="mr-3">
+          <TagInfo
+            title="language"
+            titlelength="5"
+            taglist={["java", "javascript", "html&css", "python", "react"]}
+          />
+        </div>
         {/* <p className="p-4 font-bold text-black text-md dark:text-white">
           Languages
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
@@ -149,7 +146,14 @@ export default function MyInfo(props) {
           </div>
         </div> */}
         <hr />
-        <p className="p-4 font-bold text-black text-md dark:text-white">
+        <div className="mr-3">
+          <TagInfo
+            title="Topics"
+            titlelength="5"
+            taglist={["JPA", "SpringBoot", "CD/CI", "SERVER", "UI"]}
+          />
+        </div>
+        {/* <p className="p-4 font-bold text-black text-md dark:text-white">
           Topics
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
             ({props.topicResponses == null ? 0 : props.topicResponses.length})
@@ -255,7 +259,7 @@ export default function MyInfo(props) {
             </svg>
             UI
           </div>
-        </div>
+        </div> */}
         <hr />
         <p className="p-4 font-bold text-black text-md dark:text-white">
           Completed Contributes

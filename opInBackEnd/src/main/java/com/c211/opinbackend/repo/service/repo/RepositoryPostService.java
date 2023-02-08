@@ -20,4 +20,7 @@ public interface RepositoryPostService {
 	List<RepoPostSimpleResponse> getAllPostList();
 
 	RepoPostDetailResponse getRepoDetail(Long postId);
+
+	Boolean deleteRepo(Long postId);
+
 }

@@ -26,4 +26,6 @@ public class RepositoryTechLanguage {
 	@JoinColumn(name = "REPOSITORY_ID")
 	private Repository repository;
 
+	private Long count;
+
 }

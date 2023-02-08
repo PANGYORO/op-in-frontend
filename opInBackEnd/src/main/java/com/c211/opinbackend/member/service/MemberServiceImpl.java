@@ -86,66 +86,9 @@ public class MemberServiceImpl implements MemberService {
 	private PasswordEncoder passwordEncoder;
 
 	@Override
-	public TokenDto authorize(String email, String password) {
-
-		UsernamePasswordAuthenticationToken authenticationToken =
-			new UsernamePasswordAuthenticationToken(email, password);
-
-		Authentication authentication = null;
-
-		try {
-			authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-		} catch (Exception ex) {
-			throw new RuntimeException("authenticationManagerBuilder 에러");
-		}
-
-		if (authentication != null) {
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-			String authorities = getAuthorities(authentication);
-			return tokenProvider.createToken(email, authorities);
-		} else {
-			throw new RuntimeException("authentication 에러");
-		}
-	}
-
-	@Override
 	public Optional<Member> findByEmail(String email) {
 		Optional<Member> byEmail = memberRepository.findByEmail(email);
 		return byEmail;
-	}
-
-	// 권한 가져오기
-	public String getAuthorities(Authentication authentication) {
-		return authentication.getAuthorities()
-			.stream()
-			.map(GrantedAuthority::getAuthority)
-			.collect(Collectors.joining(","));
-	}
-
-	@Override
-	public Member signUp(MemberDto memberDto) {
-
-		// 이메일 중복 체크
-		boolean existEmail = memberRepository.existsByEmail(memberDto.getEmail());
-		if (existEmail) {
-			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_EMAIL_EXCEPTION);
-		}
-
-		// 닉네임 중복 체크
-		boolean existNickname = memberRepository.existsByNickname(memberDto.getNickname());
-		if (existNickname) {
-			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_EXIST_NICKNAME_EXCEPTION);
-		}
-
-		Member member = Member.builder()
-			.email(memberDto.getEmail())
-			.password(passwordEncoder.encode(memberDto.getPassword()))
-			.nickname(memberDto.getNickname())
-			.githubSyncFl(false)
-			.role(memberDto.getRole())
-			.build();
-
-		return memberRepository.save(member);
 	}
 
 	@Override
