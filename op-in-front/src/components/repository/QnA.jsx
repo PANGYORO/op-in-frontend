@@ -2,7 +2,8 @@ import DefaultImg from "@assets/basicprofile.png";
 import Comment from "@components/repository/Comment";
 import React from "react";
 
-export default function QnA() {
+export default function QnA({}) {
+  
   return (
     <>
       <div className="w-full p-4 mb-6 bg-white rounded-lg shadow dark:bg-gray-800 sm:inline-block">
@@ -37,12 +38,16 @@ export default function QnA() {
                 Leave a Comment...
               </label>
               <div className="flex items-center px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-700">
+                {/* 이부분에서 value 받아야한다. */}
                 <textarea
                   id="chat"
                   rows="1"
+                  // onChange={(e)=>{
+                  // console.log(e.target.value)}}
                   className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Leave a Comment..."
                 ></textarea>
+                <div>
                 <button
                   // type="submit"
                   className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600"
@@ -58,15 +63,17 @@ export default function QnA() {
                   </svg>
                   <span className="sr-only">Send message</span>
                 </button>
+                </div>
               </div>
             </div>
 
             <hr className="my-4" />
             {/* 댓글 공간 */}
             <div className="grid grid-rows-1 gap-2">
+              
               <Comment />
               <Comment />
-              <Comment />
+
             </div>
           </div>
         </div>
