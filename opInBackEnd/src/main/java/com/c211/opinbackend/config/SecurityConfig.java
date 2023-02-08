@@ -101,7 +101,8 @@ public class SecurityConfig {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-					.allowedOrigins("http://127.0.0.1:5050", "http://i8c211.p.ssafy.io:5050", "http://localhost:5050", "http://127.0.0.1:5001", "http://i8c211.p.ssafy.io:5001", "http://localhost:5001")
+					.allowedOrigins("http://127.0.0.1:5050", "http://i8c211.p.ssafy.io:5050", "http://localhost:5050", "http://127.0.0.1:5001", "http://i8c211.p.ssafy.io:5001", "http://localhost:5001", "\t\n"
+						+ "http://43.201.35.140/")
 					.allowedMethods("GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS")
 					.allowedHeaders("*")
 					.allowCredentials(true);
