@@ -1,12 +1,19 @@
 package com.c211.opinbackend.auth.controller;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,8 +31,10 @@ import com.c211.opinbackend.member.service.MemberService;
 import com.c211.opinbackend.persistence.entity.Role;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
+@Slf4j
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -34,13 +43,23 @@ public class AuthController {
 	private final MemberService memberService;
 
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody MemberLoginRequest request) {
+	public ResponseEntity<?> login(@RequestBody MemberLoginRequest request, HttpServletResponse response) {
 		if (memberService.isOAuthMember(request.getEmail())) {
 			throw new MemberRuntimeException(MemberExceptionEnum.OAUTH_SIGNUP_USER_EXCEPTION);
 		}
 		TokenDto token = authService.authorize(request.getEmail(), request.getPassword());
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
+
+		// 쿠키 생성
+		Cookie cookie = new Cookie("accessToken", token.getAccessToken());
+		cookie.setPath("/");
+		response.addCookie(cookie);
+
+		Cookie cookie2 = new Cookie("refreshToken", token.getRefreshToken());
+		cookie2.setPath("/");
+		response.addCookie(cookie2);
+
 		return new ResponseEntity<TokenDto>(token, httpHeaders, HttpStatus.OK);
 	}
 
@@ -78,11 +97,21 @@ public class AuthController {
 	}
 
 	@PostMapping("/logout")
-	public void logout() {
+	public void logout(HttpServletResponse response) {
 		SecurityContext context = SecurityContextHolder.getContext();
 		SecurityContextHolder.clearContext();
 		context.setAuthentication(null);
-		// 쿠키 날려 버리기
 
+		// 쿠키 날려 버리기
+		Cookie cookie = new Cookie("accessToken", null);
+		cookie.setMaxAge(0);
+		cookie.setPath("/");
+		response.addCookie(cookie);
+
+		Cookie cookie2 = new Cookie("refreshToken", null);
+		cookie2.setMaxAge(0);
+		cookie2.setPath("/");
+		response.addCookie(cookie2);
 	}
+
 }
