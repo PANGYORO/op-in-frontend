@@ -35,18 +35,18 @@ public class RepositoryPost {
 	@Column(name = "REPOSITORY_POST_ID")
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REPOSITORY_ID")
 	private Repository repository;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MEMBER_ID")
 	private Member member;
 
-	@OneToMany(mappedBy = "repositoryPost")
+	@OneToMany(mappedBy = "repositoryPost", cascade = CascadeType.ALL)
 	List<Comment> commentsList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "repositoryPost")
+	@OneToMany(mappedBy = "repositoryPost", cascade = CascadeType.ALL)
 	List<RepositoryPostMemberLike> likeList = new ArrayList<>();
 
 	@Embedded

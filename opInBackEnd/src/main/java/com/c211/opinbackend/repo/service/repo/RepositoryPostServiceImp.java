@@ -113,7 +113,7 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 		RepositoryPost repositoryPost = repoPostRepository.findById(postId).orElseThrow(
 			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_EXIST_EXCEPTION)
 		);
-		repoPostRepository.delete(repositoryPost);
+		repoPostRepository.deleteById(postId);
 		return true;
 	}
 
