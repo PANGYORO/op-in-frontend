@@ -3,23 +3,15 @@ package com.c211.opinbackend.member.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.c211.opinbackend.auth.jwt.TokenProvider;
-import com.c211.opinbackend.auth.model.MemberDto;
-import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.response.BadgeResponse;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.auth.model.response.TechLanguageResponse;
@@ -60,7 +52,6 @@ import com.c211.opinbackend.repo.model.response.RepositoryTitleResponse;
 import com.c211.opinbackend.repo.model.response.TopicResponse;
 import com.c211.opinbackend.util.SecurityUtil;
 
-import io.netty.util.internal.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -287,11 +278,12 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	/*
-	* GET 마이페이지 정보
-	* */
+	 * GET 마이페이지 정보
+	 * */
 	@Override
 	public MypageResponse getMemberInfo(String nickname) {
-		Member member = memberRepository.findByNickname(nickname).orElseThrow(()->new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+		Member member = memberRepository.findByNickname(nickname)
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 
 		// 사용자의 레포지토리 이름 목록
 		List<RepositoryTitleResponse> myRepoTitles = getMemberRepo(member);
@@ -332,44 +324,51 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	/*
-	* 닉네임 변경
-	* */
+	 * 닉네임 변경
+	 * */
 	@Override
 	@Transactional
 	public Member modifyNickname(String nickname, String email) {
-		Member member = memberRepository.findByEmail(email).orElseThrow(()->new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+		Member member = memberRepository.findByEmail(email)
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 		member.setNickname(nickname);
 		return member;
 	}
 
 	/*
-	* 비밀번호 변경
-	* */
+	 * 비밀번호 변경
+	 * */
 	@Override
 	@Transactional
 	public boolean modifyPassword(String email, String password) {
-		Member member = memberRepository.findByEmail(email).orElseThrow(()-> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+		Member member = memberRepository.findByEmail(email)
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 		member.setPassword(passwordEncoder.encode(password));
 		return true;
 	}
 
 	/*
-	* GET 현재 로그인된 멤버 정보
-	* */
+	 * GET 현재 로그인된 멤버 정보
+	 * */
 	@Override
 	public Member getMember() {
-		String email = SecurityUtil.getCurrentUserId().orElseThrow(()-> new AuthRuntimeException(AuthExceptionEnum.AUTH_SECURITY_AUTHENTICATION_EXCEPTION));;
-		Member member = memberRepository.findByEmail(email).orElseThrow(()-> new AuthRuntimeException(AuthExceptionEnum.AUTH_SECURITY_AUTHENTICATION_EXCEPTION));;
+		String email = SecurityUtil.getCurrentUserId()
+			.orElseThrow(() -> new AuthRuntimeException(AuthExceptionEnum.AUTH_SECURITY_AUTHENTICATION_EXCEPTION));
+		;
+		Member member = memberRepository.findByEmail(email)
+			.orElseThrow(() -> new AuthRuntimeException(AuthExceptionEnum.AUTH_SECURITY_AUTHENTICATION_EXCEPTION));
+		;
 		return member;
 	}
 
 	/*
-	* 멤버 팔로우
-	* */
+	 * 멤버 팔로우
+	 * */
 	@Override
 	public MemberFollow followMember(String nickname) {
 		Member fromMember = getMember();
-		Member toMember = memberRepository.findByNickname(nickname).orElseThrow(()-> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+		Member toMember = memberRepository.findByNickname(nickname)
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 
 		MemberFollow memberFollow = MemberFollow.builder()
 			.fromMember(fromMember)
@@ -380,12 +379,13 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	/*
-	* 팔로우 취소
-	* */
+	 * 팔로우 취소
+	 * */
 	@Override
 	public boolean followDeleteMember(String nickname) {
 		Member fromMember = getMember();
-		Member toMember = memberRepository.findByNickname(nickname).orElseThrow(()-> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+		Member toMember = memberRepository.findByNickname(nickname)
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 
 		MemberFollow follow = memberFollowRepository.findByFromMemberAndToMember(fromMember, toMember).orElse(null);
 
@@ -399,8 +399,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	/*
-	* 팔로우 여부 확인
-	* */
+	 * 팔로우 여부 확인
+	 * */
 	@Override
 	public boolean isFollow(String nickname) {
 		Member fromMember = getMember();
@@ -416,11 +416,11 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	/*
-	* SAVE Member Topic
-	* */
+	 * SAVE Member Topic
+	 * */
 	@Override
 	public boolean saveTopic(List<String> topics) {
-		for(String topic : topics) {
+		for (String topic : topics) {
 			Topic isTopic = topicRepository.findByTitle(topic).orElse(null);
 
 			if (isTopic == null) {
@@ -442,13 +442,13 @@ public class MemberServiceImpl implements MemberService {
 
 		return true;
 	}
-	
+
 	/*
-	* SAVE Member Tech Language
-	* */
+	 * SAVE Member Tech Language
+	 * */
 	@Override
 	public boolean saveTechLanguage(List<String> languages) {
-		for(String lan : languages) {
+		for (String lan : languages) {
 			TechLanguage language = techLanguageRepository.findByTitle(lan).orElse(null);
 
 			if (language == null) {
@@ -471,7 +471,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	/*
-	* GET Tech Language 전체 목록
-	* */
+	 * GET Tech Language 전체 목록
+	 * */
 
 }

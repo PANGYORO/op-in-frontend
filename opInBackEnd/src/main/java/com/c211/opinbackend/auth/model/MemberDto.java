@@ -30,6 +30,7 @@ public class MemberDto {
 
 	private String githubToken;
 	private String githubId;
+	private String githubUserName;
 
 	private Role role;
 
@@ -37,12 +38,13 @@ public class MemberDto {
 		return Member.builder()
 			.id(id)
 			.password(password)
-			.githubId(githubId)
 			.email(email)
 			.nickname(nickname)
 			.avatarUrl(avatarUrl)
+			.githubId(githubId)
 			.githubToken(githubToken)
 			.githubSyncFl(githubSyncFl)
+			.githubUserName(githubUserName)
 			.role(role)
 			.build();
 	}

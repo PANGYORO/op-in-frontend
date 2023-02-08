@@ -47,8 +47,12 @@ public class Member {
 	private Role role;
 	private String githubToken;
 	private String githubId;
+	private String githubUserName;
 
-	public Member fetch(String githubToken, String avatarUrl) {
+	public Member fetch(String githubToken, String avatarUrl, String githubUserName) {
+		this.githubToken = githubToken;
+		this.avatarUrl = avatarUrl;
+		this.githubUserName = githubUserName;
 		return this;
 	}
 
@@ -62,5 +66,4 @@ public class Member {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 }
