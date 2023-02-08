@@ -8,6 +8,7 @@ import "prismjs/themes/prism.css";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 import fontSize from "tui-editor-plugin-font-size";
+import "@assets/css/editor.css";
 
 export default function PostModal({ open, setOpen }) {
   const cancelButtonRef = useRef(null);
@@ -56,10 +57,6 @@ export default function PostModal({ open, setOpen }) {
                   height="500px"
                   initialValue=" "
                   previewStyle="vertical"
-                  toolbarItems={[
-                    ["heading", "bold", "italic", "strike"],
-                    ["hr", "quote"],
-                  ]}
                   plugins={[[codeSyntaxHighlight, { highlighter: Prism }, colorSyntax, fontSize]]}
                 />
                 <div className="bg-gray-50 px-4 p-4 sm:flex sm:flex-row-reverse sm:px-6">
