@@ -8,7 +8,7 @@ import SignUp from "@pages/user/SignUp";
 import UserFind from "@pages/user/UserFind";
 import UserDetail from "@pages/user/UserDetail";
 import SelectTag from "@pages/user/SelectTag";
-import PRTutorial from '@pages/education/tutorial/PRTutorial';
+import PRTutorial from "@pages/education/tutorial/PRTutorial";
 
 import Search from "@pages/Search";
 import NotFound from "@pages/NotFound";
@@ -23,6 +23,7 @@ import PostView from "@components/PostView";
 import useToken from "@hooks/useToken";
 import { useSetRecoilState } from "recoil";
 import { userInfo } from "@recoil/user/atoms";
+import "@assets/css/editor.css";
 
 function MainTemplate() {
   return (
