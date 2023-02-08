@@ -22,6 +22,8 @@ public class SecurityUtil {
 	public static Optional<String> getCurrentUserId() {
 		final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+		logger.info(authentication.toString());
+
 		if (authentication == null) {
 			logger.debug("Security Context에 인증정보가 없습니다.");
 			return Optional.empty();

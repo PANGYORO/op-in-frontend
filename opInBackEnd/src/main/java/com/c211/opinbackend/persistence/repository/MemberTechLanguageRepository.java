@@ -13,4 +13,6 @@ public interface MemberTechLanguageRepository extends JpaRepository<MemberTechLa
 
 	List<MemberTechLanguage> findByMember(Member member);
 
+	MemberTechLanguage save(MemberTechLanguage memberTechLanguage);
+
 }

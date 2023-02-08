@@ -10,7 +10,7 @@ import com.c211.opinbackend.persistence.entity.Member;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-	Optional<Member> findByEmailAndPassword(String email, String password);
+	Optional<Member> findByNickname(String nickname);
 
 	Optional<Member> findByEmail(String email);
 

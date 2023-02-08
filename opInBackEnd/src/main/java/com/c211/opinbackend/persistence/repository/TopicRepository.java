@@ -11,4 +11,10 @@ import com.c211.opinbackend.persistence.entity.Topic;
 public interface TopicRepository extends JpaRepository<Topic, Long> {
 
 	Optional<Topic> findById(String id);
+
+	Optional<Topic> findByTitle(String title);
+
+	boolean existsByTitle(String title);
+
+	Topic save(Topic topic);
 }
