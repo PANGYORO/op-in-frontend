@@ -115,6 +115,7 @@ export default function TagInfo(props) {
           id={props.title + "-plus"}
           type="button"
           onClick={() => {
+            // document.getElementById("add" + props.title).focus();
             setOpenState(true);
           }}
           className="ml-4 px-3 py-1 text-white bg-slate-700 hover:bg-slate-800 focus:ring-4 focus:outline-none focus:ring-slate-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:ring-slate-800"

@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.c211.opinbackend.exception.repotechlan.RepoTechLangExceptionEnum;
 import com.c211.opinbackend.exception.repotechlan.RepoTechLangRuntimeException;
-import com.c211.opinbackend.repo.entitiy.Repository;
-import com.c211.opinbackend.repo.entitiy.RepositoryTechLanguage;
-import com.c211.opinbackend.repo.repository.RepoTechLanguageRepository;
+import com.c211.opinbackend.persistence.entity.Repository;
+import com.c211.opinbackend.persistence.entity.RepositoryTechLanguage;
+import com.c211.opinbackend.persistence.repository.RepoTechLanguageRepository;
 
 import lombok.AllArgsConstructor;
 
