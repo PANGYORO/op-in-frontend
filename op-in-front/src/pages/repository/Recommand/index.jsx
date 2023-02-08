@@ -6,24 +6,22 @@ import http from "@api/http";
 //axios 사용해서 정보 전달
 
 function RecommandIndex() {
-  // const [myrepo, setMyInfo] = useState(["1", "2"]);
+  const [myrepo, setMyInfo] = useState([]);
 
-  // async function getRepo() {
-  //   await http
-  //     .post("repo/member", {
-  //       email: "krocd@naver.com",
-  //     })
-  //     .then((response) => {
-  //       // console.log(response.data);
-  //       setMyInfo(response.data);
-  //     })
-  //     .catch(() => console.log("error"));
-  //   console.log();
-  // }
+  async function getRepo() {
+    await http
+      .post("post/")
+      .then((response) => {
+        console.log(myrepo);
+        setMyInfo(response.data);
+      })
+      .catch(() => console.log("error"));
+    console.log("error");
+  }
 
-  // useEffect(() => {
-  //   getRepo();
-  // }, []);
+  useEffect(() => {
+    getRepo();
+  }, []);
 
   return (
     <div className="z-40 items-center w-full h-15 pb-3 dark:bg-gray-700 rounded-t-2xl">
@@ -37,7 +35,7 @@ function RecommandIndex() {
             _techLangs={data._techLangs}
           />
         ))} */}
-        <RecommandRepo/>
+        <RecommandRepo />
       </div>
     </div>
   );
