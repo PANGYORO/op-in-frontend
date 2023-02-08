@@ -46,7 +46,6 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 		Repository repository = repoRepository.findById(repositoryId).orElseThrow(
 			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION)
 		);
-		log.info(repository.getName());
 		// 등록하는 맴버를 찾는다.
 		Member member = memberRepository.findByEmail(memberEmail)
 			.orElseThrow(() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION));
