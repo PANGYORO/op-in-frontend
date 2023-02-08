@@ -82,8 +82,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public Optional<Member> findByEmail(String email) {
-		Optional<Member> byEmail = memberRepository.findByEmail(email);
-		return byEmail;
+		return memberRepository.findByEmail(email);
 	}
 
 	@Override
