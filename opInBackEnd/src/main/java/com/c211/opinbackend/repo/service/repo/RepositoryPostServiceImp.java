@@ -110,9 +110,6 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 	@Override
 	@Transactional
 	public Boolean deleteRepo(Long postId) {
-		RepositoryPost repositoryPost = repoPostRepository.findById(postId).orElseThrow(
-			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_EXIST_EXCEPTION)
-		);
 		repoPostRepository.deleteById(postId);
 		return true;
 	}
