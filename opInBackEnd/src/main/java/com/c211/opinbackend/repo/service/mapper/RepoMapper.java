@@ -72,12 +72,12 @@ public class RepoMapper {
 	public static Repository toEntity(Member member, RepoDto repoDto) {
 		Repository repositoryToSave = Repository
 			.builder()
+			.id(repoDto.getRepoId())
 			.member(member)
 			.name(repoDto.getName())
 			.fullName(repoDto.getFullName())
 			.htmlUrl(repoDto.getHtmlUrl())
 			.description(repoDto.getDescription())
-			.htmlUrl(repoDto.getHtmlUrl())
 			.secret(repoDto.getSecret())
 			.fork(repoDto.getFork())
 			.createdAt(repoDto.getCreateAt())

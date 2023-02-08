@@ -76,9 +76,6 @@ export default function FollowingPosts() {
       <div className="grid grid-cols-2 gap-4 w-full ml-4 h-screen overflow-auto">
         <Post />
         <Post />
-        <Post />
-        <Post />
-        <Post />
       </div>
       <PostModal open={open} setOpen={setOpen} />
     </>

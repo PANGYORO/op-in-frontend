@@ -10,6 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class RepoDto {
+	private Long repoId;
 	private String memberEmail;
 	private String name;
 	private String fullName;

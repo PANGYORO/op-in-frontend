@@ -1,6 +1,7 @@
 package com.c211.opinbackend.auth.jwt;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -35,9 +36,23 @@ public class JwtFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 		throws IOException, ServletException {
 
-		// 헤더에서 JWT 를 받아옵니다.
-		String accessToken = resolveAccessToken(request);
-		String refreshToken = resolveRefreshToken(request);
+		String accessToken = null;
+		String refreshToken = null;
+
+		try {
+			Cookie[] cookies = request.getCookies();
+			if (cookies != null) {
+				for (Cookie cookie : cookies) {
+					if (cookie.getName() == "accessToken")
+						accessToken = cookie.getValue();
+					if (cookie.getName() == "refreshToken")
+						refreshToken = cookie.getValue();
+				}
+			}
+		}
+		catch (Exception ex) {
+			throw new RemoteException("JwtFilter -> get Cookies error");
+		}
 
 		// 유효한 토큰인지 확인합니다.
 		if (accessToken != null) {
@@ -78,28 +93,6 @@ public class JwtFilter extends OncePerRequestFilter {
 		}
 
 		chain.doFilter(request, response);
-	}
-
-	private String resolveToken(HttpServletRequest request) {
-		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-			return bearerToken.substring(7);
-		}
-		return null;
-	}
-
-	public String resolveAccessToken(HttpServletRequest request) {
-		if (request.getHeader("authorization") != null) {
-			return request.getHeader("authorization").substring(7);
-		}
-		return null;
-	}
-
-	public String resolveRefreshToken(HttpServletRequest request) {
-		if (request.getHeader("refreshToken") != null) {
-			return request.getHeader("refreshToken").substring(7);
-		}
-		return null;
 	}
 
 }
