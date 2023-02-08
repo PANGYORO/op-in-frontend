@@ -14,9 +14,9 @@ function useToken() {
 
   const saveToken = useCallback((token) => {
     // setCookie("token", JSON.stringify(token));
-    for (const key in token) {
-      setCookie(key, token[key])
-    }
+    // for (const key in token) {
+    //   setCookie(key, token[key])
+    // }
     
     setToken(token);
   }, []);
