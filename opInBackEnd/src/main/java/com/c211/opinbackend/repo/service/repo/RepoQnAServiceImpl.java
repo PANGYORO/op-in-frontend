@@ -11,12 +11,16 @@ import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
 import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
+import com.c211.opinbackend.persistence.entity.Comment;
+import com.c211.opinbackend.persistence.entity.CommentType;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.entity.RepositoryQnA;
+import com.c211.opinbackend.persistence.repository.CommentRepository;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
 import com.c211.opinbackend.persistence.repository.RepoQnARepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
+import com.c211.opinbackend.repo.model.requeset.RequestComment;
 import com.c211.opinbackend.repo.model.requeset.RequestQnA;
 import com.c211.opinbackend.repo.model.response.QnAComment;
 import com.c211.opinbackend.repo.model.response.RepoQnAResponse;
@@ -28,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @AllArgsConstructor
 public class RepoQnAServiceImpl implements RepoQnAService {
+	private final CommentRepository commentRepository;
 	private final RepoRepository repoRepository;
 
 	private final RepoQnARepository repoQnARepository;
@@ -39,7 +44,7 @@ public class RepoQnAServiceImpl implements RepoQnAService {
 	}
 
 	@Override
-	public QnAComment getQnAComment() {
+	public List<QnAComment> getQnAComment() {
 		return null;
 	}
 
@@ -52,13 +57,50 @@ public class RepoQnAServiceImpl implements RepoQnAService {
 		Repository repository = repoRepository.findById(requestQnA.getRepoId()).orElseThrow(
 			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION)
 		);
-		RepositoryQnA repositoryQnA = RepositoryQnA.builder()
-			.authorMember(member)
-			.repository(repository)
-			.content(requestQnA.getComment())
-			.createTime(LocalDateTime.now())
-			.build();
-		repoQnARepository.save(repositoryQnA);
-		return null;
+		if (requestQnA.getComment().isBlank() || requestQnA.getComment() == null
+			|| requestQnA.getComment().length() == 0) {
+			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_QNA_CONTENT_EMPTY_EXCEPTION);
+		}
+		try {
+
+			RepositoryQnA repositoryQnA = RepositoryQnA.builder()
+				.authorMember(member)
+				.repository(repository)
+				.content(requestQnA.getComment())
+				.createTime(LocalDateTime.now())
+				.build();
+			repoQnARepository.save(repositoryQnA);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public Boolean creatQnAComment(RequestComment requestComment, String email) {
+		Member member = memberRepository.findByEmail(email)
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+		RepositoryQnA repositoryQnA = repoQnARepository.findById(requestComment.getQnaId()).orElseThrow(
+			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_QNA_COMMENT_EMPTY_EXCEPTION)
+		);
+		if (requestComment.getComment().isBlank() || requestComment.getComment() == null
+			|| requestComment.getComment().length() == 0) {
+			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_QNA_CONTENT_EMPTY_EXCEPTION);
+		}
+		try {
+			Comment comment = Comment.builder()
+				.commentType(CommentType.QNA)
+				.createDate(LocalDateTime.now())
+				.updateDate(LocalDateTime.now())
+				.content(requestComment.getComment())
+				.member(member)
+				.repositoryQnA(repositoryQnA)
+				.repositoryPost(null)
+				.build();
+			commentRepository.save(comment);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
+import com.c211.opinbackend.repo.model.requeset.RequestComment;
 import com.c211.opinbackend.repo.model.requeset.RequestQnA;
 import com.c211.opinbackend.repo.service.repo.RepoQnAService;
 import com.c211.opinbackend.util.SecurityUtil;
@@ -27,9 +28,20 @@ public class RepoQnAController {
 	public ResponseEntity<?> createQnA(@RequestBody RequestQnA requestQnA) {
 		String memberEmail = SecurityUtil.getCurrentUserId()
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+		if (!repoQnAService.createRepoQnA(requestQnA, memberEmail)) {
+			return ResponseEntity.badRequest().body(false);
+		}
+		return ResponseEntity.ok().body(true);
+	}
 
-		repoQnAService.createRepoQnA(requestQnA, memberEmail);
-		return null;
+	@PostMapping("/comment")
+	public ResponseEntity<?> createComment(@RequestBody RequestComment comment) {
+		String memberEmail = SecurityUtil.getCurrentUserId()
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+		if (!repoQnAService.creatQnAComment(comment, memberEmail)) {
+			return ResponseEntity.badRequest().body(false);
+		}
+		return ResponseEntity.ok().body(true);
 	}
 
 }
