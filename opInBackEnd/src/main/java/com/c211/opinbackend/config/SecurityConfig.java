@@ -79,7 +79,11 @@ public class SecurityConfig {
 			.accessDeniedHandler(jwtAccessDeniedHandler)
 
 			.and()
-			.apply(new JwtSecurityConfig(tokenProvider));
+			.apply(new JwtSecurityConfig(tokenProvider))
+
+			.and()
+			.authorizeRequests()
+			.requestMatchers(CorsUtils::isPreFlightRequest).permitAll();
 
 		return http.build();
 	}
