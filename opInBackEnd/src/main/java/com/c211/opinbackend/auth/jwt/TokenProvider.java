@@ -138,17 +138,15 @@ public class TokenProvider implements InitializingBean {
 	 * 토큰 유효성 검사하는 메서드
 	 */
 	public boolean validateToken(String token) {
-
-		boolean val = false;
-
 		try {
 			Jwts.parser().setSigningKey(key).parseClaimsJws(token);
-			val = true;
+			return true;
 		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
 			log.info("잘못된 JWT 서명입니다.");
 			throw new AuthRuntimeException(AUTH_JWT_SIGNATURE_EXCEPTION);
 		} catch (ExpiredJwtException e) {
 			log.info("만료된 JWT 토큰입니다.");
+			throw new AuthRuntimeException(AUTH_JWT_EXPIRED_EXCEPTION);
 		} catch (UnsupportedJwtException e) {
 			log.info("지원하지 않는 JWT토큰입니다.");
 			throw new AuthRuntimeException(AUTH_JWT_SUPPORT_EXCEPTION);
@@ -156,7 +154,6 @@ public class TokenProvider implements InitializingBean {
 			log.info("JWT토큰이 잘못되었습니다.");
 			throw new AuthRuntimeException(AUTH_JWT_SIGNATURE_EXCEPTION);
 		}
-		return val;
 	}
 
 	/*

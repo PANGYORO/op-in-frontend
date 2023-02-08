@@ -12,4 +12,6 @@ import com.c211.opinbackend.persistence.entity.MemberTopic;
 public interface MemberTopicRepository extends JpaRepository<MemberTopic, Long> {
 
 	List<MemberTopic> findByMember(Member member);
+
+	MemberTopic save(MemberTopic memberTopic);
 }
