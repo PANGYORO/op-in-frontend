@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @AllArgsConstructor
-@Builder()
+@Builder
 @NoArgsConstructor
 public class Repository {
 	@Id
@@ -78,5 +78,4 @@ public class Repository {
 
 	@OneToMany(mappedBy = "repository")
 	List<RepositoryTopic> topicList = new ArrayList<>();
-
 }

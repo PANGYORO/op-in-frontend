@@ -110,7 +110,11 @@ public class OAuthServiceImpl implements OAuthService {
 	@Transactional
 	public Member saveOrUpdate(MemberDto memberDto) {
 		Member member = memberRepository.findByGithubId(memberDto.getGithubId())
-			.map(entity -> entity.fetch(memberDto.getGithubToken(), memberDto.getAvatarUrl()))
+			.map(entity ->
+				entity.fetch(memberDto.getGithubToken(),
+					memberDto.getAvatarUrl(),
+					memberDto.getGithubUserName()
+				))
 			.orElseGet(memberDto::toMember);
 
 		return memberRepository.save(member);
@@ -129,6 +133,7 @@ public class OAuthServiceImpl implements OAuthService {
 		return MemberDto.builder()
 			.githubId(String.valueOf(userAttributes.get("id")))
 			.githubToken(tokenResponse.getAccessToken())
+			.githubUserName(String.valueOf(userAttributes.get("login")))
 			.githubSyncFl(true)
 			.password(new BCryptPasswordEncoder().encode(""))
 			.email(userAttributes.get("id") + "@github.io")

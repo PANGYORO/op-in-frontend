@@ -164,7 +164,7 @@ export default function Example() {
                           {({ active }) => (
                             <Link
                               to="/userdetail"
-                              state={user.email}
+                              state={user.nickname}
                               className={classNames(
                                 active ? "flex flex-col bg-gray-100 items-center" : "",
                                 "flex flex-col items-center block px-4 py-2 text-sm text-gray-700"

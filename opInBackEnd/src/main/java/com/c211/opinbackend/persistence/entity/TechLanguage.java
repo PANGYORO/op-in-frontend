@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Builder
+@Builder()
 @NoArgsConstructor
 @AllArgsConstructor
 public class TechLanguage {
