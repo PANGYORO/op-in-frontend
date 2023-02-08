@@ -65,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public TokenDto authorize(String email, String password) {
 		Member member = memberRepository.findByEmail(email).orElseThrow(()->new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
-		if (!passwordEncoder.matches(member.getPassword(), password)) {
+		if (!passwordEncoder.matches(password, member.getPassword())) {
 			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_WRONG_EXCEPTION);
 		}
 
