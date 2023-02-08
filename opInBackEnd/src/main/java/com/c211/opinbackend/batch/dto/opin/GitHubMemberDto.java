@@ -1,4 +1,4 @@
-package com.c211.opinbackend.batch.dto;
+package com.c211.opinbackend.batch.dto.opin;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -11,4 +11,5 @@ public class GitHubMemberDto {
 	private Long id;
 	private String githubToken;
 	private String githubId;
+	private String githubUserName;
 }
