@@ -21,7 +21,9 @@ import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.exception.auth.AuthRuntimeException;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
+import com.c211.opinbackend.member.model.request.TechLanguageRequest;
 import com.c211.opinbackend.member.model.request.TopicAndLanguageRequest;
+import com.c211.opinbackend.member.model.request.TopicRequest;
 import com.c211.opinbackend.member.service.MemberService;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.util.SecurityUtil;
@@ -134,6 +136,26 @@ public class MemberController {
 	@PostMapping("/topic/language/put")
 	public ResponseEntity<?> saveTopicAndLanguage(@RequestBody TopicAndLanguageRequest request) {
 		if (memberService.saveTopic(request.getTopic()) && memberService.saveTechLanguage(request.getLan())) {
+			return ResponseEntity.ok(true);
+		} else {
+			throw new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION);
+		}
+	}
+	
+	// Topic 따로 저장
+	@PostMapping("/topic/put")
+	public ResponseEntity<?> saveTopic(@RequestBody TopicRequest request) {
+		if (memberService.saveTopic(request.getTopic())) {
+			return ResponseEntity.ok(true);
+		} else {
+			throw new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION);
+		}
+	}
+
+	// Tech Language 따로 저장
+	@PostMapping("/language/put")
+	public ResponseEntity<?> saveTechLanguage(@RequestBody TechLanguageRequest request) {
+		if (memberService.saveTechLanguage(request.getLan())) {
 			return ResponseEntity.ok(true);
 		} else {
 			throw new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION);
