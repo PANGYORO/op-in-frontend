@@ -8,6 +8,7 @@ import "prismjs/themes/prism.css";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 import fontSize from "tui-editor-plugin-font-size";
+import http from "@api/http";
 
 export default function PostModal({ open, setOpen, propFunction }) {
   const cancelButtonRef = useRef(null);
@@ -28,6 +29,19 @@ export default function PostModal({ open, setOpen, propFunction }) {
 
   const createPost = async () => {
     // 서버에 데이터 보내는 로직
+    await http
+      .post(`post`, {
+        repositoryId: 1,
+        title: title,
+        content: data,
+      })
+      .then(() => {
+        console.log("success");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     propFunction({
       title: title,
       content: data,

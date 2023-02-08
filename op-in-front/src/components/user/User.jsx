@@ -1,7 +1,7 @@
 import React from "react";
 import BasicProfile from "@assets/basicprofile.png";
 
-export default function Basic() {
+export default function User() {
   return (
     <div className="w-full bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       <div className="flex justify-end px-4 pt-6"></div>
@@ -13,12 +13,8 @@ export default function Basic() {
             alt="Profile image"
           />
           <div>
-            <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-              Bonnie Green
-            </h5>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              Visual Designer
-            </span>
+            <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">Bonnie Green</h5>
+            <span className="text-sm text-gray-500 dark:text-gray-400">Visual Designer</span>
           </div>
         </div>
         <div className="flex mt-4 space-x-3 md:mt-6">

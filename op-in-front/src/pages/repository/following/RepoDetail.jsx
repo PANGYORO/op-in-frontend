@@ -7,11 +7,36 @@ import { useLocation } from "react-router-dom";
 const POSTS_TAB = "posts";
 const QNAS_TAB = "qnas";
 
+// const repoData = {
+//   id: 2,
+//   title: "test title",
+//   content: "test content",
+//   techLangs: ["java", "C++", "HTML"],
+//   contributors: [
+//     {
+//       nickname: "testmj",
+//       id: "1",
+//       profileImg: null,
+//     },
+//     {
+//       nickname: "testmj2",
+//       id: "2",
+//       profileImg: null,
+//     },
+//   ],
+//   gitContributors: null,
+//   star: "12334",
+//   forkNum: "1232",
+//   topicList: ["JPA", "Security", "Django"],
+//   updateDate: null,
+// };
 export default function RepoDetail() {
   const [tab, setTab] = useState(POSTS_TAB);
 
   const location = useLocation();
-  const repoValue = location.state;
+  const repoDetail = location.state;
+
+  console.log(repoDetail);
 
   const onClick = useCallback((item) => {
     setTab(item);
@@ -29,7 +54,7 @@ export default function RepoDetail() {
           <header className="z-40 items-center w-full h-15 pb-3 bg-white shadow-lg dark:bg-gray-700 rounded-t-2xl">
             <div className="pt-3 pl-3 text-2xl">
               <span className="font-semibold"> Current Repository :&nbsp;</span>
-              <span className="font-bold"> {repoValue}</span>
+              <span className="font-bold"> {repoDetail.title}</span>
             </div>
             <ul className="pt-3 pl-3 flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
               <li className="mr-2">
@@ -54,7 +79,7 @@ export default function RepoDetail() {
         <div className="mr-4">{tab == POSTS_TAB ? <FollowingPosts /> : <FollowingQnas />}</div>
       </div>
       <div className="w-1/3 h-full">
-        <Status />
+        <Status repoDetail={repoDetail} />
       </div>
     </div>
   );
