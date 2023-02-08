@@ -32,6 +32,7 @@
     "react-tooltip": "^5.7.2",
     "react-use": "^17.4.0",
     "recoil": "^0.7.6",
+    "styled-components": "^5.3.6",
     "tui-editor-plugin-font-size": "^1.0.4",
     "universal-cookie": "^4.0.4"
   },
