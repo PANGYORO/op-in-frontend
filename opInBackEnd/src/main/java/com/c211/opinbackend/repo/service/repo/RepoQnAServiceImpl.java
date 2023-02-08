@@ -3,6 +3,8 @@ package com.c211.opinbackend.repo.service.repo;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
@@ -42,6 +44,7 @@ public class RepoQnAServiceImpl implements RepoQnAService {
 	}
 
 	@Override
+	@Transactional
 	public Boolean createRepoQnA(RequestQnA requestQnA, String email) {
 
 		Member member = memberRepository.findByEmail(email)
