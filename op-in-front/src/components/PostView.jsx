@@ -27,6 +27,7 @@ export default function PostView() {
   //     .catch(() => alert("error"));
   //   // console.log(myinfo);
   // }
+  
 
   // useEffect(() => {
   //   getRepo();
