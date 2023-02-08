@@ -54,11 +54,6 @@ public class JwtFilter extends OncePerRequestFilter {
 			throw new RemoteException("JwtFilter -> get Cookies error");
 		}
 
-
-		// 헤더에서 JWT 를 받아옵니다.
-		// String accessToken = resolveAccessToken(request);
-		// String refreshToken = resolveRefreshToken(request);
-
 		// 유효한 토큰인지 확인합니다.
 		if (accessToken != null) {
 			// 어세스 토큰이 유효한 상황
@@ -98,26 +93,6 @@ public class JwtFilter extends OncePerRequestFilter {
 		}
 
 		chain.doFilter(request, response);
-	}
-
-	private String resolveToken(HttpServletRequest request) {
-		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-			return bearerToken.substring(7);
-		}
-		return null;
-	}
-
-	public String resolveAccessToken(HttpServletRequest request) {
-		if (request.getHeader("authorization") != null)
-			return request.getHeader("authorization").substring(7);
-		return null;
-	}
-
-	public String resolveRefreshToken(HttpServletRequest request) {
-		if (request.getHeader("refreshToken") != null)
-			return request.getHeader("refreshToken").substring(7);
-		return null;
 	}
 
 }
