@@ -14,5 +14,5 @@ public class RepoQnAResponse {
 	private String authorAvatar;
 	private LocalDateTime createTime;
 	private String content;
-	private List<QnAComment> qnACommentList = new ArrayList<>();
+	private List<CommentSimpleResponse> qnACommentList = new ArrayList<>();
 }

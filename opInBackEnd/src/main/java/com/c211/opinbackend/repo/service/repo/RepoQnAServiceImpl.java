@@ -1,6 +1,7 @@
 package com.c211.opinbackend.repo.service.repo;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -22,8 +23,8 @@ import com.c211.opinbackend.persistence.repository.RepoQnARepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
 import com.c211.opinbackend.repo.model.requeset.RequestComment;
 import com.c211.opinbackend.repo.model.requeset.RequestQnA;
-import com.c211.opinbackend.repo.model.response.QnAComment;
 import com.c211.opinbackend.repo.model.response.RepoQnAResponse;
+import com.c211.opinbackend.repo.service.mapper.QnaMapper;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,13 +40,16 @@ public class RepoQnAServiceImpl implements RepoQnAService {
 	private final MemberRepository memberRepository;
 
 	@Override
-	public List<RepoQnAResponse> getRepoQnALIst() {
-		return null;
-	}
-
-	@Override
-	public List<QnAComment> getQnAComment() {
-		return null;
+	public List<RepoQnAResponse> getRepoQnALIst(Long repoId) {
+		List<RepoQnAResponse> res = new ArrayList<>();
+		repoRepository.findById(repoId)
+			.orElseThrow(() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION));
+		List<RepositoryQnA> qnAList = repoQnARepository.findByRepositoryId(repoId);
+		for (RepositoryQnA repoQnA : qnAList) {
+			List<Comment> byRepositoryQnAId = commentRepository.findByRepositoryQnAId(repoQnA.getId());
+			res.add(QnaMapper.entityToResponseQnA(repoQnA, byRepositoryQnAId));
+		}
+		return res;
 	}
 
 	@Override
