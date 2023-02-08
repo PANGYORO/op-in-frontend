@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.c211.opinbackend.repo.model.contributor.RepositoryContributorDto;
-import com.c211.opinbackend.repo.model.response.repoTechLang.RepoTechLangDto;
 
 import lombok.Builder;
 import lombok.Getter;
