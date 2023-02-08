@@ -63,13 +63,14 @@ public class OAuthServiceImpl implements OAuthService {
 
 	/**
 	 * github OAuth를 위한 Redirect 주소를 리턴합니다.
+	 *
 	 * @return
 	 */
 	@Override
-	public String getRedirectURL(String redirectUri) {
+	public String getRedirectUrl(String redirectUri) {
 
-		return GitHub.AUTHORIZE_URL + "?client_id=" + clientId +
-			(redirectUri != null ? "&redirect_uri=" + redirectUri : "");
+		return GitHub.AUTHORIZE_URL + "?client_id=" + clientId
+			+ (redirectUri != null ? "&redirect_uri=" + redirectUri : "");
 	}
 
 	@Override
@@ -102,6 +103,7 @@ public class OAuthServiceImpl implements OAuthService {
 
 	/**
 	 * 깃헙 아이디가 이미 등록되어 있다면, 깃헙의 정보를 업데이트 시켜줍니다.
+	 *
 	 * @param memberDto
 	 * @return member
 	 */
@@ -122,6 +124,7 @@ public class OAuthServiceImpl implements OAuthService {
 	 * Github으로부터 Member의 정보를 가져와 MemberDto로 넣어줍니다.
 	 * email은 {github_id}@github.io 로 설정합니다 -> 이메일이 unique해야 하므로!
 	 * nickname은 {github_id}.{random숫자 6자리}로 설정합니다.
+	 *
 	 * @param tokenResponse
 	 * @return MemberDto
 	 */
@@ -169,6 +172,7 @@ public class OAuthServiceImpl implements OAuthService {
 
 	/**
 	 * OAuth 처리 과정에서 token을 가져올 때, formData를 전송합니다.
+	 *
 	 * @param code
 	 * @return
 	 */

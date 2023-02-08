@@ -1,9 +1,49 @@
 import React, { useState } from "react";
 import QnA from "@components/repository/QnA";
 import QnaModal from "@components/modals/QnaModal";
+import QnaDemo from "@components/repository/QnaDemo";
+import { userInfo } from "@recoil/user/atoms";
+import { useRecoilValue } from "recoil";
 
+const QnaDummy = [
+  {
+    nickname: "A",
+    content: "hello11111111111111111111111111111111111111111111111111111",
+  },
+  {
+    nickname: "B",
+    content: "hello22222",
+  },
+  {
+    nickname: "C",
+    content: "hello33333",
+  },
+  {
+    nickname: "D",
+    content: "hello44444",
+  },
+];
 export default function FollowingQnas() {
   const [open, setOpen] = useState(false);
+  const user = useRecoilValue(userInfo);
+
+  const rendering = (list) => {
+    const result = [];
+    for (let i = 0; i < (list.length == null ? 0 : list.length); i++) {
+      result.push(
+        // <div>hello</div>
+        <QnaDemo key={i} user_nickname={list[i].nickname} qna_content={list[i].content} />
+      );
+    }
+    return result;
+  };
+
+  const highFunction = (text) => {
+    QnaDummy.push({
+      nickname: user.nickname,
+      content: text,
+    });
+  };
 
   function toggleModal() {
     setOpen((prev) => !prev);
@@ -76,12 +116,9 @@ export default function FollowingQnas() {
 
       <div className="ml-4 w-full h-screen overflow-auto">
         <QnA />
-        <QnA />
-        <QnA />
-        <QnA />
-        <QnA />
+        {rendering(QnaDummy)}
       </div>
-      <QnaModal open={open} setOpen={setOpen} />
+      <QnaModal open={open} setOpen={setOpen} propFunction={highFunction} />
     </>
   );
 }

@@ -12,7 +12,7 @@ import PasswordModifyModal from "@components/modals/PasswordModifyModal";
 export default function Detail() {
   const [myinfo, setMyInfo] = useState("");
   const location = useLocation();
-  const currentEmail = location.state;
+  const currentNick = location.state;
   const [open, setOpen] = useState(false);
 
   function toggleModal() {
@@ -24,7 +24,7 @@ export default function Detail() {
   async function getMember() {
     await http
       .post(`member/mypage`, {
-        email: currentEmail,
+        nickname: currentNick,
       })
       .then((response) => {
         // alert(currentEmail);
@@ -53,7 +53,7 @@ export default function Detail() {
                 <div className="grid grid-cols-2 gap-2 justify-items-between">
                   <div className="bg-prinavy self-center"> {myinfo.nickname}</div>
                   <div className="self-center">
-                    {user.email == currentEmail ? (
+                    {user.nickname == currentNick ? (
                       <button
                         type="button"
                         disabled=""

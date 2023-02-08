@@ -19,7 +19,7 @@ export default function QnA() {
             </div>
           </div>
 
-          <div className="ml-6">
+          <div className="mx-6">
             <p className="flex items-baseline">
               <span className="font-bold text-gray-600 dark:text-gray-200">A Msan</span>
               <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">2 months ago</span>

@@ -1,4 +1,4 @@
-package com.c211.opinbackend.repo.service.repoTechlag;
+package com.c211.opinbackend.repo.service.repotechlag;
 
 import java.util.List;
 

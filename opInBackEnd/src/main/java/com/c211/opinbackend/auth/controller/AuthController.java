@@ -7,6 +7,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -42,6 +43,12 @@ public class AuthController {
 	private final AuthService authService;
 	private final MemberService memberService;
 
+	@Value("${jwt.access-token-validity-in-seconds}")
+	private long accessTokenValidityInSeconds;
+
+	@Value("${jwt.refresh-token-validity-in-seconds}")
+	private long refreshTokenValidityInSeconds;
+
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody MemberLoginRequest request, HttpServletResponse response) {
 		if (memberService.isOAuthMember(request.getEmail())) {
@@ -54,10 +61,12 @@ public class AuthController {
 		// 쿠키 생성
 		Cookie cookie = new Cookie("accessToken", token.getAccessToken());
 		cookie.setPath("/");
+		cookie.setMaxAge(((int)accessTokenValidityInSeconds/1000)-1);
 		response.addCookie(cookie);
 
 		Cookie cookie2 = new Cookie("refreshToken", token.getRefreshToken());
 		cookie2.setPath("/");
+		cookie2.setMaxAge(((int)refreshTokenValidityInSeconds/1000)-1);
 		response.addCookie(cookie2);
 
 		return new ResponseEntity<TokenDto>(token, httpHeaders, HttpStatus.OK);

@@ -1,8 +1,6 @@
 package com.c211.opinbackend.batch.step;
 
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
@@ -11,10 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.c211.opinbackend.batch.dto.github.CommitDto;
 import com.c211.opinbackend.batch.dto.github.RepositoryDto;
 import com.c211.opinbackend.batch.dto.github.UserDto;
-import com.c211.opinbackend.batch.dto.mapper.MemberMapper;
-import com.c211.opinbackend.batch.dto.opin.GitHubMemberDto;
 import com.c211.opinbackend.constant.GitHub;
-import com.c211.opinbackend.member.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,17 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class Action {
-
-	private final MemberService memberService;
-
-	private List<GitHubMemberDto> getGitHubSyncMembers() {
-		return memberService.getGitHubSyncMembers()
-			.stream()
-			.map(member ->
-				MemberMapper.toGitHubMemberDto(member)
-			)
-			.collect(Collectors.toList());
-	}
 
 	public static UserDto getMemberInfo(String githubUserName) {
 		return WebClient.create()

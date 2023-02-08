@@ -13,4 +13,6 @@ public interface TechLanguageRepository extends JpaRepository<TechLanguage, Long
 	Optional<TechLanguage> findById(String id);
 
 	Optional<TechLanguage> findByTitle(String title);
+
+	TechLanguage save(TechLanguage techLanguage);
 }
