@@ -1,4 +1,4 @@
-package com.c211.opinbackend.batch.service;
+package com.c211.opinbackend.batch.step;
 
 import java.util.Arrays;
 import java.util.Map;

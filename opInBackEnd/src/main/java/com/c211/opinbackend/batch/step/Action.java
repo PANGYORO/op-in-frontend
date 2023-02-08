@@ -1,4 +1,4 @@
-package com.c211.opinbackend.batch.service;
+package com.c211.opinbackend.batch.step;
 
 import java.util.List;
 import java.util.Map;
@@ -11,8 +11,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.c211.opinbackend.batch.dto.github.CommitDto;
 import com.c211.opinbackend.batch.dto.github.RepositoryDto;
 import com.c211.opinbackend.batch.dto.github.UserDto;
+import com.c211.opinbackend.batch.dto.mapper.MemberMapper;
 import com.c211.opinbackend.batch.dto.opin.GitHubMemberDto;
-import com.c211.opinbackend.batch.service.mapper.MemberMapper;
 import com.c211.opinbackend.constant.GitHub;
 import com.c211.opinbackend.member.service.MemberService;
 

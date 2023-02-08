@@ -1,4 +1,4 @@
-package com.c211.opinbackend.batch.service.mapper;
+package com.c211.opinbackend.batch.dto.mapper;
 
 import com.c211.opinbackend.batch.dto.opin.GitHubMemberDto;
 import com.c211.opinbackend.persistence.entity.Member;
