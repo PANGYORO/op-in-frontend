@@ -9,11 +9,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Builder
 @Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class MemberTechLanguage {
 	@Id
 	@GeneratedValue
