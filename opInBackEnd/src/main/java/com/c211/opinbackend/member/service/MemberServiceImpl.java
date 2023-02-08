@@ -472,5 +472,20 @@ public class MemberServiceImpl implements MemberService {
 	/*
 	 * GET Tech Language 전체 목록
 	 * */
+	@Override
+	public List<TechLanguageResponse> getListTechLanguage() {
+		List<TechLanguage> lanList = techLanguageRepository.findAll();
+		List<TechLanguageResponse> responses = new ArrayList<TechLanguageResponse>();
 
+		for(TechLanguage lan : lanList) {
+			TechLanguageResponse techLanguageResponse = TechLanguageResponse.builder()
+				.id(lan.getId())
+				.title(lan.getTitle())
+				.build();
+
+			responses.add(techLanguageResponse);
+		}
+
+		return responses;
+	}
 }

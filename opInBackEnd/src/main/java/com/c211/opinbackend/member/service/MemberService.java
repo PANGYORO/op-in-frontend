@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.c211.opinbackend.auth.model.response.MypageResponse;
+import com.c211.opinbackend.auth.model.response.TechLanguageResponse;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.MemberFollow;
 
@@ -38,4 +39,6 @@ public interface MemberService {
 	boolean saveTopic(List<String> topics);
 
 	boolean saveTechLanguage(List<String> languages);
+
+	List<TechLanguageResponse> getListTechLanguage();
 }
