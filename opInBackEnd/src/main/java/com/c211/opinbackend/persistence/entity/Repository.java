@@ -78,4 +78,16 @@ public class Repository {
 
 	@OneToMany(mappedBy = "repository")
 	List<RepositoryTopic> topicList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "repository")
+	List<PullRequest> pullRequestList = new ArrayList<>();
+
+	public void setPullRequestList(List<PullRequest> pullRequestList) {
+		for(PullRequest pr : pullRequestList) {
+			if(!pullRequestList.contains(pr)) {
+				pr.setRepository(this);
+				this.pullRequestList.add(pr);
+			}
+		}
+	}
 }
