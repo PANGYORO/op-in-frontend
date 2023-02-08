@@ -1,5 +1,5 @@
 import React from "react";
-import Repo from "@components/Repo";
+import Repo from "@components/repository/Repo";
 
 export default function Repos() {
   return (
