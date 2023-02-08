@@ -11,9 +11,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <RecoilRoot>
       <BrowserRouter>
-        <StrictMode>
-          <Main />
-        </StrictMode>
+        <Main />
       </BrowserRouter>
     </RecoilRoot>
   </React.StrictMode>
