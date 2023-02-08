@@ -69,4 +69,15 @@ public class RepositoryPost {
 			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_NULL_EXCEPTION);
 		}
 	}
+
+	public void fetchTile(String newTitle) {
+		if (newTitle.isBlank()) {
+			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_TITLE_EMPTY_EXCEPTION);
+		}
+		this.titleContent.changeTitle(newTitle);
+	}
+
+	public void fetchContent(String content) {
+		this.titleContent.changeContent(content);
+	}
 }

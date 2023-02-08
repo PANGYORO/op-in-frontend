@@ -20,4 +20,12 @@ public class TitleContent {
 	@NotNull
 	private String content;
 
+	public void changeTitle(String newTitle) {
+		this.title = newTitle;
+	}
+
+	public void changeContent(String newContent) {
+		this.content = newContent;
+	}
+
 }

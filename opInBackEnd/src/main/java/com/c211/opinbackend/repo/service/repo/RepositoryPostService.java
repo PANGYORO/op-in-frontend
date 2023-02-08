@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
+import com.c211.opinbackend.repo.model.requeset.RequestUpdatePost;
 import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 
@@ -22,5 +23,7 @@ public interface RepositoryPostService {
 	RepoPostDetailResponse getRepoDetail(Long postId);
 
 	Boolean deleteRepo(Long postId);
+
+	Boolean update(RequestUpdatePost post);
 
 }

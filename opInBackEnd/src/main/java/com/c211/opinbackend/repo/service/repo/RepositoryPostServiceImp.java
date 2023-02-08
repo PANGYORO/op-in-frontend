@@ -19,6 +19,7 @@ import com.c211.opinbackend.persistence.repository.RepoPostRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
 import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
+import com.c211.opinbackend.repo.model.requeset.RequestUpdatePost;
 import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 import com.c211.opinbackend.repo.service.mapper.RepoMapper;
@@ -114,6 +115,17 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_EXIST_EXCEPTION)
 		);
 		repoPostRepository.delete(repositoryPost);
+		return true;
+	}
+
+	@Override
+	@Transactional
+	public Boolean update(RequestUpdatePost post) {
+		RepositoryPost repositoryPost = repoPostRepository.findById(post.getPostId()).orElseThrow(
+			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_EXIST_EXCEPTION)
+		);
+		repositoryPost.fetchTile(post.getPostTile());
+		repositoryPost.fetchContent(post.getPostContent());
 		return true;
 	}
 }

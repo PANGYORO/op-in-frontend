@@ -17,6 +17,7 @@ import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.model.requeset.RequestCommentCreateToPost;
+import com.c211.opinbackend.repo.model.requeset.RequestUpdatePost;
 import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 import com.c211.opinbackend.repo.service.commnet.CommentService;
@@ -44,6 +45,7 @@ public class RepoPostController {
 				() -> new MemberRuntimeException(
 					MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
 			);
+			log.info(memberEmail);
 			repositoryPostService.createPostToRepository(createPostRequest, memberEmail);
 			return ResponseEntity.ok(HttpStatus.ACCEPTED);
 		} catch (Exception exception) {
@@ -80,8 +82,9 @@ public class RepoPostController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> updatePosts() {
-		return null;
+	public ResponseEntity<?> updatePosts(@RequestBody RequestUpdatePost post) {
+		repositoryPostService.update(post);
+		return ResponseEntity.ok().body(true);
 	}
 
 	@PostMapping("/delete/{postId}")
