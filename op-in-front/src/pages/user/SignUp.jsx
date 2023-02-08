@@ -46,7 +46,7 @@ function Nickname({ register, error, name }) {
 
   const callApi = debounce(async (value) => {
     await http
-      .post("auth/nickname/check", {
+      .post("member/nickname/check", {
         nickname: value,
       })
       .then((res) => {
@@ -148,10 +148,8 @@ function Password({ register, error, name, label }) {
             message: "비밀번호를 입력해주세요.",
           },
           pattern: {
-            value:
-              /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$/,
-            message:
-              "비밀번호는 대문자, 소문자, 특수문자, 숫자를 포함해야합니다 (8~16 글자)",
+            value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$/,
+            message: "비밀번호는 대문자, 소문자, 특수문자, 숫자를 포함해야합니다 (8~16 글자)",
           },
         })}
       />
@@ -200,7 +198,7 @@ function EmailInput({ register, error, name }) {
 
   const callApi = debounce(async (value) => {
     await http
-      .post("auth/email/check", {
+      .post("member/email/check", {
         email: value,
       })
       .then((res) => {
@@ -221,10 +219,7 @@ function EmailInput({ register, error, name }) {
 
   return (
     <div className="col-span-6 sm:col-span-3">
-      <label
-        htmlFor="email"
-        className="block text-sm font-medium text-gray-700"
-      >
+      <label htmlFor="email" className="block text-sm font-medium text-gray-700">
         Email Address
       </label>
       <input
@@ -328,12 +323,7 @@ function SignUpForm() {
               name="nickname"
               label="Nickname"
             />
-            <EmailInput
-              register={register}
-              error={errors?.email}
-              name="email"
-              check={false}
-            />
+            <EmailInput register={register} error={errors?.email} name="email" check={false} />
             <Password
               register={register}
               error={errors?.password}

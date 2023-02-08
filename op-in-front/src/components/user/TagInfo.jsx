@@ -1,4 +1,4 @@
-import React, { ReactDOM, useState } from "react";
+import React, { useState } from "react";
 import { Tooltip } from "react-tooltip";
 
 export default function TagInfo(props) {
@@ -29,12 +29,7 @@ export default function TagInfo(props) {
             </svg>
             {list[i]}
           </div>
-          <Tooltip
-            anchorId={tempid}
-            clickable
-            variant="light"
-            events={["hover"]}
-          >
+          <Tooltip anchorId={tempid} clickable variant="light" events={["hover"]}>
             <button
               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="button"
@@ -132,11 +127,7 @@ export default function TagInfo(props) {
             stroke="currentColor"
             className="w-5 h-5"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 4.5v15m7.5-7.5h-15"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
 
           <span className="sr-only">Icon description</span>
