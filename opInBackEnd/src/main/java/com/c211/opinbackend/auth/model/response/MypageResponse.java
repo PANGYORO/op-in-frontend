@@ -2,8 +2,6 @@ package com.c211.opinbackend.auth.model.response;
 
 import java.util.List;
 
-import com.c211.opinbackend.auth.entity.Badge;
-import com.c211.opinbackend.repo.entitiy.RepositoryPost;
 import com.c211.opinbackend.repo.model.response.RepositoryPostResponse;
 import com.c211.opinbackend.repo.model.response.RepositoryTitleResponse;
 import com.c211.opinbackend.repo.model.response.TopicResponse;
