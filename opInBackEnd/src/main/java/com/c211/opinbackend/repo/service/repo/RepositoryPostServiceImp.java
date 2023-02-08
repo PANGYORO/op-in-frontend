@@ -102,7 +102,6 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 	@Override
 	@Transactional
 	public List<RepoPostSimpleResponse> getRepoAllPostList(Long repoId) {
-		// TODO: 2023-02-08 이거 안됨 
 		Repository repository = repoRepository.findById(repoId).orElseThrow(
 			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION)
 		);
