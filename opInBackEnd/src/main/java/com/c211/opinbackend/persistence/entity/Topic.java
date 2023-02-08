@@ -5,10 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
 @Getter
+@Builder
 public class Topic {
 	@Id
 	@GeneratedValue

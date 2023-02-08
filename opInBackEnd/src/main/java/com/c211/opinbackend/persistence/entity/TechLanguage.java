@@ -7,10 +7,12 @@ import javax.persistence.Id;
 
 import com.sun.istack.NotNull;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
 @Getter
+@Builder
 public class TechLanguage {
 	@Id
 	@GeneratedValue
