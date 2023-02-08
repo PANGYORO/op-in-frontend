@@ -1,8 +1,8 @@
 import DefaultImg from "@assets/basicprofile.png";
-import Comment from "@components/repository/Comment";
+// import Comment from "@components/repository/Comment";
 import React from "react";
 
-export default function QnA() {
+export default function QnaDemo({ user_nickname, qna_content }) {
   return (
     <>
       <div className="w-full p-4 mb-6 bg-white rounded-lg shadow dark:bg-gray-800 sm:inline-block">
@@ -19,17 +19,13 @@ export default function QnA() {
             </div>
           </div>
 
-          <div className="mx-6">
+          <div className="ml-6">
             <p className="flex items-baseline">
-              <span className="font-bold text-gray-600 dark:text-gray-200">A Msan</span>
+              <span className="font-bold text-gray-600 dark:text-gray-200">{user_nickname}</span>
               <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">2 months ago</span>
             </p>
             <div className="mt-3">
-              <p className="mt-1 dark:text-white">
-                My first job of scanning photos at the Memories 2 Digital Photo Scanning was
-                fantastic. She completed the work quickly while I was waiting. Thanks for a great
-                service..
-              </p>
+              <p className="mt-1 dark:text-white">{qna_content}</p>
             </div>
 
             <div className="mt-3">
@@ -64,9 +60,9 @@ export default function QnA() {
             <hr className="my-4" />
             {/* 댓글 공간 */}
             <div className="grid grid-rows-1 gap-2">
+              {/* <Comment />
               <Comment />
-              <Comment />
-              <Comment />
+              <Comment /> */}
             </div>
           </div>
         </div>
