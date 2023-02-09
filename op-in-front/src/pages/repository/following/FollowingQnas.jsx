@@ -8,7 +8,7 @@ import { useRecoilValue } from "recoil";
 const QnaDummy = [
   {
     nickname: "A",
-    content: "hello11111111111111111111111111111111111111111111111111111",
+    content: "hello1111111",
   },
   {
     nickname: "B",
@@ -31,7 +31,6 @@ export default function FollowingQnas() {
     const result = [];
     for (let i = list.length == null ? -1 : list.length - 1; i >= 0; i--) {
       result.push(
-        // <div>hello</div>
         <QnaDemo key={i} user_nickname={list[i].nickname} qna_content={list[i].content} />
       );
     }
@@ -118,6 +117,7 @@ export default function FollowingQnas() {
         {rendering(QnaDummy)}
         <QnA />
       </div>
+      
       <QnaModal open={open} setOpen={setOpen} propFunction={highFunction} />
     </>
   );
