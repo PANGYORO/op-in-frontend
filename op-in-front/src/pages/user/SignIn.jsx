@@ -99,7 +99,7 @@ function EmailInput({ register, error }) {
   );
 }
 
-function LoginForm({ saveToken, setToast}) {
+function LoginForm({ setToast}) {
   const {
     register,
     handleSubmit,
@@ -114,14 +114,14 @@ function LoginForm({ saveToken, setToast}) {
   
   const onSubmit = async (data) => {
     try {
-      let res = await http.post("auth/login", {
+      await http.post("auth/login", {
         email: data.email,
         password: data.password,
       });
-      // const decodedUserInfo = jwt_decode(cookies.get('accessToken'));
+      const decodedUserInfo = jwt_decode(cookies.get('accessToken'));
       setUser((before) => ({
         ...before,
-        // ...decodedUserInfo,
+        ...decodedUserInfo,
         logined: true,
       }));
       // saveToken(res.data);

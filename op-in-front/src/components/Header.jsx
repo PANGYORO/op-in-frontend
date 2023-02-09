@@ -7,14 +7,13 @@ import { menuState } from "@recoil/sidebar/atoms";
 import { repoMenuState } from "@recoil/sidebar/atoms2";
 import { userInfo } from "@recoil/user/atoms";
 
-import { useToast } from '@hooks/useToast';
+import { useToast } from "@hooks/useToast";
 
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
-import http from '@api/http';
+import http from "@api/http";
 
 
-import "./headerfunc";
 
 const navigation = [
   //메뉴 목록
@@ -29,13 +28,12 @@ function classNames(...classes) {
 export default function Example() {
   const user = useRecoilValue(userInfo);
   const setUser = useSetRecoilState(userInfo);
-  
 
   const setCurrentMenu = useSetRecoilState(menuState);
   const setRepoCurrentMenu = useSetRecoilState(repoMenuState);
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
-  const { setToast } = useToast()
+  const { setToast } = useToast();
 
   function selectMenu(id) {
     console.log(searchValue);
@@ -190,7 +188,7 @@ export default function Example() {
                               onClick={async () => {
                                 try {
                                   await http.post("auth/logout", {});
-                                  setToast({message:'로그아웃 성공!'})
+                                  setToast({ message: "로그아웃 성공!" });
                                   setUser((before) => ({
                                     ...before,
                                     nickname: "",
@@ -199,13 +197,9 @@ export default function Example() {
                                     logined: false,
                                   }));
                                   navigate("/");
-                          
                                 } catch (error) {
-                                  setToast({message:error.response.data.message})
+                                  setToast({ message: error.response.data.message });
                                 }
-
-                            
-                                
                               }}
                             >
                               Sign out

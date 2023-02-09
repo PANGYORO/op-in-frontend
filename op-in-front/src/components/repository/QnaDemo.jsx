@@ -1,32 +1,41 @@
 import DefaultImg from "@assets/basicprofile.png";
 import Comment from "@components/repository/Comment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
 
-export default function QnaDemo({ user_nickname, qna_content, commentlist=[ {user:"A",content:"hello"},{user:"B",content:"hello"},{user:"C",content:"no hello"} ] }) {
-
+export default function QnaDemo({
+  user_nickname,
+  qna_content,
+  commentlist = [
+    { user: "A", content: "hello" },
+    { user: "B", content: "hello" },
+    { user: "C", content: "no hello" },
+  ],
+}) {
   const user = useRecoilValue(userInfo);
-  const Comments = commentlist;
-  const [text,setText] = useState("");
-  
+  const [text, setText] = useState("");
+  const [CommentList, setCommentList] = useState(...commentlist);
+
   const createComment = (data) => {
-    Comments.push({
-      user:user.nickname, 
-      content:data,
+    const newCommentList = [...CommentList];
+    newCommentList.push({
+      user: user.nickname,
+      content: data,
     });
-    console.log(Comments);
-  }
-  
+    setCommentList(newCommentList);
+    console.log(CommentList);
+  };
+
   const commentRender = (list) => {
     const result = [];
-    if(list != null) for(let i = 0; i < list.length; i++){
-      result.push(
-        <Comment key={i} _text ={list[i].content} _name={list[i].user}/>
-      );
-    }
+    if (list != null)
+      for (let i = 0; i < list.length; i++) {
+        result.push(<Comment key={i} _text={list[i].content} _name={list[i].user} />);
+      }
     return result;
-  }
+  };
+
   return (
     <>
       <div className="w-full p-4 mb-6 bg-white rounded-lg shadow dark:bg-gray-800 sm:inline-block">
@@ -61,8 +70,8 @@ export default function QnaDemo({ user_nickname, qna_content, commentlist=[ {use
                   id="chat"
                   rows="1"
                   value={text}
-                  onChange={(e)=>{
-                    setText(e.target.value) ;
+                  onChange={(e) => {
+                    setText(e.target.value);
                   }}
                   className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Leave a Comment..."
@@ -91,9 +100,7 @@ export default function QnaDemo({ user_nickname, qna_content, commentlist=[ {use
 
             <hr className="my-4" />
             {/* 댓글 공간 */}
-            <div className="grid grid-rows-1 gap-2">
-              {commentRender(Comments)}
-            </div>
+            <div className="grid grid-rows-1 gap-2">{commentRender(CommentList)}</div>
           </div>
         </div>
       </div>

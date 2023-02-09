@@ -115,7 +115,7 @@ export default function Detail() {
         type="button"
         disabled=""
         onClick={() => toggleModal()}
-        className={`py - 1 px-3 bg-green-600 hover:bg-green-700 focus:ring-green-500
+        className={`py-1 px-3 bg-green-600 hover:bg-green-700 focus:ring-green-500
         focus:ring-offset-red-200 text-white transition ease-in duration-200
         text-center font-semibold shadow-md focus:outline-none focus:ring-2
         focus:ring-offset-2 opacity-70 rounded-lg`}
