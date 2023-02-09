@@ -32,4 +32,12 @@ public class MemberTopic {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "TOPIC_ID")
 	private Topic topic;
+
+	public void setMember(Member member) {
+		this.member = member;
+	}
+
+	public void setTopic(Topic topic) {
+		this.topic = topic;
+	}
 }

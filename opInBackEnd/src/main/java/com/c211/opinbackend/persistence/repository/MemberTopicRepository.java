@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.c211.opinbackend.persistence.entity.Member;
+import com.c211.opinbackend.persistence.entity.MemberFollow;
 import com.c211.opinbackend.persistence.entity.MemberTopic;
 import com.c211.opinbackend.persistence.entity.Topic;
 
@@ -18,4 +19,7 @@ public interface MemberTopicRepository extends JpaRepository<MemberTopic, Long> 
 	Optional<MemberTopic> findByMemberAndTopic(Member member, Topic topic);
 
 	MemberTopic save(MemberTopic memberTopic);
+
+	@Override
+	void delete(MemberTopic entity);
 }

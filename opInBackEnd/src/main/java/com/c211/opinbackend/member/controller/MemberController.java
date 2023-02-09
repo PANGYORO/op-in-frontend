@@ -170,6 +170,16 @@ public class MemberController {
 		return new ResponseEntity<>(memberService.getListTechLanguage(), HttpStatus.OK);
 	}
 	
-	// 로그인돼 있으면 tech language
+	// member - tech language 단건 삭제
+	@PostMapping("/language/delete")
+	public ResponseEntity<?> deleteLoginMemberTechLanguage(@RequestBody TechLanguageRequest request) {
+		return ResponseEntity.ok(memberService.deleteLoginMemberTechLanguage(request.getTitle()));
+	}
+
+	// member - topic 단건 삭제
+	@PostMapping("/topic/delete")
+	public ResponseEntity<?> deleteLoginMemberTopic(@RequestBody TopicRequest request) {
+		return ResponseEntity.ok(memberService.deleteLoginMemberTopic(request.getTitle()));
+	}
 
 }
