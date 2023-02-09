@@ -6,7 +6,7 @@ import http from '@api/http'
 import { useRecoilValue } from "recoil";
 import { userInfo } from "@recoil/user/atoms";
 import { useToast } from '@hooks/useToast';
-import JoyRide from 'react-joyride'
+import Joyride from 'react-joyride'
 import { Steps } from '@assets/joyride'
 
 
@@ -174,13 +174,13 @@ function SelectTag() {
 
     
     <div className='mx-44'>
-      <JoyRide
+      <Joyride
         continuous
         hideCloseButton
         scrollToFirstStep
         showProgress
         showSkipButton
-        steps={Steps}
+        state={Steps}
       />
       <div className='py-8'>
         <div className="text-3xl">
