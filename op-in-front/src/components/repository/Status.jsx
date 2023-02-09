@@ -36,7 +36,7 @@ export default function Status({ repoDetail }) {
           <button
             key={i}
             type="button"
-            className="flex items-center w-auto px-3 py-1 text-base text-blue-600 bg-blue-200 rounded-full hover:bg-red-300 mx-1"
+            className="fpx-3 py-1 mb-3 text-base text-blue-600 bg-blue-200 rounded-full mx-1"
           >
             {list[i]}
           </button>
@@ -50,7 +50,7 @@ export default function Status({ repoDetail }) {
     } else return "";
   };
   return (
-    <div className="relative max-w-xs p-4 h-screen bg-white shadow-lg rounded-xl dark:bg-gray-800 ml-3 ">
+    <div className="overflow-hidden relative max-w-xs p-4 h-screen bg-white shadow-lg rounded-xl dark:bg-gray-800 ml-3 ">
       <div className="my-2">
         <span className="font-bold">Contributors</span>
         <div className="relative max-w-xs  my-2 h-full">
@@ -71,7 +71,7 @@ export default function Status({ repoDetail }) {
         {repoDetail.updateDate == null ? "no data" : repoDetail.updateDate}
       </div>
       <div className="my-2 font-bold">About</div>
-      <div className="inline-flex items-center w-auto my-2">{tagRender(repoDetail.techLangs)}</div>
+      <div className="grid grid-cols-3 my-2">{tagRender(repoDetail.techLangs)}</div>
       <div className="m-4">
         {/* <div>
           <div className="inline-flex">

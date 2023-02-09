@@ -43,4 +43,8 @@ public interface MemberService {
 	boolean saveLoginTechLanguage(String title);
 
 	List<TechLanguageResponse> getListTechLanguage();
+
+	boolean deleteLoginMemberTopic(String title);
+
+	boolean deleteLoginMemberTechLanguage(String title);
 }

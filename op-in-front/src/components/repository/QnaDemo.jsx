@@ -52,7 +52,7 @@ export default function QnaDemo({
             </div>
           </div>
 
-          <div className="ml-6">
+          <div className="w-full ml-6">
             <p className="flex items-baseline">
               <span className="font-bold text-gray-600 dark:text-gray-200">{user_nickname}</span>
               <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">2 months ago</span>

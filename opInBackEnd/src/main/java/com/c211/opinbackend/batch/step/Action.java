@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.c211.opinbackend.batch.dto.github.CommitDto;
+import com.c211.opinbackend.batch.dto.github.ContributorDto;
 import com.c211.opinbackend.batch.dto.github.PullRequestDto;
 import com.c211.opinbackend.batch.dto.github.RepositoryDto;
 import com.c211.opinbackend.batch.dto.github.UserDto;
@@ -70,5 +71,13 @@ public class Action {
 			.get()
 			.uri(GitHub.getPublicRepositoryPullsUrl(repositoryFullName))
 			.retrieve().bodyToMono(PullRequestDto[].class).block();
+	}
+
+	public static ContributorDto[] getContributors(String repositoryFullName) {
+		return WebClient.create()
+			.get()
+			.uri(GitHub.getPublicRepositoryContributorsUrl(repositoryFullName))
+			.retrieve().bodyToMono(ContributorDto[].class).block();
+
 	}
 }

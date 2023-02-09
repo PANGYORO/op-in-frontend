@@ -417,11 +417,12 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	/*
-	* SAVE 회원가입 시 topic, tech language 저장
-	* */
+	 * SAVE 회원가입 시 topic, tech language 저장
+	 * */
 	@Override
 	public boolean saveSignUpTopicAndTechLanguage(String email, List<String> topics, List<String> lans) {
-		Member member = memberRepository.findByEmail(email).orElseThrow(()->new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+		Member member = memberRepository.findByEmail(email)
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 		saveTopic(topics, member);
 		saveTechLanguage(lans, member);
 		return true;
@@ -438,10 +439,11 @@ public class MemberServiceImpl implements MemberService {
 					.build();
 
 				isTopic = topicRepository.save(newTopic);
-			}else {
+			} else {
 				// topic 과 member 의 관계가 있는지 확인
 				MemberTopic memberTopic = memberTopicRepository.findByMemberAndTopic(member, isTopic).orElse(null);
-				if (memberTopic != null) continue;
+				if (memberTopic != null)
+					continue;
 			}
 
 			//member topic 으로 이어주기
@@ -464,10 +466,12 @@ public class MemberServiceImpl implements MemberService {
 					.build();
 
 				language = techLanguageRepository.save(newLanguage);
-			}else {
+			} else {
 				// tech language 과 member 의 관계가 있는지 확인
-				MemberTechLanguage memberTechLanguage = memberTechLanguageRepository.findByMemberAndTechLanguage(member, language).orElse(null);
-				if (memberTechLanguage != null) continue;
+				MemberTechLanguage memberTechLanguage = memberTechLanguageRepository.findByMemberAndTechLanguage(member,
+					language).orElse(null);
+				if (memberTechLanguage != null)
+					continue;
 			}
 
 			//member tech language 으로 이어주기
@@ -530,7 +534,6 @@ public class MemberServiceImpl implements MemberService {
 		return true;
 	}
 
-
 	/*
 	 * GET Tech Language 전체 목록
 	 * */
@@ -539,7 +542,7 @@ public class MemberServiceImpl implements MemberService {
 		List<TechLanguage> lanList = techLanguageRepository.findAll();
 		List<TechLanguageResponse> responses = new ArrayList<TechLanguageResponse>();
 
-		for(TechLanguage lan : lanList) {
+		for (TechLanguage lan : lanList) {
 			TechLanguageResponse techLanguageResponse = TechLanguageResponse.builder()
 				.id(lan.getId())
 				.title(lan.getTitle())
@@ -551,5 +554,40 @@ public class MemberServiceImpl implements MemberService {
 		return responses;
 	}
 
+	@Override
+	@Transactional
+	public boolean deleteLoginMemberTopic(String title) {
+		MemberTopic memberTopic = memberTopicRepository.findByMemberAndTopic(getMember(),
+				topicRepository.findByTitle(title)
+					.orElseThrow(() -> new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION)))
+			.orElseThrow(() -> new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION));
+
+		memberTopic.setMember(null);
+		memberTopic.setTopic(null);
+		try {
+			memberTopicRepository.delete(memberTopic);
+		} catch (Exception e) {
+			throw new ApiRuntimeException(ApiExceptionEnum.API_CENTER_CALL_EXCEPTION);
+		}
+		return true;
+	}
+
+	@Override
+	@Transactional
+	public boolean deleteLoginMemberTechLanguage(String title) {
+		MemberTechLanguage memberTechLanguage = memberTechLanguageRepository.findByMemberAndTechLanguage(getMember(),
+				techLanguageRepository.findByTitle(title)
+					.orElseThrow(() -> new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION)))
+			.orElseThrow(() -> new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION));
+
+		memberTechLanguage.setMember(null);
+		memberTechLanguage.setTechLanguage(null);
+		try {
+			memberTechLanguageRepository.delete(memberTechLanguage);
+		} catch (Exception e) {
+			throw new ApiRuntimeException(ApiExceptionEnum.API_CENTER_CALL_EXCEPTION);
+		}
+		return true;
+	}
 
 }
