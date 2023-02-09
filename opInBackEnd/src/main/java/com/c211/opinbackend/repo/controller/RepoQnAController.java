@@ -36,10 +36,11 @@ public class RepoQnAController {
 	public ResponseEntity<?> createQnA(@RequestBody RequestQnA requestQnA) {
 		String memberEmail = SecurityUtil.getCurrentUserId()
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
-		if (!repoQnAService.createRepoQnA(requestQnA, memberEmail)) {
+		Long saveId = repoQnAService.createRepoQnA(requestQnA, memberEmail);
+		if (saveId == null) {
 			return ResponseEntity.badRequest().body(false);
 		}
-		return ResponseEntity.ok().body(true);
+		return ResponseEntity.ok().body(saveId);
 	}
 
 	@PostMapping("/comment")
