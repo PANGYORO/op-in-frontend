@@ -7,10 +7,9 @@ import { menuState } from "@recoil/sidebar/atoms";
 import { repoMenuState } from "@recoil/sidebar/atoms2";
 import { userInfo } from "@recoil/user/atoms";
 
-import { useToast } from '@hooks/useToast';
+import { useToast } from "@hooks/useToast";
 
 import { useRecoilValue, useSetRecoilState } from "recoil";
-
 
 import "./headerfunc";
 
@@ -27,13 +26,12 @@ function classNames(...classes) {
 export default function Example() {
   const user = useRecoilValue(userInfo);
   const setUser = useSetRecoilState(userInfo);
-  
 
   const setCurrentMenu = useSetRecoilState(menuState);
   const setRepoCurrentMenu = useSetRecoilState(repoMenuState);
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
-  const { setToast } = useToast()
+  const { setToast } = useToast();
 
   function selectMenu(id) {
     console.log(searchValue);
@@ -186,7 +184,7 @@ export default function Example() {
                                 "w-full block px-4 py-2 text-sm text-gray-700"
                               )}
                               onClick={() => {
-                                setToast({message:'로그아웃 성공!'})
+                                setToast({ message: "로그아웃 성공!" });
                                 setUser((before) => ({
                                   ...before,
                                   nickname: "",
@@ -196,7 +194,6 @@ export default function Example() {
                                 }));
 
                                 navigate("/");
-                                
                               }}
                             >
                               Sign out

@@ -23,7 +23,7 @@ public class RepositoryPostMemberLike {
 	@JoinColumn(name = "REPOSITORY_POST_ID")
 	private RepositoryPost repositoryPost;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MEMBER_ID")
 	private Member member;
 }

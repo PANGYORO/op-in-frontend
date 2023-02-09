@@ -9,6 +9,7 @@ const PostDummy = [
     postId: "1",
     createTime: "2023-02-08T02:18:39",
     post_content: "A",
+    title: "How to Handle React",
     likeCount: 0,
     commentCount: 0,
   },
@@ -16,6 +17,7 @@ const PostDummy = [
     postId: "2",
     createTime: "2023-02-08T02:18:39",
     post_content: "B",
+    title: "How to Handle HTML",
     likeCount: 0,
     commentCount: 0,
   },
@@ -23,6 +25,7 @@ const PostDummy = [
     postId: "3",
     createTime: "2023-02-08T02:18:39",
     post_content: "C",
+    title: "How to Handle Vue",
     likeCount: 2,
     commentCount: 0,
   },
@@ -30,6 +33,7 @@ const PostDummy = [
     postId: "4",
     createTime: "2023-02-08T02:18:39",
     post_content: "D",
+    title: "How to Handle C++",
     likeCount: 0,
     commentCount: 0,
   },
@@ -49,11 +53,12 @@ export default function FollowingPosts() {
       result.push(
         <RepoPost
           key={i}
-          _postId={list[i].postId}
-          _createTime={list[i].createTime}
+          postId={list[i].postId}
+          createTime={list[i].createTime}
+          title={list[i].title}
           post_content={list[i].post_content}
-          _likeCount={list[i].likeCount}
-          _commentCount={list[i].commentCount}
+          likeCount={list[i].likeCount}
+          commentCount={list[i].commentCount}
         />
       );
     }

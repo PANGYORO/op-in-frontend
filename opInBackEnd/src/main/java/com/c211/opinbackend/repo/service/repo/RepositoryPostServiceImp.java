@@ -76,15 +76,16 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 	public Boolean uploadRepository(String memberEmail, RepoDto repoDto) {
 		// 맴버 없이 래포지토리가 등록 가능해야한다
 		Member member = memberRepository.findByEmail(memberEmail)
-			.orElse(null);
+			.orElseGet(null);
 		try {
 
 			Repository repository = RepoMapper.toEntity(member, repoDto);
+			log.info(repository.getName());
 			repoRepository.save(repository);
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
-		return null;
+		return true;
 	}
 
 	@Override
@@ -141,6 +142,7 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 	}
 
 	@Override
+	@Transactional
 	public List<RepoPostSimpleResponse> getMembersRepoPost(String nickName) {
 		List<RepositoryPost> byMemberId = repoPostRepository.findByMember_Nickname(nickName);
 		log.info(String.valueOf(byMemberId.size()));

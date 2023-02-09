@@ -477,7 +477,7 @@ public class MemberServiceImpl implements MemberService {
 			//member tech language 으로 이어주기
 			MemberTechLanguage memberTechLanguage = MemberTechLanguage.builder()
 				.techLanguage(language)
-				.member(getMember())
+				.member(member)
 				.build();
 
 			memberTechLanguageRepository.save(memberTechLanguage);
