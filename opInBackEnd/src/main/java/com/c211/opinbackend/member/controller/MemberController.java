@@ -1,5 +1,6 @@
 package com.c211.opinbackend.member.controller;
 
+import java.io.IOException;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.c211.opinbackend.auth.model.request.MemberEmailRequest;
 import com.c211.opinbackend.auth.model.request.MemberLoginRequest;
@@ -26,7 +29,9 @@ import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.member.model.request.TechLanguageRequest;
 import com.c211.opinbackend.member.model.request.TopicAndLanguageRequest;
 import com.c211.opinbackend.member.model.request.TopicRequest;
+import com.c211.opinbackend.member.model.response.FileUploadResponse;
 import com.c211.opinbackend.member.service.MemberService;
+import com.c211.opinbackend.member.service.S3FileUploadService;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.util.SecurityUtil;
 
@@ -41,12 +46,16 @@ public class MemberController {
 
 	MailService mailService;
 
+	S3FileUploadService s3FileUploadService;
+
 	@Autowired
 	public MemberController(MemberService memberService,
-		MailService mailService
+		MailService mailService,
+		S3FileUploadService s3FileUploadService
 	) {
 		this.memberService = memberService;
 		this.mailService = mailService;
+		this.s3FileUploadService = s3FileUploadService;
 	}
 
 	// 마이페이지 정보 리턴
@@ -182,4 +191,12 @@ public class MemberController {
 		return ResponseEntity.ok(memberService.deleteLoginMemberTopic(request.getTitle()));
 	}
 
+	//유저 프로필 업로드
+	@PostMapping("/profilePhoto")
+	public ResponseEntity<?> uploadProfilePhoto(@RequestParam("profilePhoto") MultipartFile multipartFile) throws
+		IOException {
+		//S3 Bucket 내부에 "/profile"
+		FileUploadResponse profile = s3FileUploadService.upload(multipartFile, "profile");
+		return ResponseEntity.ok(profile);
+	}
 }
