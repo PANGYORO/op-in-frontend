@@ -2,7 +2,7 @@ import DefaultImg from "@assets/basicprofile.png";
 import Comment from "@components/repository/Comment";
 import React from "react";
 
-export default function QnA({}) {
+export default function QnA() {
   
   return (
     <>
