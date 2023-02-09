@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class RepoService {
-	final RepoRepository repoRepository;
+	private final RepoRepository repoRepository;
 
 	public List<RepositoryResponseDto> search(String query) {
 		List<RepositoryResponseDto> repositories = new ArrayList<>();
