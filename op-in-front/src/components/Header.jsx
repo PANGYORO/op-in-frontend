@@ -11,6 +11,8 @@ import { useToast } from '@hooks/useToast';
 
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
+import http from '@api/http';
+
 
 import "./headerfunc";
 
@@ -185,17 +187,24 @@ export default function Example() {
                                 active ? "w-full bg-gray-100" : "",
                                 "w-full block px-4 py-2 text-sm text-gray-700"
                               )}
-                              onClick={() => {
-                                setToast({message:'로그아웃 성공!'})
-                                setUser((before) => ({
-                                  ...before,
-                                  nickname: "",
-                                  email: "",
-                                  img_url: "",
-                                  logined: false,
-                                }));
+                              onClick={async () => {
+                                try {
+                                  await http.post("auth/logout", {});
+                                  setToast({message:'로그아웃 성공!'})
+                                  setUser((before) => ({
+                                    ...before,
+                                    nickname: "",
+                                    email: "",
+                                    img_url: "",
+                                    logined: false,
+                                  }));
+                                  navigate("/");
+                          
+                                } catch (error) {
+                                  setToast({message:error.response.data.message})
+                                }
 
-                                navigate("/");
+                            
                                 
                               }}
                             >

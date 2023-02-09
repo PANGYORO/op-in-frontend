@@ -17,16 +17,4 @@ export const Steps = [
     target: "#tagButton",
     placement:"top",
   },
-  {
-    title:"", 
-    content: "",
-    target: "",
-    placement:"",
-  },
-  {
-    title:"", 
-    content: "",
-    target: "",
-    placement:"",
-  },
 ]

@@ -7,7 +7,7 @@ import { useRecoilValue } from "recoil";
 import { userInfo } from "@recoil/user/atoms";
 import { useToast } from '@hooks/useToast';
 import Joyride from 'react-joyride'
-import { Steps } from '@assets/joyride'
+
 
 
 
@@ -124,6 +124,25 @@ function SelectTag() {
 
   const [topic, setTopic] = useState([])
   const [lan, setLan] = useState([])
+  
+  const steps = [
+    {
+      target: "#topicTag",
+      content: "This is step 1",
+    },
+    {
+      target: "#lanTag",
+      content: "This is step 2",
+    },
+    {
+      target: "#tagButton",
+      content: "This is step 3",
+    },
+  ];
+  const [joyride, setJoyride] = useState({
+    run: false,
+    steps: steps,
+  });
 
   const handleTopic = (newTopic) => {
     if (topic.includes(newTopic)) {
@@ -175,12 +194,12 @@ function SelectTag() {
     
     <div className='mx-44'>
       <Joyride
+        {...joyride}
         continuous
         hideCloseButton
         scrollToFirstStep
         showProgress
         showSkipButton
-        state={Steps}
       />
       <div className='py-8'>
         <div className="text-3xl">
@@ -214,11 +233,15 @@ function SelectTag() {
       </div>
       <div className='py-8'>
       </div>
-      <div className='grid grid-cols-4 justify-center gap-4'>
+      <div  id="tagButton" className='grid grid-cols-4 justify-center gap-4'>
+        <div>
+          <button onClick={() => setJoyride({ run: true, steps: steps })}>
+            Start Tour
+          </button>
+        </div>
         <div></div>
         <div></div>
-        <div></div>
-        <Button id="tagButton" topic={topic} lan={lan}/>
+        <Button topic={topic} lan={lan}/>
       </div>
 
     </div>
