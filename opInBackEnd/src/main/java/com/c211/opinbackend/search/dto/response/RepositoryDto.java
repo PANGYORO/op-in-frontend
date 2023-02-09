@@ -1,4 +1,4 @@
-package com.c211.opinbackend.search.dto;
+package com.c211.opinbackend.search.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,7 +14,7 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class RepositoryResponseDto {
+public class RepositoryDto {
 	private Long id;
 	private String title;
 	private String content;

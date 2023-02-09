@@ -1,4 +1,4 @@
-package com.c211.opinbackend.search.dto;
+package com.c211.opinbackend.search.dto.response;
 
 import java.time.LocalDateTime;
 

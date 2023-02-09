@@ -1,7 +1,7 @@
 package com.c211.opinbackend.search.mapper;
 
 import com.c211.opinbackend.persistence.entity.RepositoryPost;
-import com.c211.opinbackend.search.dto.SearchPostDto;
+import com.c211.opinbackend.search.dto.response.SearchPostDto;
 
 public class PostMapper {
 	public static SearchPostDto toSearchPostDto(RepositoryPost post) {
