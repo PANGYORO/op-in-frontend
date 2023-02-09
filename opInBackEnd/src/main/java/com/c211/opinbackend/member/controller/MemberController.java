@@ -118,7 +118,8 @@ public class MemberController {
 	// 팔로우
 	@PostMapping("/follow")
 	public ResponseEntity<?> followMember(@RequestBody MemberNicknameRequest request) {
-		return ResponseEntity.ok(memberService.followMember(request.getNickname()));
+		memberService.followMember(request.getNickname());
+		return ResponseEntity.ok(true);
 	}
 
 	// 팔로우 취소
@@ -133,10 +134,10 @@ public class MemberController {
 		return ResponseEntity.ok(memberService.isFollow(request.getNickname()));
 	}
 
-	// Topic & TechLanguage 저장
+	// 회원가입 시 Topic & TechLanguage 저장
 	@PostMapping("/topic/language/put")
-	public ResponseEntity<?> saveTopicAndLanguage(@RequestBody TopicAndLanguageRequest request) {
-		if (memberService.saveTopic(request.getTopic()) && memberService.saveTechLanguage(request.getLan())) {
+	public ResponseEntity<?> saveSignUpTopicAndTechLanguage(@RequestBody TopicAndLanguageRequest request) {
+		if (memberService.saveSignUpTopicAndTechLanguage(request.getEmail(), request.getTopic(), request.getLan())) {
 			return ResponseEntity.ok(true);
 		} else {
 			throw new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION);
@@ -145,8 +146,8 @@ public class MemberController {
 	
 	// Topic 따로 저장
 	@PostMapping("/topic/put")
-	public ResponseEntity<?> saveTopic(@RequestBody TopicRequest request) {
-		if (memberService.saveTopic(request.getTopic())) {
+	public ResponseEntity<?> saveLoginTopic(@RequestBody TopicRequest request) {
+		if (memberService.saveLoginTopic(request.getTitle())) {
 			return ResponseEntity.ok(true);
 		} else {
 			throw new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION);
@@ -155,17 +156,20 @@ public class MemberController {
 
 	// Tech Language 따로 저장
 	@PostMapping("/language/put")
-	public ResponseEntity<?> saveTechLanguage(@RequestBody TechLanguageRequest request) {
-		if (memberService.saveTechLanguage(request.getLan())) {
+	public ResponseEntity<?> saveLoginTechLanguage(@RequestBody TechLanguageRequest request) {
+		if (memberService.saveLoginTechLanguage(request.getTitle())) {
 			return ResponseEntity.ok(true);
 		} else {
 			throw new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION);
 		}
 	}
 
+	// 전체 tech language 가져오기
 	@GetMapping("/language/all")
 	public ResponseEntity<?> getListTechLanguage() {
 		return new ResponseEntity<>(memberService.getListTechLanguage(), HttpStatus.OK);
 	}
+	
+	// 로그인돼 있으면 tech language
 
 }

@@ -24,7 +24,7 @@ function RecommandIndex() {
     await http
       .post("post/")
       .then((response) => {
-        console.log(myrepo);
+        console.log(myinfo);
         setMyInfo(response.data);
       })
       .catch(() => console.log("error"));
