@@ -13,7 +13,7 @@ const repoData = {
   id: 2,
   title: "test title",
   content: "test content",
-  techLangs: ["java", "C++", "HTML"],
+  techLangs: ["java", "C++", "HTML", "a", "b"],
   contributors: [
     {
       nickname: "박소망",

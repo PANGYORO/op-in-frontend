@@ -44,8 +44,8 @@ export default function Repo({ _id, _title, _content, _techLangs, _repoDetails }
 
         {/* 여기 언어 공간 */}
         <div>
-          <div className="inline-flex items-center bg-white leading-none ${props.textColor} rounded-lg p-2 shadow text-teal text-sm">
-            <div className="flex flex-wrap items-center gap-4">{RepoTagList()}</div>
+          <div className="inline-flex items-center bg-white leading-none ${props.textColor} rounded-lg p-2 shadow text-teal text-sm w-full">
+            <div className="overflow-hidden flex flex-wrap items-center gap-4">{RepoTagList()}</div>
           </div>
         </div>
       </div>

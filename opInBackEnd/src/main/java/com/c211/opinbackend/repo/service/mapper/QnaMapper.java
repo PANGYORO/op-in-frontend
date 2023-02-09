@@ -12,6 +12,7 @@ public class QnaMapper {
 	public static RepoQnAResponse entityToResponseQnA(RepositoryQnA repositoryQnA, List<Comment> commentList) {
 
 		return RepoQnAResponse.builder()
+			.qnaId(repositoryQnA.getId())
 			.authorMember(repositoryQnA.getAuthorMember().getNickname())
 			.authorAvatar(repositoryQnA.getAuthorMember().getAvatarUrl())
 			.content(repositoryQnA.getContent())
