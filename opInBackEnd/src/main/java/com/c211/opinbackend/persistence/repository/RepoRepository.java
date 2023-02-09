@@ -14,4 +14,5 @@ public interface RepoRepository extends JpaRepository<Repository, Long> {
 
 	List<Repository> findByMember(Member member);
 
+	List<Repository> findAllByNameOrDescription(String name, String description);
 }
