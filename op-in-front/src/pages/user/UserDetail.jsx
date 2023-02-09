@@ -137,7 +137,7 @@ export default function Detail() {
       };
       reader.readAsDataURL(e.target.files[0]);
       // 이미지 서버로 전송
-      // imageUpload(e.target.files[0]);
+      imageUpload(e.target.files[0]);
     } else {
       //업로드 취소할 시
       setImage(Image);
@@ -145,24 +145,24 @@ export default function Detail() {
     }
   };
 
-  // const imageUpload = async (img) => {
-  //   let formData = new FormData();
-  //   formData.append("upload", img);
+  const imageUpload = async (img) => {
+    let formData = new FormData();
+    formData.append("upload", img);
 
-  //   await http
-  //     .post(`/member/image/upload`, {
-  //       data: formData,
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //       },
-  //     })
-  //     .then(() => {
-  //       console.log("success");
-  //     })
-  //     .catch((error) => {
-  //       console.lod(error);
-  //     });
-  // };
+    await http
+      .post(`/member/image/upload`, {
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(() => {
+        console.log("success");
+      })
+      .catch((error) => {
+        console.lod(error);
+      });
+  };
 
   function toggleModal() {
     setOpen(true);
