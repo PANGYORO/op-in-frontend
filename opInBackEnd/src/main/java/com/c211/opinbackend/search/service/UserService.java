@@ -12,35 +12,43 @@ import com.c211.opinbackend.search.dto.MemberDto;
 import com.c211.opinbackend.search.mapper.MemberMapper;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
-	MemberRepository memberRepository;
-	MemberFollowRepository memberFollowRepository;
+	final MemberRepository memberRepository;
+	final MemberFollowRepository memberFollowRepository;
 
 	public List<MemberDto> search(String keyword) {
 		return search(keyword, null);
 	}
-	public List<MemberDto> search(String keyword, String requestMemberEmail) {
-		List<Member> memberList = memberRepository.findAllByNicknameContains(keyword);
-		Member requestMember = requestMemberEmail == null ? null : memberRepository.findByEmail(requestMemberEmail).orElse(null);
 
-		// 요청 유저가 없다면!
-		if(requestMember == null) {
+	public List<MemberDto> search(String keyword, String requestMemberEmail) {
+		log.info("keyword: {} , userEmail: {}", keyword, requestMemberEmail);
+		List<Member> memberList;
+		if (keyword == null || keyword.isEmpty()) {
+			memberList = memberRepository.findAll();
+		} else {
+			memberList = memberRepository.findAllByNicknameContaining(keyword);
+		}
+
+		Member requestMember = memberRepository.findByEmail(requestMemberEmail).orElse(null);
+
+		// 요청 유저가 있다면!
+		if (requestMember != null) {
 			return memberList.stream().map(member -> {
 				boolean follow = memberFollowRepository.existsByFromMemberAndToMember(requestMember, member);
 				return MemberMapper.toMemberDto(member, follow);
-			}).collect(Collectors.toList());
+			}).filter(m -> requestMember.getId() != m.getId()).collect(Collectors.toList());
 		} else {
-		// 요청 유저가 있다면!
-			return memberList.stream().map(member -> MemberMapper.toMemberDto(member,false)).collect(Collectors.toList());
+			// 요청 유저가 없다면!
+			return memberList.stream()
+				.map(member -> MemberMapper.toMemberDto(member, false))
+				.collect(Collectors.toList());
 		}
 
-
-
 	}
-
-
 }

@@ -2,12 +2,10 @@ package com.c211.opinbackend.search.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.c211.opinbackend.search.dto.MemberDto;
@@ -30,6 +28,9 @@ public class SearchController {
 
 	@GetMapping("/users")
 	public ResponseEntity<?> searchUsers(SearchQueryRequest request) {
+		// [TODO]: Pageable 구현
+		// PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
+
 		String userEmail = SecurityUtil.getCurrentUserId().orElse(null);
 		List<MemberDto> results = userService.search(request.getQuery(), userEmail);
 
