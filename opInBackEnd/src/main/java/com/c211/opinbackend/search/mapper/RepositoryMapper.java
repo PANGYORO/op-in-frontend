@@ -24,10 +24,11 @@ public class RepositoryMapper {
 			.forkNum(repository.getForks())
 			.star(repository.getStargazersCount())
 			.techLangs(repoTechLangDtoList)
-			.contributors(repositoryContributorDtoList)
 			.htmlUrl(repository.getHtmlUrl())
+			.contributors(repositoryContributorDtoList)
 			.gitContributors(null)
 			.topicList(topics)
+			.updateDate(repository.getUpdatedAt())
 			.build();
 	}
 
@@ -61,6 +62,7 @@ public class RepositoryMapper {
 			repoTechLangDtoList.add(RepoTechLangDto.builder()
 				.title(language.getTechLanguage().getTitle())
 				.color(language.getTechLanguage().getColor())
+				.count(language.getCount())
 				.build());
 		}
 		return repoTechLangDtoList;

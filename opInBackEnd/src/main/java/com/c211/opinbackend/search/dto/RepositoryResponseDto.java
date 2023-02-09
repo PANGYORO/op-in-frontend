@@ -1,6 +1,6 @@
 package com.c211.opinbackend.search.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.c211.opinbackend.repo.model.contributor.RepositoryContributorDto;
@@ -23,7 +23,7 @@ public class RepositoryResponseDto {
 	private Long star;
 	private Long forkNum;
 	private List<String> topicList;
-	private LocalDate updateDate;
+	private LocalDateTime updateDate;
 
 	private String htmlUrl;
 
