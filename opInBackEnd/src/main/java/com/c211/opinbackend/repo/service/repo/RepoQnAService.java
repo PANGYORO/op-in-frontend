@@ -12,7 +12,7 @@ public interface RepoQnAService {
 
 	Boolean creatQnAComment(RequestComment requestCommnet, String email);
 
-	Boolean createRepoQnA(RequestQnA requestQnA, String email);
+	Long createRepoQnA(RequestQnA requestQnA, String email);
 
 	Boolean deleteRepoQnA(Long qnaId);
 

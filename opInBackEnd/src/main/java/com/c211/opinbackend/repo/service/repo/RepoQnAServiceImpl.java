@@ -55,7 +55,7 @@ public class RepoQnAServiceImpl implements RepoQnAService {
 
 	@Override
 	@Transactional
-	public Boolean createRepoQnA(RequestQnA requestQnA, String email) {
+	public Long createRepoQnA(RequestQnA requestQnA, String email) {
 
 		Member member = memberRepository.findByEmail(email)
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
@@ -74,11 +74,12 @@ public class RepoQnAServiceImpl implements RepoQnAService {
 				.content(requestQnA.getComment())
 				.createTime(LocalDateTime.now())
 				.build();
-			repoQnARepository.save(repositoryQnA);
-		} catch (Exception e) {
-			return false;
+			RepositoryQnA save = repoQnARepository.save(repositoryQnA);
+			return save.getId();
+		} catch (Exception exception) {
+			return null;
 		}
-		return true;
+
 	}
 
 	@Override
