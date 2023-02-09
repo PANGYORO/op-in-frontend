@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.c211.opinbackend.search.dto.MemberDto;
+import com.c211.opinbackend.search.dto.RepositoryResponseDto;
 import com.c211.opinbackend.search.dto.SearchQueryRequest;
 import com.c211.opinbackend.search.service.PostService;
 import com.c211.opinbackend.search.service.RepoService;
@@ -39,7 +40,8 @@ public class SearchController {
 
 	@GetMapping("/repos")
 	public ResponseEntity<?> searchRepos(SearchQueryRequest request) {
-		return ResponseEntity.ok().body(new ArrayList<>());
+		List<RepositoryResponseDto> result = repoService.search(request.getQuery());
+		return ResponseEntity.ok().body(result);
 	}
 
 	@GetMapping("/posts")

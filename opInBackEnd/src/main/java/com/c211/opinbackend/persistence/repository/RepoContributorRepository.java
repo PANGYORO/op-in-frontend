@@ -12,4 +12,6 @@ import com.c211.opinbackend.persistence.entity.RepositoryContributor;
 public interface RepoContributorRepository extends JpaRepository<RepositoryContributor, Long> {
 
 	List<RepositoryContributor> findByMember(Member member);
+
+	RepositoryContributor save(RepositoryContributor contributor);
 }
