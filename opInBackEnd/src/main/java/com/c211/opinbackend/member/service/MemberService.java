@@ -36,9 +36,11 @@ public interface MemberService {
 
 	boolean isFollow(String nickname);
 
-	boolean saveTopic(List<String> topics);
+	boolean saveSignUpTopicAndTechLanguage(String email, List<String> topics, List<String> languages);
 
-	boolean saveTechLanguage(List<String> languages);
+	boolean saveLoginTopic(List<String> topics);
+
+	boolean saveLoginTechLanguage(List<String> languages);
 
 	List<TechLanguageResponse> getListTechLanguage();
 }
