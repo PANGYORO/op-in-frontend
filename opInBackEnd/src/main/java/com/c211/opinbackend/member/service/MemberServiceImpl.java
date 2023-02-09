@@ -353,10 +353,8 @@ public class MemberServiceImpl implements MemberService {
 	public Member getMember() {
 		String email = SecurityUtil.getCurrentUserId()
 			.orElseThrow(() -> new AuthRuntimeException(AuthExceptionEnum.AUTH_SECURITY_AUTHENTICATION_EXCEPTION));
-		;
 		Member member = memberRepository.findByEmail(email)
 			.orElseThrow(() -> new AuthRuntimeException(AuthExceptionEnum.AUTH_SECURITY_AUTHENTICATION_EXCEPTION));
-		;
 		return member;
 	}
 
@@ -381,12 +379,16 @@ public class MemberServiceImpl implements MemberService {
 	 * 팔로우 취소
 	 * */
 	@Override
+	@Transactional
 	public boolean followDeleteMember(String nickname) {
 		Member fromMember = getMember();
 		Member toMember = memberRepository.findByNickname(nickname)
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 
 		MemberFollow follow = memberFollowRepository.findByFromMemberAndToMember(fromMember, toMember).orElse(null);
+
+		follow.setfromMember(null);
+		follow.setToMember(null);
 
 		try {
 			memberFollowRepository.delete(follow);
@@ -415,12 +417,17 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	/*
-	 * SAVE Member Topic
-	 * */
+	* SAVE 회원가입 시 topic, tech language 저장
+	* */
 	@Override
-	public boolean saveTopic(List<String> topics) {
-		Member member = getMember();
+	public boolean saveSignUpTopicAndTechLanguage(String email, List<String> topics, List<String> lans) {
+		Member member = memberRepository.findByEmail(email).orElseThrow(()->new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+		saveTopic(topics, member);
+		saveTechLanguage(lans, member);
+		return true;
+	}
 
+	public void saveTopic(List<String> topics, Member member) {
 		for (String topic : topics) {
 			Topic isTopic = topicRepository.findByTitle(topic).orElse(null);
 
@@ -445,17 +452,9 @@ public class MemberServiceImpl implements MemberService {
 
 			memberTopicRepository.save(memberTopic);
 		}
-
-		return true;
 	}
 
-	/*
-	 * SAVE Member Tech Language
-	 * */
-	@Override
-	public boolean saveTechLanguage(List<String> languages) {
-		Member member = getMember();
-
+	public void saveTechLanguage(List<String> languages, Member member) {
 		for (String lan : languages) {
 			TechLanguage language = techLanguageRepository.findByTitle(lan).orElse(null);
 
@@ -466,21 +465,71 @@ public class MemberServiceImpl implements MemberService {
 
 				language = techLanguageRepository.save(newLanguage);
 			}else {
-				// topic 과 member 의 관계가 있는지 확인
+				// tech language 과 member 의 관계가 있는지 확인
 				MemberTechLanguage memberTechLanguage = memberTechLanguageRepository.findByMemberAndTechLanguage(member, language).orElse(null);
 				if (memberTechLanguage != null) continue;
 			}
 
-			//member topic 으로 이어주기
+			//member tech language 으로 이어주기
 			MemberTechLanguage memberTechLanguage = MemberTechLanguage.builder()
 				.techLanguage(language)
-				.member(getMember())
+				.member(member)
 				.build();
 
 			memberTechLanguageRepository.save(memberTechLanguage);
 		}
+	}
+
+	/*
+	 * SAVE 로그인 Member Topic
+	 * */
+	@Override
+	public boolean saveLoginTopic(String title) {
+		Member member = getMember();
+		Topic topic = topicRepository.findByTitle(title).orElse(null);
+
+		if (topic == null) {
+			Topic newTopic = Topic.builder()
+				.title(title)
+				.build();
+
+			topic = topicRepository.save(newTopic);
+		}
+
+		MemberTopic memberTopic = MemberTopic.builder()
+			.member(member)
+			.topic(topic)
+			.build();
+
+		memberTopicRepository.save(memberTopic);
 		return true;
 	}
+
+	/*
+	 * SAVE 로그인 Member Tech Language
+	 * */
+	@Override
+	public boolean saveLoginTechLanguage(String title) {
+		Member member = getMember();
+		TechLanguage techLanguage = techLanguageRepository.findByTitle(title).orElse(null);
+
+		if (techLanguage == null) {
+			TechLanguage newLanguage = TechLanguage.builder()
+				.title(title)
+				.build();
+
+			techLanguage = techLanguageRepository.save(newLanguage);
+		}
+
+		MemberTechLanguage memberTechLanguage = MemberTechLanguage.builder()
+			.member(member)
+			.techLanguage(techLanguage)
+			.build();
+
+		memberTechLanguageRepository.save(memberTechLanguage);
+		return true;
+	}
+
 
 	/*
 	 * GET Tech Language 전체 목록
@@ -501,4 +550,6 @@ public class MemberServiceImpl implements MemberService {
 
 		return responses;
 	}
+
+
 }

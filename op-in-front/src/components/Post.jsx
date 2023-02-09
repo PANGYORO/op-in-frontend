@@ -1,7 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function post({ _postId, _createTime, post_content, _likeCount, _commentCount }) {
+export default function post({
+  _postId = 1,
+  _createTime = "2022-02-09",
+  post_content = "basic content",
+  _likeCount = 0,
+  _commentCount = 0,
+}) {
   const navigate = useNavigate();
 
   return (

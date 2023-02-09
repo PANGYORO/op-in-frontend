@@ -2,9 +2,14 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import React, { useState } from "react";
 import { debounce } from "lodash";
+import { useToast } from "@hooks/useToast";
 
 import Logo from "@components/Logo";
 import http from "@api/http";
+import { useSetRecoilState } from "recoil";
+import { userInfo } from "@recoil/user/atoms";
+
+
 function Button({ onClick = () => {}, loading = false, children }) {
   return (
     <button
@@ -281,13 +286,17 @@ function EmailInput({ register, error, name }) {
     </div>
   );
 }
-function SignUpForm() {
+function SignUpForm({ setToast }) {
   const {
     register,
     handleSubmit,
     watch,
     formState: { isSubmitting, errors },
   } = useForm({ mode: "onChange" });
+
+  const setUser = useSetRecoilState(userInfo);
+  
+
 
   const navigate = useNavigate();
 
@@ -298,8 +307,13 @@ function SignUpForm() {
         password: data.password,
         nickname: data.nickname,
       })
-      .then(() => {
-        navigate("/signin");
+      .then((res) => {
+        setUser((before) => ({
+          ...before,
+          email:res.data
+        }));
+        setToast({ message: "회원가입 성공! 관심있는 tag를 골라주세요!!" });
+        navigate("/selecttag");
       })
       .catch((err) => {
         console.log(err);
@@ -310,6 +324,13 @@ function SignUpForm() {
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8 bg-gray-50 p-5">
         <div>
+          {/* <button
+            onClick={() => {
+              setToast({ message: "hi" });
+            }}
+          >
+            123213
+          </button> */}
           <Logo className="mx-auto h-20 w-auto" />
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
             Sign <span className="text-blue-600">up</span> to your account
@@ -368,7 +389,8 @@ function SignUpForm() {
   );
 }
 function SignUp() {
-  return <SignUpForm />;
+  const { setToast } = useToast();
+  return <SignUpForm setToast={setToast} />;
 }
 
 export default SignUp;

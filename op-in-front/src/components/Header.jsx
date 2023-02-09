@@ -6,9 +6,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { menuState } from "@recoil/sidebar/atoms";
 import { repoMenuState } from "@recoil/sidebar/atoms2";
 import { userInfo } from "@recoil/user/atoms";
-import useToken from "@hooks/useToken";
+
+import { useToast } from '@hooks/useToast';
 
 import { useRecoilValue, useSetRecoilState } from "recoil";
+
 
 import "./headerfunc";
 
@@ -25,12 +27,14 @@ function classNames(...classes) {
 export default function Example() {
   const user = useRecoilValue(userInfo);
   const setUser = useSetRecoilState(userInfo);
-  const { removeToken } = useToken();
+  
 
   const setCurrentMenu = useSetRecoilState(menuState);
   const setRepoCurrentMenu = useSetRecoilState(repoMenuState);
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
+  const { setToast } = useToast()
+
   function selectMenu(id) {
     console.log(searchValue);
     setCurrentMenu(id);
@@ -182,7 +186,7 @@ export default function Example() {
                                 "w-full block px-4 py-2 text-sm text-gray-700"
                               )}
                               onClick={() => {
-                                localStorage.clear();
+                                setToast({message:'로그아웃 성공!'})
                                 setUser((before) => ({
                                   ...before,
                                   nickname: "",
@@ -190,8 +194,9 @@ export default function Example() {
                                   img_url: "",
                                   logined: false,
                                 }));
+
                                 navigate("/");
-                                removeToken();
+                                
                               }}
                             >
                               Sign out

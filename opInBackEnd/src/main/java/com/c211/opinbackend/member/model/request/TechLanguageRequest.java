@@ -7,5 +7,5 @@ import lombok.Getter;
 @Getter
 public class TechLanguageRequest {
 
-	private List<String> lan;
+	private String title;
 }
