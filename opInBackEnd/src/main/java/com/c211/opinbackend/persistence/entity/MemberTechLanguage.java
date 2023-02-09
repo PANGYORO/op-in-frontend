@@ -33,4 +33,13 @@ public class MemberTechLanguage {
 	private Member member;
 
 	private String color;
+
+	public void setMember(Member member) {
+		this.member = member;
+	}
+
+	public void setTechLanguage(TechLanguage techLanguage) {
+		this.techLanguage = techLanguage;
+	}
+
 }

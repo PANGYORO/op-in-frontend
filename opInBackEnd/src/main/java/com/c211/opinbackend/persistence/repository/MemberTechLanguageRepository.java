@@ -20,4 +20,7 @@ public interface MemberTechLanguageRepository extends JpaRepository<MemberTechLa
 
 	MemberTechLanguage save(MemberTechLanguage memberTechLanguage);
 
+	@Override
+	void delete(MemberTechLanguage entity);
+
 }
