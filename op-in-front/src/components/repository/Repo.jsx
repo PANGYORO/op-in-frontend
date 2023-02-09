@@ -41,6 +41,7 @@ export default function Repo({ _id, _title, _content, _techLangs, _repoDetails }
             <p className="text-gray-600 dark:text-white my-5 pl-2">{_content}</p>
           </div>
         </div>
+
         {/* 여기 언어 공간 */}
         <div>
           <div className="inline-flex items-center bg-white leading-none ${props.textColor} rounded-lg p-2 shadow text-teal text-sm">
