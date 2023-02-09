@@ -1,21 +1,13 @@
 package com.c211.opinbackend.batch.step;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.c211.opinbackend.batch.dto.github.PullRequestDto;
-import com.c211.opinbackend.batch.dto.github.RepositoryDto;
-import com.c211.opinbackend.batch.dto.mapper.PullRequestMapper;
 import com.c211.opinbackend.batch.service.RepositoryPullRequestService;
 import com.c211.opinbackend.batch.service.RepositoryService;
 import com.c211.opinbackend.batch.service.RepositoryTechLanguageService;
-import com.c211.opinbackend.persistence.entity.PullRequest;
-import com.c211.opinbackend.persistence.entity.Repository;
+import com.c211.opinbackend.persistence.repository.MemberRepository;
+import com.c211.opinbackend.persistence.repository.RepoContributorRepository;
 
 @SpringBootTest
 
@@ -24,6 +16,12 @@ public class ActionTest {
 	RepositoryService repositoryService;
 	RepositoryTechLanguageService repositoryTechLanguageService;
 	RepositoryPullRequestService repositoryPullRequestService;
+	@Autowired
+	private MemberRepository memberRepository;
+
+	@Autowired
+	private RepoContributorRepository repoContributorRepository;
+
 	@Autowired
 	public ActionTest(
 		Action action,
@@ -95,4 +93,24 @@ public class ActionTest {
 	// 		repositoryPullRequestService.save(repository, pullRequests);
 	// 	}
 	// }
+	// @Test
+	// public void REPOSITORY_CONTRIBUTORS_REQUEST_TEST() {
+	// 	RepositoryDto[] repoDtos = action.getMemberRepository("", "Djunnni");
+	// 	for (RepositoryDto repositoryDto : repoDtos) {
+	// 		Repository repository = repositoryService.findById(repositoryDto.getId());
+	// 		ContributorDto[] contributorDtos = action.getContributors(repository.getFullName());
+	// 		for (ContributorDto contributorDto : contributorDtos) {
+	// 			Member member = memberRepository.findByGithubId(contributorDto.getId().toString()).orElse(null);
+	// 			if (member != null) {
+	// 				RepositoryContributor contributor = RepositoryContributor
+	// 					.builder()
+	// 					.repository(repository)
+	// 					.member(member)
+	// 					.build();
+	//
+	// 				repoContributorRepository.save(contributor);
+	// 			}
+	// 		}
+	// 	}
+	//}
 }

@@ -23,6 +23,7 @@ import com.c211.opinbackend.persistence.repository.RepoQnARepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
 import com.c211.opinbackend.repo.model.requeset.RequestComment;
 import com.c211.opinbackend.repo.model.requeset.RequestQnA;
+import com.c211.opinbackend.repo.model.requeset.RequestUpdateQnA;
 import com.c211.opinbackend.repo.model.response.RepoQnAResponse;
 import com.c211.opinbackend.repo.service.mapper.QnaMapper;
 
@@ -54,7 +55,7 @@ public class RepoQnAServiceImpl implements RepoQnAService {
 
 	@Override
 	@Transactional
-	public Boolean createRepoQnA(RequestQnA requestQnA, String email) {
+	public Long createRepoQnA(RequestQnA requestQnA, String email) {
 
 		Member member = memberRepository.findByEmail(email)
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
@@ -73,11 +74,12 @@ public class RepoQnAServiceImpl implements RepoQnAService {
 				.content(requestQnA.getComment())
 				.createTime(LocalDateTime.now())
 				.build();
-			repoQnARepository.save(repositoryQnA);
-		} catch (Exception e) {
-			return false;
+			RepositoryQnA save = repoQnARepository.save(repositoryQnA);
+			return save.getId();
+		} catch (Exception exception) {
+			return null;
 		}
-		return true;
+
 	}
 
 	@Override
@@ -85,7 +87,7 @@ public class RepoQnAServiceImpl implements RepoQnAService {
 		Member member = memberRepository.findByEmail(email)
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 		RepositoryQnA repositoryQnA = repoQnARepository.findById(requestComment.getQnaId()).orElseThrow(
-			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_QNA_COMMENT_EMPTY_EXCEPTION)
+			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION)
 		);
 		if (requestComment.getComment().isBlank() || requestComment.getComment() == null
 			|| requestComment.getComment().length() == 0) {
@@ -106,5 +108,36 @@ public class RepoQnAServiceImpl implements RepoQnAService {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	@Transactional
+	public Boolean deleteRepoQnA(Long qnaId) {
+		try {
+			RepositoryQnA repositoryQnA = repoQnARepository.findById(qnaId).orElseThrow(
+				() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_QNA_EXIST_EXCEPTION)
+			);
+			repositoryQnA.setMemberNull();
+			repositoryQnA.setRepositoryNull();
+			repoQnARepository.delete(repositoryQnA);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	@Override
+	@Transactional
+	public Boolean updateRepoQnA(RequestUpdateQnA requestUpdateQnA) {
+		try {
+			RepositoryQnA repositoryQnA = repoQnARepository.findById(requestUpdateQnA.getQnaId()).orElseThrow(
+				() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_QNA_EXIST_EXCEPTION)
+			);
+			repositoryQnA.updateContent(requestUpdateQnA.getPostContent());
+			repoQnARepository.save(repositoryQnA);
+			return true;
+		} catch (Exception exception) {
+			return false;
+		}
 	}
 }
