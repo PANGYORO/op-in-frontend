@@ -147,7 +147,7 @@ public class MemberController {
 	// Topic 따로 저장
 	@PostMapping("/topic/put")
 	public ResponseEntity<?> saveLoginTopic(@RequestBody TopicRequest request) {
-		if (memberService.saveLoginTopic(request.getTopic())) {
+		if (memberService.saveLoginTopic(request.getTitle())) {
 			return ResponseEntity.ok(true);
 		} else {
 			throw new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION);
@@ -157,16 +157,19 @@ public class MemberController {
 	// Tech Language 따로 저장
 	@PostMapping("/language/put")
 	public ResponseEntity<?> saveLoginTechLanguage(@RequestBody TechLanguageRequest request) {
-		if (memberService.saveLoginTechLanguage(request.getLan())) {
+		if (memberService.saveLoginTechLanguage(request.getTitle())) {
 			return ResponseEntity.ok(true);
 		} else {
 			throw new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION);
 		}
 	}
 
+	// 전체 tech language 가져오기
 	@GetMapping("/language/all")
 	public ResponseEntity<?> getListTechLanguage() {
 		return new ResponseEntity<>(memberService.getListTechLanguage(), HttpStatus.OK);
 	}
+	
+	// 로그인돼 있으면 tech language
 
 }

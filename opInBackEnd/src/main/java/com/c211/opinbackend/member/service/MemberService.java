@@ -38,9 +38,9 @@ public interface MemberService {
 
 	boolean saveSignUpTopicAndTechLanguage(String email, List<String> topics, List<String> languages);
 
-	boolean saveLoginTopic(List<String> topics);
+	boolean saveLoginTopic(String title);
 
-	boolean saveLoginTechLanguage(List<String> languages);
+	boolean saveLoginTechLanguage(String title);
 
 	List<TechLanguageResponse> getListTechLanguage();
 }

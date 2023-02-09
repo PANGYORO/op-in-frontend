@@ -7,5 +7,5 @@ import lombok.Getter;
 @Getter
 public class TopicRequest {
 
-	private List<String> topic;
+	private String title;
 }
