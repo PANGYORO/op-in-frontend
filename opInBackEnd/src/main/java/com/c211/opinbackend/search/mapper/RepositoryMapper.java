@@ -26,7 +26,6 @@ public class RepositoryMapper {
 			.techLangs(repoTechLangDtoList)
 			.htmlUrl(repository.getHtmlUrl())
 			.contributors(repositoryContributorDtoList)
-			.gitContributors(null)
 			.topicList(topics)
 			.updateDate(repository.getUpdatedAt())
 			.build();

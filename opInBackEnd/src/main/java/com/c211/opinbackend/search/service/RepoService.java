@@ -20,7 +20,8 @@ public class RepoService {
 	public List<RepositoryResponseDto> search(String query) {
 		List<RepositoryResponseDto> repositories = new ArrayList<>();
 
-		List<Repository> findRepos = repoRepository.findAllByNameContainingOrDescriptionContaining(query, query);
+		List<Repository> findRepos = repoRepository.findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+			query, query);
 		for (Repository repo : findRepos) {
 			RepositoryResponseDto repositoryResponseDto = RepositoryMapper.toMyRepoDto(repo);
 			repositories.add(repositoryResponseDto);
