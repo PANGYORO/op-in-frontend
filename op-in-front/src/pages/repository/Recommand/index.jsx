@@ -3,9 +3,7 @@ import RecommandRepo from "@components/repository/RecommandRepo";
 import http from "@api/http";
 import { useLocation } from "react-router-dom";
 
-
 //axios 사용해서 정보 전달
-
 
 // const arr = ['배열 요소1', '배열 요소2', '배열 요소3'];
 // arr.map((elem, index) => {
@@ -19,23 +17,22 @@ import { useLocation } from "react-router-dom";
 // })
 
 function RecommandIndex() {
-
   const [myinfo, setMyInfo] = useState("");
   const location = useLocation();
   const currentEmail = location.state;
 
   async function RepoData() {
-    await http
-      .post(`repo/member`, {
-        email: currentEmail,
-      })
-      .then((response) => {
-        // alert(currentEmail);
-        alert(response.data.nickname);
-        console.log(response.data);
-        setMyInfo(response.data);
-      })
-      .catch(() => alert("error"));
+    // await http
+    //   .post(`repo/member`, {
+    //     email: currentEmail,
+    //   })
+    //   .then((response) => {
+    //     // alert(currentEmail);
+    //     // alert(response.data.nickname);
+    //     console.log(response.data);
+    //     setMyInfo(response.data);
+    //   })
+    //   .catch(() => alert("error"));
     console.log(myinfo);
   }
 

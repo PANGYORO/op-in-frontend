@@ -8,10 +8,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class MemberTechLanguage {
 	@Id
 	@GeneratedValue
@@ -26,5 +32,5 @@ public class MemberTechLanguage {
 	@JoinColumn(name = "MEMBER_ID")
 	private Member member;
 
-	private String Color;
+	private String color;
 }

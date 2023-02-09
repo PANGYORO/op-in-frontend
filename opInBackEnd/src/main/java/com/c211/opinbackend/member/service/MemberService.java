@@ -1,11 +1,12 @@
 package com.c211.opinbackend.member.service;
 
+import java.util.List;
 import java.util.Optional;
 
-import com.c211.opinbackend.auth.model.MemberDto;
-import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
+import com.c211.opinbackend.auth.model.response.TechLanguageResponse;
 import com.c211.opinbackend.persistence.entity.Member;
+import com.c211.opinbackend.persistence.entity.MemberFollow;
 
 public interface MemberService {
 
@@ -29,4 +30,15 @@ public interface MemberService {
 
 	Member getMember();
 
+	MemberFollow followMember(String nickname);
+
+	boolean followDeleteMember(String nickname);
+
+	boolean isFollow(String nickname);
+
+	boolean saveTopic(List<String> topics);
+
+	boolean saveTechLanguage(List<String> languages);
+
+	List<TechLanguageResponse> getListTechLanguage();
 }

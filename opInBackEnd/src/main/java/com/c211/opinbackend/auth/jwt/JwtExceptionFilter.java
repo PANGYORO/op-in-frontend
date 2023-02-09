@@ -23,24 +23,26 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
 		try {
 			chain.doFilter(req, res);
 		} catch (Exception ex) {
-			if (ex instanceof AuthRuntimeException)
+			if (ex instanceof AuthRuntimeException) {
 				setErrorResponse(res, (AuthRuntimeException)ex);
+			}
 		}
 	}
 
 	/**
 	 * AuthRuntimeException 이 발생하게 되면 HttpServletResponse 를 사용해
 	 * 에러 메시지를 클라이언트로 전달합니다.
+	 *
 	 * @param res
-	 * @param e
+	 * @param exception
 	 * @throws IOException
 	 */
-	public void setErrorResponse(HttpServletResponse res, AuthRuntimeException e) throws IOException {
+	public void setErrorResponse(HttpServletResponse res, AuthRuntimeException exception) throws IOException {
 		res.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		res.setStatus(e.getErrorEnum().getHttpStatus().value());
+		res.setStatus(exception.getErrorEnum().getHttpStatus().value());
 		try (OutputStream os = res.getOutputStream()) {
 			ObjectMapper objectMapper = new ObjectMapper();
-			objectMapper.writeValue(os, AuthExceptionEnum.convertMap(e.getErrorEnum()));
+			objectMapper.writeValue(os, AuthExceptionEnum.convertMap(exception.getErrorEnum()));
 			os.flush();
 		}
 	}

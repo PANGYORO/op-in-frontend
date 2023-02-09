@@ -64,25 +64,19 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public TokenDto authorize(String email, String password) {
+		Member member = memberRepository.findByEmail(email).orElseThrow(()->new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+		if (!passwordEncoder.matches(password, member.getPassword())) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_WRONG_EXCEPTION);
+		}
 
 		UsernamePasswordAuthenticationToken authenticationToken =
 			new UsernamePasswordAuthenticationToken(email, password);
 
-		Authentication authentication = null;
+		Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-		try {
-			authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-		} catch (Exception ex) {
-			throw new RuntimeException("authenticationManagerBuilder 에러");
-		}
-
-		if (authentication != null) {
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-			String authorities = getAuthorities(authentication);
-			return tokenProvider.createToken(email, authorities);
-		} else {
-			throw new RuntimeException("authentication 에러");
-		}
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		String authorities = getAuthorities(authentication);
+		return tokenProvider.createToken(email, authorities);
 	}
 
 	// 권한 가져오기

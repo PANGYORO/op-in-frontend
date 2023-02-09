@@ -7,10 +7,16 @@ import javax.persistence.Id;
 
 import com.sun.istack.NotNull;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder()
+@NoArgsConstructor
+@AllArgsConstructor
 public class TechLanguage {
 	@Id
 	@GeneratedValue
@@ -19,6 +25,5 @@ public class TechLanguage {
 	@NotNull
 	private String title;
 
-	@NotNull
 	private String color;
 }

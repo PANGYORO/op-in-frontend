@@ -3,33 +3,28 @@ package com.c211.opinbackend.member.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.c211.opinbackend.auth.jwt.TokenProvider;
-import com.c211.opinbackend.auth.model.MemberDto;
-import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.response.BadgeResponse;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.auth.model.response.TechLanguageResponse;
 import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
+import com.c211.opinbackend.exception.auth.AuthExceptionEnum;
+import com.c211.opinbackend.exception.auth.AuthRuntimeException;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.persistence.entity.Badge;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.MemberBadge;
+import com.c211.opinbackend.persistence.entity.MemberFollow;
 import com.c211.opinbackend.persistence.entity.MemberTechLanguage;
 import com.c211.opinbackend.persistence.entity.MemberTopic;
 import com.c211.opinbackend.persistence.entity.Repository;
@@ -87,8 +82,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public Optional<Member> findByEmail(String email) {
-		Optional<Member> byEmail = memberRepository.findByEmail(email);
-		return byEmail;
+		return memberRepository.findByEmail(email);
 	}
 
 	@Override
@@ -282,13 +276,13 @@ public class MemberServiceImpl implements MemberService {
 		return followRepos;
 	}
 
+	/*
+	 * GET 마이페이지 정보
+	 * */
 	@Override
-	public MypageResponse getMemberInfo(String email) {
-
-		Member member = memberRepository.findByEmail(email).orElse(null);
-		if (member == null) {
-			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
-		}
+	public MypageResponse getMemberInfo(String nickname) {
+		Member member = memberRepository.findByNickname(nickname)
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 
 		// 사용자의 레포지토리 이름 목록
 		List<RepositoryTitleResponse> myRepoTitles = getMemberRepo(member);
@@ -328,36 +322,183 @@ public class MemberServiceImpl implements MemberService {
 		return mypageResponse;
 	}
 
+	/*
+	 * 닉네임 변경
+	 * */
 	@Override
 	@Transactional
 	public Member modifyNickname(String nickname, String email) {
-		Member member = memberRepository.findByEmail(email).orElse(null);
-		if (member == null) {
-			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
-		}
-
+		Member member = memberRepository.findByEmail(email)
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 		member.setNickname(nickname);
-
 		return member;
 	}
 
+	/*
+	 * 비밀번호 변경
+	 * */
 	@Override
 	@Transactional
 	public boolean modifyPassword(String email, String password) {
-		Member member = memberRepository.findByEmail(email).orElse(null);
-		if (member == null) {
-			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION);
-		}
-
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		Member member = memberRepository.findByEmail(email)
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 		member.setPassword(passwordEncoder.encode(password));
+		return true;
+	}
+
+	/*
+	 * GET 현재 로그인된 멤버 정보
+	 * */
+	@Override
+	public Member getMember() {
+		String email = SecurityUtil.getCurrentUserId()
+			.orElseThrow(() -> new AuthRuntimeException(AuthExceptionEnum.AUTH_SECURITY_AUTHENTICATION_EXCEPTION));
+		;
+		Member member = memberRepository.findByEmail(email)
+			.orElseThrow(() -> new AuthRuntimeException(AuthExceptionEnum.AUTH_SECURITY_AUTHENTICATION_EXCEPTION));
+		;
+		return member;
+	}
+
+	/*
+	 * 멤버 팔로우
+	 * */
+	@Override
+	public MemberFollow followMember(String nickname) {
+		Member fromMember = getMember();
+		Member toMember = memberRepository.findByNickname(nickname)
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+
+		MemberFollow memberFollow = MemberFollow.builder()
+			.fromMember(fromMember)
+			.toMember(toMember)
+			.build();
+
+		return memberFollowRepository.save(memberFollow);
+	}
+
+	/*
+	 * 팔로우 취소
+	 * */
+	@Override
+	public boolean followDeleteMember(String nickname) {
+		Member fromMember = getMember();
+		Member toMember = memberRepository.findByNickname(nickname)
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+
+		MemberFollow follow = memberFollowRepository.findByFromMemberAndToMember(fromMember, toMember).orElse(null);
+
+		try {
+			memberFollowRepository.delete(follow);
+		} catch (Exception e) {
+			throw new ApiRuntimeException(ApiExceptionEnum.API_CENTER_CALL_EXCEPTION);
+		}
 
 		return true;
 	}
 
+	/*
+	 * 팔로우 여부 확인
+	 * */
 	@Override
-	public Member getMember() {
-		return memberRepository.findById(Long.valueOf(SecurityUtil.getCurrentUserId().get())).orElse(null);
+	public boolean isFollow(String nickname) {
+		Member fromMember = getMember();
+		Member toMember = memberRepository.findByNickname(nickname).orElse(null);
+
+		MemberFollow follow = memberFollowRepository.findByFromMemberAndToMember(fromMember, toMember).orElse(null);
+
+		if (follow == null) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
+	/*
+	 * SAVE Member Topic
+	 * */
+	@Override
+	public boolean saveTopic(List<String> topics) {
+		Member member = getMember();
+
+		for (String topic : topics) {
+			Topic isTopic = topicRepository.findByTitle(topic).orElse(null);
+
+			//topic이 있는지 확인
+			if (isTopic == null) {
+				Topic newTopic = Topic.builder()
+					.title(topic)
+					.build();
+
+				isTopic = topicRepository.save(newTopic);
+			}else {
+				// topic 과 member 의 관계가 있는지 확인
+				MemberTopic memberTopic = memberTopicRepository.findByMemberAndTopic(member, isTopic).orElse(null);
+				if (memberTopic != null) continue;
+			}
+
+			//member topic 으로 이어주기
+			MemberTopic memberTopic = MemberTopic.builder()
+				.topic(isTopic)
+				.member(member)
+				.build();
+
+			memberTopicRepository.save(memberTopic);
+		}
+
+		return true;
+	}
+
+	/*
+	 * SAVE Member Tech Language
+	 * */
+	@Override
+	public boolean saveTechLanguage(List<String> languages) {
+		Member member = getMember();
+
+		for (String lan : languages) {
+			TechLanguage language = techLanguageRepository.findByTitle(lan).orElse(null);
+
+			if (language == null) {
+				TechLanguage newLanguage = TechLanguage.builder()
+					.title(lan)
+					.build();
+
+				language = techLanguageRepository.save(newLanguage);
+			}else {
+				// topic 과 member 의 관계가 있는지 확인
+				MemberTechLanguage memberTechLanguage = memberTechLanguageRepository.findByMemberAndTechLanguage(member, language).orElse(null);
+				if (memberTechLanguage != null) continue;
+			}
+
+			//member topic 으로 이어주기
+			MemberTechLanguage memberTechLanguage = MemberTechLanguage.builder()
+				.techLanguage(language)
+				.member(getMember())
+				.build();
+
+			memberTechLanguageRepository.save(memberTechLanguage);
+		}
+		return true;
+	}
+
+	/*
+	 * GET Tech Language 전체 목록
+	 * */
+	@Override
+	public List<TechLanguageResponse> getListTechLanguage() {
+		List<TechLanguage> lanList = techLanguageRepository.findAll();
+		List<TechLanguageResponse> responses = new ArrayList<TechLanguageResponse>();
+
+		for(TechLanguage lan : lanList) {
+			TechLanguageResponse techLanguageResponse = TechLanguageResponse.builder()
+				.id(lan.getId())
+				.title(lan.getTitle())
+				.build();
+
+			responses.add(techLanguageResponse);
+		}
+
+		return responses;
+	}
 }

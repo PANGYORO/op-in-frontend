@@ -2,12 +2,10 @@ package com.c211.opinbackend.member.controller;
 
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +16,16 @@ import com.c211.opinbackend.auth.model.request.MemberLoginRequest;
 import com.c211.opinbackend.auth.model.request.MemberNicknameRequest;
 import com.c211.opinbackend.auth.model.request.MemberPasswordRequest;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
+import com.c211.opinbackend.auth.model.response.TechLanguageResponse;
 import com.c211.opinbackend.auth.service.MailService;
+import com.c211.opinbackend.exception.api.ApiExceptionEnum;
+import com.c211.opinbackend.exception.api.ApiRuntimeException;
+import com.c211.opinbackend.exception.auth.AuthRuntimeException;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
+import com.c211.opinbackend.member.model.request.TechLanguageRequest;
+import com.c211.opinbackend.member.model.request.TopicAndLanguageRequest;
+import com.c211.opinbackend.member.model.request.TopicRequest;
 import com.c211.opinbackend.member.service.MemberService;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.util.SecurityUtil;
@@ -44,24 +49,28 @@ public class MemberController {
 		this.mailService = mailService;
 	}
 
+	// 마이페이지 정보 리턴
 	@PostMapping("/mypage")
-	public ResponseEntity<?> getMemberInfo(@RequestBody MemberEmailRequest request) throws Exception {
-		MypageResponse mypageResponse = memberService.getMemberInfo(request.getEmail());
-		return new ResponseEntity<MypageResponse>(mypageResponse, HttpStatus.OK);
+	public ResponseEntity<?> getMemberInfo(@RequestBody MemberNicknameRequest request) throws Exception {
+		MypageResponse mypageResponse = memberService.getMemberInfo(request.getNickname());
+		return new ResponseEntity<>(mypageResponse, HttpStatus.OK);
 	}
 
+	// 이메일 중복확인
 	@PostMapping("/email/check")
 	public ResponseEntity<?> existEmail(@RequestBody MemberEmailRequest request) throws Exception {
 		boolean exist = memberService.existEmail(request.getEmail());
-		return new ResponseEntity<Boolean>(exist, HttpStatus.OK);
+		return new ResponseEntity<>(exist, HttpStatus.OK);
 	}
 
+	// 닉네임 중복확인
 	@PostMapping("/nickname/check")
 	public ResponseEntity<?> existNickname(@RequestBody MemberNicknameRequest request) throws Exception {
 		boolean exist = memberService.existNickname(request.getNickname());
-		return new ResponseEntity<Boolean>(exist, HttpStatus.OK);
+		return new ResponseEntity<>(exist, HttpStatus.OK);
 	}
-
+	
+	// 닉네임 변경
 	@PostMapping("/nickname/put")
 	public ResponseEntity<?> modifyNickname(@RequestBody MemberNicknameRequest request) {
 		boolean exist = memberService.existNickname(request.getNickname());
@@ -71,28 +80,31 @@ public class MemberController {
 
 		String username = SecurityUtil.getCurrentUserId().orElse(null);
 		Member member = memberService.modifyNickname(request.getNickname(), username);
-		return new ResponseEntity<String>(member.getNickname(), HttpStatus.OK);
+		return new ResponseEntity<>(member.getNickname(), HttpStatus.OK);
 	}
 
+	// 비밀번호 변경
 	@PostMapping("/password/put")
 	public ResponseEntity<?> modifyPassword(@RequestBody MemberPasswordRequest request) {
 		String username = SecurityUtil.getCurrentUserId().orElse(null);
 		boolean val = memberService.modifyPassword(username, request.getPassword());
-		return new ResponseEntity<Boolean>(val, HttpStatus.OK);
+		return new ResponseEntity<>(val, HttpStatus.OK);
 	}
 
+	// 로그인할 때 정보 리턴
 	@PostMapping("/member/info")
 	public ResponseEntity<?> getMemberLogin() {
 		Member member = memberService.getMember();
-		return new ResponseEntity<Member>(member, HttpStatus.OK);
+		return new ResponseEntity<>(member, HttpStatus.OK);
 	}
 
+	// 임시 비밀번호 발급 이메일
 	@PostMapping("/password/email")
 	public ResponseEntity<?> changePwEmail(@RequestBody Map<String, String> email) {
-		String temporaryPassword = mailService.mailSend(email.get("email"));
-		return ResponseEntity.ok(memberService.modifyPassword(email.get("email"), temporaryPassword));
+		return ResponseEntity.ok(mailService.mailSend(email.get("email")));
 	}
 
+	// 회원 탈퇴
 	@PostMapping("/delete")
 	public ResponseEntity<?> deleteMember(@RequestBody MemberLoginRequest request) {
 		return ResponseEntity.ok(memberService.deleteMember(request.getEmail(), request.getPassword()));
@@ -100,8 +112,60 @@ public class MemberController {
 
 	@PostMapping("/gitMem/delete")
 	public ResponseEntity<?> deleteGithubMember(@RequestBody MemberLoginRequest request) {
-		log.info(request.getEmail());
 		return ResponseEntity.ok(memberService.deleteGithubMember(request.getEmail()));
+	}
+
+	// 팔로우
+	@PostMapping("/follow")
+	public ResponseEntity<?> followMember(@RequestBody MemberNicknameRequest request) {
+		return ResponseEntity.ok(memberService.followMember(request.getNickname()));
+	}
+
+	// 팔로우 취소
+	@PostMapping("/follow/delete")
+	public ResponseEntity<?> followDeleteMember(@RequestBody MemberNicknameRequest request) {
+		return ResponseEntity.ok(memberService.followDeleteMember(request.getNickname()));
+	}
+
+	//팔로우여부 확인 : true/ false
+	@PostMapping("/follow/check")
+	public ResponseEntity<?> isFollow(@RequestBody MemberNicknameRequest request) {
+		return ResponseEntity.ok(memberService.isFollow(request.getNickname()));
+	}
+
+	// Topic & TechLanguage 저장
+	@PostMapping("/topic/language/put")
+	public ResponseEntity<?> saveTopicAndLanguage(@RequestBody TopicAndLanguageRequest request) {
+		if (memberService.saveTopic(request.getTopic()) && memberService.saveTechLanguage(request.getLan())) {
+			return ResponseEntity.ok(true);
+		} else {
+			throw new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION);
+		}
+	}
+	
+	// Topic 따로 저장
+	@PostMapping("/topic/put")
+	public ResponseEntity<?> saveTopic(@RequestBody TopicRequest request) {
+		if (memberService.saveTopic(request.getTopic())) {
+			return ResponseEntity.ok(true);
+		} else {
+			throw new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION);
+		}
+	}
+
+	// Tech Language 따로 저장
+	@PostMapping("/language/put")
+	public ResponseEntity<?> saveTechLanguage(@RequestBody TechLanguageRequest request) {
+		if (memberService.saveTechLanguage(request.getLan())) {
+			return ResponseEntity.ok(true);
+		} else {
+			throw new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION);
+		}
+	}
+
+	@GetMapping("/language/all")
+	public ResponseEntity<?> getListTechLanguage() {
+		return new ResponseEntity<>(memberService.getListTechLanguage(), HttpStatus.OK);
 	}
 
 }

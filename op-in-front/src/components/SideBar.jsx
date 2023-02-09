@@ -36,7 +36,7 @@ export default function Sidebar() {
       if (!user.logined) {
         toggleModal();
       } else {
-        navigate(`/userdetail`, { state: user.email });
+        navigate(`/userdetail`, { state: user.nickname });
       }
     } else if (id == ITEMS.REPOSITORY) {
       if (user.logined) setRepoCurrentMenu("myrepo");
