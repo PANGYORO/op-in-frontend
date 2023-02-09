@@ -8,7 +8,7 @@ import DeleteModal from "@components/modals/DeleteModal";
 import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
 
-export default function MyInfo(props) {
+export default function MyInfo({ userinfo }) {
   const [open, setOpen] = useState(false);
   const user = useRecoilValue(userInfo);
 
@@ -22,7 +22,7 @@ export default function MyInfo(props) {
         <p className="p-4 font-bold text-black text-md dark:text-white">
           Badges
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
-            ({props.badges == null ? 0 : props.badges.length})
+            ({userinfo.badges == null ? 0 : userinfo.badges.length})
           </span>
         </p>
         <div className="grid grid-cols-8 gap-4 px-3 mb-3">
@@ -47,6 +47,7 @@ export default function MyInfo(props) {
             title="language"
             titlelength="5"
             taglist={["java", "javascript", "html&css", "python", "react"]}
+            ismine={user.nickname == userinfo.nickname ? true : false}
           />
         </div>
         <hr />
@@ -55,13 +56,14 @@ export default function MyInfo(props) {
             title="Topics"
             titlelength="5"
             taglist={["JPA", "SpringBoot", "CD/CI", "SERVER", "UI"]}
+            ismine={user.nickname == userinfo.nickname ? true : false}
           />
         </div>
         <hr />
         <p className="p-4 font-bold text-black text-md dark:text-white">
           Completed Contributes
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
-            ({props.contributeRepo == null ? 0 : props.contributeRepo.length})
+            ({userinfo.contributeRepo == null ? 0 : userinfo.contributeRepo.length})
           </span>
         </p>
         <ul>
@@ -94,7 +96,7 @@ export default function MyInfo(props) {
         <p className="p-4 font-bold text-black text-md dark:text-white">
           following Respsitories
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
-            ({props.followRepo == null ? 0 : props.followRepo.length})
+            ({userinfo.followRepo == null ? 0 : userinfo.followRepo.length})
           </span>
         </p>
         <ul>
@@ -122,21 +124,25 @@ export default function MyInfo(props) {
             </div>
           </li>
         </ul>
-        <div className="grid grid-cols-1 justify-items-center py-4">
-          <button
-            type="button"
-            disabled=""
-            onClick={() => {
-              toggleModal();
-            }}
-            className={`py-3 px-4 bg-red-600 hover:bg-red-700 focus:ring-red-500
+        {userinfo.nickname == user.nickname ? (
+          <div className="grid grid-cols-1 justify-items-center py-4">
+            <button
+              type="button"
+              disabled=""
+              onClick={() => {
+                toggleModal();
+              }}
+              className={`py-3 px-4 bg-red-600 hover:bg-red-700 focus:ring-red-500
         focus:ring-offset-red-200 text-white transition ease-in duration-200
         text-center font-semibold shadow-md focus:outline-none focus:ring-2
         focus:ring-offset-2 opacity-70 rounded-lg`}
-          >
-            Delete Member
-          </button>
-        </div>
+            >
+              Delete Member
+            </button>
+          </div>
+        ) : (
+          <div></div>
+        )}
       </div>
       <DeleteModal open={open} setOpen={setOpen} />
     </div>
