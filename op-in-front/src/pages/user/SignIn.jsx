@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import React from "react";
 import jwt_decode from "jwt-decode";
+import { Cookies } from 'react-cookie'
 
 import Logo from "@components/Logo";
 import http from "@api/http";
@@ -98,7 +99,7 @@ function EmailInput({ register, error }) {
   );
 }
 
-function LoginForm({ saveToken, setToast}) {
+function LoginForm({ setToast}) {
   const {
     register,
     handleSubmit,
@@ -108,24 +109,26 @@ function LoginForm({ saveToken, setToast}) {
   const setUser = useSetRecoilState(userInfo);
 
   const navigate = useNavigate();
+  const cookies = new Cookies()
 
   
   const onSubmit = async (data) => {
     try {
-      let res = await http.post("auth/login", {
+      await http.post("auth/login", {
         email: data.email,
         password: data.password,
       });
-      const decodedUserInfo = jwt_decode(res.data.accessToken);
+      const decodedUserInfo = jwt_decode(cookies.get('accessToken'));
       setUser((before) => ({
         ...before,
         ...decodedUserInfo,
         logined: true,
       }));
-      saveToken(res.data);
+      // saveToken(res.data);
       setToast({message:'로그인 성공!'})
       navigate("/");
     } catch (error) {
+      console.log(error)
       setToast({message:error.response.data.message})
     }
   };

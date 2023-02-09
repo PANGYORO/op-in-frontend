@@ -4,7 +4,7 @@ import { useCookies } from 'react-cookie';
 
 function useToken() {
 
-  const [cookies, setCookie, removeCookie] = useCookies();
+  const [cookies, removeCookie] = useCookies();
   const [token, setToken] = useState();
 
   useEffect(() => {
@@ -13,11 +13,6 @@ function useToken() {
   }, []);
 
   const saveToken = useCallback((token) => {
-    // setCookie("token", JSON.stringify(token));
-    // for (const key in token) {
-    //   setCookie(key, token[key])
-    // }
-    
     setToken(token);
   }, []);
 
