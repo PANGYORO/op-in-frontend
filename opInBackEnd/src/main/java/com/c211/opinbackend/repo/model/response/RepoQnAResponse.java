@@ -10,6 +10,7 @@ import lombok.Getter;
 @Builder
 @Getter
 public class RepoQnAResponse {
+	private Long qnaId;
 	private String authorMember;
 	private String authorAvatar;
 	private LocalDateTime createTime;
