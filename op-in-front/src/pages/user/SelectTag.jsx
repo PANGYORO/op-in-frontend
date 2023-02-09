@@ -1,11 +1,13 @@
 import { Transition } from '@headlessui/react'
 import { useNavigate } from "react-router-dom";
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { Fragment, useState} from 'react'
 import { useTimeoutFn } from 'react-use'
 import http from '@api/http'
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { userInfo } from "@recoil/user/atoms";
 import { useToast } from '@hooks/useToast';
+import JoyRide from 'react-joyride'
+import { Steps } from '@assets/joyride'
 
 
 
@@ -77,26 +79,26 @@ function LanTag(props) {
   )
 }
 
-function Button(props) {
+function Button({ topic, lan }) {
   const user = useRecoilValue(userInfo);
   const { setToast } = useToast()
   const navigate = useNavigate();
   
 
-  const onSubmit = async (data) => {
+  const onSubmit = async () => {
     
     try {
-      let res = await http.post("member/topic/language/put", {
+      await http.post("member/topic/language/put", {
         email: user.email,
-        topic: data.topic,
-        lan: data.lan
-
+        topic,
+        lan
       });
-
-      setToast({message: '관심tag를 저장했습니다! 로그인 후 op-in을 사용해보세요'})
       
+      setToast({message: '관심tag를 저장했습니다! 로그인 후 op-in을 사용해보세요'})
+      navigate('/signin')
 
     } catch (error) {
+      console.log(user.email)
       console.log(error)
     }
     
@@ -106,7 +108,7 @@ function Button(props) {
     <div className="flex flex-col items-center p-4">
       <button
         className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-400 py-4 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-        onClick={onSubmit(props)}
+        onClick={onSubmit}
       >
         Send
       </button>
@@ -170,13 +172,22 @@ function SelectTag() {
   
   return (
 
+    
     <div className='mx-44'>
+      <JoyRide
+        continuous
+        hideCloseButton
+        scrollToFirstStep
+        showProgress
+        showSkipButton
+        steps={Steps}
+      />
       <div className='py-8'>
         <div className="text-3xl">
           HOT Topic
         </div>
       </div>
-      <div className='grid grid-cols-5 justify-center gap-4'>
+      <div id='topicTag' className='grid grid-cols-5 justify-center gap-4'>
         <TopicTag name='Git' svg={gitSvg} handleTopic={handleTopic} />
         <TopicTag name='Vue' svg={vueSvg } handleTopic={handleTopic} />
         <TopicTag name='Angular' svg={angularSvg} handleTopic={handleTopic}/>
@@ -194,7 +205,7 @@ function SelectTag() {
           HOT Language
         </div>
       </div>
-      <div className='grid grid-cols-5 justify-center gap-4'>
+      <div id='lanTag' className='grid grid-cols-5 justify-center gap-4'>
         <LanTag name='python' svg={pythonSvg} handleLan={handleLan} />
         <LanTag name='Java' svg={javaSvg} handleLan={handleLan}/>
         <LanTag name='Java script' svg={jsSvg} handleLan={handleLan}/>
@@ -207,7 +218,7 @@ function SelectTag() {
         <div></div>
         <div></div>
         <div></div>
-        <Button topic={topic} lan={lan}/>
+        <Button id="tagButton" topic={topic} lan={lan}/>
       </div>
 
     </div>

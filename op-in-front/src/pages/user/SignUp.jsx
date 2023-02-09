@@ -6,7 +6,7 @@ import { useToast } from "@hooks/useToast";
 
 import Logo from "@components/Logo";
 import http from "@api/http";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { userInfo } from "@recoil/user/atoms";
 
 
@@ -295,7 +295,7 @@ function SignUpForm({ setToast }) {
   } = useForm({ mode: "onChange" });
 
   const setUser = useSetRecoilState(userInfo);
-  const user = useRecoilValue(userInfo);
+  
 
 
   const navigate = useNavigate();

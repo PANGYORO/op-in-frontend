@@ -1,11 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import React, { useEffect } from "react";
+import React from "react";
 import jwt_decode from "jwt-decode";
 
 import Logo from "@components/Logo";
 import http from "@api/http";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState} from "recoil";
 import { userInfo } from "@recoil/user/atoms";
 import { useToast } from '@hooks/useToast';
 
@@ -106,7 +106,7 @@ function LoginForm({ saveToken, setToast}) {
   } = useForm();
 
   const setUser = useSetRecoilState(userInfo);
-  const user = useRecoilValue(userInfo);
+
   const navigate = useNavigate();
 
   
@@ -126,8 +126,7 @@ function LoginForm({ saveToken, setToast}) {
       setToast({message:'로그인 성공!'})
       navigate("/");
     } catch (error) {
-      console.log('hi')
-      console.log(error);
+      setToast({message:error.response.data.message})
     }
   };
 
