@@ -20,15 +20,11 @@ export default function Detail() {
   const [Image, setImage] = useState(DefaultImg);
   const fileInput = useRef(null);
 
-  const followClassState = `py-1 px-3 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500
-  focus:ring-offset-red-200 text-white  transition ease-in duration-200
-  text-center font-semibold shadow-md focus:outline-none focus:ring-2
-  focus:ring-offset-2  opacity-70 rounded-lg `;
+  const followClassState =
+    "py-1 px-3 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-red-200 text-white  transition ease-in duration-200 text-center font-semibold shadow-md focus:outline-none focus:ring-2  focus:ring-offset-2  opacity-70 rounded-lg ";
 
-  const unfollowClassState = `py-1 px-3 bg-orange-600 hover:bg-orange-700 focus:ring-orange-500
-  focus:ring-offset-red-200 text-white  transition ease-in duration-200
-  text-center font-semibold shadow-md focus:outline-none focus:ring-2
-  focus:ring-offset-2  opacity-70 rounded-lg `;
+  const unfollowClassState =
+    "py-1 px-3 bg-orange-600 hover:bg-orange-700 focus:ring-orange-500  focus:ring-offset-red-200 text-white  transition ease-in duration-200 text-center font-semibold shadow-md focus:outline-none focus:ring-2   focus:ring-offset-2  opacity-70 rounded-lg ";
 
   const [followState, setFollowState] = useState({
     state: true,
@@ -38,7 +34,9 @@ export default function Detail() {
 
   const setFollowButton = async () => {
     await http
-      .post(`member/follow/check`)
+      .post(`member/follow/check`, {
+        nickname: user.nickname,
+      })
       .then((response) => {
         if (response.data) {
           setFollowState({
@@ -61,27 +59,66 @@ export default function Detail() {
       });
   };
 
-  const renderFollowButton = () => {
-    if (user.nickname == currentNick) return modifyPasswordButton;
-    else return followButton;
+  const renderButton = () => {
+    if (user.nickname == currentNick) return <ModifyPasswordButton />;
+    else return <FollowButton />;
   };
-  const followButton = () => {
+  const FollowButton = () => {
     return (
-      <button type="button" disabled="" className={followState.classValue}>
+      <button type="button" onClick={() => followStateChange()} className={followState.classValue}>
         {followState.value}
       </button>
     );
   };
-  const modifyPasswordButton = () => {
+
+  const followStateChange = async () => {
+    // 팔로우 상태라면 언팔로우
+    if (followState.state) {
+      await http
+        .post(`member/follow/delete`, {
+          nickname: user.nickname,
+        })
+        .then(() => {
+          setFollowState({
+            state: false,
+            classValue: unfollowClassState,
+            value: "unfollow",
+          });
+          console.log("unfollow set");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    // 언팔로우 상태라면 팔로우
+    else {
+      await http
+        .post(`member/follow`, {
+          nickname: user.nickname,
+        })
+        .then(() => {
+          setFollowState({
+            state: true,
+            classValue: followClassState,
+            value: "follow",
+          });
+          console.log("follow set");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+  const ModifyPasswordButton = () => {
     return (
       <button
         type="button"
         disabled=""
-        onClick={toggleModal}
-        className="py-1 px-3 bg-green-600 hover:bg-green-700 focus:ring-green-500
-focus:ring-offset-red-200 text-white  transition ease-in duration-200
-text-center font-semibold shadow-md focus:outline-none focus:ring-2
-focus:ring-offset-2  opacity-70 rounded-lg "
+        onClick={() => toggleModal()}
+        className={`py - 1 px-3 bg-green-600 hover:bg-green-700 focus:ring-green-500
+        focus:ring-offset-red-200 text-white transition ease-in duration-200
+        text-center font-semibold shadow-md focus:outline-none focus:ring-2
+        focus:ring-offset-2 opacity-70 rounded-lg`}
       >
         Modify Password
       </button>
@@ -153,7 +190,7 @@ focus:ring-offset-2  opacity-70 rounded-lg "
 
   useEffect(() => {
     getMember();
-    setFollowButton();
+    if (user.nickname != currentNick) setFollowButton();
   }, []);
 
   return (
@@ -167,25 +204,31 @@ focus:ring-offset-2  opacity-70 rounded-lg "
               style={{ margin: "20px" }}
               size={200}
               onClick={() => {
-                fileInput.current.click();
+                if (user.nickname == currentNick) fileInput.current.click();
               }}
             />
-            <input
-              type="file"
-              style={{ display: "none" }}
-              accept="image/jpg,image/png,image/jpeg"
-              name="profile_img"
-              onChange={onChange}
-              ref={fileInput}
-            />
-            <Tooltip anchorId="profile_img" content="Click to change Image" />
+            {user.nickname != currentNick ? (
+              <div></div>
+            ) : (
+              <>
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  accept="image/jpg,image/png,image/jpeg"
+                  name="profile_img"
+                  onChange={onChange}
+                  ref={fileInput}
+                />
+                <Tooltip anchorId="profile_img" content="Click to change Image" />
+              </>
+            )}
           </div>
           <div className="flex justify-center col-span-2 lg:text-3xl md:text-2xl sm:text-xl w-4/5">
             <div className="grid content-center">
               <div>
                 <div className="grid grid-cols-2 gap-2 justify-items-between">
                   <div className="bg-prinavy self-center"> {myinfo.nickname}</div>
-                  <div className="self-center">{renderFollowButton}</div>
+                  <div className="self-center">{renderButton()}</div>
                   {/* <img src={Setting} alt="setting" className="h-16 justify-self-end" /> */}
                 </div>
                 <div className="grid grid-cols-3 gap-4 justify-items-between mt-6">
@@ -259,7 +302,11 @@ focus:ring-offset-2  opacity-70 rounded-lg "
           </div>
         </div>
       </div>
-      <PasswordModifyModal open={open} setOpen={setOpen} />
+      {user.nickname != currentNick ? (
+        <div></div>
+      ) : (
+        <PasswordModifyModal open={open} setOpen={setOpen} />
+      )}
     </div>
   );
 }
