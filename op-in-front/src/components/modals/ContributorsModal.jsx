@@ -13,7 +13,7 @@ export default function ContributorsModal({ open, setOpen, contributors }) {
       for (let i = 0; i < list.length; i++) {
         result.push(
           <>
-            <User />
+            <User profileImg={list[i].profileImg} nickname={list[i].nickname} />
           </>
         );
       }

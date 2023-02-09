@@ -15,9 +15,78 @@ export default function Detail() {
   const location = useLocation();
   const currentNick = location.state;
   const [open, setOpen] = useState(false);
+  const user = useRecoilValue(userInfo);
 
   const [Image, setImage] = useState(DefaultImg);
   const fileInput = useRef(null);
+
+  const followClassState = `py-1 px-3 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500
+  focus:ring-offset-red-200 text-white  transition ease-in duration-200
+  text-center font-semibold shadow-md focus:outline-none focus:ring-2
+  focus:ring-offset-2  opacity-70 rounded-lg `;
+
+  const unfollowClassState = `py-1 px-3 bg-orange-600 hover:bg-orange-700 focus:ring-orange-500
+  focus:ring-offset-red-200 text-white  transition ease-in duration-200
+  text-center font-semibold shadow-md focus:outline-none focus:ring-2
+  focus:ring-offset-2  opacity-70 rounded-lg `;
+
+  const [followState, setFollowState] = useState({
+    state: true,
+    classValue: followClassState,
+    value: "follow",
+  });
+
+  const setFollowButton = async () => {
+    await http
+      .post(`member/follow/check`)
+      .then((response) => {
+        if (response.data) {
+          setFollowState({
+            state: true,
+            classValue: followClassState,
+            value: "follow",
+          });
+          console.log("initial follow setted");
+        } else {
+          setFollowState({
+            state: false,
+            classValue: unfollowClassState,
+            value: "unfollow",
+          });
+          console.log("initial unfollow setted");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const renderFollowButton = () => {
+    if (user.nickname == currentNick) return modifyPasswordButton;
+    else return followButton;
+  };
+  const followButton = () => {
+    return (
+      <button type="button" disabled="" className={followState.classValue}>
+        {followState.value}
+      </button>
+    );
+  };
+  const modifyPasswordButton = () => {
+    return (
+      <button
+        type="button"
+        disabled=""
+        onClick={toggleModal}
+        className="py-1 px-3 bg-green-600 hover:bg-green-700 focus:ring-green-500
+focus:ring-offset-red-200 text-white  transition ease-in duration-200
+text-center font-semibold shadow-md focus:outline-none focus:ring-2
+focus:ring-offset-2  opacity-70 rounded-lg "
+      >
+        Modify Password
+      </button>
+    );
+  };
 
   const onChange = (e) => {
     if (e.target.files[0]) {
@@ -67,8 +136,6 @@ export default function Detail() {
   //   setUserImg(img);
   // };
 
-  const user = useRecoilValue(userInfo);
-
   async function getMember() {
     await http
       .post(`member/mypage`, {
@@ -86,6 +153,7 @@ export default function Detail() {
 
   useEffect(() => {
     getMember();
+    setFollowButton();
   }, []);
 
   return (
@@ -117,32 +185,7 @@ export default function Detail() {
               <div>
                 <div className="grid grid-cols-2 gap-2 justify-items-between">
                   <div className="bg-prinavy self-center"> {myinfo.nickname}</div>
-                  <div className="self-center">
-                    {user.nickname == currentNick ? (
-                      <button
-                        type="button"
-                        disabled=""
-                        onClick={toggleModal}
-                        className="py-1 px-3 bg-green-600 hover:bg-green-700 focus:ring-green-500
-                    focus:ring-offset-red-200 text-white  transition ease-in duration-200
-                    text-center font-semibold shadow-md focus:outline-none focus:ring-2
-                    focus:ring-offset-2  opacity-70 rounded-lg "
-                      >
-                        Modify Password
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        disabled=""
-                        className="py-1 px-3 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500
-                    focus:ring-offset-red-200 text-white  transition ease-in duration-200
-                    text-center font-semibold shadow-md focus:outline-none focus:ring-2
-                    focus:ring-offset-2  opacity-70 rounded-lg "
-                      >
-                        Follow
-                      </button>
-                    )}
-                  </div>
+                  <div className="self-center">{renderFollowButton}</div>
                   {/* <img src={Setting} alt="setting" className="h-16 justify-self-end" /> */}
                 </div>
                 <div className="grid grid-cols-3 gap-4 justify-items-between mt-6">

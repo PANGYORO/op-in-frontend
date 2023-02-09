@@ -2,11 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function RepoPost({
-  _postId,
-  _createTime,
-  post_content,
-  _likeCount,
-  _commentCount,
+  _postId = 1,
+  _createTime = "2022-02-09",
+  post_content = "basic title",
+  _likeCount = 0,
+  _commentCount = 0,
 }) {
   const navigate = useNavigate();
 
@@ -50,7 +50,9 @@ export default function RepoPost({
                 </div> */}
                 <div className="flex items-center space-x-4 justify-between">
                   <div className="flex gap-3 space-y-1">
-                    <span className="text-md">{post_content}</span>
+                    <span className="text-md">
+                      {post_content == null ? "nodtata" : post_content}
+                    </span>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4 justify-between">
