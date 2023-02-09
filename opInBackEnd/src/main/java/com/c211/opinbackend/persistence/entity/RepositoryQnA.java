@@ -26,7 +26,6 @@ public class RepositoryQnA {
 	@Column(name = "REPOSITORY_QNA_ID")
 	private Long id;
 
-	// TODO: 2023/02/08 qna 삭제되면 래포도 맴버도 삭제되는지 확인 필요합니다
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "MEMBER_ID")
 	private Member authorMember;
@@ -38,5 +37,17 @@ public class RepositoryQnA {
 	private String content;
 
 	private LocalDateTime createTime;
+
+	public void setMemberNull() {
+		this.authorMember = null;
+	}
+
+	public void setRepositoryNull() {
+		this.repository = null;
+	}
+
+	public void updateContent(String newContent) {
+		this.content = newContent;
+	}
 
 }
