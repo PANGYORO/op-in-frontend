@@ -1,47 +1,78 @@
-import React, { useState } from "react";
-import QnA from "@components/repository/QnA";
+import React, { useState, useEffect } from "react";
 import QnaModal from "@components/modals/QnaModal";
-import QnaDemo from "@components/repository/QnaDemo";
+import QnA from "@components/repository/QnA";
 import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
+import http from "@api/http";
+import { useToast } from "@hooks/useToast";
 
-const QnaDummy = [
-  {
-    nickname: "A",
-    content: "hello1111111",
-  },
-  {
-    nickname: "B",
-    content: "hello22222",
-  },
-  {
-    nickname: "C",
-    content: "hello33333",
-  },
-  {
-    nickname: "D",
-    content: "hello44444",
-  },
-];
 export default function FollowingQnas() {
+  const repoId = 1;
   const [open, setOpen] = useState(false);
   const user = useRecoilValue(userInfo);
+  const { setToast } = useToast();
+
+  const [qnaData, setQnaData] = useState([]);
+
+  useEffect(() => {
+    setQnaData(getQnaData());
+    // console.log(qnaData);
+  }, []);
+
+  const getQnaData = async () => {
+    await http
+      .get(`qna/repo/${repoId}`)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const rendering = (list) => {
     const result = [];
     for (let i = list.length == null ? -1 : list.length - 1; i >= 0; i--) {
       result.push(
-        <QnaDemo key={i} user_nickname={list[i].nickname} qna_content={list[i].content} />
+        <QnA
+          qnaId={list[i].qnaId}
+          authorMember={list[i].authorMember}
+          authorAvatar={list[i].authorAvatar}
+          createTime={list[i].createTime}
+          content={list[i].content}
+          qnACommentList={list[i].qnACommentList}
+        />
       );
     }
     return result;
   };
 
   const highFunction = (text) => {
-    QnaDummy.push({
-      nickname: user.nickname,
-      content: text,
-    });
+    const qnaId = async () => {
+      await http
+        .post(`qna`, { comment: text, repoId: repoId })
+        .then((response) => {
+          return response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+          return 0;
+        });
+    };
+    console.log(qnaData);
+    setQnaData((prev) => [
+      ...Array.from(prev),
+      {
+        qnaId: qnaId,
+        authorMember: user.nickname,
+        authorAvatar: user.img_url,
+        createTime: "today",
+        content: text,
+        qnACommentList: [],
+      },
+    ]);
+
+    setToast({ message: "Qna가 작성되었습니다." });
   };
 
   function toggleModal() {
@@ -113,11 +144,8 @@ export default function FollowingQnas() {
         </div>
       </header>
 
-      <div className="ml-4 w-full h-screen overflow-auto">
-        {rendering(QnaDummy)}
-        <QnA />
-      </div>
-      
+      <div className="ml-4 w-full h-screen overflow-auto">{rendering(qnaData)}</div>
+
       <QnaModal open={open} setOpen={setOpen} propFunction={highFunction} />
     </>
   );
