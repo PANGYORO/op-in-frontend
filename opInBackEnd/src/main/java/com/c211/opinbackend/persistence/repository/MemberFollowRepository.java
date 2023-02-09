@@ -19,6 +19,6 @@ public interface MemberFollowRepository extends JpaRepository<MemberFollow, Long
 	void delete(MemberFollow entity);
 
 	Optional<MemberFollow> findByFromMemberAndToMember(Member fromMember, Member toMember);
-
+	boolean existsByFromMemberAndToMember(Member fromMember, Member toMember);
 	MemberFollow save(MemberFollow memberFollow);
 }
