@@ -353,11 +353,8 @@ public class MemberServiceImpl implements MemberService {
 	public Member getMember() {
 		String email = SecurityUtil.getCurrentUserId()
 			.orElseThrow(() -> new AuthRuntimeException(AuthExceptionEnum.AUTH_SECURITY_AUTHENTICATION_EXCEPTION));
-		;
-		log.info("getMember: {}", email);
 		Member member = memberRepository.findByEmail(email)
 			.orElseThrow(() -> new AuthRuntimeException(AuthExceptionEnum.AUTH_SECURITY_AUTHENTICATION_EXCEPTION));
-		;
 		return member;
 	}
 
@@ -382,12 +379,16 @@ public class MemberServiceImpl implements MemberService {
 	 * 팔로우 취소
 	 * */
 	@Override
+	@Transactional
 	public boolean followDeleteMember(String nickname) {
 		Member fromMember = getMember();
 		Member toMember = memberRepository.findByNickname(nickname)
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 
 		MemberFollow follow = memberFollowRepository.findByFromMemberAndToMember(fromMember, toMember).orElse(null);
+
+		follow.setfromMember(null);
+		follow.setToMember(null);
 
 		try {
 			memberFollowRepository.delete(follow);
@@ -416,12 +417,27 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	/*
-	 * SAVE Member Topic
+	* SAVE 회원가입 시 topic, tech language 저장
+	* */
+	@Override
+	public boolean saveSignUpTopicAndTechLanguage(String email, List<String> topics, List<String> lans) {
+		Member member = memberRepository.findByEmail(email).orElseThrow(()->new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+		saveTopic(topics, member);
+		saveTechLanguage(lans, member);
+		return true;
+	}
+
+	/*
+	 * SAVE 로그인 Member Topic
 	 * */
 	@Override
-	public boolean saveTopic(List<String> topics) {
+	public boolean saveLoginTopic(List<String> topics) {
 		Member member = getMember();
+		saveTopic(topics, member);
+		return true;
+	}
 
+	public void saveTopic(List<String> topics, Member member) {
 		for (String topic : topics) {
 			Topic isTopic = topicRepository.findByTitle(topic).orElse(null);
 
@@ -446,17 +462,19 @@ public class MemberServiceImpl implements MemberService {
 
 			memberTopicRepository.save(memberTopic);
 		}
-
-		return true;
 	}
 
 	/*
-	 * SAVE Member Tech Language
+	 * SAVE 로그인 Member Tech Language
 	 * */
 	@Override
-	public boolean saveTechLanguage(List<String> languages) {
+	public boolean saveLoginTechLanguage(List<String> languages) {
 		Member member = getMember();
+		saveTechLanguage(languages, member);
+		return true;
+	}
 
+	public void saveTechLanguage(List<String> languages, Member member) {
 		for (String lan : languages) {
 			TechLanguage language = techLanguageRepository.findByTitle(lan).orElse(null);
 
@@ -467,12 +485,12 @@ public class MemberServiceImpl implements MemberService {
 
 				language = techLanguageRepository.save(newLanguage);
 			}else {
-				// topic 과 member 의 관계가 있는지 확인
+				// tech language 과 member 의 관계가 있는지 확인
 				MemberTechLanguage memberTechLanguage = memberTechLanguageRepository.findByMemberAndTechLanguage(member, language).orElse(null);
 				if (memberTechLanguage != null) continue;
 			}
 
-			//member topic 으로 이어주기
+			//member tech language 으로 이어주기
 			MemberTechLanguage memberTechLanguage = MemberTechLanguage.builder()
 				.techLanguage(language)
 				.member(getMember())
@@ -480,7 +498,6 @@ public class MemberServiceImpl implements MemberService {
 
 			memberTechLanguageRepository.save(memberTechLanguage);
 		}
-		return true;
 	}
 
 	/*
