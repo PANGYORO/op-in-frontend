@@ -1,5 +1,6 @@
 package com.c211.opinbackend.persistence.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,6 @@ public interface TechLanguageRepository extends JpaRepository<TechLanguage, Long
 	Optional<TechLanguage> findByTitle(String title);
 
 	TechLanguage save(TechLanguage techLanguage);
+
+	List<TechLanguage> findAll();
 }

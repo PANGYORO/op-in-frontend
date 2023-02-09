@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Fragment, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import "@toast-ui/editor/dist/toastui-editor.css";
@@ -8,10 +8,32 @@ import "prismjs/themes/prism.css";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 import fontSize from "tui-editor-plugin-font-size";
-import "@assets/css/editor.css";
 
-export default function PostModal({ open, setOpen }) {
+export default function PostModal({ open, setOpen, propFunction }) {
   const cancelButtonRef = useRef(null);
+
+  const toastuiEditor = useRef();
+  const [data, setData] = useState("");
+
+  const [title, setText] = useState("");
+
+  const textChangeHandler = (e) => {
+    setText(e.currentTarget.value);
+  };
+
+  const onChange = () => {
+    setData(toastuiEditor.current.getInstance().getMarkdown());
+    // setData(toastuiEditor.current.getInstance().getHTML());
+  };
+
+  const createPost = async () => {
+    // 서버에 데이터 보내는 로직
+    propFunction({
+      title: title,
+      content: data,
+    });
+    setText("");
+  };
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -50,6 +72,8 @@ export default function PostModal({ open, setOpen }) {
                     className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-400 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
                     name="Title"
                     placeholder="Insert Title..."
+                    value={title}
+                    onChange={textChangeHandler}
                   />
                 </div>
 
@@ -57,6 +81,17 @@ export default function PostModal({ open, setOpen }) {
                   height="500px"
                   initialValue=" "
                   previewStyle="vertical"
+                  ref={toastuiEditor}
+                  onChange={onChange}
+                  language="ko-KR"
+                  toolbarItems={[
+                    // 툴바 옵션 설정
+                    ["heading", "bold", "italic", "strike"],
+                    ["hr", "quote"],
+                    ["ul", "ol", "task", "indent", "outdent"],
+                    ["table", "image", "link"],
+                    ["code", "codeblock"],
+                  ]}
                   plugins={[[codeSyntaxHighlight, { highlighter: Prism }, colorSyntax, fontSize]]}
                 />
                 <div className="bg-gray-50 px-4 p-4 sm:flex sm:flex-row-reverse sm:px-6">
@@ -71,7 +106,10 @@ export default function PostModal({ open, setOpen }) {
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-                    onClick={() => setOpen(false)}
+                    onClick={() => {
+                      setOpen(false);
+                      createPost();
+                    }}
                   >
                     Write
                   </button>

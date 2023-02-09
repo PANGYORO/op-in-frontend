@@ -1,13 +1,74 @@
 import React, { useState } from "react";
-import Post from "@components/repository/RepoPost";
+import RepoPost from "@components/repository/RepoPost";
 import PostModal from "@components/modals/PostModal";
+// import { userInfo } from "@recoil/user/atoms";
+// import { useRecoilValue } from "recoil";
+
+const PostDummy = [
+  {
+    postId: "1",
+    createTime: "2023-02-08T02:18:39",
+    post_content: "A",
+    likeCount: 0,
+    commentCount: 0,
+  },
+  {
+    postId: "2",
+    createTime: "2023-02-08T02:18:39",
+    post_content: "B",
+    likeCount: 0,
+    commentCount: 0,
+  },
+  {
+    postId: "3",
+    createTime: "2023-02-08T02:18:39",
+    post_content: "C",
+    likeCount: 2,
+    commentCount: 0,
+  },
+  {
+    postId: "4",
+    createTime: "2023-02-08T02:18:39",
+    post_content: "D",
+    likeCount: 0,
+    commentCount: 0,
+  },
+];
 
 export default function FollowingPosts() {
   const [open, setOpen] = useState(false);
+  // const user = useRecoilValue(userInfo);
 
   function toggleModal() {
     setOpen((prev) => !prev);
   }
+
+  const rendering = (list) => {
+    const result = [];
+    for (let i = list.length == null ? -1 : list.length - 1; i >= 0; i--) {
+      result.push(
+        <RepoPost
+          key={i}
+          _postId={list[i].postId}
+          _createTime={list[i].createTime}
+          post_content={list[i].post_content}
+          _likeCount={list[i].likeCount}
+          _commentCount={list[i].commentCount}
+        />
+      );
+    }
+    return result;
+  };
+
+  const highFunction = (data) => {
+    PostDummy.push({
+      postId: data.title,
+      createTime: "today",
+      post_content: data.content,
+      likeCount: 0,
+      commentCount: 0,
+    });
+  };
   return (
     <>
       <header className="z-20 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl ml-4 mb-4 mr-4">
@@ -73,11 +134,12 @@ export default function FollowingPosts() {
           </div>
         </div>
       </header>
-      <div className="grid grid-cols-2 gap-4 w-full ml-4 h-screen overflow-auto">
-        <Post />
-        <Post />
+      <div className="flex">
+        <div className="grid grid-cols-2 gap-4 w-full ml-4 h-screen overflow-auto">
+          {rendering(PostDummy)}
+        </div>
       </div>
-      <PostModal open={open} setOpen={setOpen} />
+      <PostModal open={open} setOpen={setOpen} propFunction={highFunction} />
     </>
   );
 }

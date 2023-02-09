@@ -16,6 +16,7 @@ import com.c211.opinbackend.auth.model.request.MemberLoginRequest;
 import com.c211.opinbackend.auth.model.request.MemberNicknameRequest;
 import com.c211.opinbackend.auth.model.request.MemberPasswordRequest;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
+import com.c211.opinbackend.auth.model.response.TechLanguageResponse;
 import com.c211.opinbackend.auth.service.MailService;
 import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
@@ -52,21 +53,21 @@ public class MemberController {
 	@PostMapping("/mypage")
 	public ResponseEntity<?> getMemberInfo(@RequestBody MemberNicknameRequest request) throws Exception {
 		MypageResponse mypageResponse = memberService.getMemberInfo(request.getNickname());
-		return new ResponseEntity<MypageResponse>(mypageResponse, HttpStatus.OK);
+		return new ResponseEntity<>(mypageResponse, HttpStatus.OK);
 	}
 
 	// 이메일 중복확인
 	@PostMapping("/email/check")
 	public ResponseEntity<?> existEmail(@RequestBody MemberEmailRequest request) throws Exception {
 		boolean exist = memberService.existEmail(request.getEmail());
-		return new ResponseEntity<Boolean>(exist, HttpStatus.OK);
+		return new ResponseEntity<>(exist, HttpStatus.OK);
 	}
 
 	// 닉네임 중복확인
 	@PostMapping("/nickname/check")
 	public ResponseEntity<?> existNickname(@RequestBody MemberNicknameRequest request) throws Exception {
 		boolean exist = memberService.existNickname(request.getNickname());
-		return new ResponseEntity<Boolean>(exist, HttpStatus.OK);
+		return new ResponseEntity<>(exist, HttpStatus.OK);
 	}
 	
 	// 닉네임 변경
@@ -79,7 +80,7 @@ public class MemberController {
 
 		String username = SecurityUtil.getCurrentUserId().orElse(null);
 		Member member = memberService.modifyNickname(request.getNickname(), username);
-		return new ResponseEntity<String>(member.getNickname(), HttpStatus.OK);
+		return new ResponseEntity<>(member.getNickname(), HttpStatus.OK);
 	}
 
 	// 비밀번호 변경
@@ -87,20 +88,20 @@ public class MemberController {
 	public ResponseEntity<?> modifyPassword(@RequestBody MemberPasswordRequest request) {
 		String username = SecurityUtil.getCurrentUserId().orElse(null);
 		boolean val = memberService.modifyPassword(username, request.getPassword());
-		return new ResponseEntity<Boolean>(val, HttpStatus.OK);
+		return new ResponseEntity<>(val, HttpStatus.OK);
 	}
 
 	// 로그인할 때 정보 리턴
 	@PostMapping("/member/info")
 	public ResponseEntity<?> getMemberLogin() {
 		Member member = memberService.getMember();
-		return new ResponseEntity<Member>(member, HttpStatus.OK);
+		return new ResponseEntity<>(member, HttpStatus.OK);
 	}
 
 	// 임시 비밀번호 발급 이메일
 	@PostMapping("/password/email")
 	public ResponseEntity<?> changePwEmail(@RequestBody Map<String, String> email) {
-		return new ResponseEntity<String>(mailService.mailSend(email.get("email")), HttpStatus.OK);
+		return ResponseEntity.ok(mailService.mailSend(email.get("email")));
 	}
 
 	// 회원 탈퇴
@@ -160,6 +161,11 @@ public class MemberController {
 		} else {
 			throw new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION);
 		}
+	}
+
+	@GetMapping("/language/all")
+	public ResponseEntity<?> getListTechLanguage() {
+		return new ResponseEntity<>(memberService.getListTechLanguage(), HttpStatus.OK);
 	}
 
 }

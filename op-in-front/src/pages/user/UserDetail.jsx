@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import DefaultImg from "@assets/basicprofile.png";
 // import Setting from "@assets/settings.png";
 import Post from "@components/Post";
@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
 import PasswordModifyModal from "@components/modals/PasswordModifyModal";
+import { Tooltip } from "react-tooltip";
 
 export default function Detail() {
   const [myinfo, setMyInfo] = useState("");
@@ -15,9 +16,56 @@ export default function Detail() {
   const currentNick = location.state;
   const [open, setOpen] = useState(false);
 
+  const [Image, setImage] = useState(DefaultImg);
+  const fileInput = useRef(null);
+
+  const onChange = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+      //화면에 프로필 사진 표시
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImage(reader.result);
+        }
+      };
+      reader.readAsDataURL(e.target.files[0]);
+      // 이미지 서버로 전송
+      // imageUpload(e.target.files[0]);
+    } else {
+      //업로드 취소할 시
+      setImage(Image);
+      return;
+    }
+  };
+
+  // const imageUpload = async (img) => {
+  //   let formData = new FormData();
+  //   formData.append("upload", img);
+
+  //   await http
+  //     .post(`/member/image/upload`, {
+  //       data: formData,
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     })
+  //     .then(() => {
+  //       console.log("success");
+  //     })
+  //     .catch((error) => {
+  //       console.lod(error);
+  //     });
+  // };
+
   function toggleModal() {
     setOpen(true);
   }
+
+  // const onImageChange = (e) => {
+  //   const img = e.target.files[0];
+  //   setUserImg(img);
+  // };
 
   const user = useRecoilValue(userInfo);
 
@@ -44,8 +92,25 @@ export default function Detail() {
     <div className="flex items-start justify-between mx-44">
       <div className="w-full mx-4 my-4 h-screen overflow-auto">
         <div className="grid grid-cols-3 gap-3 mb-8">
-          <div className="flex justify-center h-full ">
-            <img src={DefaultImg} alt="none" />
+          <div className="flex flex-col justify-center h-full ml-44">
+            <img
+              id="profile_img"
+              src={Image}
+              style={{ margin: "20px" }}
+              size={200}
+              onClick={() => {
+                fileInput.current.click();
+              }}
+            />
+            <input
+              type="file"
+              style={{ display: "none" }}
+              accept="image/jpg,image/png,image/jpeg"
+              name="profile_img"
+              onChange={onChange}
+              ref={fileInput}
+            />
+            <Tooltip anchorId="profile_img" content="Click to change Image" />
           </div>
           <div className="flex justify-center col-span-2 lg:text-3xl md:text-2xl sm:text-xl w-4/5">
             <div className="grid content-center">
