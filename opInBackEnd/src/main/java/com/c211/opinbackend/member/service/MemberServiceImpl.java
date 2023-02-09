@@ -354,6 +354,7 @@ public class MemberServiceImpl implements MemberService {
 		String email = SecurityUtil.getCurrentUserId()
 			.orElseThrow(() -> new AuthRuntimeException(AuthExceptionEnum.AUTH_SECURITY_AUTHENTICATION_EXCEPTION));
 		;
+		log.info("getMember: {}", email);
 		Member member = memberRepository.findByEmail(email)
 			.orElseThrow(() -> new AuthRuntimeException(AuthExceptionEnum.AUTH_SECURITY_AUTHENTICATION_EXCEPTION));
 		;
