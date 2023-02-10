@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class GetMemberRepositoryReader implements ItemReader<RepositoryDto> {
 
+	private final MemberRepository memberRepository;
 	private List<RepositoryDto> collectData = new ArrayList<>(); //Rest로 가져온 데이터를 리스트에 넣는다.
 	private boolean checkRestCall = false; //RestAPI 호출여부 판단
 	private int nextIndex = 0;//리스트의 데이터를 하나씩 인덱스를 통해 가져온다.
@@ -31,13 +32,20 @@ public class GetMemberRepositoryReader implements ItemReader<RepositoryDto> {
 		UnexpectedInputException, ParseException, NonTransientResourceException {
 
 		if (checkRestCall == false){//한번도 호출 않았는지 체크
-			RepositoryDto[] memberRepository = getMemberRepository("", "Djuuuni");
-			collectData = Arrays.asList(memberRepository);//배열을 리스트로 변환
+
+			List<Member> members = memberRepository.findAllByGithubIdIsNotNull();
+
+			for (Member member : members) {
+				RepositoryDto[] memberRepository = getMemberRepository("", member.getGithubUserName());
+				List<RepositoryDto> repos = Arrays.asList(memberRepository);
+				collectData.addAll(repos);
+			}
+
 			log.info("Rest Call result : >>>>>>>" + collectData.size());
 			checkRestCall = true;//다음 read() 부터는 재호출 방지하기 위해 true로 변경
 		}
 
-		RepositoryDto nextCollect = null; //ItemReader는 반복문으로 동작한다. 하나씩 Writer로 전달해야 한다.
+		RepositoryDto nextCollect = null; // ItemReader는 반복문으로 동작한다. 하나씩 Writer로 전달해야 한다.
 
 		if (nextIndex < collectData.size()) {//전체 리스트에서 하나씩 추출해서, 하나씩 Writer로 전달
 			nextCollect = collectData.get(nextIndex);

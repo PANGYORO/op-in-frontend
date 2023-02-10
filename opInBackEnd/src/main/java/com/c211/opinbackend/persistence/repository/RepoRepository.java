@@ -12,6 +12,8 @@ public interface RepoRepository extends JpaRepository<Repository, Long> {
 
 	Optional<Repository> findById(String id);
 
+	List<Repository> findAll();
+
 	List<Repository> findByMember(Member member);
 
 	List<Repository> findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name,

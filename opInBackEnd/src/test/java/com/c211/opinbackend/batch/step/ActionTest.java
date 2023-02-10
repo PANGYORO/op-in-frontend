@@ -1,5 +1,7 @@
 package com.c211.opinbackend.batch.step;
 
+import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,6 +10,7 @@ import com.c211.opinbackend.batch.dto.github.RepositoryDto;
 import com.c211.opinbackend.batch.service.RepositoryPullRequestService;
 import com.c211.opinbackend.batch.service.RepositoryService;
 import com.c211.opinbackend.batch.service.RepositoryTechLanguageService;
+import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
 import com.c211.opinbackend.persistence.repository.RepoContributorRepository;
 
@@ -50,7 +53,7 @@ public class ActionTest {
 			}
 		}
 	}
-	//
+
 	// @Test
 	// public void USER_REPOSITORIES_REQUEST_AND_TECH_LANGUAGE() {
 	// 	RepositoryDto[] repoDtos = action.getMemberRepository("", "Djunnni");
@@ -59,13 +62,16 @@ public class ActionTest {
 	// 			Map<String, Long> languages = action.getRepositoryLanguages(repo.getFullName());
 	// 			Repository repository = repositoryService.saveOrUpdateRepository(repo);
 	// 			repositoryTechLanguageService.fetchTechLanguage(repository, languages);
+	// 			for (String language : languages.keySet()) {
+	// 				System.out.println(language);
+	// 			}
 	// 		} catch (Exception e) {
 	// 			e.printStackTrace();
 	// 			System.out.println(repo);
 	// 		}
 	// 	}
 	// }
-	//
+
 	// @Test
 	// public void REPOSITORY_COMMIT_REQUEST_TEST() {
 	// 	CommitDto[] commits = action.getRepositoryCommits("Djunnni/Algorithm");
