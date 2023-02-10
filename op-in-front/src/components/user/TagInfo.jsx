@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import { useToast } from "@hooks/useToast";
 import http from "@api/http";
 
-export default function TagInfo({ title, titlelength = 0, taglist = [], ismine }) {
+export default function TagInfo({ title, taglist = [], ismine }) {
+  // console.log(taglist);
+  // console.log(taglist.length);
   const [openState, setOpenState] = useState(false);
-  const [curlength, setCurlength] = useState(Number(titlelength));
-  const [amount, setAmount] = useState(Number(titlelength));
-  console.log(curlength + " " + amount);
+  const [curlength, setCurlength] = useState(0);
+  const [amount, setAmount] = useState(0);
+
+  useEffect(() => {
+    setCurlength(taglist.length);
+    setAmount(taglist.length);
+  });
+
+  // console.log(curlength + " " + amount);
   const { setToast } = useToast();
 
   const rendering = (list) => {
@@ -177,7 +185,6 @@ export default function TagInfo({ title, titlelength = 0, taglist = [], ismine }
               id={title + "-plus"}
               type="button"
               onClick={() => {
-                // document.getElementById("add" + title).focus();
                 setOpenState(true);
               }}
               className="ml-4 px-3 py-1 text-white bg-slate-700 hover:bg-slate-800 focus:ring-4 focus:outline-none focus:ring-slate-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:ring-slate-800"

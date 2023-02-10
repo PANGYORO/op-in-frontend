@@ -6,8 +6,8 @@ import { useRecoilValue } from "recoil";
 import http from "@api/http";
 import { useToast } from "@hooks/useToast";
 
-function FollowingQnas() {
-  const repoId = 1;
+function FollowingQnas({ repoId }) {
+  const curRepoId = repoId;
   const [open, setOpen] = useState(false);
   const user = useRecoilValue(userInfo);
   const { setToast } = useToast();
@@ -16,12 +16,12 @@ function FollowingQnas() {
 
   useEffect(() => {
     setQnaData(getQnaData());
-    // console.log(qnaData);
+    console.log(qnaData);
   }, []);
 
   const getQnaData = async () => {
     await http
-      .get(`qna/repo/${repoId}`)
+      .get(`qna/repo/${curRepoId}`)
       .then((response) => {
         return response.data;
       })
@@ -35,6 +35,7 @@ function FollowingQnas() {
     for (let i = list.length == null ? -1 : list.length - 1; i >= 0; i--) {
       result.push(
         <QnA
+          repoId={curRepoId}
           qnaId={list[i].qnaId}
           authorMember={list[i].authorMember}
           authorAvatar={list[i].authorAvatar}

@@ -2,7 +2,8 @@ import { Fragment, useRef } from "react";
 import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import User from "@components/user/User";
-// import http from "api/http";
+import http from "@api/http";
+import { userInfo } from "@recoil/user/atoms";
 
 export default function ContributorsModal({ open, setOpen, contributors }) {
   const cancelButtonRef = useRef(null);

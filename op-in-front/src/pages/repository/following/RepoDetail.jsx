@@ -53,11 +53,11 @@ export default function RepoDetail() {
             </ul>
           </header>
         </div>
-        <div className="ml-4 mb-4">
+        <div className="mr-4">
           {tab == POSTS_TAB ? (
             <FollowingPosts repoId={repoDetail?.id} />
           ) : (
-            <FollowingQnas />
+            <FollowingQnas repoId={repoDetail.id} />
           )}
         </div>
       </div>
