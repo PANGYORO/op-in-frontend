@@ -42,8 +42,8 @@ function FollowingQnas({ repoId }) {
         <QnA
           repoId={curRepoId}
           qnaId={list[i].id}
-          authorMember={list[i].authorMember}
-          authorAvatar={list[i].authorAvatar}
+          nickname={list[i].member.nickname}
+          avatar={list[i].member.user_img}
           createTime={list[i].createTime}
           content={list[i].content}
           qnACommentList={list[i].comments}
