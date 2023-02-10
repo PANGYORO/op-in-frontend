@@ -29,6 +29,8 @@
     "react-hot-toast": "^2.4.0",
     "react-iframe": "^1.8.5",
     "react-joyride": "^2.5.3",
+    "react-native": "^0.71.2",
+    "react-native-progress": "^5.0.0",
     "react-player": "^2.11.1",
     "react-router-dom": "^6.8.0",
     "react-split": "^2.0.14",
