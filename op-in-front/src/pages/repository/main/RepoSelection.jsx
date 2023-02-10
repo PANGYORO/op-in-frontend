@@ -89,11 +89,11 @@ export default function RepoSelection() {
         result.push(
           <Repo
             key={i}
-            _id={list[i].id}
-            _title={list[i].title}
-            _content={list[i].content}
-            _techLangs={list[i].techLangs}
-            _repoDetails={list[i]}
+            id={list[i].id}
+            title={list[i].title}
+            content={list[i].content}
+            techLangs={list[i].techLangs}
+            repoDetails={list[i]}
           />
         );
       }
@@ -105,11 +105,11 @@ export default function RepoSelection() {
       <div className="flex items-top w-full  pt-2 pb-24 pl-2 pr-2 overflow-auto md:pt-0 md:pr-0 md:pl-0">
         <div className="grid grid-cols-2 gap-4 w-full">
           <Repo
-            _id={repoData.id}
-            _title={repoData.title}
-            _content={repoData.content}
-            _techLangs={repoData.techLangs}
-            _repoDetails={repoData}
+            id={repoData.id}
+            title={repoData.title}
+            content={repoData.content}
+            techLangs={repoData.techLangs}
+            repoDetails={repoData}
           />
           {repoRendering(repoDatas)}
         </div>
