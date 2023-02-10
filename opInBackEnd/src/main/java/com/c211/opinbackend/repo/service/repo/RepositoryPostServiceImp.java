@@ -8,6 +8,8 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.c211.opinbackend.exception.member.MemberExceptionEnum;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
 import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
 import com.c211.opinbackend.persistence.entity.Member;
@@ -17,12 +19,10 @@ import com.c211.opinbackend.persistence.entity.TitleContent;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
 import com.c211.opinbackend.persistence.repository.RepoPostRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
-import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.model.requeset.RequestUpdatePost;
 import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
-import com.c211.opinbackend.repo.service.mapper.RepoMapper;
 import com.c211.opinbackend.repo.service.mapper.RepoPostMapper;
 
 import lombok.AllArgsConstructor;
@@ -48,7 +48,7 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 		);
 		// 등록하는 맴버를 찾는다.
 		Member member = memberRepository.findByEmail(memberEmail)
-			.orElseThrow(() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION));
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 		// 포스트를 등록한다.
 		try {
 			RepositoryPost repositoryPost = RepositoryPost.builder()
@@ -67,23 +67,6 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 			repoPostRepository.save(repositoryPost);
 		} catch (Exception exception) {
 			return false;
-		}
-		return true;
-	}
-
-	@Override
-	@Transactional
-	public Boolean uploadRepository(String memberEmail, RepoDto repoDto) {
-		// 맴버 없이 래포지토리가 등록 가능해야한다
-		Member member = memberRepository.findByEmail(memberEmail)
-			.orElseGet(null);
-		try {
-
-			Repository repository = RepoMapper.toEntity(member, repoDto);
-			log.info(repository.getName());
-			repoRepository.save(repository);
-		} catch (Exception exception) {
-			exception.printStackTrace();
 		}
 		return true;
 	}

@@ -9,6 +9,7 @@ import com.c211.opinbackend.exception.ExceptionResponseEntity;
 import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.exception.auth.AuthRuntimeException;
+import com.c211.opinbackend.exception.event.EventExceptionRuntimeException;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
 
@@ -73,6 +74,18 @@ public class ExceptionAdvice {
 	@ExceptionHandler({RepositoryRuntimeException.class})
 	private ResponseEntity<ExceptionResponseEntity> repoExceptionHandler(
 		final RepositoryRuntimeException runError) {
+		return new ResponseEntity<>(
+			new ExceptionResponseEntity(
+				runError.getErrorEnum().getHttpStatus().value(),
+				runError.getErrorEnum().getHttpCode(),
+				runError.getMessage()
+			),
+			runError.getErrorEnum().getHttpStatus());
+	}
+
+	@ExceptionHandler({EventExceptionRuntimeException.class})
+	private ResponseEntity<ExceptionResponseEntity> eventExceptionHandler(
+		final EventExceptionRuntimeException runError) {
 		return new ResponseEntity<>(
 			new ExceptionResponseEntity(
 				runError.getErrorEnum().getHttpStatus().value(),
