@@ -1,11 +1,13 @@
 package com.c211.opinbackend.persistence.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+
+import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,10 +24,17 @@ public class Event {
 	@Id
 	@Column(name = "EVENT_ID")
 	private Long id;
+
+	@NotNull
+	@Column(nullable = false)
 	private String title;
+	@NotNull
+	@Column(nullable = false)
 	private String content;
-	private LocalDateTime openDate;
-	private LocalDateTime endDate;
-	private String imgUrl;
+	@NotNull
+	@Column(nullable = false)
+	private LocalDate openDate;
+	private LocalDate endDate;
+	private String img;
 	private String link;
 }

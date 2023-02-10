@@ -8,6 +8,8 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.c211.opinbackend.exception.member.MemberExceptionEnum;
+import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
 import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
 import com.c211.opinbackend.persistence.entity.Member;
@@ -46,7 +48,7 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 		);
 		// 등록하는 맴버를 찾는다.
 		Member member = memberRepository.findByEmail(memberEmail)
-			.orElseThrow(() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION));
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 		// 포스트를 등록한다.
 		try {
 			RepositoryPost repositoryPost = RepositoryPost.builder()
