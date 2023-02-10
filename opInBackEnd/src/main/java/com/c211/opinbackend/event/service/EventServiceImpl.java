@@ -1,6 +1,7 @@
 package com.c211.opinbackend.event.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.transaction.Transactional;
 
@@ -50,6 +51,26 @@ public class EventServiceImpl implements EventService {
 			eventRepository.delete(event);
 		} catch (Exception exception) {
 			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public Boolean update(RequestUploadEvent request) {
+		Event event = eventRepository.findById(request.getEventId()).orElseThrow(
+			() -> new EventExceptionRuntimeException(EventExceptionEnum.EVENT_NOT_EXIST_EXCEPTION)
+		);
+		if (request.getTitle().length() != 0 || !Objects.nonNull(request.getTitle())) {
+			event.updateTitle(request.getTitle());
+		} else if (request.getLink().length() != 0 || !Objects.nonNull(request.getLink())) {
+			event.updateLink(event.getLink());
+		} else if (request.getContent().length() != 0 || !Objects.nonNull(request.getContent())) {
+			event.updateContent(request.getContent());
+		} else if (request.getOpenDate().toString().length() != 0) {
+			event.updateOpenDate(request.getOpenDate());
+		} else if (request.getEndDate().toString().length() != 0) {
+			event.updateEndDate(request.getEndDate());
+
 		}
 		return true;
 	}

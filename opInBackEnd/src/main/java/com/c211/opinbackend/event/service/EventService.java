@@ -12,4 +12,6 @@ public interface EventService {
 	List<Event> getALlEvent();
 
 	Boolean delete(Long eventId);
+
+	Boolean update(RequestUploadEvent requestUploadEvent);
 }
