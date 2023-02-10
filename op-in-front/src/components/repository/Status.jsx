@@ -14,24 +14,16 @@ export default function Status({ repoDetail }) {
     if (list != null)
       for (let i = 0; i < (list.length < 5 ? list.length : 5); i++) {
         result.push(
-          <>
-            <Link
-              id={"cont" + list[i].id}
-              to={`/userdetail`}
-              state={list[i].nickname}
-              key={i}
-            >
+          <span key={i}>
+            <Link id={"cont" + list[i].id} to={`/userdetail`} state={list[i].nickname} key={i}>
               <img
                 className="inline-block h-10 w-10 rounded-full object-cover ring-2 ring-white"
                 src={DefaultImg}
                 alt={list[i].nickname}
               />
             </Link>
-            <Tooltip
-              anchorId={"cont" + list[i].id}
-              content={list[i].nickname}
-            />
-          </>
+            <Tooltip anchorId={"cont" + list[i].id} content={list[i].nickname} />
+          </span>
         );
       }
     return result;
@@ -53,10 +45,7 @@ export default function Status({ repoDetail }) {
     return result;
   };
   const moreContributors = () => {
-    if (
-      repoDetail?.contributors != null &&
-      repoDetail?.contributors.length > 4
-    ) {
+    if (repoDetail?.contributors != null && repoDetail?.contributors.length > 4) {
       return repoDetail?.contributors.length - 4 + " more Contributors...";
     } else return "";
   };
@@ -68,14 +57,9 @@ export default function Status({ repoDetail }) {
           <div className="block w-full h-full">
             <div className="w-full">
               <div className="flex items-center">
-                <div className="flex -space-x-2">
-                  {contributerRender(repoDetail?.contributors)}
-                </div>
+                <div className="flex -space-x-2">{contributerRender(repoDetail?.contributors)}</div>
               </div>
-              <div
-                className="mt-2 text-blue-500 dark:text-gray-300"
-                onClick={toggleModal}
-              >
+              <div className="mt-2 text-blue-500 dark:text-gray-300" onClick={toggleModal}>
                 {moreContributors()}
               </div>
             </div>
@@ -87,9 +71,7 @@ export default function Status({ repoDetail }) {
         {repoDetail?.updateDate == null ? "no data" : repoDetail?.updateDate}
       </div>
       <div className="my-2 font-bold">About</div>
-      <div className="grid grid-cols-3 my-2">
-        {tagRender(repoDetail?.techLangs)}
-      </div>
+      <div className="grid grid-cols-3 my-2">{tagRender(repoDetail?.techLangs)}</div>
       <div className="m-4">
         {/* <div>
           <div className="inline-flex">
@@ -173,11 +155,7 @@ export default function Status({ repoDetail }) {
           </div>
         </div>
       </div>
-      <ContributorsModal
-        open={open}
-        setOpen={setOpen}
-        contributors={repoDetail?.contributors}
-      />
+      <ContributorsModal open={open} setOpen={setOpen} contributors={repoDetail?.contributors} />
     </div>
   );
 }
