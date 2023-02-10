@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import RepoPost from "@components/repository/RepoPost";
 import PostModal from "@components/modals/PostModal";
 import http from "@api/http";
@@ -43,11 +43,13 @@ import http from "@api/http";
 function FollowingPosts({ repoId }) {
   const [open, setOpen] = useState(false);
   const [posts, setPosts] = useState([]);
+  const inputRef = useRef();
   // const user = useRecoilValue(userInfo);
 
   useEffect(() => {
     searchData({ page: 0, size: 100, query: "" });
   }, []);
+
   function searchData({ page = 0, size = 10, query = "" }) {
     http
       .get(`/search/repos/${repoId}/posts`, {
@@ -67,6 +69,11 @@ function FollowingPosts({ repoId }) {
   function toggleModal() {
     setOpen((prev) => !prev);
   }
+  const keyUpEvent = (e) => {
+    if (e.keyCode == 13) {
+      searchData({ page: 0, size: 100, query: inputRef.current.value });
+    }
+  };
 
   const rendering = (list) => {
     const result = [];
@@ -129,6 +136,8 @@ function FollowingPosts({ repoId }) {
                   type="text"
                   className="block w-full py-1.5 pl-10 pr-4 leading-normal rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-400 aa-input"
                   placeholder="Post Search"
+                  ref={inputRef}
+                  onKeyUp={keyUpEvent}
                 />
               </div>
             </div>
@@ -179,3 +188,4 @@ function FollowingPosts({ repoId }) {
 }
 
 export default FollowingPosts;
+

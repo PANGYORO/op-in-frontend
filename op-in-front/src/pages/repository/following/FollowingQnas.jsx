@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import QnaModal from "@components/modals/QnaModal";
 import QnA from "@components/repository/QnA";
 import { userInfo } from "@recoil/user/atoms";
@@ -11,6 +11,7 @@ function FollowingQnas({ repoId }) {
   const [open, setOpen] = useState(false);
   const user = useRecoilValue(userInfo);
   const { setToast } = useToast();
+  const inputRef = useRef();
 
   const [qnaData, setQnaData] = useState([]);
 
@@ -76,6 +77,12 @@ function FollowingQnas({ repoId }) {
     setOpen((prev) => !prev);
   }
 
+  const keyUpEvent = (e) => {
+    if (e.keyCode == 13) {
+      searchQnaData({ size: 100, page: 0, query: inputRef.current.value });
+    }
+  };
+
   return (
     <>
       <header className="z-20 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl mb-4 mr-4">
@@ -107,6 +114,8 @@ function FollowingQnas({ repoId }) {
                   type="text"
                   className="block w-full py-1.5 pl-10 pr-4 leading-normal rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-400 aa-input"
                   placeholder="Qna Search"
+                  ref={inputRef}
+                  onKeyUp={keyUpEvent}
                 />
               </div>
             </div>
@@ -155,3 +164,4 @@ function FollowingQnas({ repoId }) {
 }
 
 export default FollowingQnas;
+
