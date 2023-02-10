@@ -8,8 +8,8 @@ import { useToast } from "@hooks/useToast";
 
 export default function QnA({
   qnaId,
-  authorMember,
-  authorAvatar,
+  nickname,
+  avatar,
   createTime,
   content,
   qnACommentList,
@@ -39,7 +39,9 @@ export default function QnA({
     const result = [];
     if (list != null)
       for (let i = 0; i < list.length; i++) {
-        result.push(<Comment key={i} _text={list[i].content} _name={list[i].user} />);
+        result.push(
+          <Comment key={i} comment={list[i].comment} member={list[i].member} />
+        );
       }
     return result;
   };
@@ -53,7 +55,7 @@ export default function QnA({
               <a href="#" className="relative block">
                 <img
                   alt="profile"
-                  src={authorAvatar == null || authorAvatar == "" ? DefaultImg : authorAvatar}
+                  src={avatar || DefaultImg}
                   className="mx-auto object-cover rounded-full h-16 w-16 "
                 />
               </a>
@@ -64,16 +66,18 @@ export default function QnA({
             <div className="flex flex-cols justify-between">
               <div>
                 <p className="flex items-baseline">
-                  <span className="font-bold text-gray-600 dark:text-gray-200">{authorMember}</span>
+                  <span className="font-bold text-gray-600 dark:text-gray-200">
+                    {nickname}
+                  </span>
                   <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">
-                    {createTime}
+                    {new Date(createTime).toLocaleString()}
                   </span>
                 </p>
                 <div className="mt-3">
                   <p className="mt-1 dark:text-white">{content}</p>
                 </div>
               </div>
-              {authorMember == user.nickname ? (
+              {nickname == user.nickname ? (
                 <div>
                   <button
                     type="button"
@@ -132,7 +136,9 @@ export default function QnA({
 
             <hr className="my-4" />
             {/* 댓글 공간 */}
-            <div className="grid grid-rows-1 gap-2">{commentRender(CommentList)}</div>
+            <div className="grid grid-rows-1 gap-2">
+              {commentRender(CommentList)}
+            </div>
           </div>
         </div>
       </div>

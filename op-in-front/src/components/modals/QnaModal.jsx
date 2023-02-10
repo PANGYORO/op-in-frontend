@@ -2,8 +2,13 @@ import { Fragment, useRef, useState } from "react";
 import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
 // import http from "api/http";
-
-export default function QnaModal({ open, setOpen, propFunction }) {
+import http from "@api/http";
+export default function QnaModal({
+  repositoryId,
+  open,
+  setOpen,
+  propFunction,
+}) {
   const cancelButtonRef = useRef(null);
 
   const [text, setText] = useState("");
@@ -14,23 +19,27 @@ export default function QnaModal({ open, setOpen, propFunction }) {
 
   const createQna = async () => {
     // 서버에 데이터 보내는 로직
-    // await http
-    //   .post(`/repo/qnacreate`, {
-    //     content: text,
-    //   })
-    //   .then(() => {
-    //     console.log("success");
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-
-    propFunction(text);
+    await http
+      .post(`qna`, { comment: text, repoId: repositoryId })
+      .then(({ data }) => {
+        propFunction({
+          repoId: data,
+          comment: text,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-40" initialFocus={cancelButtonRef} onClose={setOpen}>
+      <Dialog
+        as="div"
+        className="relative z-40"
+        initialFocus={cancelButtonRef}
+        onClose={setOpen}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"

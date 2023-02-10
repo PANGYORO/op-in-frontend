@@ -12,7 +12,7 @@ import lombok.ToString;
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommentDto {
-	private String memberEmail;
+	private MemberDto member;
 	private Long repositoryId;
 	private Long repositoryPostId;
 
