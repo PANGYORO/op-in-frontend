@@ -1,13 +1,32 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Repo({
-  id,
-  title = "",
-  content = "",
-  techLangs = [],
-  repoDetails = null,
-}) {
+const Repo = ({
+  id = 1,
+  title = "test",
+  content = "testrepo",
+  techLangs = [{ title: "react" }, { title: "HTML" }],
+  repoDetails = [
+    {
+      id: 2,
+      title: "test title",
+      content: "test content",
+      techLangs: [],
+      contributors: [
+        {
+          nickname: "testmj",
+          id: "1",
+          profileImg: null,
+        },
+      ],
+      gitContributors: null,
+      star: "1233455565",
+      forkNum: "123214141",
+      topicList: [],
+      updateDate: null,
+    },
+  ],
+}) => {
   const navigate = useNavigate();
 
   return (
@@ -50,4 +69,5 @@ export default function Repo({
       </div>
     </>
   );
-}
+};
+export default Repo;
