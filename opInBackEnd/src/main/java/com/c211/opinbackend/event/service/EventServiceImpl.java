@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.c211.opinbackend.event.model.mapper.EventMapper;
 import com.c211.opinbackend.event.model.request.EventUpdateRequest;
 import com.c211.opinbackend.event.model.request.RequestUploadEvent;
+import com.c211.opinbackend.exception.event.EventExceptionEnum;
+import com.c211.opinbackend.exception.event.EventExceptionRuntimeException;
 import com.c211.opinbackend.member.model.response.FileUploadResponse;
 import com.c211.opinbackend.persistence.entity.Event;
 import com.c211.opinbackend.persistence.repository.EventRepository;
@@ -42,6 +44,14 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public Boolean updateEvent(EventUpdateRequest eventUpdateRequest) {
-		return null;
+		if (eventUpdateRequest.getOpenDate().isBefore(eventUpdateRequest.getEndDate())) {
+			throw new EventExceptionRuntimeException(EventExceptionEnum.EVENT_OPEN_DATE_WRONG_EXCEPTION);
+		}
+
+		Event event = eventRepository.findById(eventUpdateRequest.getId()).orElseThrow(
+			() -> new EventExceptionRuntimeException(EventExceptionEnum.EVENT_NOT_EXIST_EXCEPTION)
+		);
+		// TODO: 2023-02-10 업데이트 메소드 만들기 
+		return true;
 	}
 }
