@@ -5,9 +5,9 @@ import react from "@vitejs/plugin-react";
 // https://vitejs.dev/config/
 export default defineConfig({
   define: {
-    'global': {},
+    global: () => ({}),
   },
-  assetsInclude: ['**/*.mov'],
+  assetsInclude: ["**/*.mov"],
   plugins: [react()],
   resolve: {
     alias: {
@@ -20,3 +20,4 @@ export default defineConfig({
     },
   },
 });
+
