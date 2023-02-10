@@ -30,10 +30,10 @@ public class OAuthController {
 	private static final Logger logger = LoggerFactory.getLogger(OAuthController.class);
 	OAuthService oAuthService;
 	@Value("${jwt.access-token-validity-in-seconds}")
-	private long accessTokenValidityInSeconds;
+	private int accessTokenValidityInSeconds;
 
 	@Value("${jwt.refresh-token-validity-in-seconds}")
-	private long refreshTokenValidityInSeconds;
+	private int refreshTokenValidityInSeconds;
 
 	@Autowired
 	public OAuthController(OAuthServiceImpl oAuthService) {
@@ -59,11 +59,11 @@ public class OAuthController {
 			Cookie typeCookie = new Cookie("type", token.getType());
 
 			accessTokenCookie.setPath("/");
-			accessTokenCookie.setMaxAge((int)accessTokenValidityInSeconds - 1);
+			accessTokenCookie.setMaxAge(accessTokenValidityInSeconds);
 			refreshTokenCookie.setPath("/");
-			refreshTokenCookie.setMaxAge((int)refreshTokenValidityInSeconds - 1);
+			refreshTokenCookie.setMaxAge(refreshTokenValidityInSeconds);
 			typeCookie.setPath("/");
-			typeCookie.setMaxAge(((int)accessTokenValidityInSeconds / 1000) - 1);
+			typeCookie.setMaxAge(refreshTokenValidityInSeconds);
 
 			response.addCookie(accessTokenCookie);
 			response.addCookie(refreshTokenCookie);

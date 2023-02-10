@@ -8,11 +8,11 @@ export default function Comment({ member, comment }) {
         <div className="w-20">
           <img
             alt="profile"
-            src={member.user_img || DefaultImg}
+            src={member?.user_img || DefaultImg}
             className="mx-auto object-cover h-10 ml-4"
           />
         </div>
-        <div>{member.nickname}</div>
+        <div>{member?.nickname}</div>
       </div>
       <div className="flex items-center p-3">
         <p>{comment} </p>
