@@ -31,7 +31,7 @@ export default function RepoDetail() {
           <header className="z-40 items-center w-full h-15 pb-3 bg-white shadow-lg dark:bg-gray-700 rounded-t-2xl">
             <div className="pt-3 pl-3 text-2xl">
               <span className="font-semibold"> Current Repository :&nbsp;</span>
-              <span className="font-bold"> {repoDetail.title}</span>
+              <span className="font-bold"> {repoDetail?.title}</span>
             </div>
             <ul className="pt-3 pl-3 flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
               <li className="mr-2">
@@ -55,7 +55,7 @@ export default function RepoDetail() {
         </div>
         <div className="mr-4">
           {tab == POSTS_TAB ? (
-            <FollowingPosts repoId={repoDetail.id} />
+            <FollowingPosts repoId={repoDetail?.id} />
           ) : (
             <FollowingQnas repoId={repoDetail.id} />
           )}

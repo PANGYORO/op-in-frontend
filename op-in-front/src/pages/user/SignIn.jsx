@@ -2,13 +2,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import React from "react";
 import jwt_decode from "jwt-decode";
-import { Cookies } from 'react-cookie'
+import { Cookies } from "react-cookie";
 
 import Logo from "@components/Logo";
 import http from "@api/http";
-import { useSetRecoilState} from "recoil";
+import { useSetRecoilState } from "recoil";
 import { userInfo } from "@recoil/user/atoms";
-import { useToast } from '@hooks/useToast';
+import { useToast } from "@hooks/useToast";
 
 import useToken from "@hooks/useToken";
 
@@ -99,7 +99,7 @@ function EmailInput({ register, error }) {
   );
 }
 
-function LoginForm({ setToast}) {
+function LoginForm({ setToast }) {
   const {
     register,
     handleSubmit,
@@ -109,34 +109,32 @@ function LoginForm({ setToast}) {
   const setUser = useSetRecoilState(userInfo);
 
   const navigate = useNavigate();
-  const cookies = new Cookies()
+  const cookies = new Cookies();
 
-  
   const onSubmit = async (data) => {
     try {
       await http.post("auth/login", {
         email: data.email,
         password: data.password,
       });
-      const decodedUserInfo = jwt_decode(cookies.get('accessToken'));
+      const decodedUserInfo = jwt_decode(cookies.get("accessToken"));
       setUser((before) => ({
         ...before,
         ...decodedUserInfo,
         logined: true,
       }));
       // saveToken(res.data);
-      setToast({message:'로그인 성공!'})
+      setToast({ message: "로그인 성공!" });
       navigate("/");
     } catch (error) {
-      console.log(error)
-      setToast({message:error.response.data.message})
+      console.log(error);
+      //setToast({message:error.response.data.message})
     }
   };
 
   return (
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8 bg-gray-50 p-5">
-        
         <div>
           <Logo className="mx-auto h-20 w-auto" />
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
@@ -219,7 +217,7 @@ function SignIn() {
   const { saveToken } = useToken();
   const { setToast } = useToast();
 
-  return <LoginForm saveToken={saveToken} setToast={setToast}/>;
+  return <LoginForm saveToken={saveToken} setToast={setToast} />;
 }
 
 export default SignIn;
