@@ -60,7 +60,8 @@ const repoData = {
 export default function RepoSelection() {
   const user = useRecoilValue(userInfo);
   const navigate = useNavigate();
-  const [repoDatas, setRepoData] = useState("");
+  const [repoDatas, setRepoData] = useState([]);
+
   useEffect(() => {
     if (!user.logined) navigate(`/repo/recommand`);
     else getData();
@@ -71,33 +72,14 @@ export default function RepoSelection() {
       .post(`/repo/member`, {
         email: user.email,
       })
-      .then((response) => {
-        setRepoData(response.data);
+      .then(({ data }) => {
+        setRepoData(data);
         console.log("success");
       })
       .catch((error) => {
         console.log("fail");
         console.log(error);
       });
-  };
-
-  const repoRendering = (list) => {
-    console.log(list);
-    const result = [];
-    if (list != null)
-      for (let i = 0; i < list.length; i++) {
-        result.push(
-          <Repo
-            key={i}
-            id={list[i].id}
-            title={list[i].title}
-            content={list[i].content}
-            techLangs={list[i].techLangs}
-            repoDetails={list[i]}
-          />
-        );
-      }
-    return result;
   };
 
   return (
@@ -111,7 +93,18 @@ export default function RepoSelection() {
             techLangs={repoData.techLangs}
             repoDetails={repoData}
           />
-          {repoRendering(repoDatas)}
+          {repoDatas.map((repoData) => {
+            return (
+              <Repo
+                key={repoData.id}
+                id={repoData.id}
+                title={repoData.title}
+                content={repoData.content}
+                techLangs={repoData.techLangs}
+                repoDetails={repoData}
+              />
+            );
+          })}
         </div>
       </div>
     </div>
