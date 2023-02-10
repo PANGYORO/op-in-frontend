@@ -7,29 +7,6 @@ import { useLocation } from "react-router-dom";
 const POSTS_TAB = "posts";
 const QNAS_TAB = "qnas";
 
-// const repoData = {
-//   id: 2,
-//   title: "test title",
-//   content: "test content",
-//   techLangs: ["java", "C++", "HTML"],
-//   contributors: [
-//     {
-//       nickname: "testmj",
-//       id: "1",
-//       profileImg: null,
-//     },
-//     {
-//       nickname: "testmj2",
-//       id: "2",
-//       profileImg: null,
-//     },
-//   ],
-//   gitContributors: null,
-//   star: "12334",
-//   forkNum: "1232",
-//   topicList: ["JPA", "Security", "Django"],
-//   updateDate: null,
-// };
 export default function RepoDetail() {
   const [tab, setTab] = useState(POSTS_TAB);
 
@@ -76,7 +53,9 @@ export default function RepoDetail() {
             </ul>
           </header>
         </div>
-        <div className="mr-4">{tab == POSTS_TAB ? <FollowingPosts /> : <FollowingQnas />}</div>
+        <div className="mr-4">
+          {tab == POSTS_TAB ? <FollowingPosts repoId={repoDetail.id} /> : <FollowingQnas />}
+        </div>
       </div>
       <div className="w-1/3 h-full">
         <Status repoDetail={repoDetail} />

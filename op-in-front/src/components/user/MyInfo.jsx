@@ -8,9 +8,13 @@ import DeleteModal from "@components/modals/DeleteModal";
 import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
 
+// Language , Topic
 export default function MyInfo({ userinfo }) {
   const [open, setOpen] = useState(false);
   const user = useRecoilValue(userInfo);
+
+  // console.log(userinfo);
+  // console.log(userinfo.techLanguages);
 
   function toggleModal() {
     setOpen((prev) => !prev);
@@ -44,18 +48,18 @@ export default function MyInfo({ userinfo }) {
         <hr />
         <div className="mr-3">
           <TagInfo
-            title="language"
-            titlelength="5"
-            taglist={["java", "javascript", "html&css", "python", "react"]}
+            title="Language"
+            titlelength={userinfo?.techLanguages?.length}
+            taglist={userinfo?.techLanguages}
             ismine={user.nickname == userinfo.nickname ? true : false}
           />
         </div>
         <hr />
         <div className="mr-3">
           <TagInfo
-            title="Topics"
-            titlelength="5"
-            taglist={["JPA", "SpringBoot", "CD/CI", "SERVER", "UI"]}
+            title="Topic"
+            titlelength={userinfo?.topicResponses?.length}
+            taglist={userinfo?.topicResponses}
             ismine={user.nickname == userinfo.nickname ? true : false}
           />
         </div>

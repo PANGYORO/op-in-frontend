@@ -39,7 +39,7 @@ const PostDummy = [
   },
 ];
 
-export default function FollowingPosts() {
+export default function FollowingPosts({ repoId }) {
   const [open, setOpen] = useState(false);
   // const user = useRecoilValue(userInfo);
 
