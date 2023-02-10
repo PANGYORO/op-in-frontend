@@ -1,6 +1,8 @@
 package com.c211.opinbackend.persistence.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,6 +36,9 @@ public class RepositoryQnA {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "REPOSITORY_ID")
 	private Repository repository;
+
+	@OneToMany(mappedBy = "repositoryQnA")
+	private List<Comment> comments = new ArrayList<>();
 
 	private String content;
 

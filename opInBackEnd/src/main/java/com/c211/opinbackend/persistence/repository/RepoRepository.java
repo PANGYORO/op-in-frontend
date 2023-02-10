@@ -3,6 +3,8 @@ package com.c211.opinbackend.persistence.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.c211.opinbackend.persistence.entity.Member;
@@ -16,4 +18,6 @@ public interface RepoRepository extends JpaRepository<Repository, Long> {
 
 	List<Repository> findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name,
 		String description);
+	Page<Repository> findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name,
+		String description, Pageable pageable);
 }
