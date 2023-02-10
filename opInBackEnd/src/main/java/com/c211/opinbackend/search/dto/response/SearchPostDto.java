@@ -1,6 +1,8 @@
 package com.c211.opinbackend.search.dto.response;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -27,4 +29,6 @@ public class SearchPostDto {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private LocalDateTime date;
+
+	private List<CommentDto> comments = new ArrayList<>();
 }

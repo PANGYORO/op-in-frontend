@@ -1,5 +1,7 @@
 package com.c211.opinbackend.search.mapper;
 
+import java.util.stream.Collectors;
+
 import com.c211.opinbackend.persistence.entity.RepositoryPost;
 import com.c211.opinbackend.search.dto.response.SearchPostDto;
 
@@ -9,6 +11,11 @@ public class PostMapper {
 			.id(post.getId())
 			.title(post.getTitleContent().getTitle())
 			.content(post.getTitleContent().getContent())
+			.comments(post.getCommentsList()
+				.stream()
+				.map(comment -> CommentMapper.toCommentDto(comment))
+				.collect(Collectors.toList())
+			)
 			.commentCount(post.getCommentsList().size())
 			.likeCount(post.getLikeList().size())
 			.imageUrl(post.getImageUrl())

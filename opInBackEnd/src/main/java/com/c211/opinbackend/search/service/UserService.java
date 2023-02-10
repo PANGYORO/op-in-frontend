@@ -24,7 +24,7 @@ public class UserService {
 	final MemberFollowRepository memberFollowRepository;
 
 	public List<MemberDto> search(String keyword) {
-		return search(null,keyword);
+		return search(null, keyword);
 	}
 
 	public List<MemberDto> search(String requestMemberEmail, String keyword) {
@@ -51,7 +51,8 @@ public class UserService {
 				.collect(Collectors.toList());
 		}
 	}
-	public List<MemberDto> search(String requestMemberEmail, String keyword,  Pageable pageable) {
+
+	public List<MemberDto> search(String requestMemberEmail, String keyword, Pageable pageable) {
 		log.info("keyword: {} , userEmail: {}, pageable: {}", keyword, requestMemberEmail, pageable);
 		List<Member> memberList;
 		if (keyword == null || keyword.isEmpty()) {
