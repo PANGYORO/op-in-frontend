@@ -95,13 +95,13 @@ const RepoSelection = () => {
   const [repoDatas, setRepoData] = useState([]);
 
   useEffect(() => {
-    if (!user.logined) navigate(`/post`);
+    if (!user.logined) navigate(`/repo/recommand`);
     else getData();
   }, []);
 
   const getData = async () => {
     await http
-      .post(`/post`, {
+      .post(`/repo/member`, {
         email: user.email,
       })
       .then(({ data }) => {
@@ -113,6 +113,7 @@ const RepoSelection = () => {
         console.log(error);
       });
   };
+
 
   return (
     <div className="flex flex-col w-full pl-0 md:p-4 h-screen">
