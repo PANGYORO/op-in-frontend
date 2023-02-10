@@ -1,5 +1,6 @@
-package com.c211.opinbackend.search.dto;
+package com.c211.opinbackend.search.dto.response;
 
+import com.c211.opinbackend.persistence.entity.Member;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Builder;
@@ -17,4 +18,12 @@ public class MemberDto {
 	private String avatarUrl;
 
 	private boolean follow;
+
+	public static MemberDto from(Member member) {
+		return MemberDto.builder()
+			.id(member.getId())
+			.nickname(member.getNickname())
+			.avatarUrl(member.getAvatarUrl())
+			.build();
+	}
 }
