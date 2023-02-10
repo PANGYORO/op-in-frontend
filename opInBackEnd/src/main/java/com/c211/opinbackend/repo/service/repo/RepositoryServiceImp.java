@@ -15,6 +15,7 @@ import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
+import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
 import com.c211.opinbackend.repo.service.mapper.RepoMapper;
 
@@ -53,4 +54,20 @@ public class RepositoryServiceImp implements RepositoryService {
 		return repositoryResponseDtoList;
 	}
 
+	@Override
+	@Transactional
+	public Boolean uploadRepository(String memberEmail, RepoDto repoDto) {
+		// 맴버 없이 래포지토리가 등록 가능해야한다
+		Member member = memberRepository.findByEmail(memberEmail)
+			.orElseGet(null);
+		try {
+
+			Repository repository = RepoMapper.toEntity(member, repoDto);
+			log.info(repository.getName());
+			repoRepository.save(repository);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+		return true;
+	}
 }

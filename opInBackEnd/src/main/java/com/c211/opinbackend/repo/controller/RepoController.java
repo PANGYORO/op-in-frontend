@@ -48,7 +48,7 @@ public class RepoController {
 		log.info("input test");
 		log.info(dto.toString());
 		try {
-			repositoryPostService.uploadRepository(dto.getMemberEmail(), dto);
+			repositoryService.uploadRepository(dto.getMemberEmail(), dto);
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
