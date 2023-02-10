@@ -10,7 +10,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+  // <React.StrictMode>
+  //   </React.StrictMode>
     <RecoilRoot>
       <ToastContainer 
         autoClose={3000} // 자동 off 시간
@@ -19,5 +20,4 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Main />
       </BrowserRouter>
     </RecoilRoot>
-  </React.StrictMode>
 );

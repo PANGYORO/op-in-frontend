@@ -39,10 +39,6 @@ export default function PostView() {
 
   return (
     <div className="w-full m-4 p-6 bg-white h-screen shadow-lg rounded-2xl dark:bg-gray-700 ">
-      <div>제목</div>
-      <div> 생성시간</div>
-      <div>좋아요 수</div>
-
       <div>
         <RepoPostDetail/>
       </div>

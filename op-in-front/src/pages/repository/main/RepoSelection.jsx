@@ -5,9 +5,65 @@ import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 import http from "@api/http";
+import axios from 'axios';
 
 // axios 사용하기
-// for or map 사용해서 여러가지 repo 하기
+function Tests() {
+  const [users, setUsers] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        // 요청이 시작 할 때에는 error 와 users 를 초기화하고
+        setError(null);
+        setUsers(null);
+        // loading 상태를 true 로 바꿉니다.
+        setLoading(true);
+        const response = await axios.get(
+          // 주소만 새로 설정하기
+          'https://jsonplaceholder.typicode.com/users'
+        );
+        setUsers(response.data); // 데이터는 response.data 안에 들어있습니다.
+      } catch (e) {
+        setError(e);
+      }
+      setLoading(false);
+    };
+
+    fetchUsers();
+  }, []);
+
+  if (loading) return <div>로딩중..</div>;
+  if (error) return <div>에러가 발생했습니다</div>;
+  if (!users) return null;
+  return (
+    <ul>
+      {users.map(user => (
+        <li key={user.id}>
+          {user.username}({user.id})
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+
+
+
+// function ApiTest() {
+//   // axios.get('http://i8c211.p.ssafy.io:5001/post')
+//   axios.get('https://my-json-server.typicode.com/typicode/demo/posts')
+//     .then(function (response) {
+//       console.log(response.data[0].id);
+//       // test = response.data[0]
+//     }).catch((error => {
+//       console.log(error);
+//     }))
+  
+
+// }
 
 const repoData = {
   id: 2,
@@ -30,26 +86,6 @@ const repoData = {
       id: "3",
       profileImg: null,
     },
-    {
-      nickname: "swany0509",
-      id: "4",
-      profileImg: null,
-    },
-    {
-      nickname: "swany0509",
-      id: "5",
-      profileImg: null,
-    },
-    {
-      nickname: "swany0509",
-      id: "6",
-      profileImg: null,
-    },
-    {
-      nickname: "swany0509",
-      id: "7",
-      profileImg: null,
-    },
   ],
   gitContributors: null,
   star: "12334",
@@ -61,17 +97,19 @@ export default function RepoSelection() {
   const user = useRecoilValue(userInfo);
   const navigate = useNavigate();
   const [repoDatas, setRepoData] = useState("");
+
   useEffect(() => {
-    if (!user.logined) navigate(`/repo/recommand`);
+    if (!user.logined) navigate(`/post`);
     else getData();
   }, []);
 
   const getData = async () => {
     await http
-      .post(`/repo/member`, {
+      .post(`/post`, {
         email: user.email,
       })
       .then((response) => {
+        console.log(response.data)
         setRepoData(response.data);
         console.log("success");
       })
@@ -112,6 +150,8 @@ export default function RepoSelection() {
             repoDetails={repoData}
           />
           {repoRendering(repoDatas)}
+          {/* {user(repoDatas)} */}
+          <Tests/>
         </div>
       </div>
     </div>
