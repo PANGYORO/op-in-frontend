@@ -12,7 +12,8 @@ import lombok.Setter;
 @Getter
 @Builder
 @Setter
-public class RequestUploadEvent {
+public class RequestUpdate {
+	private Long id;
 	private String title;
 	private String content;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")

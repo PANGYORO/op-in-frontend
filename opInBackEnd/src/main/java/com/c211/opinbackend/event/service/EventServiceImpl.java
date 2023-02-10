@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.c211.opinbackend.event.model.mapper.EventMapper;
+import com.c211.opinbackend.event.model.request.RequestUpdate;
 import com.c211.opinbackend.event.model.request.RequestUploadEvent;
 import com.c211.opinbackend.exception.event.EventExceptionEnum;
 import com.c211.opinbackend.exception.event.EventExceptionRuntimeException;
@@ -56,8 +57,9 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public Boolean update(RequestUploadEvent request) {
-		Event event = eventRepository.findById(request.getEventId()).orElseThrow(
+	@Transactional
+	public Boolean update(RequestUpdate request) {
+		Event event = eventRepository.findById(request.getId()).orElseThrow(
 			() -> new EventExceptionRuntimeException(EventExceptionEnum.EVENT_NOT_EXIST_EXCEPTION)
 		);
 		if (request.getTitle().length() != 0 || !Objects.nonNull(request.getTitle())) {
@@ -72,6 +74,7 @@ public class EventServiceImpl implements EventService {
 			event.updateEndDate(request.getEndDate());
 
 		}
+		eventRepository.save(event);
 		return true;
 	}
 }

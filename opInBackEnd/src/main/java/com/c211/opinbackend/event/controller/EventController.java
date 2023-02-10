@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.c211.opinbackend.event.model.request.RequestUpdate;
 import com.c211.opinbackend.event.model.request.RequestUploadEvent;
 import com.c211.opinbackend.event.service.EventService;
 import com.c211.opinbackend.exception.event.EventExceptionEnum;
@@ -38,7 +38,7 @@ public class EventController {
 	public ResponseEntity<?> createEvent(@ModelAttribute RequestUploadEvent request) throws IOException {
 		// 여기서 입력 널인친구들 검사
 		// title, content, openDate 널이면안된다. endDate 는 널일수 있습니다.
-		log.info(String.valueOf(request.getImg().getOriginalFilename().length() == 0));
+		log.info(String.valueOf(Objects.isNull(request.getImg().getOriginalFilename())));
 		Event event = null;
 		if (request.getTitle().isBlank() || request.getTitle().length() == 0) {//타이틀 없으면
 			throw new EventExceptionRuntimeException(EventExceptionEnum.EVENT_TITLE_NULL_EXCEPTION);
@@ -80,9 +80,10 @@ public class EventController {
 	}
 
 	@PatchMapping
-	public ResponseEntity<?> updateEvent(@RequestBody RequestUploadEvent req) {
-		Boolean delete = eventService.update(req);
-		return ResponseEntity.ok().body(delete);
+	public ResponseEntity<?> updateEvent(@ModelAttribute RequestUpdate req) {
+		Boolean update = eventService.update(req);
+
+		return ResponseEntity.ok().body(update);
 	}
 
 }
