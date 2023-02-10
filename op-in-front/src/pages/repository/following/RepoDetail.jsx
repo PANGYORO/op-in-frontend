@@ -54,7 +54,11 @@ export default function RepoDetail() {
           </header>
         </div>
         <div className="mr-4">
-          {tab == POSTS_TAB ? <FollowingPosts repoId={repoDetail.id} /> : <FollowingQnas />}
+          {tab == POSTS_TAB ? (
+            <FollowingPosts repoId={repoDetail.id} />
+          ) : (
+            <FollowingQnas repoId={repoDetail.id} />
+          )}
         </div>
       </div>
       <div className="w-1/3 h-full">
