@@ -30,7 +30,13 @@ export default function QnA({
       .catch((error) => {
         console.log(error);
       });
-    setCommentList([...CommentList, { user: user.nickname, content: data }]);
+    setCommentList([
+      ...CommentList,
+      {
+        member: { nickname: user.nickname, user_img: user.img_url },
+        comment: data,
+      },
+    ]);
     console.log(CommentList);
     setToast({ message: "Comment가 추가되었습니다." });
   };

@@ -57,9 +57,12 @@ function FollowingQnas({ repoId }) {
     setQnaData((prev) => [
       ...Array.from(prev),
       {
+        repoId: repoId,
         qnaId: data.qnaId,
-        authorMember: user.nickname,
-        authorAvatar: user.img_url,
+        member: {
+          nickname: user.nickname,
+          user_img: user.img_url,
+        },
         createTime: new Date(),
         content: data.content,
         comments: [],
