@@ -59,9 +59,9 @@ public class OAuthController {
 			Cookie typeCookie = new Cookie("type", token.getType());
 
 			accessTokenCookie.setPath("/");
-			accessTokenCookie.setMaxAge(((int)accessTokenValidityInSeconds / 1000) - 1);
+			accessTokenCookie.setMaxAge((int)accessTokenValidityInSeconds - 1);
 			refreshTokenCookie.setPath("/");
-			refreshTokenCookie.setMaxAge(((int)refreshTokenValidityInSeconds / 1000) - 1);
+			refreshTokenCookie.setMaxAge((int)refreshTokenValidityInSeconds - 1);
 			typeCookie.setPath("/");
 			typeCookie.setMaxAge(((int)accessTokenValidityInSeconds / 1000) - 1);
 

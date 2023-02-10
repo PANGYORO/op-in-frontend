@@ -15,20 +15,25 @@ function FollowingQnas({ repoId }) {
   const [qnaData, setQnaData] = useState([]);
 
   useEffect(() => {
-    setQnaData(getQnaData());
-    console.log(qnaData);
+    searchQnaData({ page: 0, size: 100, query: "" });
   }, []);
 
-  const getQnaData = async () => {
-    await http
-      .get(`qna/repo/${curRepoId}`)
-      .then((response) => {
-        return response.data;
+  function searchQnaData({ page = 0, size = 10, query = "" }) {
+    http
+      .get(`/search/repos/${repoId}/qnas`, {
+        params: {
+          page,
+          size,
+          query,
+        },
       })
-      .catch((error) => {
-        console.log(error);
+      .then(({ data }) => {
+        setQnaData(data);
+      })
+      .catch((err) => {
+        console.error(err);
       });
-  };
+  }
 
   const rendering = (list) => {
     const result = [];
@@ -36,40 +41,28 @@ function FollowingQnas({ repoId }) {
       result.push(
         <QnA
           repoId={curRepoId}
-          qnaId={list[i].qnaId}
+          qnaId={list[i].id}
           authorMember={list[i].authorMember}
           authorAvatar={list[i].authorAvatar}
           createTime={list[i].createTime}
           content={list[i].content}
-          qnACommentList={list[i].qnACommentList}
+          qnACommentList={list[i].comments}
         />
       );
     }
     return result;
   };
 
-  const highFunction = (text) => {
-    const qnaId = async () => {
-      await http
-        .post(`qna`, { comment: text, repoId: repoId })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          return 0;
-        });
-    };
-    console.log(qnaData);
+  const highFunction = (data) => {
     setQnaData((prev) => [
       ...Array.from(prev),
       {
-        qnaId: qnaId,
+        qnaId: data.qnaId,
         authorMember: user.nickname,
         authorAvatar: user.img_url,
-        createTime: "today",
-        content: text,
-        qnACommentList: [],
+        createTime: new Date(),
+        content: data.content,
+        comments: [],
       },
     ]);
 
@@ -148,7 +141,12 @@ function FollowingQnas({ repoId }) {
 
       <div className="w-full h-screen overflow-auto">{rendering(qnaData)}</div>
 
-      <QnaModal open={open} setOpen={setOpen} propFunction={highFunction} />
+      <QnaModal
+        open={open}
+        setOpen={setOpen}
+        repositoryId={repoId}
+        propFunction={highFunction}
+      />
     </>
   );
 }

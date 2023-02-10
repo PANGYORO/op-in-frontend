@@ -39,7 +39,13 @@ export default function QnA({
     const result = [];
     if (list != null)
       for (let i = 0; i < list.length; i++) {
-        result.push(<Comment key={i} _text={list[i].content} _name={list[i].user} />);
+        result.push(
+          <Comment
+            key={i}
+            _text={list[i].comment}
+            _name={list[i].memberEmail}
+          />
+        );
       }
     return result;
   };
@@ -53,7 +59,11 @@ export default function QnA({
               <a href="#" className="relative block">
                 <img
                   alt="profile"
-                  src={authorAvatar == null || authorAvatar == "" ? DefaultImg : authorAvatar}
+                  src={
+                    authorAvatar == null || authorAvatar == ""
+                      ? DefaultImg
+                      : authorAvatar
+                  }
                   className="mx-auto object-cover rounded-full h-16 w-16 "
                 />
               </a>
@@ -64,9 +74,11 @@ export default function QnA({
             <div className="flex flex-cols justify-between">
               <div>
                 <p className="flex items-baseline">
-                  <span className="font-bold text-gray-600 dark:text-gray-200">{authorMember}</span>
+                  <span className="font-bold text-gray-600 dark:text-gray-200">
+                    {authorMember}
+                  </span>
                   <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">
-                    {createTime}
+                    {new Date(createTime).toLocaleString()}
                   </span>
                 </p>
                 <div className="mt-3">
@@ -132,7 +144,9 @@ export default function QnA({
 
             <hr className="my-4" />
             {/* 댓글 공간 */}
-            <div className="grid grid-rows-1 gap-2">{commentRender(CommentList)}</div>
+            <div className="grid grid-rows-1 gap-2">
+              {commentRender(CommentList)}
+            </div>
           </div>
         </div>
       </div>

@@ -5,40 +5,40 @@ import http from "@api/http";
 // import { userInfo } from "@recoil/user/atoms";
 // import { useRecoilValue } from "recoil";
 
-const PostDummy = [
-  {
-    postId: "1",
-    createTime: "2023-02-08T02:18:39",
-    post_content: "A",
-    title: "How to Handle React",
-    likeCount: 0,
-    commentCount: 0,
-  },
-  {
-    postId: "2",
-    createTime: "2023-02-08T02:18:39",
-    post_content: "B",
-    title: "How to Handle HTML",
-    likeCount: 0,
-    commentCount: 0,
-  },
-  {
-    postId: "3",
-    createTime: "2023-02-08T02:18:39",
-    post_content: "C",
-    title: "How to Handle Vue",
-    likeCount: 2,
-    commentCount: 0,
-  },
-  {
-    postId: "4",
-    createTime: "2023-02-08T02:18:39",
-    post_content: "D",
-    title: "How to Handle C++",
-    likeCount: 0,
-    commentCount: 0,
-  },
-];
+// const PostDummy = [
+//   {
+//     postId: "1",
+//     createTime: "2023-02-08T02:18:39",
+//     post_content: "A",
+//     title: "How to Handle React",
+//     likeCount: 0,
+//     commentCount: 0,
+//   },
+//   {
+//     postId: "2",
+//     createTime: "2023-02-08T02:18:39",
+//     post_content: "B",
+//     title: "How to Handle HTML",
+//     likeCount: 0,
+//     commentCount: 0,
+//   },
+//   {
+//     postId: "3",
+//     createTime: "2023-02-08T02:18:39",
+//     post_content: "C",
+//     title: "How to Handle Vue",
+//     likeCount: 2,
+//     commentCount: 0,
+//   },
+//   {
+//     postId: "4",
+//     createTime: "2023-02-08T02:18:39",
+//     post_content: "D",
+//     title: "How to Handle C++",
+//     likeCount: 0,
+//     commentCount: 0,
+//   },
+// ];
 
 function FollowingPosts({ repoId }) {
   const [open, setOpen] = useState(false);
