@@ -29,9 +29,7 @@ export default function DashBoard() {
           <header className="z-40 items-center w-full h-15 pb-3 bg-white shadow-lg dark:bg-gray-700 rounded-t-2xl">
             <div className="pt-3 pl-3 text-2xl">
               <span className="font-semibold"> Current Search :&nbsp;</span>
-              <span className="font-bold">
-                {searchValue == "" ? "nodata" : searchValue}
-              </span>
+              <span className="font-bold">{searchValue == "" ? "nodata" : searchValue}</span>
             </div>
             <ul className="pt-3 pl-3 flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
               <li className="mr-2">
@@ -62,7 +60,13 @@ export default function DashBoard() {
           </header>
         </div>
         <div id="dashboardcontent" className="h-screen overflow-auto">
-          {tab == "posts" ? <Posts /> : tab == "repos" ? <Repos /> : <Users />}
+          {tab == "posts" ? (
+            <Posts value={searchValue} />
+          ) : tab == "repos" ? (
+            <Repos value={searchValue} />
+          ) : (
+            <Users value={searchValue} />
+          )}
         </div>
       </div>
     </div>

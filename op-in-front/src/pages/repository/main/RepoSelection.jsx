@@ -5,52 +5,49 @@ import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 import http from "@api/http";
-import axios from 'axios';
+import axios from "axios";
 
 // axios 사용하기
-function Tests() {
-  const [users, setUsers] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+// function Tests() {
+//   const [users, setUsers] = useState(null);
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        // 요청이 시작 할 때에는 error 와 users 를 초기화하고
-        setError(null);
-        setUsers(null);
-        // loading 상태를 true 로 바꿉니다.
-        setLoading(true);
-        const response = await axios.get(
-          // 주소만 새로 설정하기
-          'https://jsonplaceholder.typicode.com/users'
-        );
-        setUsers(response.data); // 데이터는 response.data 안에 들어있습니다.
-      } catch (e) {
-        setError(e);
-      }
-      setLoading(false);
-    };
+//   useEffect(() => {
+//     const fetchUsers = async () => {
+//       try {
+//         // 요청이 시작 할 때에는 error 와 users 를 초기화하고
+//         setError(null);
+//         setUsers(null);
+//         // loading 상태를 true 로 바꿉니다.
+//         setLoading(true);
+//         const response = await axios.get(
+//           // 주소만 새로 설정하기
+//           "https://jsonplaceholder.typicode.com/users"
+//         );
+//         setUsers(response.data); // 데이터는 response.data 안에 들어있습니다.
+//       } catch (e) {
+//         setError(e);
+//       }
+//       setLoading(false);
+//     };
 
-    fetchUsers();
-  }, []);
+//     fetchUsers();
+//   }, []);
 
-  if (loading) return <div>로딩중..</div>;
-  if (error) return <div>에러가 발생했습니다</div>;
-  if (!users) return null;
-  return (
-    <ul>
-      {users.map(user => (
-        <li key={user.id}>
-          {user.username}({user.id})
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-
-
+//   if (loading) return <div>로딩중..</div>;
+//   if (error) return <div>에러가 발생했습니다</div>;
+//   if (!users) return null;
+//   return (
+//     <ul>
+//       {users.map((user) => (
+//         <li key={user.id}>
+//           {user.username}({user.id})
+//         </li>
+//       ))}
+//     </ul>
+//   );
+// }
 
 // function ApiTest() {
 //   // axios.get('http://i8c211.p.ssafy.io:5001/post')
@@ -61,7 +58,6 @@ function Tests() {
 //     }).catch((error => {
 //       console.log(error);
 //     }))
-  
 
 // }
 
@@ -93,10 +89,10 @@ const repoData = {
   topicList: ["JPA", "Security", "Django"],
   updateDate: null,
 };
-export default function RepoSelection() {
+const RepoSelection = () => {
   const user = useRecoilValue(userInfo);
   const navigate = useNavigate();
-  const [repoDatas, setRepoData] = useState("");
+  const [repoDatas, setRepoData] = useState([]);
 
   useEffect(() => {
     if (!user.logined) navigate(`/post`);
@@ -108,34 +104,14 @@ export default function RepoSelection() {
       .post(`/post`, {
         email: user.email,
       })
-      .then((response) => {
-        console.log(response.data)
-        setRepoData(response.data);
+      .then(({ data }) => {
+        setRepoData(data);
         console.log("success");
       })
       .catch((error) => {
         console.log("fail");
         console.log(error);
       });
-  };
-
-  const repoRendering = (list) => {
-    console.log(list);
-    const result = [];
-    if (list != null)
-      for (let i = 0; i < list.length; i++) {
-        result.push(
-          <Repo
-            key={i}
-            id={list[i].id}
-            title={list[i].title}
-            content={list[i].content}
-            techLangs={list[i].techLangs}
-            repoDetails={list[i]}
-          />
-        );
-      }
-    return result;
   };
 
   return (
@@ -149,11 +125,21 @@ export default function RepoSelection() {
             techLangs={repoData.techLangs}
             repoDetails={repoData}
           />
-          {repoRendering(repoDatas)}
-          {/* {user(repoDatas)} */}
-          <Tests/>
+          {repoDatas.map((repoData) => {
+            return (
+              <Repo
+                key={repoData.id}
+                id={repoData.id}
+                title={repoData.title}
+                content={repoData.content}
+                techLangs={repoData.techLangs}
+                repoDetails={repoData}
+              />
+            );
+          })}
         </div>
       </div>
     </div>
   );
 }
+export default RepoSelection;
