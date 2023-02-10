@@ -161,7 +161,7 @@ export default function Detail() {
         console.log("success");
       })
       .catch((error) => {
-        console.lod(error);
+        console.log(error);
       });
   };
 
@@ -179,11 +179,12 @@ export default function Detail() {
       .post(`member/mypage`, {
         nickname: currentNick,
       })
-      .then((response) => {
+      .then(({ data }) => {
         // alert(currentEmail);
         // alert(response.data.nickname);
-        console.log(response.data);
-        setMyInfo(response.data);
+        console.log(data);
+        setMyInfo(data);
+        setImage(data.avatarUrl);
       })
       .catch(() => alert("error"));
     console.log(myinfo);
@@ -201,7 +202,7 @@ export default function Detail() {
           <div className="flex flex-col justify-center h-full ml-44">
             <img
               id="profile_img"
-              src={Image}
+              src={Image == null ? DefaultImg : Image}
               style={{ margin: "20px" }}
               size={200}
               onClick={() => {
