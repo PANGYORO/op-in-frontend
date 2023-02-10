@@ -13,7 +13,7 @@ public class PostMapper {
 			.content(post.getTitleContent().getContent())
 			.comments(post.getCommentsList()
 				.stream()
-				.map(comment -> CommentMapper.toCommentDto(comment))
+				.map(comment -> CommentMapper.toPostCommentDto(comment))
 				.collect(Collectors.toList())
 			)
 			.commentCount(post.getCommentsList().size())

@@ -17,7 +17,7 @@ public class QnaMapper {
 			.comments(
 				repositoryQnA.getComments()
 					.stream()
-					.map(comment -> CommentMapper.toCommentDto(comment))
+					.map(comment -> CommentMapper.toQnaCommentDto(comment))
 					.collect(
 						Collectors.toList()
 					))
