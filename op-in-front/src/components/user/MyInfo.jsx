@@ -8,9 +8,13 @@ import DeleteModal from "@components/modals/DeleteModal";
 import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
 
-export default function MyInfo({ userinfo }) {
+// Language , Topic
+export default function MyInfo({ currentuser }) {
   const [open, setOpen] = useState(false);
   const user = useRecoilValue(userInfo);
+
+  // console.log(currentuser);
+  // console.log(currentuser.techLanguages);
 
   function toggleModal() {
     setOpen((prev) => !prev);
@@ -22,7 +26,7 @@ export default function MyInfo({ userinfo }) {
         <p className="p-4 font-bold text-black text-md dark:text-white">
           Badges
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
-            ({userinfo.badges == null ? 0 : userinfo.badges.length})
+            ({currentuser.badges == null ? 0 : currentuser.badges.length})
           </span>
         </p>
         <div className="grid grid-cols-8 gap-4 px-3 mb-3">
@@ -44,26 +48,24 @@ export default function MyInfo({ userinfo }) {
         <hr />
         <div className="mr-3">
           <TagInfo
-            title="language"
-            titlelength="5"
-            taglist={["java", "javascript", "html&css", "python", "react"]}
-            ismine={user.nickname == userinfo.nickname ? true : false}
+            title="Language"
+            taglist={currentuser?.techLanguages}
+            ismine={user.nickname == currentuser.nickname ? true : false}
           />
         </div>
         <hr />
         <div className="mr-3">
           <TagInfo
-            title="Topics"
-            titlelength="5"
-            taglist={["JPA", "SpringBoot", "CD/CI", "SERVER", "UI"]}
-            ismine={user.nickname == userinfo.nickname ? true : false}
+            title="Topic"
+            taglist={currentuser?.topicResponses}
+            ismine={user.nickname == currentuser.nickname ? true : false}
           />
         </div>
         <hr />
         <p className="p-4 font-bold text-black text-md dark:text-white">
           Completed Contributes
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
-            ({userinfo.contributeRepo == null ? 0 : userinfo.contributeRepo.length})
+            ({currentuser.contributeRepo == null ? 0 : currentuser.contributeRepo.length})
           </span>
         </p>
         <ul>
@@ -96,7 +98,7 @@ export default function MyInfo({ userinfo }) {
         <p className="p-4 font-bold text-black text-md dark:text-white">
           following Respsitories
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
-            ({userinfo.followRepo == null ? 0 : userinfo.followRepo.length})
+            ({currentuser.followRepo == null ? 0 : currentuser.followRepo.length})
           </span>
         </p>
         <ul>
@@ -124,7 +126,7 @@ export default function MyInfo({ userinfo }) {
             </div>
           </li>
         </ul>
-        {userinfo.nickname == user.nickname ? (
+        {currentuser.nickname == user.nickname ? (
           <div className="grid grid-cols-1 justify-items-center py-4">
             <button
               type="button"

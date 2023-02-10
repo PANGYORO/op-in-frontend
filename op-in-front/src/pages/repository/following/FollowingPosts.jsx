@@ -1,48 +1,69 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RepoPost from "@components/repository/RepoPost";
 import PostModal from "@components/modals/PostModal";
+import http from "@api/http";
 // import { userInfo } from "@recoil/user/atoms";
 // import { useRecoilValue } from "recoil";
 
-const PostDummy = [
-  {
-    postId: "1",
-    createTime: "2023-02-08T02:18:39",
-    post_content: "A",
-    title: "How to Handle React",
-    likeCount: 0,
-    commentCount: 0,
-  },
-  {
-    postId: "2",
-    createTime: "2023-02-08T02:18:39",
-    post_content: "B",
-    title: "How to Handle HTML",
-    likeCount: 0,
-    commentCount: 0,
-  },
-  {
-    postId: "3",
-    createTime: "2023-02-08T02:18:39",
-    post_content: "C",
-    title: "How to Handle Vue",
-    likeCount: 2,
-    commentCount: 0,
-  },
-  {
-    postId: "4",
-    createTime: "2023-02-08T02:18:39",
-    post_content: "D",
-    title: "How to Handle C++",
-    likeCount: 0,
-    commentCount: 0,
-  },
-];
+// const PostDummy = [
+//   {
+//     postId: "1",
+//     createTime: "2023-02-08T02:18:39",
+//     post_content: "A",
+//     title: "How to Handle React",
+//     likeCount: 0,
+//     commentCount: 0,
+//   },
+//   {
+//     postId: "2",
+//     createTime: "2023-02-08T02:18:39",
+//     post_content: "B",
+//     title: "How to Handle HTML",
+//     likeCount: 0,
+//     commentCount: 0,
+//   },
+//   {
+//     postId: "3",
+//     createTime: "2023-02-08T02:18:39",
+//     post_content: "C",
+//     title: "How to Handle Vue",
+//     likeCount: 2,
+//     commentCount: 0,
+//   },
+//   {
+//     postId: "4",
+//     createTime: "2023-02-08T02:18:39",
+//     post_content: "D",
+//     title: "How to Handle C++",
+//     likeCount: 0,
+//     commentCount: 0,
+//   },
+// ];
 
-export default function FollowingPosts() {
+function FollowingPosts({ repoId }) {
   const [open, setOpen] = useState(false);
+  const [posts, setPosts] = useState([]);
   // const user = useRecoilValue(userInfo);
 
+  useEffect(() => {
+    searchData({ page: 0, size: 100, query: "" });
+  }, []);
+  function searchData({ page = 0, size = 10, query = "" }) {
+    http
+      .get(`/search/repos/${repoId}/posts`, {
+        params: {
+          page,
+          size,
+          query,
+        },
+      })
+      .then(({ data }) => {
+        setPosts(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
   function toggleModal() {
     setOpen((prev) => !prev);
   }
@@ -66,17 +87,20 @@ export default function FollowingPosts() {
   };
 
   const highFunction = (data) => {
-    PostDummy.push({
-      postId: data.title,
-      createTime: "today",
-      post_content: data.content,
-      likeCount: 0,
-      commentCount: 0,
-    });
+    setPosts((prev) => [
+      ...prev,
+      {
+        postId: data.title,
+        createTime: new Date(),
+        post_content: data.content,
+        likeCount: 0,
+        commentCount: 0,
+      },
+    ]);
   };
   return (
     <>
-      <header className="z-20 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl ml-4 mb-4 mr-4">
+      <header className="z-20 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl mb-4 ">
         <div className="relative z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">
           <div className="relative grid grid-cols-2 items-center w-full pl-1 lg:max-w-68 sm:pr-2 sm:ml-0">
             <div className="container relative left-0 z-20 flex w-3/4 h-auto h-full">
@@ -140,11 +164,18 @@ export default function FollowingPosts() {
         </div>
       </header>
       <div className="flex">
-        <div className="grid grid-cols-2 gap-4 w-full ml-4 h-screen overflow-auto">
-          {rendering(PostDummy)}
+        <div className="grid grid-cols-2 gap-4 w-full overflow-auto">
+          {rendering(posts)}
         </div>
       </div>
-      <PostModal open={open} setOpen={setOpen} propFunction={highFunction} />
+      <PostModal
+        open={open}
+        setOpen={setOpen}
+        propFunction={highFunction}
+        repositoryId={repoId}
+      />
     </>
   );
 }
+
+export default FollowingPosts;

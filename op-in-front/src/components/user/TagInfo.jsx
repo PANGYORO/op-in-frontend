@@ -1,23 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
+import { useToast } from "@hooks/useToast";
+import http from "@api/http";
 
-export default function TagInfo({
-  title = "language",
-  titlelength = "5",
-  taglist = ["java", "javascript", "html&css", "python", "react"],
-  ismine = true,
-}) {
+export default function TagInfo({ title, taglist = [], ismine }) {
+  // console.log(taglist);
+  // console.log(taglist.length);
   const [openState, setOpenState] = useState(false);
-  const [curlength, setCurlength] = useState(Number(titlelength));
-  const [amount, setAmount] = useState(Number(titlelength));
+  const [curlength, setCurlength] = useState(0);
+  const [amount, setAmount] = useState(0);
+
+  useEffect(() => {
+    setCurlength(taglist.length);
+    setAmount(taglist.length);
+  });
+
+  // console.log(curlength + " " + amount);
+  const { setToast } = useToast();
+
   const rendering = (list) => {
     const result = [];
     for (let i = 0; i < curlength; i++) {
       let tempid = title + "-minus-" + i;
       result.push(
         <span id={tempid} key={i}>
-          <div className="ml-4 text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 bg-green-200 text-green-700 rounded-full mb-2">
-            {list[i]}
+          <div
+            id={tempid + "-value"}
+            className="ml-4 text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 bg-green-200 text-green-700 rounded-full mb-2"
+          >
+            {list[i].title}
           </div>
           {ismine ? (
             <Tooltip anchorId={tempid} clickable variant="light" events={["hover"]}>
@@ -25,8 +36,9 @@ export default function TagInfo({
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 type="button"
                 onClick={() => {
-                  document.getElementById(tempid).remove();
-                  setAmount(amount - 1);
+                  MinusTag(list[i].title, document.getElementById(tempid));
+                  //document.getElementById(tempid).remove();
+                  //setAmount(amount - 1);
                 }}
               >
                 delete
@@ -40,10 +52,75 @@ export default function TagInfo({
     }
     return result;
   };
-  const PlusTag = (data) => {
-    taglist.push(data);
-    setCurlength(Number(curlength) + 1);
-    setAmount(Number(amount) + 1);
+  const MinusTag = async (data, e) => {
+    if (title == "Language") {
+      await http
+        .post(`member/language/delete`, {
+          title: data,
+        })
+        .then(() => {
+          e.remove();
+          setAmount(amount - 1);
+          setToast({ message: data + " 언어 태그가 삭제되었습니다." });
+        })
+        .catch(() => {
+          setToast({ message: "삭제 중 에러가 발생했습니다." });
+        });
+    } else if (title == "Topic") {
+      await http
+        .post(`member/topic/delete`, {
+          title: data,
+        })
+        .then(() => {
+          e.remove();
+          setAmount(amount - 1);
+          setToast({ message: data + " 토픽 태그가 삭제되었습니다." });
+        })
+        .catch(() => {
+          setToast({ message: "삭제 중 에러가 발생했습니다." });
+        });
+    } else {
+      setToast({ message: "잘못된 접근입니다." });
+    }
+  };
+  const PlusTag = async (data) => {
+    if (title == "Language") {
+      await http
+        .post(`member/language/put`, {
+          title: data,
+        })
+        .then(() => {
+          taglist.push({
+            id: "",
+            title: data,
+          });
+          setCurlength(Number(curlength) + 1);
+          setAmount(Number(amount) + 1);
+          setToast({ message: data + " 언어 태그가 추가되었습니다." });
+        })
+        .catch(() => {
+          setToast({ message: "삭제 중 에러가 발생했습니다." });
+        });
+    } else if (title == "Topic") {
+      await http
+        .post(`member/topic/put`, {
+          title: data,
+        })
+        .then(() => {
+          taglist.push({
+            id: "",
+            title: data,
+          });
+          setCurlength(Number(curlength) + 1);
+          setAmount(Number(amount) + 1);
+          setToast({ message: data + " 토픽 태그가 추가되었습니다." });
+        })
+        .catch(() => {
+          setToast({ message: "삭제 중 에러가 발생했습니다." });
+        });
+    } else {
+      setToast({ message: "잘못된 접근입니다." });
+    }
   };
   const AddTag = () => {
     return (
@@ -108,7 +185,6 @@ export default function TagInfo({
               id={title + "-plus"}
               type="button"
               onClick={() => {
-                // document.getElementById("add" + title).focus();
                 setOpenState(true);
               }}
               className="ml-4 px-3 py-1 text-white bg-slate-700 hover:bg-slate-800 focus:ring-4 focus:outline-none focus:ring-slate-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:ring-slate-800"

@@ -1,9 +1,7 @@
 package com.c211.opinbackend.search.mapper;
 
-import org.springframework.stereotype.Component;
-
 import com.c211.opinbackend.persistence.entity.Member;
-import com.c211.opinbackend.search.dto.MemberDto;
+import com.c211.opinbackend.search.dto.response.MemberDto;
 
 public class MemberMapper {
 	public static MemberDto toMemberDto(Member member, boolean follow) {
