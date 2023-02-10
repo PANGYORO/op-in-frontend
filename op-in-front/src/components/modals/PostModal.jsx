@@ -10,7 +10,12 @@ import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 import fontSize from "tui-editor-plugin-font-size";
 import http from "@api/http";
 
-export default function PostModal({ open, setOpen, propFunction }) {
+export default function PostModal({
+  open,
+  setOpen,
+  propFunction,
+  repositoryId,
+}) {
   const cancelButtonRef = useRef(null);
 
   const toastuiEditor = useRef();
@@ -31,27 +36,33 @@ export default function PostModal({ open, setOpen, propFunction }) {
     // 서버에 데이터 보내는 로직
     await http
       .post(`post`, {
-        repositoryId: 1,
+        repositoryId,
         title: title,
         content: data,
       })
       .then(() => {
         console.log("success");
+
+        propFunction({
+          title: title,
+          content: data,
+        });
       })
       .catch((error) => {
         console.log(error);
       });
 
-    propFunction({
-      title: title,
-      content: data,
-    });
     setText("");
   };
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-40" initialFocus={cancelButtonRef} onClose={setOpen}>
+      <Dialog
+        as="div"
+        className="relative z-40"
+        initialFocus={cancelButtonRef}
+        onClose={setOpen}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -76,7 +87,10 @@ export default function PostModal({ open, setOpen, propFunction }) {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-4/5">
-                <Dialog.Title as="h2" className="text-3xl font-bold leading-6 text-gray-900 p-4">
+                <Dialog.Title
+                  as="h2"
+                  className="text-3xl font-bold leading-6 text-gray-900 p-4"
+                >
                   New Post
                 </Dialog.Title>
                 <div className=" relative  p-4">
@@ -106,7 +120,14 @@ export default function PostModal({ open, setOpen, propFunction }) {
                     ["table", "image", "link"],
                     ["code", "codeblock"],
                   ]}
-                  plugins={[[codeSyntaxHighlight, { highlighter: Prism }, colorSyntax, fontSize]]}
+                  plugins={[
+                    [
+                      codeSyntaxHighlight,
+                      { highlighter: Prism },
+                      colorSyntax,
+                      fontSize,
+                    ],
+                  ]}
                 />
                 <div className="bg-gray-50 px-4 p-4 sm:flex sm:flex-row-reverse sm:px-6">
                   <button

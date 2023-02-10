@@ -7,7 +7,6 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.c211.opinbackend.event.model.mapper.EventMapper;
-import com.c211.opinbackend.event.model.request.EventUpdateRequest;
 import com.c211.opinbackend.event.model.request.RequestUploadEvent;
 import com.c211.opinbackend.exception.event.EventExceptionEnum;
 import com.c211.opinbackend.exception.event.EventExceptionRuntimeException;
@@ -28,13 +27,13 @@ public class EventServiceImpl implements EventService {
 	@Override
 	@Transactional
 	public Event createEvent(RequestUploadEvent requestUploadEvent, FileUploadResponse eventFileResponse) {
+		Event event;
 		if (eventFileResponse == null) {
-			Event event = EventMapper.toEntity(requestUploadEvent);
-			return eventRepository.save(event);
+			event = EventMapper.toEntity(requestUploadEvent);
 		} else {
-			Event event = EventMapper.toEntity(requestUploadEvent, eventFileResponse);
-			return eventRepository.save(event);
+			event = EventMapper.toEntity(requestUploadEvent, eventFileResponse);
 		}
+		return eventRepository.save(event);
 	}
 
 	@Override
@@ -43,15 +42,15 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public Boolean updateEvent(EventUpdateRequest eventUpdateRequest) {
-		if (eventUpdateRequest.getOpenDate().isBefore(eventUpdateRequest.getEndDate())) {
-			throw new EventExceptionRuntimeException(EventExceptionEnum.EVENT_OPEN_DATE_WRONG_EXCEPTION);
-		}
-
-		Event event = eventRepository.findById(eventUpdateRequest.getId()).orElseThrow(
+	public Boolean delete(Long eventId) {
+		Event event = eventRepository.findById(eventId).orElseThrow(
 			() -> new EventExceptionRuntimeException(EventExceptionEnum.EVENT_NOT_EXIST_EXCEPTION)
 		);
-		// TODO: 2023-02-10 업데이트 메소드 만들기 
+		try {
+			eventRepository.delete(event);
+		} catch (Exception exception) {
+			return false;
+		}
 		return true;
 	}
 }

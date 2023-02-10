@@ -59,7 +59,7 @@ export default function Main() {
   }, [token]);
 
   return (
-    <div className="Main h-screen overflow-auto">
+    <div className="Main overflow-auto">
       <Header />
       <main className="relative h-screen overflow-hidden bg-gray-100 dark:bg-gray-800">
         <Routes>

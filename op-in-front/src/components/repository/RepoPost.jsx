@@ -4,79 +4,46 @@ import { useNavigate } from "react-router-dom";
 export default function RepoPost({
   postId = 1,
   createTime = "2022-02-09",
-  post_content = "basic content",
   title = "basic title",
   likeCount = 0,
   commentCount = 0,
+  pageContent = "",
+  authorMemberAvatar = "",
+  authorMemberName = "",
 }) {
   const navigate = useNavigate();
 
   return (
     <>
-      <div className="mb-4">
+      <div>
         <div
-          className=" w-full p-4 bg-white shadow-lg rounded-2xl dark:bg-gray-700 items-center justify-center group sm:flex space-x-6 "
-          onClick={() => navigate(`/repo/postview`, { state: post_content })}
+          className=" w-full p-4 bg-white shadow-lg rounded-2xl dark:bg-gray-700 items-center group sm:flex space-x-6 "
+          onClick={() => navigate(`/repo/postview`, { state: pageContent })}
         >
-          <div className="grid grid-row gap-3">
-            <img
-              className="mx-auto w-full block w-full h-40 rounded-lg"
-              alt="art cover"
-              loading="lazy"
-              src="https://picsum.photos/seed/2/2000/1000"
-            />
-            <div className="sm:w-full pl-0 p-5">
+          <div className="grid grid-row gap-3 w-full">
+            <div className="sm:w-full p-5">
               <div className="space-y-2">
                 <div className="space-y-4 ">
-                  <h3 className="text-3xl font-semibold text-cyan-900 text-justify">{title}</h3>
+                  <h3 className="text-2xl font-semibold text-black-900 text-justify">
+                    {title}
+                  </h3>
                 </div>
-                {/* <div>
-                  <div className="text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 bg-green-200 text-green-700 rounded-full">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="feather feather-activity mr-2"
-                    >
-                      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                    </svg>
-                    facebook-initail-user
+                {/* <div className="flex items-center space-x-4 justify-between">
+                  <div className="flex gap-3 space-y-1">
+                    <span className="text-md">
+                      {pageContent == null ? "nodtata" : pageContent}
+                    </span>
                   </div>
                 </div> */}
                 <div className="flex items-center space-x-4 justify-between">
-                  <div className="flex gap-3 space-y-1">
-                    <span className="text-md">
-                      {post_content == null ? "nodtata" : post_content}
-                    </span>
+                  <div>
+                    <img
+                      className="inline-block h-10 w-10 rounded-full object-cover ring-2 ring-white"
+                      src={authorMemberAvatar || "/src/assets/basicprofile.png"}
+                      alt={authorMemberName}
+                    />
                   </div>
-                </div>
-                <div className="flex items-center space-x-4 justify-between">
-                  <div className="text-grey-500 flex flex-row space-x-1  my-4">
-                    <svg
-                      stroke="currentColor"
-                      fill="none"
-                      strokeWidth="0"
-                      viewBox="0 0 24 24"
-                      height="1em"
-                      width="1em"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                      ></path>
-                    </svg>
-                    <p className="text-xs">{createTime}</p>
-                  </div>
-                  <div className=" px-3 py-1 rounded-lg flex space-x-2 flex-row">
+                  <div className="py-1 rounded-lg flex space-x-2 flex-row flex-1">
                     <div className="cursor-pointer text-center text-md justify-center items-center flex">
                       <svg
                         stroke="currentColor"
@@ -109,6 +76,27 @@ export default function RepoPost({
                       </svg>
                       <span className="text-md mx-1">{commentCount}</span>
                     </div>
+                  </div>
+                  <div className="text-grey-500 flex flex-row space-x-1  my-4">
+                    <svg
+                      stroke="currentColor"
+                      fill="none"
+                      strokeWidth="0"
+                      viewBox="0 0 24 24"
+                      height="1em"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      ></path>
+                    </svg>
+                    <p className="text-xs">
+                      {new Date(createTime).toLocaleString()}
+                    </p>
                   </div>
                 </div>
               </div>

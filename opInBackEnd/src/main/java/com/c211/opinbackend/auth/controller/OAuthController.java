@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,11 @@ public class OAuthController {
 
 	private static final Logger logger = LoggerFactory.getLogger(OAuthController.class);
 	OAuthService oAuthService;
+	@Value("${jwt.access-token-validity-in-seconds}")
+	private int accessTokenValidityInSeconds;
+
+	@Value("${jwt.refresh-token-validity-in-seconds}")
+	private int refreshTokenValidityInSeconds;
 
 	@Autowired
 	public OAuthController(OAuthServiceImpl oAuthService) {
@@ -53,8 +59,11 @@ public class OAuthController {
 			Cookie typeCookie = new Cookie("type", token.getType());
 
 			accessTokenCookie.setPath("/");
+			accessTokenCookie.setMaxAge(accessTokenValidityInSeconds);
 			refreshTokenCookie.setPath("/");
+			refreshTokenCookie.setMaxAge(refreshTokenValidityInSeconds);
 			typeCookie.setPath("/");
+			typeCookie.setMaxAge(refreshTokenValidityInSeconds);
 
 			response.addCookie(accessTokenCookie);
 			response.addCookie(refreshTokenCookie);

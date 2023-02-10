@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import QnaModal from "@components/modals/QnaModal";
 import QnA from "@components/repository/QnA";
 import { userInfo } from "@recoil/user/atoms";
@@ -6,69 +6,67 @@ import { useRecoilValue } from "recoil";
 import http from "@api/http";
 import { useToast } from "@hooks/useToast";
 
-export default function FollowingQnas() {
-  const repoId = 1;
+function FollowingQnas({ repoId }) {
+  const curRepoId = repoId;
   const [open, setOpen] = useState(false);
   const user = useRecoilValue(userInfo);
   const { setToast } = useToast();
+  const inputRef = useRef();
 
   const [qnaData, setQnaData] = useState([]);
 
   useEffect(() => {
-    setQnaData(getQnaData());
-    // console.log(qnaData);
+    searchQnaData({ page: 0, size: 100, query: "" });
   }, []);
 
-  const getQnaData = async () => {
-    await http
-      .get(`qna/repo/${repoId}`)
-      .then((response) => {
-        return response.data;
+  function searchQnaData({ page = 0, size = 10, query = "" }) {
+    http
+      .get(`/search/repos/${repoId}/qnas`, {
+        params: {
+          page,
+          size,
+          query,
+        },
       })
-      .catch((error) => {
-        console.log(error);
+      .then(({ data }) => {
+        setQnaData(data);
+      })
+      .catch((err) => {
+        console.error(err);
       });
-  };
+  }
 
   const rendering = (list) => {
     const result = [];
     for (let i = list.length == null ? -1 : list.length - 1; i >= 0; i--) {
       result.push(
         <QnA
-          qnaId={list[i].qnaId}
-          authorMember={list[i].authorMember}
-          authorAvatar={list[i].authorAvatar}
+          repoId={curRepoId}
+          qnaId={list[i].id}
+          nickname={list[i].member.nickname}
+          avatar={list[i].member.user_img}
           createTime={list[i].createTime}
           content={list[i].content}
-          qnACommentList={list[i].qnACommentList}
+          qnACommentList={list[i].comments}
         />
       );
     }
     return result;
   };
 
-  const highFunction = (text) => {
-    const qnaId = async () => {
-      await http
-        .post(`qna`, { comment: text, repoId: repoId })
-        .then((response) => {
-          return response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-          return 0;
-        });
-    };
-    console.log(qnaData);
+  const highFunction = (data) => {
     setQnaData((prev) => [
       ...Array.from(prev),
       {
-        qnaId: qnaId,
-        authorMember: user.nickname,
-        authorAvatar: user.img_url,
-        createTime: "today",
-        content: text,
-        qnACommentList: [],
+        repoId: repoId,
+        qnaId: data.qnaId,
+        member: {
+          nickname: user.nickname,
+          user_img: user.img_url,
+        },
+        createTime: new Date(),
+        content: data.content,
+        comments: [],
       },
     ]);
 
@@ -78,9 +76,16 @@ export default function FollowingQnas() {
   function toggleModal() {
     setOpen((prev) => !prev);
   }
+
+  const keyUpEvent = (e) => {
+    if (e.keyCode == 13) {
+      searchQnaData({ size: 100, page: 0, query: inputRef.current.value });
+    }
+  };
+
   return (
     <>
-      <header className="z-20 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl ml-4 mb-4 mr-4">
+      <header className="z-20 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl mb-4 mr-4">
         <div className="relative z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">
           <div className="relative grid grid-cols-2 items-center w-full pl-1 lg:max-w-68 sm:pr-2 sm:ml-0">
             <div className="container relative left-0 z-20 flex w-3/4 h-auto h-full">
@@ -109,6 +114,8 @@ export default function FollowingQnas() {
                   type="text"
                   className="block w-full py-1.5 pl-10 pr-4 leading-normal rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-400 aa-input"
                   placeholder="Qna Search"
+                  ref={inputRef}
+                  onKeyUp={keyUpEvent}
                 />
               </div>
             </div>
@@ -144,9 +151,17 @@ export default function FollowingQnas() {
         </div>
       </header>
 
-      <div className="ml-4 w-full h-screen overflow-auto">{rendering(qnaData)}</div>
+      <div className="w-full h-screen overflow-auto">{rendering(qnaData)}</div>
 
-      <QnaModal open={open} setOpen={setOpen} propFunction={highFunction} />
+      <QnaModal
+        open={open}
+        setOpen={setOpen}
+        repositoryId={repoId}
+        propFunction={highFunction}
+      />
     </>
   );
 }
+
+export default FollowingQnas;
+
