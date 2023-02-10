@@ -1,8 +1,10 @@
 package com.c211.opinbackend.batch.step;
 
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.c211.opinbackend.batch.dto.github.RepositoryDto;
 import com.c211.opinbackend.batch.service.RepositoryPullRequestService;
 import com.c211.opinbackend.batch.service.RepositoryService;
 import com.c211.opinbackend.batch.service.RepositoryTechLanguageService;
@@ -35,18 +37,19 @@ public class ActionTest {
 		this.repositoryPullRequestService = repositoryPullRequestService;
 	}
 
-	// @Test
-	// public void USER_REPOSITORIES_REQUEST_WITH_SAVE() {
-	// 	RepositoryDto[] repoDtos = action.getMemberRepository("", "Djunnni");
-	// 	for (RepositoryDto repo : repoDtos) {
-	// 		try {
-	// 			repositoryService.saveOrUpdateRepository(repo);
-	// 		} catch (Exception e) {
-	// 			System.out.println(e.toString());
-	// 			System.out.println(repo);
-	// 		}
-	// 	}
-	// }
+	@Test
+	public void USER_REPOSITORIES_REQUEST_WITH_SAVE() {
+		RepositoryDto[] repoDtos = action.getMemberRepository("", "Djunnni");
+
+		for (RepositoryDto repo : repoDtos) {
+			try {
+				repositoryService.saveOrUpdateRepository(repo);
+			} catch (Exception e) {
+				System.out.println(e.toString());
+				System.out.println(repo);
+			}
+		}
+	}
 	//
 	// @Test
 	// public void USER_REPOSITORIES_REQUEST_AND_TECH_LANGUAGE() {

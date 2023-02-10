@@ -15,8 +15,10 @@ import com.c211.opinbackend.persistence.repository.PullRequestRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class RepositoryService {
 	private final RepoRepository repoRepository;
@@ -28,7 +30,7 @@ public class RepositoryService {
 		return repoRepository.findById(id).orElse(null);
 	}
 	public Repository saveOrUpdateRepository(RepositoryDto repositoryDto) {
-		Member member = memberRepository.findByGithubId(repositoryDto.getOwner().getId().toString()).orElseGet(null);
+		Member member = memberRepository.findByGithubId(repositoryDto.getOwner().getId().toString()).orElse(null);
 		Repository repo = repoMapper.toRepository(repositoryDto, member);
 
 		return repoRepository.save(repo);
