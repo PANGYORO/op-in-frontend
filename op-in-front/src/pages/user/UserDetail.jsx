@@ -23,11 +23,11 @@ export default function Detail() {
   const followClassState =
     "py-1 px-3 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-red-200 text-white  transition ease-in duration-200 text-center font-semibold shadow-md focus:outline-none focus:ring-2  focus:ring-offset-2  opacity-70 rounded-lg ";
 
-  const unfollowClassState =
+  const followingClassState =
     "py-1 px-3 bg-orange-600 hover:bg-orange-700 focus:ring-orange-500  focus:ring-offset-red-200 text-white  transition ease-in duration-200 text-center font-semibold shadow-md focus:outline-none focus:ring-2   focus:ring-offset-2  opacity-70 rounded-lg ";
 
   const [followState, setFollowState] = useState({
-    state: true,
+    state: false,
     classValue: followClassState,
     value: "follow",
   });
@@ -35,23 +35,24 @@ export default function Detail() {
   const setFollowButton = async () => {
     await http
       .post(`member/follow/check`, {
-        nickname: user.nickname,
+        nickname: currentNick,
       })
-      .then((response) => {
-        if (response.data) {
+      .then(({ data }) => {
+        console.log("팔로우 체크 : " + (data ? "following" : "nofollow"));
+        if (data) {
           setFollowState({
             state: true,
-            classValue: followClassState,
-            value: "follow",
+            classValue: followingClassState,
+            value: "following",
           });
-          console.log("initial follow setted");
+          console.log("initial following setted");
         } else {
           setFollowState({
             state: false,
-            classValue: unfollowClassState,
-            value: "unfollow",
+            classValue: followClassState,
+            value: "follow",
           });
-          console.log("initial unfollow setted");
+          console.log("initial nofollow setted");
         }
       })
       .catch((error) => {
@@ -76,15 +77,15 @@ export default function Detail() {
     if (followState.state) {
       await http
         .post(`member/follow/delete`, {
-          nickname: user.nickname,
+          nickname: currentNick,
         })
         .then(() => {
           setFollowState({
             state: false,
-            classValue: unfollowClassState,
-            value: "unfollow",
+            classValue: followClassState,
+            value: "follow",
           });
-          console.log("unfollow set");
+          console.log("no follow set");
         })
         .catch((error) => {
           console.log(error);
@@ -94,15 +95,15 @@ export default function Detail() {
     else {
       await http
         .post(`member/follow`, {
-          nickname: user.nickname,
+          nickname: currentNick,
         })
         .then(() => {
           setFollowState({
             state: true,
-            classValue: followClassState,
-            value: "follow",
+            classValue: followingClassState,
+            value: "following",
           });
-          console.log("follow set");
+          console.log("following set");
         })
         .catch((error) => {
           console.log(error);
@@ -245,7 +246,7 @@ export default function Detail() {
           <div className="pt-2 pb-24 pl-2 pr-2  md:pt-0 md:pr-0 md:pl-0">
             <div className="flex flex-col flex-wrap sm:flex-row h-full">
               <div className="w-1/3 h-full ">
-                <MyInfo userinfo={myinfo} />
+                <MyInfo currentuser={myinfo} />
               </div>
 
               <div className=" w-2/3  h-screen overflow-auto">

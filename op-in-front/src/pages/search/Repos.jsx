@@ -1,7 +1,7 @@
 import React from "react";
 import Repo from "@components/repository/Repo";
 
-export default function Repos() {
+const Repos = ({ value }) => {
   return (
     <>
       <div className="grid grid-cols-2 ml-4 gap-4">
@@ -16,4 +16,5 @@ export default function Repos() {
       </div>
     </>
   );
-}
+};
+export default Repos;
