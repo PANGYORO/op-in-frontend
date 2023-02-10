@@ -6,7 +6,7 @@ import { useRecoilValue } from "recoil";
 import http from "@api/http";
 import { useToast } from "@hooks/useToast";
 
-export default function FollowingQnas() {
+function FollowingQnas() {
   const repoId = 1;
   const [open, setOpen] = useState(false);
   const user = useRecoilValue(userInfo);
@@ -78,9 +78,10 @@ export default function FollowingQnas() {
   function toggleModal() {
     setOpen((prev) => !prev);
   }
+
   return (
     <>
-      <header className="z-20 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl ml-4 mb-4 mr-4">
+      <header className="z-20 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl mb-4 mr-4">
         <div className="relative z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">
           <div className="relative grid grid-cols-2 items-center w-full pl-1 lg:max-w-68 sm:pr-2 sm:ml-0">
             <div className="container relative left-0 z-20 flex w-3/4 h-auto h-full">
@@ -144,9 +145,11 @@ export default function FollowingQnas() {
         </div>
       </header>
 
-      <div className="ml-4 w-full h-screen overflow-auto">{rendering(qnaData)}</div>
+      <div className="w-full h-screen overflow-auto">{rendering(qnaData)}</div>
 
       <QnaModal open={open} setOpen={setOpen} propFunction={highFunction} />
     </>
   );
 }
+
+export default FollowingQnas;

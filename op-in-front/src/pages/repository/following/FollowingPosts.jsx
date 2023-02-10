@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RepoPost from "@components/repository/RepoPost";
 import PostModal from "@components/modals/PostModal";
+import http from "@api/http";
 // import { userInfo } from "@recoil/user/atoms";
 // import { useRecoilValue } from "recoil";
 
@@ -39,10 +40,30 @@ const PostDummy = [
   },
 ];
 
-export default function FollowingPosts({ repoId }) {
+function FollowingPosts({ repoId }) {
   const [open, setOpen] = useState(false);
+  const [posts, setPosts] = useState([]);
   // const user = useRecoilValue(userInfo);
 
+  useEffect(() => {
+    searchData({ page: 0, size: 100, query: "" });
+  }, []);
+  function searchData({ page = 0, size = 10, query = "" }) {
+    http
+      .get(`/search/repos/${repoId}/posts`, {
+        params: {
+          page,
+          size,
+          query,
+        },
+      })
+      .then(({ data }) => {
+        setPosts(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
   function toggleModal() {
     setOpen((prev) => !prev);
   }
@@ -66,13 +87,16 @@ export default function FollowingPosts({ repoId }) {
   };
 
   const highFunction = (data) => {
-    PostDummy.push({
-      postId: data.title,
-      createTime: "today",
-      post_content: data.content,
-      likeCount: 0,
-      commentCount: 0,
-    });
+    setPosts((prev) => [
+      ...prev,
+      {
+        postId: data.title,
+        createTime: new Date(),
+        post_content: data.content,
+        likeCount: 0,
+        commentCount: 0,
+      },
+    ]);
   };
   return (
     <>
@@ -141,10 +165,17 @@ export default function FollowingPosts({ repoId }) {
       </header>
       <div className="flex">
         <div className="grid grid-cols-2 gap-4 w-full overflow-auto">
-          {rendering(PostDummy)}
+          {rendering(posts)}
         </div>
       </div>
-      <PostModal open={open} setOpen={setOpen} propFunction={highFunction} />
+      <PostModal
+        open={open}
+        setOpen={setOpen}
+        propFunction={highFunction}
+        repositoryId={repoId}
+      />
     </>
   );
 }
+
+export default FollowingPosts;
