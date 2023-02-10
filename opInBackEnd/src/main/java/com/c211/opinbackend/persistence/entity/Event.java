@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.springframework.lang.Nullable;
+
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -35,6 +37,7 @@ public class Event {
 	@Column(nullable = false)
 	private LocalDate openDate;
 	private LocalDate endDate;
+	@Nullable
 	private String img;
 	private String link;
 }
