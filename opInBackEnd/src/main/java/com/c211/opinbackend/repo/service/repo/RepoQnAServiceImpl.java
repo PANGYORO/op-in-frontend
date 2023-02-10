@@ -41,6 +41,7 @@ public class RepoQnAServiceImpl implements RepoQnAService {
 	private final MemberRepository memberRepository;
 
 	@Override
+	@Transactional
 	public List<RepoQnAResponse> getRepoQnALIst(Long repoId) {
 		List<RepoQnAResponse> res = new ArrayList<>();
 		repoRepository.findById(repoId)
@@ -83,6 +84,7 @@ public class RepoQnAServiceImpl implements RepoQnAService {
 	}
 
 	@Override
+	@Transactional
 	public Boolean creatQnAComment(RequestComment requestComment, String email) {
 		Member member = memberRepository.findByEmail(email)
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));

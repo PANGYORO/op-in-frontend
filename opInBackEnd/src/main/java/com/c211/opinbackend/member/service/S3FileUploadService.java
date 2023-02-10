@@ -9,14 +9,11 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.c211.opinbackend.exception.member.MemberExceptionEnum;
-import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.member.model.response.FileUploadResponse;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
@@ -42,7 +39,7 @@ public class S3FileUploadService {
 	// dir => profile
 	public FileUploadResponse upload(MultipartFile multipartFile, String dirName) throws IOException {
 
-		log.info(multipartFile.getName());
+		log.info(multipartFile.getOriginalFilename());
 
 		// MultipartFile -> file 로 변환
 		File uploadFile = convert(multipartFile)
@@ -85,7 +82,7 @@ public class S3FileUploadService {
 
 	private Optional<File> convert(MultipartFile file) throws IOException {
 		File convertFile = new File(file.getOriginalFilename());
-		if(convertFile.createNewFile()) {
+		if (convertFile.createNewFile()) {
 			try (FileOutputStream fos = new FileOutputStream(convertFile)) {
 				fos.write(file.getBytes());
 			}
@@ -94,6 +91,5 @@ public class S3FileUploadService {
 
 		return Optional.empty();
 	}
-
 
 }
