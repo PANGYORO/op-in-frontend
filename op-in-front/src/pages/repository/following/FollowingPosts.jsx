@@ -84,11 +84,14 @@ function FollowingPosts({ repoId }) {
     setPosts((prev) => [
       ...prev,
       {
-        postId: data.title,
-        createTime: new Date(),
+        postId: data.id,
+        title: data.title,
+        createTime: new Date(data.date),
         post_content: data.content,
-        likeCount: 0,
-        commentCount: 0,
+        likeCount: data.likeCount,
+        commentCount: data.commentCount,
+        authorMemberAvatar: data.authorMemberAvatar,
+        authorMemberName: data.authorMemberName,
       },
     ]);
   };
