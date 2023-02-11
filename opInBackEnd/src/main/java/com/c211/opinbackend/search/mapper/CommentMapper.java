@@ -12,6 +12,8 @@ public class CommentMapper {
 			.comment(comment.getContent())
 			.repositoryId(comment.getRepositoryQnA().getRepository().getId())
 			.repositoryPostId(comment.getRepositoryPost().getId())
+			.createDate(comment.getCreateDate())
+			.updateDate(comment.getUpdateDate())
 			.build();
 	}
 
@@ -22,6 +24,8 @@ public class CommentMapper {
 			.comment(comment.getContent())
 			.repositoryId(comment.getRepositoryQnA().getRepository().getId())
 			.repositoryQnaId(comment.getRepositoryQnA().getId())
+			.createDate(comment.getCreateDate())
+			.updateDate(comment.getUpdateDate())
 			.build();
 	}
 }
