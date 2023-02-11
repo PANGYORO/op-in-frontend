@@ -9,7 +9,7 @@ import com.c211.opinbackend.repo.model.response.RepoQnAResponse;
 public interface RepoQnAService {
 	List<RepoQnAResponse> getRepoQnAList(Long repoId);
 
-	Long createRepoQnA(RequestQnA requestQnA, String email);
+	RepoQnAResponse createRepoQnA(RequestQnA requestQnA, String email);
 
 	Boolean deleteRepoQnA(Long qnaId);
 

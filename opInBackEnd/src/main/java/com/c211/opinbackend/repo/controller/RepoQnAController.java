@@ -38,11 +38,11 @@ public class RepoQnAController {
 	public ResponseEntity<?> createQnA(@RequestBody RequestQnA requestQnA) {
 		String memberEmail = SecurityUtil.getCurrentUserId()
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
-		Long saveId = repoQnAService.createRepoQnA(requestQnA, memberEmail);
-		if (saveId == null) {
+		RepoQnAResponse repoQnA = repoQnAService.createRepoQnA(requestQnA, memberEmail);
+		if (repoQnA == null) {
 			return ResponseEntity.badRequest().body(false);
 		}
-		return ResponseEntity.ok().body(saveId);
+		return ResponseEntity.ok().body(repoQnA);
 	}
 
 	@PostMapping("/comment")
@@ -52,6 +52,12 @@ public class RepoQnAController {
 		return ResponseEntity.ok().body(commentService.creatQnAComment(comment, memberEmail));
 	}
 
+	/**
+	 * 특정 래포 qna 전체 조회
+	 *
+	 * @param repoId
+	 * @return
+	 */
 	@GetMapping("/repo/{repoId}")
 	public ResponseEntity<?> getQnaList(@PathVariable Long repoId) {
 		List<RepoQnAResponse> repoQnAList = repoQnAService.getRepoQnAList(repoId);
