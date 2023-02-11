@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -127,6 +128,22 @@ public class MemberController {
 	public ResponseEntity<?> followMember(@RequestBody MemberNicknameRequest request) {
 		memberService.followMember(request.getNickname());
 		return ResponseEntity.ok(true);
+	}
+
+	/**
+	 * 맴버의 래포 팔로우
+	 *
+	 * @param repoId
+	 * @return
+	 */
+	@PostMapping("/follow/repo/{repoId}")
+	public ResponseEntity<?> followRepo(@PathVariable("repoId") Long repoId) {
+		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(() -> new MemberRuntimeException(
+			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION
+		));
+		// TODO: 2023/02/12 이제 리턴 값 추가하기
+		memberService.followRepo(repoId, memberEmail);
+		return null;
 	}
 
 	// 팔로우 취소

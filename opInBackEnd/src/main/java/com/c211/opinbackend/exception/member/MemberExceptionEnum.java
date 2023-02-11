@@ -19,7 +19,8 @@ public enum MemberExceptionEnum {
 	MEMBER_TYPE_EXCEPTION(HttpStatus.BAD_REQUEST, "M0010", "존재하지 않는 멤버 타입입니다."),
 	MEMBER_PASSWORD_EXCEPTION(HttpStatus.BAD_REQUEST, "M0011", "비밀번호를 확인해주세요."),
 	MEMBER_PASSWORD_TYPE_EXCEPTION(HttpStatus.BAD_REQUEST, "M0012", "잘못된 비밀번호 양식입니다."),
-	MEMBER_WRONG_EXCEPTION(HttpStatus.BAD_REQUEST, "M0013", "아이디 혹은 비밀번호를 확인해주세요.");
+	MEMBER_CREATE_FOLLOW_EXCEPTION(HttpStatus.BAD_REQUEST, "M0013", "이미 팔로우된 상태입니다"),
+	MEMBER_WRONG_EXCEPTION(HttpStatus.BAD_REQUEST, "M0014", "아이디 혹은 비밀번호를 확인해주세요.");
 	private final HttpStatus httpStatus;
 	private final String httpCode;
 	private final String errorMessage;

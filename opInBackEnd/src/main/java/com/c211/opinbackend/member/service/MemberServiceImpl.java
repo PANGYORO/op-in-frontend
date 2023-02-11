@@ -21,6 +21,8 @@ import com.c211.opinbackend.exception.auth.AuthExceptionEnum;
 import com.c211.opinbackend.exception.auth.AuthRuntimeException;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
+import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
+import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
 import com.c211.opinbackend.persistence.entity.Badge;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.MemberBadge;
@@ -589,4 +591,30 @@ public class MemberServiceImpl implements MemberService {
 		return true;
 	}
 
+	@Override
+	public Boolean followRepo(Long repoId, String memberEmail) {
+		// 팔로운 당하는 래포를 찾고 그중에 있다
+		// 중복되는 상태를 찾고 없으면 진행한다
+		List<RepositoryFollow> checkExist = repositoryFollowRepository.findByRepositoryIdAndMember_Email(
+			repoId, memberEmail);
+		if (checkExist.size() > 0) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_CREATE_FOLLOW_EXCEPTION);
+		}
+		Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
+			() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+		);
+		Repository repository = repoRepository.findById(repoId).orElseThrow(
+			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION)
+		);
+		try {
+			RepositoryFollow createItem = RepositoryFollow.builder()
+				.member(member)
+				.repository(repository)
+				.build();
+			repositoryFollowRepository.save(createItem);
+			return true;
+		} catch (Exception exception) {
+			return false;
+		}
+	}
 }
