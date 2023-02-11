@@ -123,7 +123,11 @@ const UserDetail = () => {
   };
   const FollowButton = () => {
     return (
-      <button type="button" onClick={() => followStateChange()} className={followState.classValue}>
+      <button
+        type="button"
+        onClick={() => followStateChange()}
+        className={followState.classValue}
+      >
         {followState.value}
       </button>
     );
@@ -208,7 +212,7 @@ const UserDetail = () => {
     formData.append("upload", img);
 
     await http
-      .post(`/member/image/upload`, {
+      .post(`/member/profilePhoto`, {
         data: formData,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -257,7 +261,10 @@ const UserDetail = () => {
                   onChange={onChange}
                   ref={fileInput}
                 />
-                <Tooltip anchorId="profile_img" content="Click to change Image" />
+                <Tooltip
+                  anchorId="profile_img"
+                  content="Click to change Image"
+                />
               </>
             )}
           </div>
@@ -265,12 +272,18 @@ const UserDetail = () => {
             <div className="grid content-center">
               <div>
                 <div className="grid grid-cols-2 gap-2 justify-items-between">
-                  <div className="bg-prinavy self-center"> {myinfo.nickname}</div>
+                  <div className="bg-prinavy self-center">
+                    {" "}
+                    {myinfo.nickname}
+                  </div>
                   <div className="self-center">{renderButton()}</div>
                   {/* <img src={Setting} alt="setting" className="h-16 justify-self-end" /> */}
                 </div>
                 <div className="grid grid-cols-3 gap-4 justify-items-between mt-6">
-                  <div> posts {myinfo.posts == null ? 0 : myinfo.posts.length}</div>
+                  <div>
+                    {" "}
+                    posts {myinfo.posts == null ? 0 : myinfo.posts.length}
+                  </div>
                   <div> follower {myinfo.countFollower}</div>
                   <div> following {myinfo.countFollowing}</div>
                 </div>
@@ -315,3 +328,4 @@ const UserDetail = () => {
   );
 };
 export default UserDetail;
+
