@@ -12,7 +12,6 @@ export default function RepoPost({
   authorMemberName = "",
 }) {
   const navigate = useNavigate();
-
   return (
     <>
       <div>
