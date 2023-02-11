@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.c211.opinbackend.search.dto.response.MemberDto;
 import com.c211.opinbackend.search.dto.response.RepositoryDto;
 import com.c211.opinbackend.search.dto.response.SearchPostDto;
-import com.c211.opinbackend.search.dto.request.SearchQueryRequest;
 import com.c211.opinbackend.search.dto.response.SearchQnaDto;
 import com.c211.opinbackend.search.service.PostService;
 import com.c211.opinbackend.search.service.QnaService;

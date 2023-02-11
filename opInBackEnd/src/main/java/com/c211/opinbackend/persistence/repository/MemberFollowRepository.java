@@ -10,7 +10,6 @@ import com.c211.opinbackend.persistence.entity.MemberFollow;
 
 @Repository
 public interface MemberFollowRepository extends JpaRepository<MemberFollow, Long> {
-
 	long countByFromMember(Member member);
 
 	long countByToMember(Member member);
@@ -19,6 +18,8 @@ public interface MemberFollowRepository extends JpaRepository<MemberFollow, Long
 	void delete(MemberFollow entity);
 
 	Optional<MemberFollow> findByFromMemberAndToMember(Member fromMember, Member toMember);
+
 	boolean existsByFromMemberAndToMember(Member fromMember, Member toMember);
+
 	MemberFollow save(MemberFollow memberFollow);
 }
