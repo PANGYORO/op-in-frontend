@@ -3,6 +3,7 @@ package com.c211.opinbackend.repo.service.repo;
 import java.util.List;
 
 import com.c211.opinbackend.repo.model.dto.RepoDto;
+import com.c211.opinbackend.repo.model.response.RepoDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
 
 public interface RepositoryService {
@@ -10,4 +11,5 @@ public interface RepositoryService {
 
 	Boolean uploadRepository(String memberEmail, RepoDto repoDto);
 
+	RepoDetailResponse getDetailResponse(Long repoId);
 }

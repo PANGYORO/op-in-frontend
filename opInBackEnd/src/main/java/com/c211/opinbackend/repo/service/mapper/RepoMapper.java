@@ -10,6 +10,7 @@ import com.c211.opinbackend.persistence.entity.RepositoryTechLanguage;
 import com.c211.opinbackend.persistence.entity.RepositoryTopic;
 import com.c211.opinbackend.repo.model.contributor.RepositoryContributorDto;
 import com.c211.opinbackend.repo.model.dto.RepoDto;
+import com.c211.opinbackend.repo.model.response.RepoDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoTechLangDto;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
 
@@ -25,6 +26,21 @@ public class RepoMapper {
 			.content(repository.getName())
 			.techLangs(repoTechLangDtoList)
 			.contributors(repositoryContributorDtoList)
+			.star(repository.getStargazersCount())
+			.forkNum(repository.getForks())
+			.topicList(topics)
+			.build();
+		return repositoryResponseDto;
+	}
+
+	public static RepoDetailResponse toDetailResponse(Repository repository) {
+		List<RepoTechLangDto> repoTechLangDtoList = getRepoTechLangDtoList(repository);
+		List<String> topics = getTopicList(repository);
+		RepoDetailResponse repositoryResponseDto = RepoDetailResponse.builder()
+			.id(repository.getId())
+			.title(repository.getName())
+			.content(repository.getName())
+			.techLangs(repoTechLangDtoList)
 			.star(repository.getStargazersCount())
 			.forkNum(repository.getForks())
 			.topicList(topics)
