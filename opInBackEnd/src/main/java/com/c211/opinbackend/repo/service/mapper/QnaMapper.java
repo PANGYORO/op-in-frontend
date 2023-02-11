@@ -26,6 +26,7 @@ public class QnaMapper {
 		for (Comment comment : commentList) {
 			CommentSimpleResponse commentSimpleResponse =
 				CommentSimpleResponse.builder()
+					.id(comment.getId())
 					.commentContent(comment.getContent())
 					.memberName(comment.getMember().getNickname())
 					.memberAvatarUrl(comment.getMember().getAvatarUrl())

@@ -23,6 +23,7 @@ import com.c211.opinbackend.persistence.repository.RepoRepository;
 import com.c211.opinbackend.repo.model.requeset.RequestQnA;
 import com.c211.opinbackend.repo.model.requeset.RequestUpdateQnA;
 import com.c211.opinbackend.repo.model.response.RepoQnAResponse;
+import com.c211.opinbackend.repo.service.mapper.CommentMapper;
 import com.c211.opinbackend.repo.service.mapper.QnaMapper;
 
 import lombok.AllArgsConstructor;
@@ -54,7 +55,7 @@ public class RepoQnAServiceImpl implements RepoQnAService {
 
 	@Override
 	@Transactional
-	public Long createRepoQnA(RequestQnA requestQnA, String email) {
+	public RepoQnAResponse createRepoQnA(RequestQnA requestQnA, String email) {
 
 		Member member = memberRepository.findByEmail(email)
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
@@ -74,7 +75,7 @@ public class RepoQnAServiceImpl implements RepoQnAService {
 				.createTime(LocalDateTime.now())
 				.build();
 			RepositoryQnA save = repoQnARepository.save(repositoryQnA);
-			return save.getId();
+			return CommentMapper.toRepoQnAResponse(save);
 		} catch (Exception exception) {
 			return null;
 		}
