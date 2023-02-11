@@ -25,10 +25,9 @@ public class RepoMapper {
 			.content(repository.getName())
 			.techLangs(repoTechLangDtoList)
 			.contributors(repositoryContributorDtoList)
-			.star("1233455565")
-			.forkNum("123214141")
+			.star(repository.getStargazersCount())
+			.forkNum(repository.getForks())
 			.topicList(topics)
-			.gitContributors(null)
 			.build();
 		return repositoryResponseDto;
 	}
