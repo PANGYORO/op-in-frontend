@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Tooltip } from "react-tooltip";
 import { useToast } from "@hooks/useToast";
 import http from "@api/http";
 
-export default function TagInfo({ title, taglist = [], ismine }) {
+const TagInfo = ({ title, taglist = [], ismine }) => {
   // console.log(taglist);
   // console.log(taglist.length);
   const [openState, setOpenState] = useState(false);
   const [curlength, setCurlength] = useState(0);
   const [amount, setAmount] = useState(0);
+  const inputRef = useRef();
 
   useEffect(() => {
     setCurlength(taglist.length);
@@ -17,6 +18,12 @@ export default function TagInfo({ title, taglist = [], ismine }) {
 
   // console.log(curlength + " " + amount);
   const { setToast } = useToast();
+
+  useEffect(() => {
+    if (openState && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [openState, inputRef]);
 
   const rendering = (list) => {
     const result = [];
@@ -131,6 +138,7 @@ export default function TagInfo({ title, taglist = [], ismine }) {
               add New
             </label>
             <input
+              ref={inputRef}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id={"add" + title}
               type="text"
@@ -222,4 +230,5 @@ export default function TagInfo({ title, taglist = [], ismine }) {
       </div>
     </>
   );
-}
+};
+export default TagInfo;

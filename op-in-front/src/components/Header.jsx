@@ -1,4 +1,5 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
+import DefaultImg from "@assets/basicprofile.png";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Logo from "@components/Logo";
@@ -13,8 +14,6 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 
 import http from "@api/http";
 
-
-
 const navigation = [
   //메뉴 목록
   { name: "SignIn", href: "/signin", current: true },
@@ -25,7 +24,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example() {
+const Header = () => {
   const user = useRecoilValue(userInfo);
   const setUser = useSetRecoilState(userInfo);
 
@@ -34,12 +33,18 @@ export default function Example() {
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
   const { setToast } = useToast();
+  const headerImg = useRef();
+  console.log(user);
 
-  function selectMenu(id) {
+  useEffect(() => {
+    if (headerImg.current) headerImg.current.src = user.img_url;
+  }, [user.img_url, headerImg]);
+
+  const selectMenu = (id) => {
     console.log(searchValue);
     setCurrentMenu(id);
     setRepoCurrentMenu("myrepo");
-  }
+  };
   return (
     <Disclosure as="nav" className="bg-gray-800 sticky top-0 z-50">
       {({ open }) => (
@@ -149,7 +154,8 @@ export default function Example() {
                         <span className="sr-only">Open user menu</span>
                         <img
                           className="h-8 w-8 rounded-full"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          ref={headerImg}
+                          src={DefaultImg}
                           alt=""
                         />
                       </Menu.Button>
@@ -236,40 +242,7 @@ export default function Example() {
                     leave="transition ease-in duration-75"
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
-                  >
-                    {/* <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Your Profile
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Settings
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                          >
-                            Sign out
-                          </a>
-                        )}
-                      </Menu.Item>
-                    </Menu.Items> */}
-                  </Transition>
+                  ></Transition>
                 </Menu>
               </div>
             </div>
@@ -278,4 +251,5 @@ export default function Example() {
       )}
     </Disclosure>
   );
-}
+};
+export default Header;
