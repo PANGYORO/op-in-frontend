@@ -58,6 +58,26 @@ function FollowingPosts({ repoId }) {
     }
   };
 
+  const rendering = (list) => {
+    const result = [];
+    for (let i = list.length == null ? -1 : list.length - 1; i >= 0; i--) {
+      result.push(
+        <RepoPost
+          key={i}
+          postId={list[i].postId}
+          createTime={list[i].createTime}
+          title={list[i].title}
+          post_content={list[i].post_content}
+          likeCount={list[i].likeCount}
+          commentCount={list[i].commentCount}
+          authorMemberAvatar={list[i].authorMemberAvatar}
+          authorMemberName={list[i].authorMemberName}
+        />
+      );
+    }
+    return result;
+  };
+
   const highFunction = (data) => {
     setPosts((prev) => [
       ...prev,
