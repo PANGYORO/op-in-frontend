@@ -13,6 +13,7 @@ import { useToast } from "@hooks/useToast";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
 import http from "@api/http";
+import useToken from "@hooks/useToken";
 
 const navigation = [
   //메뉴 목록
@@ -33,6 +34,7 @@ const Header = () => {
   const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
   const { setToast } = useToast();
+  const { removeToken } = useToken();
   const headerImg = useRef();
   console.log(user);
 
@@ -176,7 +178,9 @@ const Header = () => {
                               to="/userdetail"
                               state={user.nickname}
                               className={classNames(
-                                active ? "flex flex-col bg-gray-100 items-center" : "",
+                                active
+                                  ? "flex flex-col bg-gray-100 items-center"
+                                  : "",
                                 "flex flex-col items-center block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
@@ -188,24 +192,21 @@ const Header = () => {
                           {({ active }) => (
                             <button
                               className={classNames(
-                                active ? "w-full bg-gray-100" : "",
+                                active && "w-full bg-gray-100",
                                 "w-full block px-4 py-2 text-sm text-gray-700"
                               )}
-                              onClick={async () => {
-                                try {
-                                  await http.post("auth/logout", {});
-                                  setToast({ message: "로그아웃 성공!" });
-                                  setUser((before) => ({
-                                    ...before,
-                                    nickname: "",
-                                    email: "",
-                                    img_url: "",
-                                    logined: false,
-                                  }));
-                                  navigate("/");
-                                } catch (error) {
-                                  setToast({ message: error.response.data.message });
-                                }
+                              onClick={() => {
+                                http.post("auth/logout");
+                                setToast({ message: "로그아웃 성공!" });
+                                setUser((before) => ({
+                                  ...before,
+                                  nickname: "",
+                                  email: "",
+                                  img_url: "",
+                                  logined: false,
+                                }));
+                                removeToken();
+                                navigate("/");
                               }}
                             >
                               Sign out
@@ -253,3 +254,4 @@ const Header = () => {
   );
 };
 export default Header;
+
