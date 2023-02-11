@@ -7,7 +7,7 @@ import com.c211.opinbackend.repo.model.requeset.RequestUpdateQnA;
 import com.c211.opinbackend.repo.model.response.RepoQnAResponse;
 
 public interface RepoQnAService {
-	List<RepoQnAResponse> getRepoQnALIst(Long repoId);
+	List<RepoQnAResponse> getRepoQnAList(Long repoId);
 
 	Long createRepoQnA(RequestQnA requestQnA, String email);
 

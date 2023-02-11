@@ -8,19 +8,14 @@ import com.c211.opinbackend.search.dto.response.SearchQnaDto;
 
 public class QnaMapper {
 
-	static public SearchQnaDto toSearchQnaDto(RepositoryQnA repositoryQnA) {
+	public static SearchQnaDto toSearchQnaDto(RepositoryQnA repositoryQnA) {
 		return SearchQnaDto.builder()
 			.id(repositoryQnA.getId())
 			.content(repositoryQnA.getContent())
 			.createTime(repositoryQnA.getCreateTime())
 			.member(MemberDto.from(repositoryQnA.getAuthorMember()))
 			.comments(
-				repositoryQnA.getComments()
-					.stream()
-					.map(comment -> CommentMapper.toQnaCommentDto(comment))
-					.collect(
-						Collectors.toList()
-					))
+				repositoryQnA.getComments().stream().map(CommentMapper::toQnaCommentDto).collect(Collectors.toList()))
 			.build();
 	}
 }

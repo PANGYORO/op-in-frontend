@@ -40,7 +40,7 @@ public class RepoQnAServiceImpl implements RepoQnAService {
 
 	@Override
 	@Transactional
-	public List<RepoQnAResponse> getRepoQnALIst(Long repoId) {
+	public List<RepoQnAResponse> getRepoQnAList(Long repoId) {
 		List<RepoQnAResponse> res = new ArrayList<>();
 		repoRepository.findById(repoId)
 			.orElseThrow(() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION));

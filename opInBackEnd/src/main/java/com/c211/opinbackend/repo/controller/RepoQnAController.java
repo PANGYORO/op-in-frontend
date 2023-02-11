@@ -54,8 +54,8 @@ public class RepoQnAController {
 
 	@GetMapping("/repo/{repoId}")
 	public ResponseEntity<?> getQnaList(@PathVariable Long repoId) {
-		List<RepoQnAResponse> repoQnALIst = repoQnAService.getRepoQnALIst(repoId);
-		return ResponseEntity.ok().body(repoQnALIst);
+		List<RepoQnAResponse> repoQnAList = repoQnAService.getRepoQnAList(repoId);
+		return ResponseEntity.ok().body(repoQnAList);
 	}
 
 	@DeleteMapping("/{qnaId}")

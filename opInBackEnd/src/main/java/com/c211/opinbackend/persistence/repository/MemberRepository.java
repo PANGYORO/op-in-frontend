@@ -24,8 +24,11 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	List<Member> findAllByGithubIdIsNotNull();
 
 	List<Member> findAllByNicknameContaining(String nickname);
+
 	Page<Member> findAllByNicknameContaining(String nickname, Pageable pageable);
+
 	Page<Member> findAll(Pageable pageable);
+
 	boolean existsByEmail(String email);
 
 	boolean existsByNickname(String nickname);

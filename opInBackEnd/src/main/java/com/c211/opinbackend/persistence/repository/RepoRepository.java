@@ -18,6 +18,7 @@ public interface RepoRepository extends JpaRepository<Repository, Long> {
 
 	List<Repository> findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name,
 		String description);
-	Page<Repository> findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name,
-		String description, Pageable pageable);
+
+	Page<Repository> findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name, String description,
+		Pageable pageable);
 }
