@@ -29,7 +29,6 @@ function FollowingPosts({ repoId }) {
   const [open, setOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const inputRef = useRef();
-  // const user = useRecoilValue(userInfo);
 
   useEffect(() => {
     searchData({ page: 0, size: 100, query: "" });
@@ -58,26 +57,6 @@ function FollowingPosts({ repoId }) {
     if (e.keyCode == 13) {
       searchData({ page: 0, size: 100, query: inputRef.current.value });
     }
-  };
-
-  const rendering = (list) => {
-    const result = [];
-    for (let i = list.length == null ? -1 : list.length - 1; i >= 0; i--) {
-      result.push(
-        <RepoPost
-          key={i}
-          postId={list[i].postId}
-          createTime={list[i].createTime}
-          title={list[i].title}
-          post_content={list[i].post_content}
-          likeCount={list[i].likeCount}
-          commentCount={list[i].commentCount}
-          authorMemberAvatar={list[i].authorMemberAvatar}
-          authorMemberName={list[i].authorMemberName}
-        />
-      );
-    }
-    return result;
   };
 
   const highFunction = (data) => {
