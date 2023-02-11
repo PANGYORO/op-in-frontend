@@ -19,8 +19,8 @@ public class RepositoryResponseDto {
 	private List<RepoTechLangDto> techLangs;
 	private List<RepositoryContributorDto> contributors;
 	private List<RepositoryContributorDto> gitContributors;
-	private String star;
-	private String forkNum;
+	private Long star;
+	private Long forkNum;
 	private List<String> topicList;
 	private LocalDate updateDate;
 

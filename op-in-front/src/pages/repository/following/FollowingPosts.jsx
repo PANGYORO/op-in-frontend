@@ -1,57 +1,41 @@
 import React, { useEffect, useState, useRef } from "react";
-import RepoPost from "@components/repository/RepoPost";
+import Post from "@components/Post";
 import PostModal from "@components/modals/PostModal";
 import http from "@api/http";
-// import { userInfo } from "@recoil/user/atoms";
-// import { useRecoilValue } from "recoil";
 
-// const PostDummy = [
-//   {
-//     postId: "1",
-//     createTime: "2023-02-08T02:18:39",
-//     post_content: "A",
-//     title: "How to Handle React",
-//     likeCount: 0,
-//     commentCount: 0,
-//   },
-//   {
-//     postId: "2",
-//     createTime: "2023-02-08T02:18:39",
-//     post_content: "B",
-//     title: "How to Handle HTML",
-//     likeCount: 0,
-//     commentCount: 0,
-//   },
-//   {
-//     postId: "3",
-//     createTime: "2023-02-08T02:18:39",
-//     post_content: "C",
-//     title: "How to Handle Vue",
-//     likeCount: 2,
-//     commentCount: 0,
-//   },
-//   {
-//     postId: "4",
-//     createTime: "2023-02-08T02:18:39",
-//     post_content: "D",
-//     title: "How to Handle C++",
-//     likeCount: 0,
-//     commentCount: 0,
-//   },
-// ];
+const PostList = ({ posts = [] }) => {
+  return (
+    <div className="grid grid-cols-2 gap-4 w-full overflow-auto">
+      {posts.map((post) => {
+        return (
+          <Post
+            key={post.id}
+            postId={post.id}
+            createTime={post.createTime}
+            title={post.title}
+            post_content={post.post_content}
+            likeCount={post.likeCount}
+            commentCount={post.commentCount}
+            authorMemberAvatar={post.authorMemberAvatar}
+            authorMemberName={post.authorMemberName}
+          />
+        );
+      })}
+    </div>
+  );
+};
 
 function FollowingPosts({ repoId }) {
   const [open, setOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const inputRef = useRef();
-  // const user = useRecoilValue(userInfo);
 
   useEffect(() => {
     searchData({ page: 0, size: 100, query: "" });
   }, []);
 
-  function searchData({ page = 0, size = 10, query = "" }) {
-    http
+  const searchData = async ({ page = 0, size = 10, query = "" }) => {
+    await http
       .get(`/search/repos/${repoId}/posts`, {
         params: {
           page,
@@ -65,7 +49,7 @@ function FollowingPosts({ repoId }) {
       .catch((err) => {
         console.error(err);
       });
-  }
+  };
   function toggleModal() {
     setOpen((prev) => !prev);
   }
@@ -75,33 +59,18 @@ function FollowingPosts({ repoId }) {
     }
   };
 
-  const rendering = (list) => {
-    const result = [];
-    for (let i = list.length == null ? -1 : list.length - 1; i >= 0; i--) {
-      result.push(
-        <RepoPost
-          key={i}
-          postId={list[i].postId}
-          createTime={list[i].createTime}
-          title={list[i].title}
-          post_content={list[i].post_content}
-          likeCount={list[i].likeCount}
-          commentCount={list[i].commentCount}
-        />
-      );
-    }
-    return result;
-  };
-
   const highFunction = (data) => {
     setPosts((prev) => [
       ...prev,
       {
-        postId: data.title,
-        createTime: new Date(),
+        postId: data.id,
+        title: data.title,
+        createTime: new Date(data.date),
         post_content: data.content,
-        likeCount: 0,
-        commentCount: 0,
+        likeCount: data.likeCount,
+        commentCount: data.commentCount,
+        authorMemberAvatar: data.authorMemberAvatar,
+        authorMemberName: data.authorMemberName,
       },
     ]);
   };
@@ -173,9 +142,7 @@ function FollowingPosts({ repoId }) {
         </div>
       </header>
       <div className="flex">
-        <div className="grid grid-cols-2 gap-4 w-full overflow-auto">
-          {rendering(posts)}
-        </div>
+        <PostList posts={posts} />
       </div>
       <PostModal
         open={open}
@@ -186,6 +153,5 @@ function FollowingPosts({ repoId }) {
     </>
   );
 }
-
 export default FollowingPosts;
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import DefaultImg from "@assets/basicprofile.png";
 
 export default function Post({
   postId = 1,
@@ -8,7 +9,7 @@ export default function Post({
   likeCount = 0,
   commentCount = 0,
   pageContent = "",
-  authorMemberAvatar = "",
+  authorMemberAvatar = null,
   authorMemberName = "",
 }) {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function Post({
       <div>
         <div
           className=" w-full p-4 bg-white shadow-lg rounded-2xl dark:bg-gray-700 items-center group sm:flex space-x-6 "
-          onClick={() => navigate(`/repo/postview`, { state: pageContent })}
+          onClick={() => navigate(`/repo/postview`, { state: postId })}
         >
           <div className="grid grid-row gap-3 w-full">
             <div className="sm:w-full p-5">
@@ -37,7 +38,7 @@ export default function Post({
                   <div>
                     <img
                       className="inline-block h-10 w-10 rounded-full object-cover ring-2 ring-white"
-                      src={authorMemberAvatar || "/src/assets/basicprofile.png"}
+                      src={authorMemberAvatar || DefaultImg}
                       alt={authorMemberName}
                     />
                   </div>

@@ -6,14 +6,7 @@ import { useRecoilValue } from "recoil";
 import http from "@api/http";
 import { useToast } from "@hooks/useToast";
 
-export default function QnA({
-  qnaId,
-  nickname,
-  avatar,
-  createTime,
-  content,
-  qnACommentList,
-}) {
+const QnA = ({ qnaId, nickname, avatar, createTime, content, qnACommentList }) => {
   const user = useRecoilValue(userInfo);
   const [text, setText] = useState("");
   const [CommentList, setCommentList] = useState([...qnACommentList]);
@@ -45,9 +38,7 @@ export default function QnA({
     const result = [];
     if (list != null)
       for (let i = 0; i < list.length; i++) {
-        result.push(
-          <Comment key={i} comment={list[i].comment} member={list[i].member} />
-        );
+        result.push(<Comment key={i} comment={list[i].comment} member={list[i].member} />);
       }
     return result;
   };
@@ -72,9 +63,7 @@ export default function QnA({
             <div className="flex flex-cols justify-between">
               <div>
                 <p className="flex items-baseline">
-                  <span className="font-bold text-gray-600 dark:text-gray-200">
-                    {nickname}
-                  </span>
+                  <span className="font-bold text-gray-600 dark:text-gray-200">{nickname}</span>
                   <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">
                     {new Date(createTime).toLocaleString()}
                   </span>
@@ -142,12 +131,11 @@ export default function QnA({
 
             <hr className="my-4" />
             {/* 댓글 공간 */}
-            <div className="grid grid-rows-1 gap-2">
-              {commentRender(CommentList)}
-            </div>
+            <div className="grid grid-rows-1 gap-2">{commentRender(CommentList)}</div>
           </div>
         </div>
       </div>
     </>
   );
-}
+};
+export default QnA;

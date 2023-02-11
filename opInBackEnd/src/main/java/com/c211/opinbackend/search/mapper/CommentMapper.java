@@ -10,8 +10,10 @@ public class CommentMapper {
 			.commentType(comment.getCommentType())
 			.member(MemberDto.from(comment.getMember()))
 			.comment(comment.getContent())
-			.repositoryId(comment.getRepositoryQnA().getRepository().getId())
+			.repositoryId(comment.getRepositoryPost().getRepository().getId())
 			.repositoryPostId(comment.getRepositoryPost().getId())
+			.createDate(comment.getCreateDate())
+			.updateDate(comment.getUpdateDate())
 			.build();
 	}
 
@@ -22,6 +24,8 @@ public class CommentMapper {
 			.comment(comment.getContent())
 			.repositoryId(comment.getRepositoryQnA().getRepository().getId())
 			.repositoryQnaId(comment.getRepositoryQnA().getId())
+			.createDate(comment.getCreateDate())
+			.updateDate(comment.getUpdateDate())
 			.build();
 	}
 }
