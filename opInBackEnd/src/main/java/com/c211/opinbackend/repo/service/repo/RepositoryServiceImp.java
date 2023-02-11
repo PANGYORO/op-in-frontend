@@ -16,6 +16,7 @@ import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
 import com.c211.opinbackend.repo.model.dto.RepoDto;
+import com.c211.opinbackend.repo.model.response.RepoDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
 import com.c211.opinbackend.repo.service.mapper.RepoMapper;
 
@@ -69,5 +70,14 @@ public class RepositoryServiceImp implements RepositoryService {
 			exception.printStackTrace();
 		}
 		return true;
+	}
+
+	@Override
+	public RepoDetailResponse getDetailResponse(Long repoId) {
+		Repository repository = repoRepository.findById(repoId).orElseThrow(
+			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION)
+		);
+
+		return RepoMapper.toDetailResponse(repository);
 	}
 }
