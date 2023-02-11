@@ -22,7 +22,7 @@ public class CommentMapper {
 
 	public static CommentDetailResponse toRepoCommentDetailResponse(Comment comment) {
 		return CommentDetailResponse.builder()
-			.qnaId(comment.getId())
+			.qnaId(comment.getRepositoryQnA().getId())
 			.memberName(comment.getMember().getNickname())
 			.commentContent(comment.getContent())
 			.createDate(comment.getCreateDate())
