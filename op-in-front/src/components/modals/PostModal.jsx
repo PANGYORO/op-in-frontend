@@ -3,19 +3,9 @@ import { Fragment, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
-import Prism from "prismjs";
-import "prismjs/themes/prism.css";
-import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
-import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
-import fontSize from "tui-editor-plugin-font-size";
 import http from "@api/http";
 
-export default function PostModal({
-  open,
-  setOpen,
-  propFunction,
-  repositoryId,
-}) {
+export default function PostModal({ open, setOpen, propFunction, repositoryId }) {
   const cancelButtonRef = useRef(null);
 
   const toastuiEditor = useRef();
@@ -57,12 +47,7 @@ export default function PostModal({
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog
-        as="div"
-        className="relative z-40"
-        initialFocus={cancelButtonRef}
-        onClose={setOpen}
-      >
+      <Dialog as="div" className="relative z-40" initialFocus={cancelButtonRef} onClose={setOpen}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -87,10 +72,7 @@ export default function PostModal({
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-4/5">
-                <Dialog.Title
-                  as="h2"
-                  className="text-3xl font-bold leading-6 text-gray-900 p-4"
-                >
+                <Dialog.Title as="h2" className="text-3xl font-bold leading-6 text-gray-900 p-4">
                   New Post
                 </Dialog.Title>
                 <div className=" relative  p-4">
@@ -119,14 +101,6 @@ export default function PostModal({
                     ["ul", "ol", "task", "indent", "outdent"],
                     ["table", "image", "link"],
                     ["code", "codeblock"],
-                  ]}
-                  plugins={[
-                    [
-                      codeSyntaxHighlight,
-                      { highlighter: Prism },
-                      colorSyntax,
-                      fontSize,
-                    ],
                   ]}
                 />
                 <div className="bg-gray-50 px-4 p-4 sm:flex sm:flex-row-reverse sm:px-6">

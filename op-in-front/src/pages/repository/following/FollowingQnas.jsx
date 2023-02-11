@@ -41,6 +41,7 @@ function FollowingQnas({ repoId }) {
     for (let i = list.length == null ? -1 : list.length - 1; i >= 0; i--) {
       result.push(
         <QnA
+          key={list[i].id}
           repoId={curRepoId}
           qnaId={list[i].id}
           nickname={list[i].member.nickname}
@@ -153,15 +154,9 @@ function FollowingQnas({ repoId }) {
 
       <div className="w-full h-screen overflow-auto">{rendering(qnaData)}</div>
 
-      <QnaModal
-        open={open}
-        setOpen={setOpen}
-        repositoryId={repoId}
-        propFunction={highFunction}
-      />
+      <QnaModal open={open} setOpen={setOpen} repositoryId={repoId} propFunction={highFunction} />
     </>
   );
 }
 
 export default FollowingQnas;
-
