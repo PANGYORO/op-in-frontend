@@ -1,25 +1,106 @@
 import React, { useState, useEffect } from "react";
-import Prism from "prismjs";
 import http from "@api/http";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 // 여기 css를 수정해서 코드 하이라이팅 커스텀 가능
-import "prismjs/themes/prism.css";
+
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Viewer } from "@toast-ui/react-editor";
 
 import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
-import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
 import { userInfo } from "@recoil/user/atoms";
 
 import DefaultImg from "@assets/basicprofile.png";
 import PostComment from "./repository/PostComment";
 import { useRecoilValue } from "recoil";
+import { useToast } from "@hooks/useToast";
 
-const PostDetail = ({ details }) => {
+const PostView = () => {
+  const location = useLocation();
+  const postId = location.state;
+  const [detail, setDetail] = useState({});
+  const { setToast } = useToast();
   const user = useRecoilValue(userInfo);
-  return (
-    <>
-      <div className="dark:bg-gray-800 border-4">
+  const [CommentList, setCommentList] = useState([]);
+
+  useEffect(() => {
+    getPostData();
+  }, []);
+
+  const getPostData = async () => {
+    // console.log(postId);
+    await http
+      .get(`/post/${postId}`)
+      .then(({ data }) => {
+        setDetail(data);
+        setCommentList([...detail.commentList]);
+        // console.log("inner console" + detail);
+      })
+      .catch((error) => console.log(error));
+  };
+  // console.log(detail);
+  // console.log(detail.commentList);
+
+  const PostCommentList = ({ comments }) => {
+    return (
+      <div className="grid grid-rows-1 gap-2 ml-4">
+        {comments.map((comment) => {
+          return (
+            <PostComment
+              key={new Date()}
+              memberName={comment.memberName}
+              memberAvatarUrl={comment.memberAvatarUrl}
+              commentContent={comment.commentContent}
+            />
+          );
+        })}
+      </div>
+    );
+  };
+
+  // const commentRender = (list) => {
+  //   const result = [];
+  //   if (list != null)
+  //     for (let i = 0; i < list.length; i++) {
+  //       result.push(
+  //         <PostComment
+  //           key={i}
+  //           memberName={list[i].memberName}
+  //           memberAvatarUrl={list[i].memberAvatarUrl}
+  //           commentContent={list[i].commentContent}
+  //         />
+  //       );
+  //     }
+  //   return result;
+  // };
+
+  const createComment = async (data) => {
+    await http
+      .post(`post/comment`, {
+        postId: postId,
+        commentContent: data,
+      })
+      .then(() => {
+        setToast({ message: "Comment가 추가되었습니다." });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setCommentList([
+      ...CommentList,
+      {
+        member: { nickname: user.nickname, user_img: user.img_url },
+        comment: data,
+      },
+    ]);
+    console.log(CommentList);
+  };
+
+  const PostDetail = ({ details }) => {
+    // console.log(details);
+    const [text, setText] = useState("");
+
+    return (
+      <>
         <div className="lg:flex lg:items-center lg:justify-between w-full mx-auto py-12 px-4 sm:px-6 lg:py-5 lg:px-8 z-20">
           <h1 className="text-3xl font-extrabold text-black dark:text-white sm:text-4xl">
             <span className="block flex felx-col place-items-center">{details.title}</span>
@@ -31,7 +112,11 @@ const PostDetail = ({ details }) => {
           <div className="flex items-start text-left">
             <div className="flex-shrink-0">
               <div className="relative inline-block">
-                <a href="#" className="relative block">
+                <Link
+                  to={`/userdetail`}
+                  state={details.authorMemberName}
+                  className="relative block"
+                >
                   <img
                     alt="profile"
                     src={
@@ -39,7 +124,7 @@ const PostDetail = ({ details }) => {
                     }
                     className="mx-auto object-cover rounded-full h-16 w-16 "
                   />
-                </a>
+                </Link>
               </div>
             </div>
             <div className="ml-6 mt-4 grid grid-col">
@@ -54,16 +139,12 @@ const PostDetail = ({ details }) => {
 
           <div className="mt-3">
             <p className="mt-1 mx-4 font-light">
-              <Viewer
-                initialValue={details.content}
-                plugins={[[codeSyntaxHighlight, { highlighter: Prism }]]}
-              />
-              `
+              <Viewer initialValue={details.content} />
             </p>
           </div>
-          <div className="flex items-start mt-6 text-gray-100">
+          <div className="flex items-start mt-6 ">
             {/* 하트 */}
-            <button className="mr-4 hover:text-white">
+            <button className="mx-3">
               <svg
                 width="25"
                 height="25"
@@ -76,7 +157,7 @@ const PostDetail = ({ details }) => {
             </button>
             {details.likeCount}
             {/* 포크 */}
-            <button className="hover:text-white">
+            <button className="mx-3">
               <svg
                 width="25"
                 height="25"
@@ -91,7 +172,7 @@ const PostDetail = ({ details }) => {
           </div>
         </div>
         {/* 댓글 적는칸 */}
-        <div className="my-3">
+        <div className="m-3">
           <label htmlFor="chat" className="sr-only">
             Leave a Comment...
           </label>
@@ -99,18 +180,18 @@ const PostDetail = ({ details }) => {
             <textarea
               id="chat"
               rows="1"
-              // value={text}
-              // onChange={(e) => {
-              //   setText(e.target.value);
-              // }}
+              value={text}
+              onChange={(e) => {
+                setText(e.target.value);
+              }}
               className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Leave a Comment..."
             ></textarea>
             <button
               // type="submit"
               onClick={() => {
-                // createComment(text);
-                // setText("");
+                createComment(text);
+                setText("");
               }}
               className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600"
             >
@@ -128,31 +209,11 @@ const PostDetail = ({ details }) => {
           </div>
         </div>
         {/* 댓글달리는 곳 */}
-        <div className="m-4 p-4 grid grid-row">
-          <PostComment />
-          <PostComment />
-          <PostComment />
-          <PostComment />
-        </div>
-      </div>
-    </>
-  );
-};
-
-const PostView = () => {
-  const location = useLocation();
-  const postId = location.state;
-  const [detail, setDetail] = useState({});
-
-  useEffect(() => {
-    http
-      .get(`/post/${postId}`)
-      .then(({ data }) => {
-        setDetail(data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
-
+        {/* <div className="grid grid-rows-1 gap-2">{commentRender(details.commentList)}</div> */}
+        <PostCommentList comments={CommentList} />
+      </>
+    );
+  };
   return (
     <div className="w-full m-4 p-6 bg-white h-screen shadow-lg rounded-2xl dark:bg-gray-700 ">
       <PostDetail details={detail} />

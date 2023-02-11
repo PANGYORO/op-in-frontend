@@ -288,7 +288,7 @@ export default function Detail() {
                     </div>
                   </header>
                 </div>
-                <div className="grid grid-rows-1 ">
+                <div className="grid grid-cols-1 ml-4 gap-4">
                   <Post />
                   <Post />
                   <Post />
