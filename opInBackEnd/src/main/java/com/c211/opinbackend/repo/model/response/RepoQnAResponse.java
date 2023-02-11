@@ -1,7 +1,6 @@
 package com.c211.opinbackend.repo.model.response;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Builder;
@@ -15,5 +14,5 @@ public class RepoQnAResponse {
 	private String authorAvatar;
 	private LocalDateTime createTime;
 	private String content;
-	private List<CommentSimpleResponse> qnACommentList = new ArrayList<>();
+	private List<CommentSimpleResponse> qnACommentList;
 }

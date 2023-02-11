@@ -49,10 +49,7 @@ public class RepoQnAController {
 	public ResponseEntity<?> createComment(@RequestBody RequestComment comment) {
 		String memberEmail = SecurityUtil.getCurrentUserId()
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
-		if (!commentService.creatQnAComment(comment, memberEmail)) {
-			return ResponseEntity.badRequest().body(false);
-		}
-		return ResponseEntity.ok().body(true);
+		return ResponseEntity.ok().body(commentService.creatQnAComment(comment, memberEmail));
 	}
 
 	@GetMapping("/repo/{repoId}")

@@ -13,7 +13,6 @@ import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
 import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
 import com.c211.opinbackend.persistence.entity.Comment;
-import com.c211.opinbackend.persistence.entity.CommentType;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.entity.RepositoryQnA;
@@ -21,7 +20,6 @@ import com.c211.opinbackend.persistence.repository.CommentRepository;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
 import com.c211.opinbackend.persistence.repository.RepoQnARepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
-import com.c211.opinbackend.repo.model.requeset.RequestComment;
 import com.c211.opinbackend.repo.model.requeset.RequestQnA;
 import com.c211.opinbackend.repo.model.requeset.RequestUpdateQnA;
 import com.c211.opinbackend.repo.model.response.RepoQnAResponse;
@@ -81,35 +79,6 @@ public class RepoQnAServiceImpl implements RepoQnAService {
 			return null;
 		}
 
-	}
-
-	@Override
-	@Transactional
-	public Boolean creatQnAComment(RequestComment requestComment, String email) {
-		Member member = memberRepository.findByEmail(email)
-			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
-		RepositoryQnA repositoryQnA = repoQnARepository.findById(requestComment.getQnaId()).orElseThrow(
-			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION)
-		);
-		if (requestComment.getComment().isBlank() || requestComment.getComment() == null
-			|| requestComment.getComment().length() == 0) {
-			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_QNA_CONTENT_EMPTY_EXCEPTION);
-		}
-		try {
-			Comment comment = Comment.builder()
-				.commentType(CommentType.QNA)
-				.createDate(LocalDateTime.now())
-				.updateDate(LocalDateTime.now())
-				.content(requestComment.getComment())
-				.member(member)
-				.repositoryQnA(repositoryQnA)
-				.repositoryPost(null)
-				.build();
-			commentRepository.save(comment);
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
 	}
 
 	@Override

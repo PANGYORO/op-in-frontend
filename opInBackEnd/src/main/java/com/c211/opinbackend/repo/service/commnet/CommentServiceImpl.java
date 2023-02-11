@@ -21,6 +21,8 @@ import com.c211.opinbackend.persistence.repository.RepoPostRepository;
 import com.c211.opinbackend.persistence.repository.RepoQnARepository;
 import com.c211.opinbackend.repo.model.requeset.RequestComment;
 import com.c211.opinbackend.repo.model.requeset.RequestCommentCreateToPost;
+import com.c211.opinbackend.repo.model.response.RepoQnAResponse;
+import com.c211.opinbackend.repo.service.mapper.CommentMapper;
 
 import lombok.AllArgsConstructor;
 
@@ -59,7 +61,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	@Transactional
-	public Boolean creatQnAComment(RequestComment requestComment, String email) {
+	public RepoQnAResponse creatQnAComment(RequestComment requestComment, String email) {
 		Member member = memberRepository.findByEmail(email)
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 		RepositoryQnA repositoryQnA = repoQnARepository.findById(requestComment.getQnaId()).orElseThrow(
@@ -79,10 +81,9 @@ public class CommentServiceImpl implements CommentService {
 				.repositoryQnA(repositoryQnA)
 				.repositoryPost(null)
 				.build();
-			commentRepository.save(comment);
-		} catch (Exception e) {
-			return false;
+			return CommentMapper.toRepoQnAResponse(commentRepository.save(comment));
+		} catch (Exception exception) {
+			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_SAVE_EXCEPTION);
 		}
-		return true;
 	}
 }
