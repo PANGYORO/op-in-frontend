@@ -49,7 +49,6 @@ const UserDetail = () => {
   const fileInput = useRef(null);
 
   useEffect(() => {
-    console.log("@Image", Image);
     if (Image) {
       imageUpload(Image);
     }

@@ -29,7 +29,6 @@ const PostList = ({ posts }) => {
 const Posts = ({ value }) => {
   const [results, setResults] = useState([]);
   useEffect(() => {
-    console.log("value:" + value);
     http
       .get(`search/posts?query=${value}&size=10&page=0`)
       .then(({ data }) => {
@@ -46,3 +45,4 @@ const Posts = ({ value }) => {
   );
 };
 export default Posts;
+
