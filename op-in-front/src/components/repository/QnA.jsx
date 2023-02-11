@@ -17,7 +17,16 @@ const commentRender = (list) => {
   return result;
 };
 
-const QnA = ({ repoId, qnaId, nickname, avatar, createTime, content, qnACommentList }) => {
+const QnA = ({
+  repoId,
+  qnaId,
+  nickname,
+  avatar,
+  createTime,
+  content,
+  qnACommentList,
+  propFunction,
+}) => {
   const user = useRecoilValue(userInfo);
   const [qnaContent, setQnaContent] = useState();
   const [text, setText] = useState("");
@@ -27,7 +36,6 @@ const QnA = ({ repoId, qnaId, nickname, avatar, createTime, content, qnACommentL
   const [CommentList, setCommentList] = useState([...qnACommentList]);
 
   const { setToast } = useToast();
-  const qnaref = useRef();
 
   useEffect(() => {
     setQnaContent(content);
@@ -37,9 +45,8 @@ const QnA = ({ repoId, qnaId, nickname, avatar, createTime, content, qnACommentL
     setQnaContent(postContent);
     setToast({ message: "Qna가 수정되었습니다." });
   };
-  const deleteHighFunction = ({ qnaId }) => {
-    qnaref.current.remove();
-    setToast({ message: "Qna가 삭제되었습니다." });
+  const deleteHighFunction = () => {
+    propFunction(qnaId);
   };
 
   const createComment = async (data) => {
@@ -72,7 +79,7 @@ const QnA = ({ repoId, qnaId, nickname, avatar, createTime, content, qnACommentL
   };
 
   return (
-    <div ref={qnaref}>
+    <>
       <div className="w-full p-4 mb-6 bg-white rounded-lg shadow dark:bg-gray-800 sm:inline-block">
         <div className="flex items-start text-left">
           <div className="flex-shrink-0">
@@ -176,7 +183,7 @@ const QnA = ({ repoId, qnaId, nickname, avatar, createTime, content, qnACommentL
         qnaId={qnaId}
         propFunction={deleteHighFunction}
       />
-    </div>
+    </>
   );
 };
 export default QnA;

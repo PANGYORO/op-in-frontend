@@ -7,7 +7,7 @@ import http from "@api/http";
 import { useToast } from "@hooks/useToast";
 import ToLoginModal from "@components/modals/ToLoginModal";
 
-function FollowingQnas({ repoId }) {
+const FollowingQnas = ({ repoId }) => {
   const curRepoId = repoId;
   const [open, setOpen] = useState(false);
   const [toLoginOpen, setToLoginOpen] = useState(false);
@@ -39,11 +39,17 @@ function FollowingQnas({ repoId }) {
       });
   }
 
+  const deleteHighFunction = (qnaId) => {
+    searchQnaData({ page: 0, size: 100, query: "" });
+    setToast({ message: "Qna가 삭제되었습니다." });
+  };
+
   const rendering = (list) => {
     const result = [];
     for (let i = list.length == null ? -1 : list.length - 1; i >= 0; i--) {
       result.push(
         <QnA
+          id={list[i].id}
           key={list[i].id}
           repoId={curRepoId}
           qnaId={list[i].id}
@@ -52,6 +58,7 @@ function FollowingQnas({ repoId }) {
           createTime={list[i].createTime}
           content={list[i].content}
           qnACommentList={list[i].comments}
+          propFunction={deleteHighFunction}
         />
       );
     }
@@ -166,6 +173,6 @@ function FollowingQnas({ repoId }) {
       <QnaModal open={open} setOpen={setOpen} repositoryId={repoId} propFunction={highFunction} />
     </>
   );
-}
+};
 
 export default FollowingQnas;
