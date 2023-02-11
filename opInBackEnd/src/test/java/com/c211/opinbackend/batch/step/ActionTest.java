@@ -6,11 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.c211.opinbackend.batch.dto.github.RepositoryDto;
 import com.c211.opinbackend.batch.service.RepositoryPullRequestService;
 import com.c211.opinbackend.batch.service.RepositoryService;
-import com.c211.opinbackend.batch.service.RepositoryTechLanguageService;
-import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
 import com.c211.opinbackend.persistence.repository.RepoContributorRepository;
 
@@ -19,7 +16,6 @@ import com.c211.opinbackend.persistence.repository.RepoContributorRepository;
 public class ActionTest {
 	Action action;
 	RepositoryService repositoryService;
-	RepositoryTechLanguageService repositoryTechLanguageService;
 	RepositoryPullRequestService repositoryPullRequestService;
 	@Autowired
 	private MemberRepository memberRepository;
@@ -31,29 +27,27 @@ public class ActionTest {
 	public ActionTest(
 		Action action,
 		RepositoryService repositoryService,
-		RepositoryTechLanguageService repositoryTechLanguageService,
 		RepositoryPullRequestService repositoryPullRequestService
 	) {
 		this.action = action;
 		this.repositoryService = repositoryService;
-		this.repositoryTechLanguageService = repositoryTechLanguageService;
 		this.repositoryPullRequestService = repositoryPullRequestService;
 	}
 
-	@Test
-	public void USER_REPOSITORIES_REQUEST_WITH_SAVE() {
-		RepositoryDto[] repoDtos = action.getMemberRepository("", "Djunnni");
-
-		for (RepositoryDto repo : repoDtos) {
-			try {
-				repositoryService.saveOrUpdateRepository(repo);
-			} catch (Exception e) {
-				System.out.println(e.toString());
-				System.out.println(repo);
-			}
-		}
-	}
-
+	// @Test
+	// public void USER_REPOSITORIES_REQUEST_WITH_SAVE() {
+	// 	RepositoryDto[] repoDtos = action.getMemberRepository("", "Djunnni");
+	//
+	// 	for (RepositoryDto repo : repoDtos) {
+	// 		try {
+	// 			repositoryService.saveOrUpdateRepository(repo);
+	// 		} catch (Exception e) {
+	// 			System.out.println(e.toString());
+	// 			System.out.println(repo);
+	// 		}
+	// 	}
+	// }
+	//
 	// @Test
 	// public void USER_REPOSITORIES_REQUEST_AND_TECH_LANGUAGE() {
 	// 	RepositoryDto[] repoDtos = action.getMemberRepository("", "Djunnni");
@@ -71,14 +65,14 @@ public class ActionTest {
 	// 		}
 	// 	}
 	// }
-
+	//
 	// @Test
 	// public void REPOSITORY_COMMIT_REQUEST_TEST() {
 	// 	CommitDto[] commits = action.getRepositoryCommits("Djunnni/Algorithm");
 	//
 	// 	System.out.println(Arrays.toString(commits));
 	// }
-	//
+
 	// @Test
 	// public void REPOSITORY_LANGUAGE_REQUEST_TEST() {
 	// 	Map<String, Long> languages = action.getRepositoryLanguages("Djunnni/Algorithm");

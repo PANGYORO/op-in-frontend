@@ -2,6 +2,7 @@ package com.c211.opinbackend.batch.dto.github;
 
 import java.util.List;
 
+import com.c211.opinbackend.persistence.entity.Repository;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
@@ -12,6 +13,8 @@ import lombok.ToString;
 @Setter
 @ToString
 public class CommitDto {
+
+	private Repository repo;
 	private String sha;
 	private CommitDetailDto commit;
 	private String url;
