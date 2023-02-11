@@ -7,11 +7,9 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import { Viewer } from "@toast-ui/react-editor";
 
 import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
-import { userInfo } from "@recoil/user/atoms";
 
 import DefaultImg from "@assets/basicprofile.png";
 import PostComment from "./repository/PostComment";
-import { useRecoilValue } from "recoil";
 import { useToast } from "@hooks/useToast";
 
 const PostView = () => {
@@ -19,26 +17,21 @@ const PostView = () => {
   const postId = location.state;
   const [detail, setDetail] = useState({});
   const { setToast } = useToast();
-  const user = useRecoilValue(userInfo);
-  const [CommentList, setCommentList] = useState([]);
+  const [commentList, setCommentList] = useState([]);
 
   useEffect(() => {
     getPostData();
   }, []);
 
   const getPostData = async () => {
-    // console.log(postId);
     await http
       .get(`/post/${postId}`)
       .then(({ data }) => {
         setDetail(data);
-        setCommentList([...detail.commentList]);
-        // console.log("inner console" + detail);
+        setCommentList(data.commentList);
       })
       .catch((error) => console.log(error));
   };
-  // console.log(detail);
-  // console.log(detail.commentList);
 
   const PostCommentList = ({ comments }) => {
     return (
@@ -46,10 +39,11 @@ const PostView = () => {
         {comments.map((comment) => {
           return (
             <PostComment
-              key={new Date()}
+              key={comment.id}
               memberName={comment.memberName}
               memberAvatarUrl={comment.memberAvatarUrl}
               commentContent={comment.commentContent}
+              date={comment.date}
             />
           );
         })}
@@ -57,42 +51,29 @@ const PostView = () => {
     );
   };
 
-  // const commentRender = (list) => {
-  //   const result = [];
-  //   if (list != null)
-  //     for (let i = 0; i < list.length; i++) {
-  //       result.push(
-  //         <PostComment
-  //           key={i}
-  //           memberName={list[i].memberName}
-  //           memberAvatarUrl={list[i].memberAvatarUrl}
-  //           commentContent={list[i].commentContent}
-  //         />
-  //       );
-  //     }
-  //   return result;
-  // };
-
-  const createComment = async (data) => {
+  const createComment = async (comment) => {
     await http
       .post(`post/comment`, {
         postId: postId,
-        commentContent: data,
+        commentContent: comment,
       })
-      .then(() => {
+      .then((response) => {
+        const comment = response.data;
         setToast({ message: "Comment가 추가되었습니다." });
+        setCommentList([
+          ...commentList,
+          {
+            id: comment.id,
+            memberName: comment.memberName,
+            memberAvatarUrl: comment.memberAvatarUrl,
+            commentContent: comment.commentContent,
+            date: new Date(comment.updateDate),
+          },
+        ]);
       })
       .catch((error) => {
         console.log(error);
       });
-    setCommentList([
-      ...CommentList,
-      {
-        member: { nickname: user.nickname, user_img: user.img_url },
-        comment: data,
-      },
-    ]);
-    console.log(CommentList);
   };
 
   const PostDetail = ({ details }) => {
@@ -103,7 +84,9 @@ const PostView = () => {
       <>
         <div className="lg:flex lg:items-center lg:justify-between w-full mx-auto py-12 px-4 sm:px-6 lg:py-5 lg:px-8 z-20">
           <h1 className="text-3xl font-extrabold text-black dark:text-white sm:text-4xl">
-            <span className="block flex felx-col place-items-center">{details.title}</span>
+            <span className="block flex felx-col place-items-center">
+              {details.title}
+            </span>
           </h1>
         </div>
 
@@ -120,7 +103,9 @@ const PostView = () => {
                   <img
                     alt="profile"
                     src={
-                      details.authorMemberAvatar == null ? DefaultImg : details.authorMemberAvatar
+                      details.authorMemberAvatar == null
+                        ? DefaultImg
+                        : details.authorMemberAvatar
                     }
                     className="mx-auto object-cover rounded-full h-16 w-16 "
                   />
@@ -210,7 +195,7 @@ const PostView = () => {
         </div>
         {/* 댓글달리는 곳 */}
         {/* <div className="grid grid-rows-1 gap-2">{commentRender(details.commentList)}</div> */}
-        <PostCommentList comments={CommentList} />
+        <PostCommentList comments={commentList} />
       </>
     );
   };
@@ -221,3 +206,4 @@ const PostView = () => {
   );
 };
 export default PostView;
+

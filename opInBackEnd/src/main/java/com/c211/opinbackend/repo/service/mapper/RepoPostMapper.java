@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.c211.opinbackend.persistence.entity.Comment;
 import com.c211.opinbackend.persistence.entity.RepositoryPost;
+import com.c211.opinbackend.repo.model.response.CommentDetailReponse;
 import com.c211.opinbackend.repo.model.response.CommentSimpleResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
@@ -29,14 +30,9 @@ public class RepoPostMapper {
 	}
 
 	public static RepoPostDetailResponse toDetailResponse(RepositoryPost repositoryPost) {
-		List<CommentSimpleResponse> simpleCommentList = new ArrayList<>();
+		List<CommentDetailReponse> detailCommentList = new ArrayList<>();
 		for (Comment comment : repositoryPost.getCommentsList()) {
-			CommentSimpleResponse commentResDto = CommentSimpleResponse.builder()
-				.memberName(comment.getMember().getNickname())
-				.memberAvatarUrl(comment.getMember().getAvatarUrl())
-				.commentContent(comment.getContent())
-				.build();
-			simpleCommentList.add(commentResDto);
+			detailCommentList.add(CommentMapper.toDetailCommentDto(comment));
 		}
 		return RepoPostDetailResponse.builder()
 			.id(repositoryPost.getId())
@@ -46,7 +42,7 @@ public class RepoPostMapper {
 			.title(repositoryPost.getTitleContent().getTitle())
 			.likeCount(repositoryPost.getLikeList().size())
 			.commentCount(repositoryPost.getCommentsList().size())
-			.commentList(simpleCommentList)
+			.commentList(detailCommentList)
 			.content(repositoryPost.getTitleContent().getContent())
 			.build();
 	}
