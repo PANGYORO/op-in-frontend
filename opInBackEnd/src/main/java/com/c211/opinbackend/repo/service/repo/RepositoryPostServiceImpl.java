@@ -59,6 +59,8 @@ public class RepositoryPostServiceImpl implements RepositoryPostService {
 					.title(createPostRequest.getTitle())
 					.build())
 				.mergeFL(false)
+				.commentsList(new ArrayList<>())
+				.likeList(new ArrayList<>())
 				.date(LocalDateTime.now())
 				.closeState(false)
 				.build();

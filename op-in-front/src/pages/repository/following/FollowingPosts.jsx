@@ -16,6 +16,8 @@ const PostList = ({ posts = [] }) => {
             post_content={post.post_content}
             likeCount={post.likeCount}
             commentCount={post.commentCount}
+            authorMemberAvatar={post.authorMemberAvatar}
+            authorMemberName={post.authorMemberName}
           />
         );
       })}
@@ -160,8 +162,14 @@ function FollowingPosts({ repoId }) {
       <div className="flex">
         <PostList posts={posts} />
       </div>
-      <PostModal open={open} setOpen={setOpen} propFunction={highFunction} repositoryId={repoId} />
+      <PostModal
+        open={open}
+        setOpen={setOpen}
+        propFunction={highFunction}
+        repositoryId={repoId}
+      />
     </>
   );
 }
 export default FollowingPosts;
+

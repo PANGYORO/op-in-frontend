@@ -53,9 +53,10 @@ public class RepoPostController {
 					MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
 			);
 			RepositoryPost post = repositoryPostService.createPostToRepository(createPostRequest, memberEmail);
-
+			System.out.println(post);
 			return ResponseEntity.ok().body(RepoPostMapper.toSimpleResponse(post));
 		} catch (Exception exception) {
+			exception.printStackTrace();
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(RepositoryExceptionEnum.REPOSITORY_POST_SAVE_EXCEPTION.getErrorMessage());
 		}
