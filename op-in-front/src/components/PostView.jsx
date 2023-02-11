@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import http from "@api/http";
 import { useLocation, Link } from "react-router-dom";
-// 여기 css를 수정해서 코드 하이라이팅 커스텀 가능
-
-import "@toast-ui/editor/dist/toastui-editor.css";
 import { Viewer } from "@toast-ui/react-editor";
-
-import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
-
-import DefaultImg from "@assets/basicprofile.png";
-import PostComment from "./repository/PostComment";
 import { useToast } from "@hooks/useToast";
+
+import PostComment from "./repository/PostComment";
+
+import http from "@api/http";
+import DefaultImg from "@assets/basicprofile.png";
+
+// 여기 css를 수정해서 코드 하이라이팅 커스텀 가능
+import "@toast-ui/editor/dist/toastui-editor.css";
+import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
 
 const PostView = () => {
   const location = useLocation();
