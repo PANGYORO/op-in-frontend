@@ -32,7 +32,7 @@ const Users = ({ value }) => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [value]);
 
   return (
     <>
@@ -41,3 +41,4 @@ const Users = ({ value }) => {
   );
 };
 export default Users;
+
