@@ -87,6 +87,8 @@ function FollowingPosts({ repoId }) {
           post_content={list[i].post_content}
           likeCount={list[i].likeCount}
           commentCount={list[i].commentCount}
+          authorMemberAvatar={list[i].authorMemberAvatar}
+          authorMemberName={list[i].authorMemberName}
         />
       );
     }

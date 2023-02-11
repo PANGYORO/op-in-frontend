@@ -60,9 +60,6 @@ public class RepositoryPost {
 	@NotNull
 	private Boolean closeState;
 
-	@NotNull
-	private String imageUrl;
-
 	public void createPostToRepo(Repository repository) {
 		if (repository != null) {
 			this.repository = repository;
