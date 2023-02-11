@@ -38,7 +38,7 @@ const Posts = ({ value }) => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [value]);
   return (
     <>
       <PostList posts={results} />

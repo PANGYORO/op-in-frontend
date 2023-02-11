@@ -1,17 +1,46 @@
 import DefaultImg from "@assets/basicprofile.png";
 import Comment from "@components/repository/Comment";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
 import http from "@api/http";
 import { useToast } from "@hooks/useToast";
+import QnaModifyModal from "@components/modals/QnaModifyModal";
+import QnaDeleteModal from "@components/modals/QnaDeleteModal";
 
-const QnA = ({ qnaId, nickname, avatar, createTime, content, qnACommentList }) => {
+const commentRender = (list) => {
+  const result = [];
+  if (list != null)
+    for (let i = 0; i < list.length; i++) {
+      result.push(<Comment key={i} comment={list[i].comment} member={list[i].member} />);
+    }
+  return result;
+};
+
+const QnA = ({ repoId, qnaId, nickname, avatar, createTime, content, qnACommentList }) => {
   const user = useRecoilValue(userInfo);
+  const [qnaContent, setQnaContent] = useState();
   const [text, setText] = useState("");
+  const [modifyOpen, setModifyOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
   const [CommentList, setCommentList] = useState([...qnACommentList]);
 
   const { setToast } = useToast();
+  const qnaref = useRef();
+
+  useEffect(() => {
+    setQnaContent(content);
+  }, []);
+
+  const modifyHighFunction = ({ postContent, qnaId }) => {
+    setQnaContent(postContent);
+    setToast({ message: "Qna가 수정되었습니다." });
+  };
+  const deleteHighFunction = ({ qnaId }) => {
+    qnaref.current.remove();
+    setToast({ message: "Qna가 삭제되었습니다." });
+  };
 
   const createComment = async (data) => {
     await http
@@ -34,17 +63,16 @@ const QnA = ({ qnaId, nickname, avatar, createTime, content, qnACommentList }) =
     setToast({ message: "Comment가 추가되었습니다." });
   };
 
-  const commentRender = (list) => {
-    const result = [];
-    if (list != null)
-      for (let i = 0; i < list.length; i++) {
-        result.push(<Comment key={i} comment={list[i].comment} member={list[i].member} />);
-      }
-    return result;
+  const modifyQnA = () => {
+    setModifyOpen(true);
+  };
+
+  const removeQnA = () => {
+    setDeleteOpen(true);
   };
 
   return (
-    <>
+    <div ref={qnaref}>
       <div className="w-full p-4 mb-6 bg-white rounded-lg shadow dark:bg-gray-800 sm:inline-block">
         <div className="flex items-start text-left">
           <div className="flex-shrink-0">
@@ -68,21 +96,21 @@ const QnA = ({ qnaId, nickname, avatar, createTime, content, qnACommentList }) =
                     {new Date(createTime).toLocaleString()}
                   </span>
                 </p>
-                <div className="mt-3">
-                  <p className="mt-1 dark:text-white">{content}</p>
-                </div>
+                <div className="mt-4 dark:text-white whitespace-pre">{qnaContent}</div>
               </div>
               {nickname == user.nickname ? (
-                <div>
+                <div className="">
                   <button
                     type="button"
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    onClick={modifyQnA}
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                   >
                     Modify
                   </button>
                   <button
                     type="button"
-                    className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                    onClick={removeQnA}
+                    className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                   >
                     Delete
                   </button>
@@ -135,7 +163,20 @@ const QnA = ({ qnaId, nickname, avatar, createTime, content, qnACommentList }) =
           </div>
         </div>
       </div>
-    </>
+      <QnaModifyModal
+        qnaId={qnaId}
+        previousValue={qnaContent}
+        open={modifyOpen}
+        setOpen={setModifyOpen}
+        propFunction={modifyHighFunction}
+      />
+      <QnaDeleteModal
+        open={deleteOpen}
+        setOpen={setDeleteOpen}
+        qnaId={qnaId}
+        propFunction={deleteHighFunction}
+      />
+    </div>
   );
 };
 export default QnA;

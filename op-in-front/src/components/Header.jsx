@@ -34,7 +34,6 @@ const Header = () => {
   const navigate = useNavigate();
   const { setToast } = useToast();
   const headerImg = useRef();
-  console.log(user);
 
   useEffect(() => {
     if (headerImg.current) headerImg.current.src = user.img_url;
@@ -118,7 +117,7 @@ const Header = () => {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <button
+                {/* <button
                   id="theme-toggle"
                   type="button"
                   className="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
@@ -145,13 +144,13 @@ const Header = () => {
                       clipRule="evenodd"
                     ></path>
                   </svg>
-                </button>
+                </button> */}
+                <span className="text-white">{user.nickname}</span>
 
                 {user.logined && (
                   <Menu as="div" className="relative ml-3">
                     <div>
                       <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                        <span className="sr-only">Open user menu</span>
                         <img
                           className="h-8 w-8 rounded-full"
                           ref={headerImg}
@@ -202,6 +201,7 @@ const Header = () => {
                                     img_url: "",
                                     logined: false,
                                   }));
+                                  selectMenu("dashboard");
                                   navigate("/");
                                 } catch (error) {
                                   setToast({ message: error.response.data.message });

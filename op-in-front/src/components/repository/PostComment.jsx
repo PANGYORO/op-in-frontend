@@ -1,12 +1,14 @@
 import React from "react";
 import DefaultImg from "@assets/basicprofile.png";
+import { useNavigate } from "react-router-dom";
 
-export default function PostComment({
+const PostComment = ({
   memberName = "david",
   memberAvatarUrl = DefaultImg,
   commentContent = "안녕하세요",
   date = new Date(),
-}) {
+}) => {
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col inline-flex place-item-start">
       <div className="flex flex-row mr-4 items-center">
@@ -14,7 +16,8 @@ export default function PostComment({
           <img
             alt="profile"
             src={memberAvatarUrl || DefaultImg}
-            className="mx-auto object-cover h-10 ml-4"
+            onClick={() => navigate(`/userdetail`, { state: memberName })}
+            className="mx-auto object-cover rounded-full h-10 w-10 ml-4"
           />
         </div>
         <div>
@@ -28,5 +31,5 @@ export default function PostComment({
       <hr />
     </div>
   );
-}
-
+};
+export default PostComment;
