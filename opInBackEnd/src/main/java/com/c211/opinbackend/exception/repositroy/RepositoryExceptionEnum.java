@@ -10,6 +10,7 @@ import lombok.Getter;
 public enum RepositoryExceptionEnum {
 	REPOSITORY_NULL_EXCEPTION(HttpStatus.BAD_REQUEST, "M0002", "래포지토리 가 null 입니다."),
 	REPOSITORY_EXIST_EXCEPTION(HttpStatus.BAD_REQUEST, "M0008", "존재하지 않는 래포입니다."),
+	REPOSITORY_SAVE_EXCEPTION(HttpStatus.BAD_REQUEST, "M0008", "래포지토리 저장을 실패했습니다"),
 
 	REPOSITORY_POST_SAVE_EXCEPTION(HttpStatus.BAD_REQUEST, "M0009", "래포지토리 포스트 등록 실패"),
 	REPOSITORY_POST_EXIST_EXCEPTION(HttpStatus.BAD_REQUEST, "M0010", "래포지토리 포스트 가 존재하지 않습니다."),

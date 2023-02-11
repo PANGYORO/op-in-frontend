@@ -1,7 +1,10 @@
 package com.c211.opinbackend.repo.service.mapper;
 
+import java.util.ArrayList;
+
 import com.c211.opinbackend.persistence.entity.Comment;
 import com.c211.opinbackend.repo.model.response.CommentDetailReponse;
+import com.c211.opinbackend.repo.model.response.RepoQnAResponse;
 
 public class CommentMapper {
 
@@ -14,6 +17,17 @@ public class CommentMapper {
 			.createDate(comment.getCreateDate())
 			.updateDate(comment.getUpdateDate())
 			.build();
-
 	}
+
+	public static RepoQnAResponse toRepoQnAResponse(Comment comment) {
+		return RepoQnAResponse.builder()
+			.qnaId(comment.getId())
+			.authorAvatar(comment.getMember().getAvatarUrl())
+			.authorMember(comment.getMember().getNickname())
+			.content(comment.getContent())
+			.createTime(comment.getCreateDate())
+			.qnACommentList(new ArrayList<>())
+			.build();
+	}
+
 }
