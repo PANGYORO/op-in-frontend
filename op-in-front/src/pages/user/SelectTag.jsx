@@ -6,7 +6,6 @@ import http from '@api/http'
 import { useRecoilValue } from "recoil";
 import { userInfo } from "@recoil/user/atoms";
 import { useToast } from '@hooks/useToast';
-import Joyride from 'react-joyride'
 
 
 
@@ -125,30 +124,7 @@ function SelectTag() {
   const [topic, setTopic] = useState([])
   const [lan, setLan] = useState([])
   
-  const steps = [
-    {
-      title:"Topic Tag", 
-      content: "인기있는 topic 모음입니다",
-      target: "#topicTag",
-      placement:"top-end",
-    },
-    {
-      title:"Lan Tag", 
-      content: "인기있는 언어 모음입니다",
-      target: "#lanTag",
-      placement:"bottom",
-    },
-    {
-      title:"Tag Btn ", 
-      content: "관심있는 tag들을 모두 골랐다면 버튼을 눌러 제출해주세요",
-      target: "#tagButton",
-      placement:"top",
-    },
-  ];
-  const [joyride, setJoyride] = useState({
-    run: false,
-    steps: steps,
-  });
+  
 
   const handleTopic = (newTopic) => {
     if (topic.includes(newTopic)) {
@@ -199,14 +175,6 @@ function SelectTag() {
 
     
     <div className='mx-44'>
-      <Joyride
-        {...joyride}
-        continuous
-        hideCloseButton
-        scrollToFirstStep
-        showProgress
-        showSkipButton
-      />
       <div className='py-8'>
         <div className="text-3xl">
           HOT Topic
@@ -240,11 +208,7 @@ function SelectTag() {
       <div className='py-8'>
       </div>
       <div  id="tagButton" className='grid grid-cols-4 justify-center gap-4'>
-        <div>
-          <button onClick={() => setJoyride({ run: true, steps: steps })}>
-            Start Tour
-          </button>
-        </div>
+        <div></div>
         <div></div>
         <div></div>
         <Button topic={topic} lan={lan}/>
