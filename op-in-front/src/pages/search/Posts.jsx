@@ -3,10 +3,11 @@ import Post from "@components/Post";
 import http from "@api/http";
 
 const PostList = ({ posts }) => {
-  console.log(posts);
+  // console.log(posts);
   return (
     <div className="grid grid-cols-2 gap-4 ml-4">
       {posts.map((post) => {
+        // console.log(post.id);
         return (
           <Post
             key={post.id}
@@ -30,7 +31,7 @@ const Posts = ({ value }) => {
   useEffect(() => {
     console.log("value:" + value);
     http
-      .get(`search/repos?query=${value}&size=10&page=0`)
+      .get(`search/posts?query=${value}&size=10&page=0`)
       .then(({ data }) => {
         setResults([...data]);
       })

@@ -101,7 +101,7 @@ public class MemberController {
 	}
 
 	// 로그인할 때 정보 리턴
-	@PostMapping("/member/info")
+	@PostMapping("/info")
 	public ResponseEntity<?> getMemberLogin() {
 		Member member = memberService.getMember();
 		return new ResponseEntity<>(member, HttpStatus.OK);

@@ -15,12 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
+import com.c211.opinbackend.persistence.entity.Comment;
+import com.c211.opinbackend.persistence.entity.RepositoryPost;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.model.requeset.RequestCommentCreateToPost;
 import com.c211.opinbackend.repo.model.requeset.RequestUpdatePost;
 import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 import com.c211.opinbackend.repo.service.commnet.CommentService;
+import com.c211.opinbackend.repo.service.mapper.CommentMapper;
+import com.c211.opinbackend.repo.service.mapper.RepoPostMapper;
 import com.c211.opinbackend.repo.service.repo.RepositoryPostService;
 import com.c211.opinbackend.util.SecurityUtil;
 
@@ -50,10 +54,10 @@ public class RepoPostController {
 				() -> new MemberRuntimeException(
 					MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
 			);
-			log.info(memberEmail);
-			repositoryPostService.createPostToRepository(createPostRequest, memberEmail);
-			return ResponseEntity.ok(HttpStatus.ACCEPTED);
+			RepositoryPost post = repositoryPostService.createPostToRepository(createPostRequest, memberEmail);
+			return ResponseEntity.ok().body(RepoPostMapper.toSimpleResponse(post));
 		} catch (Exception exception) {
+			exception.printStackTrace();
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(RepositoryExceptionEnum.REPOSITORY_POST_SAVE_EXCEPTION.getErrorMessage());
 		}
@@ -124,9 +128,9 @@ public class RepoPostController {
 	public ResponseEntity<?> createCommentToPost(@RequestBody RequestCommentCreateToPost requestCommentCreateToPost) {
 		String memberEmail = SecurityUtil.getCurrentUserId()
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_WRONG_EXCEPTION));
-		commentService.createCommentToPost(memberEmail, requestCommentCreateToPost);
 
-		return ResponseEntity.ok().body("댓글 저장 성공");
+		Comment comment = commentService.createCommentToPost(memberEmail, requestCommentCreateToPost);
+		return ResponseEntity.ok().body(CommentMapper.toDetailCommentDto(comment));
 
 	}
 

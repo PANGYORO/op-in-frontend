@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Repo from "@components/repository/Repo";
-// import RepoPost from "@components/repository/RepoPost";
 import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";

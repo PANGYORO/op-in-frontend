@@ -31,7 +31,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	@Transactional
-	public Boolean createCommentToPost(String memberEmail, RequestCommentCreateToPost request) {
+	public Comment createCommentToPost(String memberEmail, RequestCommentCreateToPost request) {
 		Member member = memberRepository.findByEmail(memberEmail)
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 		RepositoryPost repositoryPost = repoPostRepository.findById(request.getPostId())
@@ -46,8 +46,8 @@ public class CommentServiceImpl implements CommentService {
 				.createDate(LocalDateTime.now())
 				.updateDate(LocalDateTime.now())
 				.build();
-			commentRepository.save(commentToCreate);
-			return true;
+			Comment comment = commentRepository.save(commentToCreate);
+			return comment;
 		} catch (Exception e) {
 			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_COMMENT_SAVE_EXCEPTION);
 		}
