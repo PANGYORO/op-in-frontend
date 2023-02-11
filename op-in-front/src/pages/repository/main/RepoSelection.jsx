@@ -18,7 +18,6 @@ const RepoList = ({ repos }) => {
             title={repo.title}
             content={repo.content}
             techLangs={repo.techLangs}
-            repoDetails={repo}
           />
         );
       })}

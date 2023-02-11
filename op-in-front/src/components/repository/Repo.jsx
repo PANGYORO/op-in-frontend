@@ -6,26 +6,6 @@ const Repo = ({
   title = "test",
   content = "testrepo",
   techLangs = [{ title: "react" }, { title: "HTML" }],
-  repoDetails = [
-    {
-      id: 2,
-      title: "test title",
-      content: "test content",
-      techLangs: [],
-      contributors: [
-        {
-          nickname: "testmj",
-          id: "1",
-          profileImg: null,
-        },
-      ],
-      gitContributors: null,
-      star: "12345",
-      forkNum: "12345",
-      topicList: [],
-      updateDate: null,
-    },
-  ],
 }) => {
   const navigate = useNavigate();
 
@@ -35,7 +15,7 @@ const Repo = ({
         <div
           onClick={() =>
             navigate(`/repo/${id}`, {
-              state: repoDetails,
+              state: id,
             })
           }
         >
