@@ -162,7 +162,6 @@ public class MemberServiceImpl implements MemberService {
 				.id(myPost.getId())
 				.title(myPost.getTitleContent().getTitle())
 				.content(myPost.getTitleContent().getContent())
-				.imageUrl(myPost.getImageUrl())
 				.mergeFL(myPost.getMergeFL())
 				.date(myPost.getDate())
 				.closeState(myPost.getCloseState())

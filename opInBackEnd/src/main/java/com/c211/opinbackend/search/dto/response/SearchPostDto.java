@@ -17,12 +17,14 @@ public class SearchPostDto {
 	private Long id;
 
 	private String title;
+
+	private String authorMemberName;
+	private String authorMemberAvatar;
+
 	private String content;
 
-	private int commentCount;
 	private int likeCount;
-
-	private String imageUrl;
+	private int commentCount;
 
 	private boolean mergeFl;
 	private boolean closeState;
@@ -31,4 +33,5 @@ public class SearchPostDto {
 	private LocalDateTime date;
 
 	private List<CommentDto> comments = new ArrayList<>();
+
 }

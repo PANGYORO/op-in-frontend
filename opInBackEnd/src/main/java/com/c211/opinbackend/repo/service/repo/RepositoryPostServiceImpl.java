@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class RepositoryPostServiceImp implements RepositoryPostService {
+public class RepositoryPostServiceImpl implements RepositoryPostService {
 
 	private final MemberRepository memberRepository;
 	private final RepoRepository repoRepository;
@@ -39,7 +39,7 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 
 	@Override
 	@Transactional
-	public Boolean createPostToRepository(CreatePostRequest createPostRequest, String memberEmail) {
+	public RepositoryPost createPostToRepository(CreatePostRequest createPostRequest, String memberEmail) {
 		// 등록할 래포지토리를 찾고
 
 		Long repositoryId = createPostRequest.getRepositoryId();
@@ -58,17 +58,15 @@ public class RepositoryPostServiceImp implements RepositoryPostService {
 					.content(createPostRequest.getContent())
 					.title(createPostRequest.getTitle())
 					.build())
-				.mergeFL(false) // TODO: 2023-02-07 나중에 api 로 바꿔줘야합니다
+				.mergeFL(false)
 				.date(LocalDateTime.now())
 				.closeState(false)
-				.imageUrl("http://testurl")
 				.build();
 			repositoryPost.createPostToRepo(repository);
-			repoPostRepository.save(repositoryPost);
+			return repoPostRepository.save(repositoryPost);
 		} catch (Exception exception) {
-			return false;
+			return null;
 		}
-		return true;
 	}
 
 	@Override
