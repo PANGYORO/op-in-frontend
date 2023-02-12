@@ -47,4 +47,10 @@ public interface MemberService {
 	boolean deleteLoginMemberTopic(String title);
 
 	boolean deleteLoginMemberTechLanguage(String title);
+
+	Long followRepo(Long repoId, String memberEmail);
+
+	Long followDeleteRepo(Long repoId, String memberEmail);
+
+	Long followCheckRepo(Long repoId, String memberEmail);
 }
