@@ -15,6 +15,7 @@ import com.c211.opinbackend.auth.jwt.TokenProvider;
 import com.c211.opinbackend.auth.model.response.BadgeResponse;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.auth.model.response.TechLanguageResponse;
+import com.c211.opinbackend.auth.service.MailService;
 import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.exception.auth.AuthExceptionEnum;
@@ -64,6 +65,7 @@ public class MemberServiceImpl implements MemberService {
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 	private final TokenProvider tokenProvider;
 	private final MemberRepository memberRepository;
+	private final MailService mailService;
 	private final MemberFollowRepository memberFollowRepository;
 	private final MemberBadgeRepository memberBadgeRepository;
 	private final MemberTechLanguageRepository memberTechLanguageRepository;
@@ -586,6 +588,20 @@ public class MemberServiceImpl implements MemberService {
 		} catch (Exception e) {
 			throw new ApiRuntimeException(ApiExceptionEnum.API_CENTER_CALL_EXCEPTION);
 		}
+		return true;
+	}
+
+	@Override
+	@Transactional
+	public boolean changePwEmail(String email){
+		String pass = mailService.mailSend(email);
+		System.out.println(pass);
+
+		Member member = memberRepository.findByEmail(email)
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+		member.setPassword(passwordEncoder.encode(pass));
+		memberRepository.save(member);
+
 		return true;
 	}
 
