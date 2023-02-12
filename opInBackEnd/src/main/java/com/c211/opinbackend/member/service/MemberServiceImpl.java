@@ -443,8 +443,9 @@ public class MemberServiceImpl implements MemberService {
 			} else {
 				// topic 과 member 의 관계가 있는지 확인
 				MemberTopic memberTopic = memberTopicRepository.findByMemberAndTopic(member, isTopic).orElse(null);
-				if (memberTopic != null)
+				if (memberTopic != null) {
 					continue;
+				}
 			}
 
 			//member topic 으로 이어주기
@@ -469,10 +470,11 @@ public class MemberServiceImpl implements MemberService {
 				language = techLanguageRepository.save(newLanguage);
 			} else {
 				// tech language 과 member 의 관계가 있는지 확인
-				MemberTechLanguage memberTechLanguage = memberTechLanguageRepository.findByMemberAndTechLanguage(member,
-					language).orElse(null);
-				if (memberTechLanguage != null)
+				MemberTechLanguage memberTechLanguage = memberTechLanguageRepository
+					.findByMemberAndTechLanguage(member, language).orElse(null);
+				if (memberTechLanguage != null) {
 					continue;
+				}
 			}
 
 			//member tech language 으로 이어주기
