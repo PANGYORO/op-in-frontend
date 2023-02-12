@@ -599,7 +599,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional
-	public boolean changePwEmail(String email){
+	public boolean changePwEmail(String email) {
 		String pass = mailService.mailSend(email);
 		System.out.println(pass);
 

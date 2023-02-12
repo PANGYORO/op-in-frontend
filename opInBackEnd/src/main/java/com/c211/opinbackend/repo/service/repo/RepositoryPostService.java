@@ -28,4 +28,10 @@ public interface RepositoryPostService {
 
 	List<RepoPostSimpleResponse> getMembersRepoPost(String nickName);
 
+	Boolean createLike(Long postId);
+
+	Boolean deleteLike(Long postId);
+
+	Boolean checkLike(Long postId);
+
 }
