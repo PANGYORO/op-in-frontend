@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @RequiredArgsConstructor
 public class GetRepoTechLanguageJobConfig {
-
+/*
 	private final JobBuilderFactory jobBuilderFactory;
 	private final StepBuilderFactory stepBuilderFactory;
 	private final RepoRepository repoRepository;
@@ -51,5 +51,7 @@ public class GetRepoTechLanguageJobConfig {
 			.writer(new GetRepoTechLanguageWriter(techLanguageRepository, repoTechLanguageRepository))
 			.build();
 	}
+
+ */
 
 }

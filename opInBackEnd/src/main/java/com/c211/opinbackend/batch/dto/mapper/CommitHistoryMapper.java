@@ -1,8 +1,11 @@
 package com.c211.opinbackend.batch.dto.mapper;
 
+import org.springframework.stereotype.Component;
+
 import com.c211.opinbackend.batch.dto.github.CommitDto;
 import com.c211.opinbackend.persistence.entity.CommitHistory;
 
+@Component
 public class CommitHistoryMapper {
 
 	public static CommitHistory toCommitHistory(CommitDto commit) {

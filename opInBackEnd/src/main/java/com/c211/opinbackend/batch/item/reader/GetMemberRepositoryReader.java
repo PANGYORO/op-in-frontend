@@ -11,6 +11,7 @@ import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.c211.opinbackend.batch.dto.github.RepositoryDto;
+import com.c211.opinbackend.batch.step.Action;
 import com.c211.opinbackend.constant.GitHub;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class GetMemberRepositoryReader implements ItemReader<RepositoryDto> {
 
 	private final MemberRepository memberRepository;
+	private final Action action;
 	private List<RepositoryDto> collectData = new ArrayList<>(); //Rest로 가져온 데이터를 리스트에 넣는다.
 	private boolean checkRestCall = false; //RestAPI 호출여부 판단
 	private int nextIndex = 0;//리스트의 데이터를 하나씩 인덱스를 통해 가져온다.
@@ -36,7 +38,8 @@ public class GetMemberRepositoryReader implements ItemReader<RepositoryDto> {
 			List<Member> members = memberRepository.findAllByGithubIdIsNotNull();
 
 			for (Member member : members) {
-				RepositoryDto[] memberRepository = getMemberRepository("", member.getGithubUserName());
+
+				RepositoryDto[] memberRepository = action.getMemberRepository("", member.getGithubUserName());
 				List<RepositoryDto> repos = Arrays.asList(memberRepository);
 				collectData.addAll(repos);
 			}
@@ -54,16 +57,4 @@ public class GetMemberRepositoryReader implements ItemReader<RepositoryDto> {
 
 		return nextCollect;//DTO 하나씩 반환한다. Rest 호출시 데이터가 없으면 null로 반환.
 	}
-
-	public RepositoryDto[] getMemberRepository(String githubToken, String githubUserName) {
-		return WebClient.create()
-			.get()
-			.uri(GitHub.getUserRepoUrl(githubUserName))
-			.headers(header -> {
-				if (githubToken != null && !githubToken.isEmpty()) {
-					header.setBearerAuth(githubToken);
-				}
-			}).retrieve().bodyToMono(RepositoryDto[].class).block();
-	}
-
 }

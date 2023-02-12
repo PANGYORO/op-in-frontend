@@ -61,6 +61,7 @@ public class GetRepoCommitReader implements ItemReader<CommitDto> {
 		return WebClient.create()
 			.get()
 			.uri(GitHub.getPublicRepositoryCommitUrl(repositoryFullName))
+			.header("Authorization", "token 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")
 			.retrieve().bodyToMono(CommitDto[].class).block();
 	}
 

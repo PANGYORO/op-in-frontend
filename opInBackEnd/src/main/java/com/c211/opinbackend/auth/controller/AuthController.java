@@ -42,10 +42,8 @@ public class AuthController {
 
 	private final AuthService authService;
 	private final MemberService memberService;
-
 	@Value("${jwt.access-token-validity-in-seconds}")
 	private long accessTokenValidityInSeconds;
-
 	@Value("${jwt.refresh-token-validity-in-seconds}")
 	private long refreshTokenValidityInSeconds;
 

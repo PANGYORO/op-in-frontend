@@ -61,7 +61,9 @@ public class GetRepoTechLanguageReader implements ItemReader<RepoTechLanguageDto
 			.get()
 			.uri(
 				GitHub.getPublicRepositoryLanguageUrl(repositoryFullName)
-			).retrieve().bodyToMono(new ParameterizedTypeReference<Map<String, Long>>() {
+			)
+			.header("Authorization", "token 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")
+			.retrieve().bodyToMono(new ParameterizedTypeReference<Map<String, Long>>() {
 			}).block();
 	}
 

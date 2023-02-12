@@ -33,23 +33,22 @@ public class Action {
 		return WebClient.create()
 			.get()
 			.uri(GitHub.getUserRepoUrl(githubUserName))
-			.headers(header -> {
-				if (githubToken != null && !githubToken.isEmpty()) {
-					header.setBearerAuth(githubToken);
-				}
-			}).retrieve().bodyToMono(RepositoryDto[].class).block();
+			.header("Authorization", "token "+githubToken)
+			.retrieve().bodyToMono(RepositoryDto[].class).block();
 	}
 
-	public static Map<String, Long> getRepositoryLanguages(String repositoryFullName) {
+	public static Map<String, Long> getRepositoryLanguages(String githubToken, String repositoryFullName) {
 		return WebClient.create()
 			.get()
 			.uri(
 				GitHub.getPublicRepositoryLanguageUrl(repositoryFullName)
-			).retrieve().bodyToMono(new ParameterizedTypeReference<Map<String, Long>>() {
+			)
+			.header("Authorization", "token "+githubToken)
+			.retrieve().bodyToMono(new ParameterizedTypeReference<Map<String, Long>>() {
 			}).block();
 	}
 
-	public static Map<String, Long> getRepositoryLanguages(String repositoryName, String githubUserName) {
+	public static Map<String, Long> getRepositoryLanguages2(String repositoryName, String githubUserName) {
 		return WebClient.create()
 			.get()
 			.uri(

@@ -17,28 +17,17 @@ import lombok.extern.slf4j.Slf4j;
 public class GetRepoCommitWriter implements ItemWriter<CommitDto> {
 
 	private final CommitHistoryRepository commitHistoryRepository;
+	private final CommitHistoryMapper commitHistoryMapper;
 
 	@Override
 	public void write(List<? extends CommitDto> items) throws Exception {
 		for (CommitDto commit : items) {
 			try {
-				commitHistoryRepository.save(toCommitHistory(commit));
+				commitHistoryRepository.save(commitHistoryMapper.toCommitHistory(commit));
 			} catch (Exception e) {
 				log.info(e.toString());
 			}
 		}
 	}
 
-	public CommitHistory toCommitHistory(CommitDto commit) {
-		return CommitHistory.builder()
-			.sha(commit.getSha())
-			.repository(commit.getRepo())
-			.date(commit.getAuthor().getDate())
-			.message(commit.getCommit().getMessage())
-			.authorId(Long.toString(commit.getAuthor().getId()))
-			.authorName(commit.getAuthor().getName())
-			.authorAvatarUrl(commit.getAuthor().getAvatarUrl())
-			.parent(toCommitHistory(commit.getParents().get(0)))
-			.build();
-	}
 }

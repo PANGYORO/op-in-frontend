@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @RequiredArgsConstructor
 public class GetRepoCommitJobConfig {
-
+/*
 	private final JobBuilderFactory jobBuilderFactory;
 	private final StepBuilderFactory stepBuilderFactory;
 	private final RepoRepository repoRepository;
@@ -47,4 +47,6 @@ public class GetRepoCommitJobConfig {
 			.writer(new GetRepoCommitWriter(commitHistoryRepository))
 			.build();
 	}
+
+ */
 }

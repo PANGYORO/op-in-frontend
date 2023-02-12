@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class Scheduler {
-
+/*
 	private final Job getMemberRepositoryJob;
 	private final Job getRepoTechLanguageJob;
 	private final Job getRepoCommitJob;
@@ -28,7 +28,7 @@ public class Scheduler {
 	private final JobLauncher jobLauncher;
 
 	// @Scheduled(cron = "0 0 24 * * ?")
-	@Scheduled(cron = "0 0 13 * * ?")
+	@Scheduled(cron = "0 1 * * * *")
 	public void getMemberRepositoryJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -42,7 +42,7 @@ public class Scheduler {
 	}
 
 	// @Scheduled(fixedDelay=60*60*1000)
-	@Scheduled(fixedDelay = 60 * 60 * 1000)
+	@Scheduled(fixedDelay = 60 * 1000)
 	public void getRepoTechLanguageJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -56,7 +56,7 @@ public class Scheduler {
 	}
 
 	// @Scheduled(fixedDelay=60*60*1000)
-	@Scheduled(fixedDelay = 60 * 60 * 1000)
+	@Scheduled(fixedDelay = 60 * 1000)
 	public void getRepoCommitJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -70,7 +70,7 @@ public class Scheduler {
 	}
 
 	// @Scheduled(fixedDelay=60*60*1000)
-	@Scheduled(fixedDelay = 60 * 60 * 1000)
+	@Scheduled(fixedDelay = 60 * 1000)
 	public void getRepoPullRequestJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -83,7 +83,7 @@ public class Scheduler {
 		jobLauncher.run(getRepoPullRequestJob, jobParameters);
 	}
 
-	@Scheduled(fixedDelay = 60 * 60 * 1000)
+	@Scheduled(fixedDelay = 60 * 1000)
 	public void getRepoContributorJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -95,6 +95,5 @@ public class Scheduler {
 
 		jobLauncher.run(getRepoContributorJob, jobParameters);
 	}
-
-
+*/
 }

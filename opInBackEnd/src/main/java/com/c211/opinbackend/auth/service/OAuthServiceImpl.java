@@ -1,6 +1,7 @@
 package com.c211.opinbackend.auth.service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,40 +27,58 @@ import com.c211.opinbackend.auth.jwt.TokenProvider;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.response.OAuthAccessTokenResponse;
+import com.c211.opinbackend.batch.dto.RepoTechLanguageDto;
+import com.c211.opinbackend.batch.dto.github.CommitDto;
+import com.c211.opinbackend.batch.dto.github.ContributorDto;
+import com.c211.opinbackend.batch.dto.github.RepositoryDto;
+import com.c211.opinbackend.batch.dto.mapper.CommitHistoryMapper;
+import com.c211.opinbackend.batch.dto.mapper.PullRequestMapper;
+import com.c211.opinbackend.batch.dto.mapper.RepoMapper;
+import com.c211.opinbackend.batch.service.RepositoryService;
+import com.c211.opinbackend.batch.step.Action;
 import com.c211.opinbackend.constant.GitHub;
+import com.c211.opinbackend.exception.api.ApiExceptionEnum;
+import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.persistence.entity.Member;
+import com.c211.opinbackend.persistence.entity.PullRequest;
+import com.c211.opinbackend.persistence.entity.Repository;
+import com.c211.opinbackend.persistence.entity.RepositoryContributor;
+import com.c211.opinbackend.persistence.entity.RepositoryTechLanguage;
 import com.c211.opinbackend.persistence.entity.Role;
+import com.c211.opinbackend.persistence.entity.TechLanguage;
+import com.c211.opinbackend.persistence.repository.CommitHistoryRepository;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
+import com.c211.opinbackend.persistence.repository.PullRequestRepository;
+import com.c211.opinbackend.persistence.repository.RepoContributorRepository;
+import com.c211.opinbackend.persistence.repository.RepoTechLanguageRepository;
+import com.c211.opinbackend.persistence.repository.TechLanguageRepository;
 import com.c211.opinbackend.util.RandomString;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Service
 @Slf4j
+@Service
+@RequiredArgsConstructor
 public class OAuthServiceImpl implements OAuthService {
 	private final TokenProvider tokenProvider;
+	private final Action action;
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
-	private final String clientId;
-	private final String clientSecret;
-	MemberRepository memberRepository;
-
+	private final RepositoryService repositoryService;
+	private final TechLanguageRepository techLanguageRepository;
+	private final RepoTechLanguageRepository repoTechLanguageRepository;
+	private final RepoMapper repoMapper;
+	private final CommitHistoryRepository commitHistoryRepository;
+	private final CommitHistoryMapper commitHistoryMapper;
+	private final PullRequestMapper pullRequestMapper;
+	private final RepoContributorRepository repoContributorRepository;
+	private final PullRequestRepository pullRequestRepository;
+	private final MemberRepository memberRepository;
+	@Value("${security.oauth.github.client-id}")
+	private String clientId;
+	@Value("${security.oauth.github.client-secret}")
+	private String clientSecret;
 	private final PasswordEncoder passwordEncoder;
-
-	@Autowired
-	public OAuthServiceImpl(
-		PasswordEncoder passwordEncoder,
-		TokenProvider tokenProvider,
-		AuthenticationManagerBuilder authenticationManagerBuilder,
-		MemberRepository memberRepository,
-		@Value("${security.oauth.github.client-id}") String clientId,
-		@Value("${security.oauth.github.client-secret}") String clientSecret) {
-		this.memberRepository = memberRepository;
-		this.clientId = clientId;
-		this.clientSecret = clientSecret;
-		this.tokenProvider = tokenProvider;
-		this.authenticationManagerBuilder = authenticationManagerBuilder;
-		this.passwordEncoder = passwordEncoder;
-	}
 
 	/**
 	 * github OAuth를 위한 Redirect 주소를 리턴합니다.
@@ -78,10 +97,114 @@ public class OAuthServiceImpl implements OAuthService {
 		OAuthAccessTokenResponse tokenResponse = getToken(code, redirectUri);
 		MemberDto memberDto = getUserProfile(tokenResponse);
 		Member member = saveOrUpdate(memberDto);
-
 		TokenDto token = authorize(member);
+		System.out.println(token.getAccessToken());
 
+		/** 깃허브 회원이 로그인 할 때마다
+		 *  access token 으로 api 쏴보고,
+		 * 가능하면 github_token_expire 에 false 로 저장하고 해당 token으로,
+		 *  401 exception 뜨면 github_token_expire 에 true 로 저장하고 우리 token으로,
+		 *  repo, repo Tech Language, repo commit, repo contributor 전부 가져오기
+		 * */
+
+		String apiGithubToken = null;
+		if (isGithubTokenExpire(tokenResponse.getAccessToken(),member.getGithubUserName())) {
+			apiGithubToken = "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";
+		}else{
+			apiGithubToken = tokenResponse.getAccessToken();
+		}
+
+		try {
+			// 멤버 레포 가져오기
+			RepositoryDto[] repos = action.getMemberRepository(apiGithubToken, member.getGithubUserName());
+
+			// 멤버 레포의 tech language, commit, pull request, contributor 가져오기
+			for (RepositoryDto repo : repos) {
+
+				Repository repoEntity = repoMapper.toRepository(repo, member);
+
+				// 멤버 레포 저장
+				repositoryService.saveOrUpdateRepository(repo);
+
+				// 멤버 레포 tech language 불러오기
+				Map<String, Long> languages = action.getRepositoryLanguages(apiGithubToken, repo.getFullName());
+
+				// 멤버 레포 tech language 저장
+				for (String lan : languages.keySet()) {
+					TechLanguage techLanguage = techLanguageRepository.findByTitle(lan).orElse(null);
+					if (techLanguage == null) {
+						techLanguage = techLanguageRepository.save(TechLanguage.builder().title(lan).build());
+
+						repoTechLanguageRepository.save(
+							RepositoryTechLanguage.builder().techLanguage(techLanguage).repository(repoEntity).build());
+					}else {
+						RepositoryTechLanguage repoTech = repoTechLanguageRepository.findByRepositoryAndTechLanguage(repoEntity, techLanguage).orElse(null);
+						if (repoTech == null) {
+							repoTechLanguageRepository.save(
+								RepositoryTechLanguage.builder().techLanguage(techLanguage).repository(repoEntity).build());
+						}
+					}
+
+				}
+
+				// 멤버 레포 commit 불러오기
+				CommitDto[] commits = action.getRepositoryCommits(repo.getFullName());
+
+				// 멤버 레포 commit 저장
+				for (CommitDto commit : commits) {
+					System.out.println("");
+					System.out.println("!!!!!!!!!!!!!!!!!!");
+					System.out.println(commit.toString());
+					commitHistoryRepository.save(commitHistoryMapper.toCommitHistory(commit));
+					System.out.println("");
+				}
+
+				// 멤버 레포 pull request 불러오기
+				PullRequest[] pullRequests = Arrays.stream(action.getRepositoryPulls(repo.getFullName())).map(
+					prDto -> pullRequestMapper.toPullRequest(prDto, repoMapper.toRepository(repo, member))
+				).toArray(PullRequest[]::new);
+
+				// 멤버 레포 pull request 저장
+				for (PullRequest pullRequest : pullRequests) {
+					pullRequestRepository.save(pullRequest);
+				}
+
+				// 멤버 레포 contributor 불러오기
+				ContributorDto[] contributorDtos = action.getContributors(repo.getFullName());
+
+				// 멤버 레포 contributor 저장
+				for (ContributorDto contributor : contributorDtos) {
+					Member member2 = memberRepository.findByGithubId(contributor.getId().toString()).orElse(null);
+					if (member2 != null) {
+						RepositoryContributor con = RepositoryContributor
+							.builder()
+							.repository(contributor.getRepository())
+							.member(member2)
+							.build();
+
+						repoContributorRepository.save(con);
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			throw new ApiRuntimeException(ApiExceptionEnum.API_OAUTH_CENTER_CALL_EXCEPTION);
+		}
 		return token;
+	}
+
+	/** github_token으로 get repository api 쏴보기
+	 * */
+	public boolean isGithubTokenExpire(String githubToken, String githubUserName) {
+		boolean isExpire = false;
+
+		try {
+			action.getMemberRepository(githubToken, githubUserName);
+		} catch (Exception e) {
+			isExpire = true;
+		}
+
+		return isExpire;
 	}
 
 	public TokenDto authorize(Member member) {
@@ -112,7 +235,6 @@ public class OAuthServiceImpl implements OAuthService {
 		Member member = memberRepository.findByGithubId(memberDto.getGithubId())
 			.map(entity ->
 				entity.fetch(memberDto.getGithubToken(),
-					memberDto.getAvatarUrl(),
 					memberDto.getGithubUserName()
 				))
 			.orElseGet(memberDto::toMember);
