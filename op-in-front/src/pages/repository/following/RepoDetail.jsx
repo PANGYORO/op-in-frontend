@@ -78,7 +78,7 @@ const RepoDetail = () => {
           )}
         </div>
       </div>
-      <div className="w-1/3 h-full">
+      <div className="w-1/3 h-full max-2xl:hidden">
         <Status repoDetail={repoDetail} />
       </div>
     </div>
