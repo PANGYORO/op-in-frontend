@@ -28,7 +28,7 @@ const QnA = ({
   propFunction,
 }) => {
   const user = useRecoilValue(userInfo);
-  const [qnaContent, setQnaContent] = useState();
+  const [qnaContent, setQnaContent] = useState("");
   const [text, setText] = useState("");
   const [modifyOpen, setModifyOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -41,7 +41,7 @@ const QnA = ({
     setQnaContent(content);
   }, []);
 
-  const modifyHighFunction = ({ postContent, qnaId }) => {
+  const modifyHighFunction = ({ postContent }) => {
     setQnaContent(postContent);
     setToast({ message: "Qna가 수정되었습니다." });
   };

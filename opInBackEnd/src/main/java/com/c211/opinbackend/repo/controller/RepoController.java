@@ -29,6 +29,13 @@ public class RepoController {
 	private final RepositoryService repositoryService;
 	private final RepositoryPostService repositoryPostService;
 
+	/**
+	 * 안쓰는거 같음 확인 부탁
+	 *
+	 * @param emailRequest
+	 * @return
+	 * @throws Exception
+	 */
 	@PostMapping("/member")
 	public ResponseEntity<?> getReposByEmail(@RequestBody MemberEmailRequest emailRequest) throws Exception {
 		String email = emailRequest.getEmail();

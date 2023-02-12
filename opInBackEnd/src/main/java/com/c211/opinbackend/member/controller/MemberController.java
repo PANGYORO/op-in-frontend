@@ -3,10 +3,11 @@ package com.c211.opinbackend.member.controller;
 import java.io.IOException;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
+import com.c211.opinbackend.member.model.dto.MemberDto;
 import com.c211.opinbackend.member.model.request.TechLanguageRequest;
 import com.c211.opinbackend.member.model.request.TopicAndLanguageRequest;
 import com.c211.opinbackend.member.model.request.TopicRequest;
@@ -33,27 +35,29 @@ import com.c211.opinbackend.member.service.S3FileUploadService;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.util.SecurityUtil;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/member")
 public class MemberController {
 
-	MemberService memberService;
+	private final MemberService memberService;
+	private final MailService mailService;
+	private final S3FileUploadService s3FileUploadService;
 
-	MailService mailService;
-
-	S3FileUploadService s3FileUploadService;
-
-	@Autowired
-	public MemberController(MemberService memberService,
-		MailService mailService,
-		S3FileUploadService s3FileUploadService
-	) {
-		this.memberService = memberService;
-		this.mailService = mailService;
-		this.s3FileUploadService = s3FileUploadService;
+	/**
+	 * 로그인 되어 있다면 내정보를 가져올수 있는 api
+	 * #68
+	 *
+	 * @return
+	 */
+	@GetMapping
+	public ResponseEntity<?> getMemberMyInfo() {
+		MemberDto memberInfo = memberService.getMemberInfoBySecurityContext();
+		return ResponseEntity.ok().body(memberInfo);
 	}
 
 	// 마이페이지 정보 리턴
@@ -108,7 +112,7 @@ public class MemberController {
 	// 임시 비밀번호 발급 이메일
 	@PostMapping("/password/email")
 	public ResponseEntity<?> changePwEmail(@RequestBody Map<String, String> email) {
-		return ResponseEntity.ok(mailService.mailSend(email.get("email")));
+		return ResponseEntity.ok(memberService.changePwEmail(email.get("email")));
 	}
 
 	// 회원 탈퇴
@@ -129,10 +133,57 @@ public class MemberController {
 		return ResponseEntity.ok(true);
 	}
 
+	/**
+	 * 맴버의 가 래포 팔로우
+	 *
+	 * @param repoId
+	 * @return
+	 */
+	@PostMapping("/follow/repo/{repoId}")
+	public ResponseEntity<?> followRepo(@PathVariable("repoId") Long repoId) {
+		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(() -> new MemberRuntimeException(
+			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION
+		));
+		Boolean saveState = memberService.followRepo(repoId, memberEmail);
+		return ResponseEntity.ok().body(saveState);
+	}
+
 	// 팔로우 취소
+	// TODO: 2023/02/12 추후 델리트 매소드로 바꾸면 좋을거 같습니다.
 	@PostMapping("/follow/delete")
 	public ResponseEntity<?> followDeleteMember(@RequestBody MemberNicknameRequest request) {
 		return ResponseEntity.ok(memberService.followDeleteMember(request.getNickname()));
+	}
+
+	/**
+	 * 래포아이디를 받아 팔로우 취소
+	 *
+	 * @param repoId
+	 * @return 저장한 repoId
+	 */
+	@DeleteMapping("/follow/repo/{repoId}")
+	public ResponseEntity<?> followRepoDeleteMember(@PathVariable Long repoId) {
+		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(() -> new MemberRuntimeException(
+			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION
+		));
+		Boolean delState = memberService.followDeleteRepo(repoId, memberEmail);
+		return ResponseEntity.ok().body(delState);
+	}
+
+	/**
+	 * 래포지토리를 팔로우 하고 있는지 체크
+	 *
+	 * @param repoId
+	 * @return
+	 */
+
+	@GetMapping("/follow/repo/{repoId}")
+	public ResponseEntity<?> checkFollowRepo(@PathVariable Long repoId) {
+		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(() -> new MemberRuntimeException(
+			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION
+		));
+		Boolean res = memberService.followCheckRepo(repoId, memberEmail);
+		return ResponseEntity.ok().body(res);
 	}
 
 	//팔로우여부 확인 : true/ false

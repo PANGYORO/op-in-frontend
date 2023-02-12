@@ -8,12 +8,12 @@ import { userInfo } from "@recoil/user/atoms";
 
 const PostList = ({ posts = [] }) => {
   return (
-    <div className="grid grid-cols-2 gap-4 w-full overflow-auto">
+    <div className="grid grid-cols-2 max-2xl:grid-cols-1 gap-4 w-full overflow-auto">
       {posts.map((post) => {
         return (
           <Post
             key={post.id}
-            postId={post.id}
+            id={post.id}
             createTime={post.createTime}
             title={post.title}
             post_content={post.post_content}
@@ -71,7 +71,7 @@ function FollowingPosts({ repoId }) {
     setPosts((prev) => [
       ...prev,
       {
-        postId: data.id,
+        id: data.id,
         title: data.title,
         createTime: new Date(data.date),
         post_content: data.content,

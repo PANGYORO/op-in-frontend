@@ -9,10 +9,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RepositoryPostMemberLike {
 	@Id
 	@GeneratedValue
@@ -26,4 +32,9 @@ public class RepositoryPostMemberLike {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MEMBER_ID")
 	private Member member;
+
+	public void setNullMemberAndRepo() {
+		this.repositoryPost = null;
+		this.member = null;
+	}
 }

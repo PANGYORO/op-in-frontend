@@ -20,8 +20,10 @@ public class RepoMapper {
 		List<RepoTechLangDto> repoTechLangDtoList = getRepoTechLangDtoList(repository);
 		List<RepositoryContributorDto> repositoryContributorDtoList = getRepoTechContributorDtoList(repository);
 		List<String> topics = getTopicList(repository);
+		Member member = repository.getMember();
 		RepositoryResponseDto repositoryResponseDto = RepositoryResponseDto.builder()
 			.id(repository.getId())
+			.ownerId(member == null ? null : member.getId())
 			.title(repository.getName())
 			.content(repository.getName())
 			.techLangs(repoTechLangDtoList)
@@ -36,14 +38,20 @@ public class RepoMapper {
 	public static RepoDetailResponse toDetailResponse(Repository repository) {
 		List<RepoTechLangDto> repoTechLangDtoList = getRepoTechLangDtoList(repository);
 		List<String> topics = getTopicList(repository);
+		Member member = repository.getMember();
+		List<RepositoryContributorDto> repositoryContributorDtoList = getRepoTechContributorDtoList(repository);
 		RepoDetailResponse repositoryResponseDto = RepoDetailResponse.builder()
 			.id(repository.getId())
+			.ownerId(member == null ? null : member.getId())
 			.title(repository.getName())
 			.content(repository.getName())
 			.techLangs(repoTechLangDtoList)
 			.star(repository.getStargazersCount())
+			.contributors(repositoryContributorDtoList)
 			.forkNum(repository.getForks())
 			.topicList(topics)
+			.date(repository.getUpdatedAt())
+			.html(repository.getHtmlUrl())
 			.build();
 		return repositoryResponseDto;
 	}
