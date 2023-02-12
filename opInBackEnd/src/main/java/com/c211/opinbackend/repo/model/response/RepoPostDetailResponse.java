@@ -10,5 +10,7 @@ import lombok.experimental.SuperBuilder;
 public class RepoPostDetailResponse extends RepoPostSimpleResponse {
 	private List<CommentDetailResponse> commentList;
 	private String content;
+	private Long repoId;
+	private String repoName;
 
 }
