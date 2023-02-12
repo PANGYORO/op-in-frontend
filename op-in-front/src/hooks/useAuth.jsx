@@ -28,7 +28,7 @@ function useAuth() {
       // console.debug("@login", token);
       if (token) {
         const decodeAccessTokenUserInfo = jwt_decode(token);
-        _getUserInfo(decodeAccessTokenUserInfo.nickname, ({ data }) => {
+        _getUserInfo(({ data }) => {
           setUser((prev) => ({
             ...prev,
             id: data.id,
@@ -54,7 +54,7 @@ function useAuth() {
       const decodeRefreshTokenUserInfo = jwt_decode(cookie.refreshToken);
 
       if (!_isExpiredToken(decodeAccessTokenUserInfo.exp)) {
-        _getUserInfo(decodeAccessTokenUserInfo.nickname, ({ data }) => {
+        _getUserInfo(({ data }) => {
           setUser((prev) => ({
             ...prev,
             id: data.id,
@@ -83,7 +83,7 @@ function useAuth() {
     if (cookie.accessToken) {
       const decodeAccessTokenUserInfo = jwt_decode(cookie.accessToken);
       if (!_isExpiredToken(decodeAccessTokenUserInfo.exp)) {
-        _getUserInfo(decodeAccessTokenUserInfo.nickname, ({ data }) => {
+        _getUserInfo(({ data }) => {
           setUser((prev) => ({
             ...prev,
             id: data.id,
@@ -118,11 +118,9 @@ function useAuth() {
     http.post("auth/logout");
   }, []);
 
-  const _getUserInfo = useCallback((nickname, callback = () => {}) => {
+  const _getUserInfo = useCallback((callback = () => {}) => {
     http
-      .post(`member/mypage`, {
-        nickname,
-      })
+      .get(`member`)
       .then(callback)
       .catch((e) => {
         console.error("[useAuth ERROR]", e);
