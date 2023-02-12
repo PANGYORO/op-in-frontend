@@ -34,11 +34,10 @@ const followingClassState =
 const UserDetail = () => {
   const location = useLocation();
   const currentNick = location.state;
-  const [user, setUser] = useRecoilState(userInfo);
 
-  const isMe = user.nickname == currentNick;
+  const [user, setUser] = useRecoilState(userInfo);
   const [open, setOpen] = useState(false);
-  const [myinfo, setMyInfo] = useState("");
+  const [myInfo, setMyInfo] = useState("");
   const [Image, setImage] = useState();
   const [myPosts, setMyPosts] = useState([]);
   const [followState, setFollowState] = useState({
@@ -47,6 +46,8 @@ const UserDetail = () => {
     value: "follow",
   });
   const fileInput = useRef(null);
+
+  const isMe = user.nickname == currentNick;
 
   useEffect(() => {
     if (Image) {
@@ -109,7 +110,7 @@ const UserDetail = () => {
   useEffect(() => {
     getMember();
     getMyPosts();
-    if (user.nickname != currentNick) setFollowButton();
+    if (!isMe) setFollowButton();
   }, []);
 
   const setFollowButton = async () => {
@@ -186,38 +187,38 @@ const UserDetail = () => {
         <div className="grid grid-cols-3 gap-3 mb-8">
           {/* 프로필 이미지  */}
           <div className="flex flex-col place-items-center">
-          <div
-            className="h-full"
-            id="profile_img"
-            style={{
-              width: "200px",
-              height: "200px",
-              border: "1px solid gray",
-              borderRadius: "200px",
-              position: "relative",
-              overflow: "hidden",
-            }}
-            onClick={() => {
-              if (isMe) fileInput.current.click();
-            }}
-          >
-            <img
-              src={user.img_url || DefaultImg}
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
-            />
-            {isMe && (
-              <>
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  accept="image/jpg,image/png,image/jpeg"
-                  name="profile_img"
-                  onChange={onFileChange}
-                  ref={fileInput}
-                />
-              </>
-            )}
-          </div>
+            <div
+              className="h-full"
+              id="profile_img"
+              style={{
+                width: "200px",
+                height: "200px",
+                border: "1px solid gray",
+                borderRadius: "200px",
+                position: "relative",
+                overflow: "hidden",
+              }}
+              onClick={() => {
+                if (isMe) fileInput.current.click();
+              }}
+            >
+              <img
+                src={myInfo.avataUrl || DefaultImg}
+                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              />
+              {isMe && (
+                <>
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    accept="image/jpg,image/png,image/jpeg"
+                    name="profile_img"
+                    onChange={onFileChange}
+                    ref={fileInput}
+                  />
+                </>
+              )}
+            </div>
           </div>
           <Tooltip anchorId="profile_img" content="Click to change Image" />
           <div className="flex justify-center col-span-2 lg:text-3xl md:text-2xl sm:text-xl w-4/5">
@@ -228,9 +229,9 @@ const UserDetail = () => {
                 <div className="grid grid-cols-2 gap-2 justify-items-between">
                   <div className="bg-prinavy self-center">
                     {" "}
-                    {myinfo.nickname}
+                    {myInfo.nickname}
                   </div>
-                  
+
                   <div className="self-center">
                     {isMe ? (
                       <button
@@ -259,33 +260,17 @@ const UserDetail = () => {
                 {/* 오른쪽 하단 */}
                 <div className="grid grid-cols-3 gap-4 place-items-start mt-6 pt-4">
                   <div className="text-center">
-                      <div>
-                    posts 
-                      </div>
-                      <div>
-                    {myinfo.posts == null ? 0 : myinfo.posts.length}
-
-                      </div>
+                    <div>posts</div>
+                    <div>{myInfo.posts == null ? 0 : myInfo.posts.length}</div>
                   </div>
                   <div className="text-center">
-                    <div>
-                    follower 
-                    </div>
-                    <div>
-                    {myinfo.countFollower}
-                    </div>
-                      </div> 
-                  <div className="text-center"> 
-                    <div>
-
-                    following 
-                    </div>
-                    <div>
-
-                    {myinfo.countFollowing}
-                    </div>
-                    </div>
-                    
+                    <div>follower</div>
+                    <div>{myInfo.countFollower}</div>
+                  </div>
+                  <div className="text-center">
+                    <div>following</div>
+                    <div>{myInfo.countFollowing}</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -296,7 +281,7 @@ const UserDetail = () => {
           <div className="pt-2 pb-24 pl-2 pr-2  md:pt-0 md:pr-0 md:pl-0">
             <div className="flex flex-col flex-wrap sm:flex-row h-full">
               <div className="w-1/3 h-full ">
-                <MyInfo currentuser={myinfo} />
+                <MyInfo currentuser={myInfo} />
               </div>
 
               <div className=" w-2/3  h-screen overflow-auto">

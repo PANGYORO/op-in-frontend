@@ -33,31 +33,20 @@ import com.c211.opinbackend.member.model.response.FileUploadResponse;
 import com.c211.opinbackend.member.service.MemberService;
 import com.c211.opinbackend.member.service.S3FileUploadService;
 import com.c211.opinbackend.persistence.entity.Member;
-import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.util.SecurityUtil;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/member")
 public class MemberController {
 
-	MemberService memberService;
-
-	MailService mailService;
-
-	S3FileUploadService s3FileUploadService;
-
-	@Autowired
-	public MemberController(MemberService memberService,
-		MailService mailService,
-		S3FileUploadService s3FileUploadService
-	) {
-		this.memberService = memberService;
-		this.mailService = mailService;
-		this.s3FileUploadService = s3FileUploadService;
-	}
+	private final MemberService memberService;
+	private final MailService mailService;
+	private final S3FileUploadService s3FileUploadService;
 
 	// 마이페이지 정보 리턴
 	@PostMapping("/mypage")
@@ -111,7 +100,7 @@ public class MemberController {
 	// 임시 비밀번호 발급 이메일
 	@PostMapping("/password/email")
 	public ResponseEntity<?> changePwEmail(@RequestBody Map<String, String> email) {
-		return ResponseEntity.ok(mailService.mailSend(email.get("email")));
+		return ResponseEntity.ok(memberService.changePwEmail(email.get("email")));
 	}
 
 	// 회원 탈퇴
@@ -143,11 +132,8 @@ public class MemberController {
 		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(() -> new MemberRuntimeException(
 			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION
 		));
-		Long saveRepoId = memberService.followRepo(repoId, memberEmail);
-		RepoDto build = RepoDto.builder()
-			.repoId(saveRepoId)
-			.build();
-		return ResponseEntity.ok().body(build);
+		Boolean saveState = memberService.followRepo(repoId, memberEmail);
+		return ResponseEntity.ok().body(saveState);
 	}
 
 	// 팔로우 취소
@@ -168,11 +154,8 @@ public class MemberController {
 		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(() -> new MemberRuntimeException(
 			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION
 		));
-		Long saveId = memberService.followDeleteRepo(repoId, memberEmail);
-		RepoDto build = RepoDto.builder()
-			.repoId(saveId)
-			.build();
-		return ResponseEntity.ok().body(build);
+		Boolean delState = memberService.followDeleteRepo(repoId, memberEmail);
+		return ResponseEntity.ok().body(delState);
 	}
 
 	/**
@@ -187,11 +170,8 @@ public class MemberController {
 		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(() -> new MemberRuntimeException(
 			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION
 		));
-		Long getFollowStateId = memberService.followCheckRepo(repoId, memberEmail);
-		RepoDto build = RepoDto.builder()
-			.repoId(getFollowStateId)
-			.build();
-		return ResponseEntity.ok().body(build);
+		Boolean res = memberService.followCheckRepo(repoId, memberEmail);
+		return ResponseEntity.ok().body(res);
 	}
 
 	//팔로우여부 확인 : true/ false

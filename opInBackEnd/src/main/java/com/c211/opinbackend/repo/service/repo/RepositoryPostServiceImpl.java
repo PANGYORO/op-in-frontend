@@ -99,7 +99,7 @@ public class RepositoryPostServiceImpl implements RepositoryPostService {
 
 	@Override
 	@Transactional
-	public RepoPostDetailResponse getRepoDetail(Long postId) {
+	public RepoPostDetailResponse getPostDetail(Long postId) {
 		RepositoryPost repositoryPost = repoPostRepository.findById(postId).orElseThrow(
 			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_EXIST_EXCEPTION));
 		return RepoPostMapper.toDetailResponse(repositoryPost);

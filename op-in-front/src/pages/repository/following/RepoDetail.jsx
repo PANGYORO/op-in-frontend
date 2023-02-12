@@ -18,6 +18,7 @@ const RepoDetail = () => {
 
   useEffect(() => {
     getRepoDetail(repoId);
+    console.log(repoDetail);
   }, []);
 
   const getRepoDetail = async (id) => {
@@ -29,7 +30,6 @@ const RepoDetail = () => {
       .catch((error) => {
         console.log(error);
       });
-    console.log(repoDetail);
   };
 
   const onClick = useCallback((item) => {

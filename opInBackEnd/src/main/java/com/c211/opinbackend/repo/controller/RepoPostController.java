@@ -98,7 +98,7 @@ public class RepoPostController {
 	/**
 	 * 맴버에 속한 포스트들 조회
 	 *
-	 * @param memberId
+	 * @param nickName
 	 * @return
 	 */
 	@GetMapping("member/{nickName}")
@@ -114,7 +114,7 @@ public class RepoPostController {
 	 */
 	@GetMapping("/{postId}")
 	public ResponseEntity<?> getDetailPost(@PathVariable("postId") Long postId) {
-		RepoPostDetailResponse repoDetail = repositoryPostService.getRepoDetail(postId);
+		RepoPostDetailResponse repoDetail = repositoryPostService.getPostDetail(postId);
 		return ResponseEntity.ok().body(repoDetail);
 	}
 

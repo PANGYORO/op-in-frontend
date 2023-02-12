@@ -43,6 +43,8 @@ public class RepoPostMapper {
 			.commentCount(repositoryPost.getCommentsList().size())
 			.commentList(detailCommentList)
 			.content(repositoryPost.getTitleContent().getContent())
+			.repoId(repositoryPost.getRepository().getId())
+			.repoName(repositoryPost.getRepository().getName())
 			.build();
 	}
 }
