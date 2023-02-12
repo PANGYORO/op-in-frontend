@@ -2,23 +2,30 @@ import { Fragment, useRef, useState } from "react";
 import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
 // import http from "api/http";
+import { Editor } from "@toast-ui/react-editor";
 import http from "@api/http";
 
 const PostModifyModal = ({ id, title, previousValue, open, setOpen, propFunction }) => {
   const cancelButtonRef = useRef(null);
 
-  const [text, setText] = useState("");
+  const toastuiEditor = useRef();
+  const [curTitle, setTitle] = useState(title);
+  const [data, setData] = useState("");
 
-  const textChangeHandler = (e) => {
-    setText(e.currentTarget.value);
+  const titleChangeHandler = (e) => {
+    setTitle(e.currentTarget.value);
   };
 
-  const modifyQna = async () => {
+  const onChange = () => {
+    setData(toastuiEditor.current.getInstance().getMarkdown());
+  };
+
+  const modifyPost = async () => {
     // 서버에 데이터 보내는 로직
     await http
-      .put(`post`, { postTitle: title, postContent: previousValue + "\n" + text, postId: id })
+      .put(`post`, { postTitle: curTitle, postContent: data, postId: id })
       .then(() => {
-        propFunction({ postTitle: title, postContent: previousValue + "\n" + text });
+        propFunction({ postTitle: curTitle, postContent: data });
       })
       .catch((error) => {
         console.log(error);
@@ -51,7 +58,7 @@ const PostModifyModal = ({ id, title, previousValue, open, setOpen, propFunction
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-1/2">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-4/5">
                 <div className="bg-white p-6 sm:p-6 sm:pb-4">
                   <div className="w-full sm:items-start">
                     <div className="mt-3 text-center sm:mt-0 sm:m-4 sm:text-left">
@@ -59,24 +66,38 @@ const PostModifyModal = ({ id, title, previousValue, open, setOpen, propFunction
                         as="h2"
                         className="text-3xl font-bold leading-6 text-gray-900 pt-4 pb-4"
                       >
-                        Qna Modify
+                        Post Modify
                       </Dialog.Title>
+
+                      <div className=" relative  p-4">
+                        <input
+                          type="text"
+                          id="name-with-label"
+                          className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-400 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                          name="Title"
+                          placeholder="Insert Title..."
+                          value={curTitle}
+                          onChange={titleChangeHandler}
+                        />
+                      </div>
+
                       <div className="mt-2">
-                        이전에 작성되었던 내용은 유지됩니다. 아래에 내용을 추가하세요.
-                        <textarea
-                          rows="6"
-                          disabled={true}
-                          value={previousValue}
-                          className="block p-2.5 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        ></textarea>
-                        <textarea
-                          id="qnamessage"
-                          rows="8"
-                          value={text}
-                          onChange={textChangeHandler}
-                          className="block p-2.5 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="Insert Qna..."
-                        ></textarea>
+                        <Editor
+                          height="500px"
+                          initialValue={previousValue}
+                          previewStyle="vertical"
+                          ref={toastuiEditor}
+                          onChange={onChange}
+                          language="ko-KR"
+                          toolbarItems={[
+                            // 툴바 옵션 설정
+                            ["heading", "bold", "italic", "strike"],
+                            ["hr", "quote"],
+                            ["ul", "ol", "task", "indent", "outdent"],
+                            ["table", "image", "link"],
+                            ["code", "codeblock"],
+                          ]}
+                        />
                       </div>
                     </div>
                   </div>
@@ -95,8 +116,7 @@ const PostModifyModal = ({ id, title, previousValue, open, setOpen, propFunction
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                     onClick={() => {
                       setOpen(false);
-                      modifyQna();
-                      setText("");
+                      modifyPost();
                     }}
                   >
                     Write
