@@ -5,10 +5,13 @@ import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
 import http from "@api/http";
 import { useToast } from "@hooks/useToast";
+import ToLoginModal from "@components/modals/ToLoginModal";
 
-function FollowingQnas({ repoId }) {
+const FollowingQnas = ({ repoId }) => {
   const curRepoId = repoId;
   const [open, setOpen] = useState(false);
+  const [toLoginOpen, setToLoginOpen] = useState(false);
+
   const user = useRecoilValue(userInfo);
   const { setToast } = useToast();
   const inputRef = useRef();
@@ -36,11 +39,17 @@ function FollowingQnas({ repoId }) {
       });
   }
 
+  const deleteHighFunction = (qnaId) => {
+    searchQnaData({ page: 0, size: 100, query: "" });
+    setToast({ message: "Qna가 삭제되었습니다." });
+  };
+
   const rendering = (list) => {
     const result = [];
     for (let i = list.length == null ? -1 : list.length - 1; i >= 0; i--) {
       result.push(
         <QnA
+          id={list[i].id}
           key={list[i].id}
           repoId={curRepoId}
           qnaId={list[i].id}
@@ -49,6 +58,7 @@ function FollowingQnas({ repoId }) {
           createTime={list[i].createTime}
           content={list[i].content}
           qnACommentList={list[i].comments}
+          propFunction={deleteHighFunction}
         />
       );
     }
@@ -77,7 +87,9 @@ function FollowingQnas({ repoId }) {
   function toggleModal() {
     setOpen((prev) => !prev);
   }
-
+  function toLoginToggleModal() {
+    setToLoginOpen((prev) => !prev);
+  }
   const keyUpEvent = (e) => {
     if (e.keyCode == 13) {
       searchQnaData({ size: 100, page: 0, query: inputRef.current.value });
@@ -124,7 +136,10 @@ function FollowingQnas({ repoId }) {
               <button
                 type="button"
                 disabled=""
-                onClick={toggleModal}
+                onClick={() => {
+                  if (user.logined) toggleModal();
+                  else toLoginToggleModal();
+                }}
                 className="py-2 px-4 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white 
                 w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none 
                 focus:ring-2 focus:ring-offset-2  opacity-70 rounded-lg flex justify-center items-center"
@@ -153,10 +168,11 @@ function FollowingQnas({ repoId }) {
       </header>
 
       <div className="w-full h-screen overflow-auto">{rendering(qnaData)}</div>
+      <ToLoginModal open={toLoginOpen} setOpen={setToLoginOpen} />
 
       <QnaModal open={open} setOpen={setOpen} repositoryId={repoId} propFunction={highFunction} />
     </>
   );
-}
+};
 
 export default FollowingQnas;

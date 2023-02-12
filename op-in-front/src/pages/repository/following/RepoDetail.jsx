@@ -29,6 +29,7 @@ const RepoDetail = () => {
       .catch((error) => {
         console.log(error);
       });
+    console.log(repoDetail);
   };
 
   const onClick = useCallback((item) => {

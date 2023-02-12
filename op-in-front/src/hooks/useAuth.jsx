@@ -1,8 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { useCookies } from "react-cookie";
+import { useRecoilState } from "recoil";
 
-function useToken() {
-  const [cookies, _, removeCookie] = useCookies();
+import { userInfo } from "@recoil/user/atoms";
+
+function useAuth() {
+  const [user, setUser] = useRecoilState(userInfo);
+  const [cookies, _setCookie, removeCookie] = useCookies();
   const [token, setToken] = useState();
 
   useEffect(() => {
@@ -23,5 +27,5 @@ function useToken() {
   return { saveToken, token, removeToken };
 }
 
-export default useToken;
+export default useAuth;
 

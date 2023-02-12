@@ -7,18 +7,22 @@ import { useState } from "react";
 import DeleteModal from "@components/modals/DeleteModal";
 import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
+import { useNavigate } from "react-router-dom";
 
 const renderRepos = (list = []) => {
+  const navigate = useNavigate();
   return list.map((item, index) => (
     <li
       key={item.id}
       className="flex items-center justify-between py-3 text-gray-600 border-b-2 border-gray-100 dark:text-gray-200 dark:border-gray-800"
     >
       <div
-        className="flex items-center justify-start text-sm"
-        // onClick={() =>
-        //   visitRepo(item.id,item,title);
-        // }
+        className="flex items-center justify-start text-sm hover:text-blue-400"
+        onClick={() =>
+          navigate(`/repo/${item.id}`, {
+            state: item.id,
+          })
+        }
       >
         <span className="mx-4">{index + 1}</span>
         <span>{item.title}</span>

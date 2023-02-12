@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, { Fragment, useRef } from "react";
 import DefaultImg from "@assets/basicprofile.png";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -13,6 +13,7 @@ import { useToast } from "@hooks/useToast";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
 import http from "@api/http";
+import useToken from "@hooks/useToken";
 
 const navigation = [
   //메뉴 목록
@@ -30,18 +31,12 @@ const Header = () => {
 
   const setCurrentMenu = useSetRecoilState(menuState);
   const setRepoCurrentMenu = useSetRecoilState(repoMenuState);
-  const [searchValue, setSearchValue] = useState("");
   const navigate = useNavigate();
   const { setToast } = useToast();
-  const headerImg = useRef();
-  console.log(user);
-
-  useEffect(() => {
-    if (headerImg.current) headerImg.current.src = user.img_url;
-  }, [user.img_url, headerImg]);
+  const { removeToken } = useToken();
+  const searchRef = useRef();
 
   const selectMenu = (id) => {
-    console.log(searchValue);
     setCurrentMenu(id);
     setRepoCurrentMenu("myrepo");
   };
@@ -100,17 +95,17 @@ const Header = () => {
                         <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
                       </svg>
                       <input
+                        ref={searchRef}
                         type="text"
                         className="block w-full py-1.5 pl-10 pr-4 leading-normal rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-400 aa-input"
                         placeholder="Search"
                         onKeyUp={(e) => {
                           if (e.key == "Enter") {
-                            navigate(`/search`, { state: e.target.value });
-                            e.target.value = "";
+                            navigate(`/search`, {
+                              state: searchRef.current.value,
+                            });
+                            searchRef.current.value = "";
                           }
-                        }}
-                        onChange={(e) => {
-                          setSearchValue(e.target.value);
                         }}
                       />
                     </div>
@@ -118,7 +113,7 @@ const Header = () => {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <button
+                {/* <button
                   id="theme-toggle"
                   type="button"
                   className="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
@@ -145,17 +140,16 @@ const Header = () => {
                       clipRule="evenodd"
                     ></path>
                   </svg>
-                </button>
+                </button> */}
+                <span className="text-white">{user.nickname}</span>
 
                 {user.logined && (
                   <Menu as="div" className="relative ml-3">
                     <div>
                       <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                        <span className="sr-only">Open user menu</span>
                         <img
                           className="h-8 w-8 rounded-full"
-                          ref={headerImg}
-                          src={DefaultImg}
+                          src={user.img_url || DefaultImg}
                           alt=""
                         />
                       </Menu.Button>
@@ -188,24 +182,22 @@ const Header = () => {
                           {({ active }) => (
                             <button
                               className={classNames(
-                                active ? "w-full bg-gray-100" : "",
+                                active && "w-full bg-gray-100",
                                 "w-full block px-4 py-2 text-sm text-gray-700"
                               )}
-                              onClick={async () => {
-                                try {
-                                  await http.post("auth/logout", {});
-                                  setToast({ message: "로그아웃 성공!" });
-                                  setUser((before) => ({
-                                    ...before,
-                                    nickname: "",
-                                    email: "",
-                                    img_url: "",
-                                    logined: false,
-                                  }));
-                                  navigate("/");
-                                } catch (error) {
-                                  setToast({ message: error.response.data.message });
-                                }
+                              onClick={() => {
+                                http.post("auth/logout");
+                                setToast({ message: "로그아웃 성공!" });
+                                setUser((before) => ({
+                                  ...before,
+                                  nickname: "",
+                                  email: "",
+                                  img_url: "",
+                                  logined: false,
+                                }));
+                                selectMenu("dashboard");
+                                removeToken();
+                                navigate("/");
                               }}
                             >
                               Sign out
