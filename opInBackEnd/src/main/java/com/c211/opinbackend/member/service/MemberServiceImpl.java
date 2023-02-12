@@ -658,17 +658,21 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public Boolean followCheckRepo(Long repoId, String memberEmail) {
-		Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
-			() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
-		);
-		List<RepositoryFollow> findRepoFollowList = repositoryFollowRepository.findByRepositoryIdAndMemberId(
-			repoId,
-			member.getId());
-		if (findRepoFollowList.size() == 0) {
-			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_FOLLOW_DONT_EXIST_EXCEPTION);
+		try {
+			Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
+				() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+			);
+			List<RepositoryFollow> findRepoFollowList = repositoryFollowRepository.findByRepositoryIdAndMemberId(
+				repoId,
+				member.getId());
+			if (findRepoFollowList.size() == 0) {
+				throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_FOLLOW_DONT_EXIST_EXCEPTION);
+			}
+			RepositoryFollow findRepoFollow = findRepoFollowList.get(0);
+			return true;
+		} catch (Exception exception) {
+			return false;
 		}
-		RepositoryFollow findRepoFollow = findRepoFollowList.get(0);
 
-		return true;
 	}
 }
