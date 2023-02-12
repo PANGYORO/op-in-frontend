@@ -21,6 +21,8 @@ import com.c211.opinbackend.exception.auth.AuthExceptionEnum;
 import com.c211.opinbackend.exception.auth.AuthRuntimeException;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
+import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
+import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
 import com.c211.opinbackend.persistence.entity.Badge;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.MemberBadge;
@@ -441,8 +443,9 @@ public class MemberServiceImpl implements MemberService {
 			} else {
 				// topic 과 member 의 관계가 있는지 확인
 				MemberTopic memberTopic = memberTopicRepository.findByMemberAndTopic(member, isTopic).orElse(null);
-				if (memberTopic != null)
+				if (memberTopic != null) {
 					continue;
+				}
 			}
 
 			//member topic 으로 이어주기
@@ -467,10 +470,11 @@ public class MemberServiceImpl implements MemberService {
 				language = techLanguageRepository.save(newLanguage);
 			} else {
 				// tech language 과 member 의 관계가 있는지 확인
-				MemberTechLanguage memberTechLanguage = memberTechLanguageRepository.findByMemberAndTechLanguage(member,
-					language).orElse(null);
-				if (memberTechLanguage != null)
+				MemberTechLanguage memberTechLanguage = memberTechLanguageRepository
+					.findByMemberAndTechLanguage(member, language).orElse(null);
+				if (memberTechLanguage != null) {
 					continue;
+				}
 			}
 
 			//member tech language 으로 이어주기
@@ -589,4 +593,71 @@ public class MemberServiceImpl implements MemberService {
 		return true;
 	}
 
+	@Override
+	@Transactional
+	public Long followRepo(Long repoId, String memberEmail) {
+		//맴버 아이디를 가져온다
+		Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
+			() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+		);
+		// 중복되는 상태를 찾고 없으면 진행한다
+		List<RepositoryFollow> findRepoFollow = repositoryFollowRepository.findByRepositoryIdAndMemberId(
+			repoId, member.getId());
+		if (findRepoFollow.size() != 0) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_FOLLOW_EXIST_EXCEPTION);
+		}
+		// 래포 아이디를 가져온다.
+		Repository repository = repoRepository.findById(repoId).orElseThrow(
+			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION)
+		);
+		try {
+			RepositoryFollow createItem = RepositoryFollow.builder()
+				.member(member)
+				.repository(repository)
+				.build();
+			repositoryFollowRepository.save(createItem);
+			return repository.getId();
+		} catch (Exception exception) {
+			// 저장실패시 다음 예외발생
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_CREATE_FOLLOW_SAVE_EXCEPTION);
+		}
+	}
+
+	@Override
+	@Transactional
+	public Long followDeleteRepo(Long repoId, String memberEmail) {
+		try {
+
+			Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
+				() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+			);
+			List<RepositoryFollow> findRepoFollowList = repositoryFollowRepository.findByRepositoryIdAndMemberId(
+				repoId,
+				member.getId());
+			// 외부키들을 다 널로 만들고 지워서 캐스케이드 를 방지합니다.
+			RepositoryFollow findRepoFollow = findRepoFollowList.get(0);
+			Long deletedRepoId = findRepoFollow.getRepository().getId();
+			findRepoFollow.setNullForeignKey();
+			repositoryFollowRepository.delete(findRepoFollow);
+			return deletedRepoId;
+		} catch (Exception exception) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_FOLLOW_DELETE_EXCEPTION);
+		}
+	}
+
+	@Override
+	public Long followCheckRepo(Long repoId, String memberEmail) {
+		Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
+			() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+		);
+		List<RepositoryFollow> findRepoFollowList = repositoryFollowRepository.findByRepositoryIdAndMemberId(
+			repoId,
+			member.getId());
+		if (findRepoFollowList.size() == 0) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_FOLLOW_REPO_DONT_EXIST_EXCEPTION);
+		}
+		RepositoryFollow findRepoFollow = findRepoFollowList.get(0);
+
+		return findRepoFollow.getRepository().getId();
+	}
 }

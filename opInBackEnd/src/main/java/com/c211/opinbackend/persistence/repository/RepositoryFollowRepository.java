@@ -12,4 +12,8 @@ import com.c211.opinbackend.persistence.entity.RepositoryFollow;
 public interface RepositoryFollowRepository extends JpaRepository<RepositoryFollow, Long> {
 
 	List<RepositoryFollow> findByMember(Member member);
+
+	List<RepositoryFollow> findByRepositoryId(Long repoId);
+
+	List<RepositoryFollow> findByRepositoryIdAndMemberId(Long repoId, Long memberId);
 }

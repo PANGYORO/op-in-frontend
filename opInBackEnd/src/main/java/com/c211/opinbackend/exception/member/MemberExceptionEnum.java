@@ -19,7 +19,11 @@ public enum MemberExceptionEnum {
 	MEMBER_TYPE_EXCEPTION(HttpStatus.BAD_REQUEST, "M0010", "존재하지 않는 멤버 타입입니다."),
 	MEMBER_PASSWORD_EXCEPTION(HttpStatus.BAD_REQUEST, "M0011", "비밀번호를 확인해주세요."),
 	MEMBER_PASSWORD_TYPE_EXCEPTION(HttpStatus.BAD_REQUEST, "M0012", "잘못된 비밀번호 양식입니다."),
-	MEMBER_WRONG_EXCEPTION(HttpStatus.BAD_REQUEST, "M0013", "아이디 혹은 비밀번호를 확인해주세요.");
+	MEMBER_FOLLOW_EXIST_EXCEPTION(HttpStatus.BAD_REQUEST, "M0013", "이미 팔로우된 상태입니다"),
+	MEMBER_FOLLOW_REPO_DONT_EXIST_EXCEPTION(HttpStatus.BAD_REQUEST, "M0014", "팔로우상태가 존재하지 않습니다 래포 아이디랑 유저 를 확인해주세요."),
+	MEMBER_CREATE_FOLLOW_SAVE_EXCEPTION(HttpStatus.BAD_REQUEST, "M0015", "이미 팔로우 상태 저장 실패"),
+	MEMBER_FOLLOW_DELETE_EXCEPTION(HttpStatus.BAD_REQUEST, "M0016", "팔로우 제거 실패"),
+	MEMBER_WRONG_EXCEPTION(HttpStatus.BAD_REQUEST, "M0017", "아이디 혹은 비밀번호를 확인해주세요.");
 	private final HttpStatus httpStatus;
 	private final String httpCode;
 	private final String errorMessage;

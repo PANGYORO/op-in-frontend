@@ -9,10 +9,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RepositoryFollow {
 	@GeneratedValue
 	@Id
@@ -26,6 +32,11 @@ public class RepositoryFollow {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "REPOSITORY_ID")
 	private Repository repository;
+
+	public void setNullForeignKey() {
+		this.member = null;
+		this.repository = null;
+	}
 
 }
 
