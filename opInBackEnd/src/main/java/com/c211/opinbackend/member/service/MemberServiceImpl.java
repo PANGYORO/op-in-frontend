@@ -249,6 +249,7 @@ public class MemberServiceImpl implements MemberService {
 			RepositoryTitleResponse repositoryTitleResponse = RepositoryTitleResponse.builder()
 				.id(repo.getId())
 				.title(repo.getName())
+				.html(repo.getHtmlUrl())
 				.build();
 
 			contributeRepos.add(repositoryTitleResponse);

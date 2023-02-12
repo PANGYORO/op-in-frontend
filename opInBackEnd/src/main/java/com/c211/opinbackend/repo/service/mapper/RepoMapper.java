@@ -36,14 +36,18 @@ public class RepoMapper {
 	public static RepoDetailResponse toDetailResponse(Repository repository) {
 		List<RepoTechLangDto> repoTechLangDtoList = getRepoTechLangDtoList(repository);
 		List<String> topics = getTopicList(repository);
+		List<RepositoryContributorDto> repositoryContributorDtoList = getRepoTechContributorDtoList(repository);
 		RepoDetailResponse repositoryResponseDto = RepoDetailResponse.builder()
 			.id(repository.getId())
 			.title(repository.getName())
 			.content(repository.getName())
 			.techLangs(repoTechLangDtoList)
 			.star(repository.getStargazersCount())
+			.contributors(repositoryContributorDtoList)
 			.forkNum(repository.getForks())
 			.topicList(topics)
+			.date(repository.getUpdatedAt())
+			.html(repository.getHtmlUrl())
 			.build();
 		return repositoryResponseDto;
 	}
