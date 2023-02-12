@@ -10,7 +10,7 @@ const PostComment = ({
 }) => {
   const navigate = useNavigate();
   return (
-    <div className="flex flex-col inline-flex place-item-start">
+    <div className="flex flex-col inline-flex place-item-start w-full mr-4">
       <div className="flex flex-row mr-4 items-center">
         <div className="w-20">
           <img

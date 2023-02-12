@@ -9,6 +9,7 @@ import { userInfo } from "@recoil/user/atoms";
 import { useRecoilState } from "recoil";
 import PasswordModifyModal from "@components/modals/PasswordModifyModal";
 import { Tooltip } from "react-tooltip";
+import { useToast } from "@hooks/useToast";
 
 const PostList = ({ posts = [] }) =>
   posts.map((post) => (
@@ -34,6 +35,7 @@ const followingClassState =
 const UserDetail = () => {
   const location = useLocation();
   const currentNick = location.state;
+  const { setToast } = useToast();
 
   const [user, setUser] = useRecoilState(userInfo);
   const [open, setOpen] = useState(false);
@@ -155,7 +157,7 @@ const UserDetail = () => {
             classValue: followClassState,
             value: "follow",
           });
-          console.log("no follow set");
+          setToast({ message: currentNick + "님 팔로우가 취소되었습니다." });
         })
         .catch((error) => {
           console.log(error);
@@ -173,7 +175,7 @@ const UserDetail = () => {
             classValue: followingClassState,
             value: "following",
           });
-          console.log("following set");
+          setToast({ message: currentNick + "님을 팔로우합니다." });
         })
         .catch((error) => {
           console.log(error);
@@ -217,11 +219,11 @@ const UserDetail = () => {
                     onChange={onFileChange}
                     ref={fileInput}
                   />
+                  <Tooltip anchorId="profile_img" content="Click to change Image" />
                 </>
               )}
             </div>
           </div>
-          <Tooltip anchorId="profile_img" content="Click to change Image" />
           <div className="flex justify-center col-span-2 lg:text-3xl md:text-2xl sm:text-xl w-4/5">
             {/* 오른쪽 전체 */}
             <div className="grid content-center">

@@ -96,10 +96,12 @@ const PostDetail = ({
 
   const [comments, setCommentList] = useState(commentList);
   const [likesCount, setLikesCount] = useState(0);
+  const [commentsCount, setCommentsCount] = useState(0);
   const [likeState, setLikeState] = useState(false);
 
   useEffect(() => {
     setLikesCount(likeCount);
+    setCommentsCount(commentCount);
   }, []);
 
   const changeHeartState = () => {
@@ -133,6 +135,7 @@ const PostDetail = ({
             date: new Date(comment.updateDate),
           },
         ]);
+        setCommentsCount((prev) => prev + 1);
       })
       .catch((error) => {
         console.log(error);
@@ -197,7 +200,7 @@ const PostDetail = ({
               />
             </svg>
           </button>
-          {commentCount}
+          {commentsCount}
         </div>
       </div>
       {/* 댓글 적는칸 */}
@@ -239,15 +242,16 @@ const PostDetail = ({
       {/* 댓글달리는 곳 */}
       {/* <div className="grid grid-rows-1 gap-2">{commentRender(details.commentList)}</div> */}
       <div className="grid grid-rows-1 gap-2 ml-4">
-        {comments.map((comment) => {
+        {comments.map((comment, index) => {
           return (
-            <PostComment
-              key={comment.id}
-              memberName={comment.memberName}
-              memberAvatarUrl={comment.memberAvatarUrl}
-              commentContent={comment.commentContent}
-              date={comment.date}
-            />
+            <div key={index} className="w-full">
+              <PostComment
+                memberName={comment.memberName}
+                memberAvatarUrl={comment.memberAvatarUrl}
+                commentContent={comment.commentContent}
+                date={comment.date}
+              />
+            </div>
           );
         })}
       </div>

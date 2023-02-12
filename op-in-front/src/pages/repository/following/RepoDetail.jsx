@@ -5,6 +5,7 @@ import Status from "@components/repository/Status";
 import { useLocation } from "react-router-dom";
 import http from "@api/http";
 import useAuth from "@hooks/useAuth";
+import { useToast } from "@hooks/useToast";
 
 const POSTS_TAB = "posts";
 const QNAS_TAB = "qnas";
@@ -19,8 +20,8 @@ const RepoDetail = () => {
   const followingClassState =
     "py-1 px-3 bg-orange-600 hover:bg-orange-700 focus:ring-orange-500  focus:ring-offset-red-200 text-white  transition ease-in duration-200 text-center font-semibold shadow-md focus:outline-none focus:ring-2   focus:ring-offset-2  opacity-70 rounded-lg ";
   const [followState, setFollowState] = useState({});
-  const [repoFollowState, setRepoFollowState] = useState(false);
   const { hasAuth } = useAuth();
+  const { setToast } = useToast();
 
   const FollowButton = () => {
     return (
@@ -32,30 +33,26 @@ const RepoDetail = () => {
 
   useEffect(() => {
     getRepoDetail(repoId);
-    console.log(repoDetail);
-    if (hasAuth) {
-      checkFollowState();
-      setFollowState(
-        repoFollowState
-          ? {
-              state: true,
-              classValue: followingClassState,
-              value: "following",
-            }
-          : {
-              state: false,
-              classValue: followClassState,
-              value: "follow",
-            }
-      );
-    }
+    if (hasAuth) checkFollowState();
   }, []);
 
   const checkFollowState = async () => {
     await http
       .get(`member/follow/repo/${repoId}`)
       .then(({ data }) => {
-        setRepoFollowState(data);
+        if (data) {
+          setFollowState({
+            state: true,
+            classValue: followingClassState,
+            value: "following",
+          });
+        } else {
+          setFollowState({
+            state: false,
+            classValue: followClassState,
+            value: "follow",
+          });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -73,7 +70,7 @@ const RepoDetail = () => {
             classValue: followClassState,
             value: "follow",
           });
-          console.log("no follow set");
+          setToast({ message: repoDetail.title + "레포 팔로우가 취소되었습니다." });
         })
         .catch((error) => {
           console.log(error);
@@ -89,7 +86,7 @@ const RepoDetail = () => {
             classValue: followingClassState,
             value: "following",
           });
-          console.log("following set");
+          setToast({ message: repoDetail.title + " 레포 팔로우가 추가되었습니다." });
         })
         .catch((error) => {
           console.log(error);
