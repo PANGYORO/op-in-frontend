@@ -3,16 +3,19 @@ package com.c211.opinbackend.member.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.c211.opinbackend.auth.jwt.TokenProvider;
+import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.response.BadgeResponse;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.auth.model.response.TechLanguageResponse;
@@ -86,8 +89,32 @@ public class MemberServiceImpl implements MemberService {
 	private PasswordEncoder passwordEncoder;
 
 	@Override
-	public Optional<Member> findByEmail(String email) {
-		return memberRepository.findByEmail(email);
+	public MemberDto getMemberInfoBySecurityContext() {
+		String currLoginEmail = SecurityUtil.getCurrentUserId().orElseThrow(
+			() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+		Member findMember = memberRepository.findByEmail(currLoginEmail).orElseThrow(
+			() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+		);
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		// 그대로 권한 객체를 주기 힘드니 검사하고 맞으면 그대로 준다. 아니면 애러 발생
+		User user = (User)authentication.getPrincipal();
+		user.getAuthorities()
+			.stream()
+			.filter(o -> o.getAuthority().equals(findMember.getRole().toString()))
+			.findAny().orElseThrow(
+				() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_ACCESS_EXCEPTION)
+			);
+
+		return MemberDto.builder()
+			.email(findMember.getEmail())
+			.nickname(findMember.getNickname())
+			.avatarUrl(findMember.getAvatarUrl())
+			.role(findMember.getRole())
+			.githubSyncFl(findMember.isGithubSyncFl())
+			.githubId(findMember.getGithubId())
+			.build();
 	}
 
 	@Override
@@ -599,7 +626,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional
-	public boolean changePwEmail(String email){
+	public boolean changePwEmail(String email) {
 		String pass = mailService.mailSend(email);
 		System.out.println(pass);
 

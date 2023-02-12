@@ -3,6 +3,7 @@ package com.c211.opinbackend.repo.service.repo;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.transaction.Transactional;
 
@@ -15,15 +16,18 @@ import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.entity.RepositoryPost;
+import com.c211.opinbackend.persistence.entity.RepositoryPostMemberLike;
 import com.c211.opinbackend.persistence.entity.TitleContent;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
 import com.c211.opinbackend.persistence.repository.RepoPostRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
+import com.c211.opinbackend.persistence.repository.RepositoryPostMemberLikeRepository;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.model.requeset.RequestUpdatePost;
 import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 import com.c211.opinbackend.repo.service.mapper.RepoPostMapper;
+import com.c211.opinbackend.util.SecurityUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @Slf4j
 public class RepositoryPostServiceImpl implements RepositoryPostService {
+	private final RepositoryPostMemberLikeRepository repositoryPostMemberLikeRepository;
 
 	private final MemberRepository memberRepository;
 	private final RepoRepository repoRepository;
@@ -134,5 +139,82 @@ public class RepositoryPostServiceImpl implements RepositoryPostService {
 			resultMapper.add(repoPostSimpleResponse);
 		}
 		return resultMapper;
+	}
+
+	@Override
+	@Transactional
+	public Boolean createLike(Long postId) {
+		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(
+			() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+		);
+		Member findMember = memberRepository.findByEmail(memberEmail).orElseThrow((
+			) -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+		);
+		RepositoryPost findPost = repoPostRepository.findById(postId).orElseThrow(
+			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_EXIST_EXCEPTION)
+		);
+
+		List<RepositoryPostMemberLike> findPostList = repositoryPostMemberLikeRepository
+			.findByMemberIdAndRepositoryPostId(
+				findMember.getId(), postId);
+		if (findPostList.size() > 0) {
+			// 좋아요를 하고 있으면 좋아요를 누를수 없어야한다.
+			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_LIKE_SAVE_EXCEPTION);
+		}
+		RepositoryPostMemberLike newLike = RepositoryPostMemberLike.builder()
+			.member(findMember)
+			.repositoryPost(findPost)
+			.build();
+		try { // 저장 실패시
+			repositoryPostMemberLikeRepository.save(newLike);
+		} catch (Exception exception) {
+			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_SAVE_EXCEPTION);
+		}
+		return true;
+	}
+
+	@Override
+	public Boolean deleteLike(Long postId) {
+		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(
+			() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+		);
+		Member findMember = memberRepository.findByEmail(memberEmail).orElseThrow((
+			) -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+		);
+		List<RepositoryPostMemberLike> findPostLike = repositoryPostMemberLikeRepository
+			.findByMemberIdAndRepositoryPostId(
+				findMember.getId(), postId);
+		if (findPostLike.size() == 0) {
+			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_LIKE_DELETE_EXCEPTION);
+		}
+		try {
+			for (RepositoryPostMemberLike like : findPostLike) {
+				like.setNullMemberAndRepo();
+				repositoryPostMemberLikeRepository.delete(like);
+			}
+		} catch (Exception exception) {
+			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_LIKE_SAVE_EXCEPTION);
+		}
+		return true;
+	}
+
+	@Override
+	public Boolean checkLike(Long postId) {
+		// 실패시 false 리턴
+		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(
+			() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+		);
+		Member findMember = memberRepository.findByEmail(memberEmail).orElseThrow((
+			) -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+		);
+		List<RepositoryPostMemberLike> findPostLike = repositoryPostMemberLikeRepository
+			.findByMemberIdAndRepositoryPostId(
+				findMember.getId(), postId);
+		if (findPostLike.size() != 1) {
+			return false;
+		} else {
+			// 틀리면 false 리턴 맞으면 true 리턴
+			return Objects.equals(findPostLike.get(0).getRepositoryPost().getId(), postId);
+		}
 	}
 }
