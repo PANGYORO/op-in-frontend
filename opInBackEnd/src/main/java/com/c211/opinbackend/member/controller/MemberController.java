@@ -3,7 +3,6 @@ package com.c211.opinbackend.member.controller;
 import java.io.IOException;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +25,7 @@ import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
+import com.c211.opinbackend.member.model.dto.MemberDto;
 import com.c211.opinbackend.member.model.request.TechLanguageRequest;
 import com.c211.opinbackend.member.model.request.TopicAndLanguageRequest;
 import com.c211.opinbackend.member.model.request.TopicRequest;
@@ -47,6 +47,18 @@ public class MemberController {
 	private final MemberService memberService;
 	private final MailService mailService;
 	private final S3FileUploadService s3FileUploadService;
+
+	/**
+	 * 로그인 되어 있다면 내정보를 가져올수 있는 api
+	 * #68
+	 *
+	 * @return
+	 */
+	@GetMapping
+	public ResponseEntity<?> getMemberMyInfo() {
+		MemberDto memberInfo = memberService.getMemberInfoBySecurityContext();
+		return ResponseEntity.ok().body(memberInfo);
+	}
 
 	// 마이페이지 정보 리턴
 	@PostMapping("/mypage")

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import DefaultImg from "@assets/basicprofile.png";
 
 export default function Post({
-  postId = 1,
+  id = 1,
   createTime = "2022-02-09",
   title = "basic title",
   likeCount = 0,
@@ -18,8 +18,8 @@ export default function Post({
     <>
       <div>
         <div
-          className="w-full py-4 bg-white shadow-lg rounded-2xl dark:bg-gray-700 items-center group sm:flex space-x-6 "
-          onClick={() => navigate(`/repo/postview`, { state: postId })}
+          className="w-full p-4 bg-white shadow-lg rounded-2xl dark:bg-gray-700 items-center group sm:flex space-x-6 "
+          onClick={() => navigate(`/repo/postview`, { state: id })}
         >
           <div className="xl:text-clip grid grid-row gap-3 w-full ">
             <div className="sm:w-full p-5 ">
@@ -44,9 +44,9 @@ export default function Post({
                       alt={authorMemberName}
                     />
                   </div>
-                  
-                  <div className="h-2 w-2 flex flex-1">
-                    <div className="cursor-pointer text-center items-center flex">
+
+                  <div className="py-1 rounded-lg flex space-x-2 flex-row flex-1">
+                    <div className="cursor-pointer text-center text-md justify-center items-center flex">
                       <svg
                         stroke="currentColor"
                         fill="currentColor"

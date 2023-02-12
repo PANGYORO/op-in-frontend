@@ -41,7 +41,7 @@ const QnA = ({
     setQnaContent(content);
   }, []);
 
-  const modifyHighFunction = ({ postContent, qnaId }) => {
+  const modifyHighFunction = ({ postContent }) => {
     setQnaContent(postContent);
     setToast({ message: "Qna가 수정되었습니다." });
   };

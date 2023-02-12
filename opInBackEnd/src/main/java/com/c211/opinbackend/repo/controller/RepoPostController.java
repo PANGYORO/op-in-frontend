@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -161,4 +162,27 @@ public class RepoPostController {
 		}
 	}
 
+	/**
+	 * 포스트 좋아요!!!
+	 *
+	 * @param postId
+	 * @return
+	 */
+	@PostMapping("/like/{postId}")
+	public ResponseEntity<?> likePost(@PathVariable("postId") Long postId) {
+		Boolean saveState = repositoryPostService.createLike(postId);
+		return ResponseEntity.ok().body(saveState);
+	}
+
+	@DeleteMapping("/like/{postId}")
+	public ResponseEntity<?> cancelLikePost(@PathVariable("postId") Long postId) {
+		Boolean deleteState = repositoryPostService.deleteLike(postId);
+		return ResponseEntity.ok().body(deleteState);
+	}
+
+	@GetMapping("/like/{postId}")
+	public ResponseEntity<?> checkLikePost(@PathVariable("postId") Long posId) {
+		Boolean checkLike = repositoryPostService.checkLike(posId);
+		return ResponseEntity.ok().body(checkLike);
+	}
 }
