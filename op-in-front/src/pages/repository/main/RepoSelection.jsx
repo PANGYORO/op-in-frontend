@@ -30,7 +30,7 @@ const RepoSelection = () => {
   const user = useRecoilValue(userInfo);
   const navigate = useNavigate();
   const [repoDatas, setRepoData] = useState([]);
-
+  console.log(user);
   useEffect(() => {
     if (!user.logined) navigate(`/repo/recommand`);
     else
@@ -56,3 +56,4 @@ const RepoSelection = () => {
   );
 };
 export default RepoSelection;
+
