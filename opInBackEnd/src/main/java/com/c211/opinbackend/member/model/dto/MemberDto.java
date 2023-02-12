@@ -17,12 +17,11 @@ public class MemberDto {
 	private String password;
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String nickname;
-	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String avataUrl;
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private boolean githubSyncFl;
-	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private Role role;
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private boolean githubSync;
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String githubToken;
 	private String githubId;

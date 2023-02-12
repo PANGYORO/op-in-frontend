@@ -10,12 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.c211.opinbackend.auth.jwt.TokenProvider;
-import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.response.BadgeResponse;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.auth.model.response.TechLanguageResponse;
@@ -28,6 +26,7 @@ import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
 import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
+import com.c211.opinbackend.member.model.dto.MemberDto;
 import com.c211.opinbackend.persistence.entity.Badge;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.MemberBadge;
@@ -96,10 +95,9 @@ public class MemberServiceImpl implements MemberService {
 			() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
 		);
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Authentication user = SecurityContextHolder.getContext().getAuthentication();
 
-		// 그대로 권한 객체를 주기 힘드니 검사하고 맞으면 그대로 준다. 아니면 애러 발생
-		User user = (User)authentication.getPrincipal();
+		// 그대로 권한 객체를 주기 힘드니 role 일치하는지 검사하고 맞으면 그대로 준다. 아니면 애러 발생
 		user.getAuthorities()
 			.stream()
 			.filter(o -> o.getAuthority().equals(findMember.getRole().toString()))
@@ -108,11 +106,12 @@ public class MemberServiceImpl implements MemberService {
 			);
 
 		return MemberDto.builder()
+			.id(findMember.getId())
 			.email(findMember.getEmail())
 			.nickname(findMember.getNickname())
-			.avatarUrl(findMember.getAvatarUrl())
+			.avataUrl(findMember.getAvatarUrl())
 			.role(findMember.getRole())
-			.githubSyncFl(findMember.isGithubSyncFl())
+			.githubSync(findMember.isGithubSyncFl())
 			.githubId(findMember.getGithubId())
 			.build();
 	}
