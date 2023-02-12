@@ -18,14 +18,13 @@ public class MemberDto {
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String nickname;
 	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private String avatarUrl;
+	private String avataUrl;
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private boolean githubSyncFl;
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private Role role;
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String githubToken;
-	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String githubId;
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String githubUserName;
