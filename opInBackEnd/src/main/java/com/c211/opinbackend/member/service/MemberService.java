@@ -53,4 +53,6 @@ public interface MemberService {
 	Boolean followDeleteRepo(Long repoId, String memberEmail);
 
 	Boolean followCheckRepo(Long repoId, String memberEmail);
+
+	boolean changePwEmail(String email);
 }

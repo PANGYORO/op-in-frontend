@@ -35,28 +35,18 @@ import com.c211.opinbackend.member.service.S3FileUploadService;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.util.SecurityUtil;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/member")
 public class MemberController {
 
-	MemberService memberService;
-
-	MailService mailService;
-
-	S3FileUploadService s3FileUploadService;
-
-	@Autowired
-	public MemberController(MemberService memberService,
-		MailService mailService,
-		S3FileUploadService s3FileUploadService
-	) {
-		this.memberService = memberService;
-		this.mailService = mailService;
-		this.s3FileUploadService = s3FileUploadService;
-	}
+	private final MemberService memberService;
+	private final MailService mailService;
+	private final S3FileUploadService s3FileUploadService;
 
 	// 마이페이지 정보 리턴
 	@PostMapping("/mypage")
@@ -110,7 +100,7 @@ public class MemberController {
 	// 임시 비밀번호 발급 이메일
 	@PostMapping("/password/email")
 	public ResponseEntity<?> changePwEmail(@RequestBody Map<String, String> email) {
-		return ResponseEntity.ok(mailService.mailSend(email.get("email")));
+		return ResponseEntity.ok(memberService.changePwEmail(email.get("email")));
 	}
 
 	// 회원 탈퇴
