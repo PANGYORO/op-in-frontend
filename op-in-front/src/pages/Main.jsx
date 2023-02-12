@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Route, Routes, Outlet } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { Cookies } from "react-cookie";
+import http from "@api/http";
 import Header from "@components/Header";
 import SignIn from "@pages/user/SignIn";
 import SignUp from "@pages/user/SignUp";
@@ -47,14 +48,19 @@ export default function Main() {
     const accessToken = cookies.get("accessToken");
     if (accessToken) {
       const decodedUserInfo = jwt_decode(accessToken);
-      setUser((before) => ({
-        ...before,
-        ...decodedUserInfo,
-        logined: true,
-      }));
-    } else {
-      //async refreshToken 보내서 accessToken 갱신해서 recoil 저장
-      // refreshToken 시간 만료시 다시 로그인하라는 알림 띄우기
+      http
+        .post(`member/mypage`, {
+          nickname: decodedUserInfo.nickname,
+        })
+        .then(({ data }) => {
+          setUser((prev) => ({
+            ...prev,
+            nickname: data.nickname,
+            email: data.email,
+            img_url: data.avataUrl,
+            logined: true,
+          }));
+        });
     }
   }, [token]);
 
@@ -88,3 +94,4 @@ export default function Main() {
     </div>
   );
 }
+

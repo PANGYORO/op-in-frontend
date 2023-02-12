@@ -40,7 +40,8 @@ public class EventController {
 		// title, content, openDate 널이면안된다. endDate 는 널일수 있습니다.
 		log.info(String.valueOf(Objects.isNull(request.getImg().getOriginalFilename())));
 		Event event = null;
-		if (request.getTitle().isBlank() || request.getTitle().length() == 0) {//타이틀 없으면
+		if (request.getTitle().isBlank() || request.getTitle().length() == 0) {
+			//타이틀 없으면
 			throw new EventExceptionRuntimeException(EventExceptionEnum.EVENT_TITLE_NULL_EXCEPTION);
 		} else if (request.getContent().isBlank() || request.getContent().length() == 0) { // 컨텐트 없으면
 			throw new EventExceptionRuntimeException(EventExceptionEnum.EVENT_CONTENT_NULL_EXCEPTION);
@@ -66,8 +67,9 @@ public class EventController {
 		aLlEvent.sort((o1, o2) -> {
 			if (o1.getOpenDate().isBefore(o2.getOpenDate())) {
 				return 1;
-			} else
+			} else {
 				return -1;
+			}
 		});
 		return ResponseEntity.ok().body(aLlEvent);
 

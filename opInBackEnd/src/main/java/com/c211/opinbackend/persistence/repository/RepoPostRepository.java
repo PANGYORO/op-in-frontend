@@ -19,18 +19,14 @@ public interface RepoPostRepository extends JpaRepository<RepositoryPost, Long> 
 
 	List<RepositoryPost> findByMember_Nickname(String memberId);
 
-	@Query("SELECT post "
-		+ "FROM RepositoryPost post "
-		+ "WHERE post.titleContent.content LIKE CONCAT('%',:query, '%')"
+	@Query("SELECT post " + "FROM RepositoryPost post " + "WHERE post.titleContent.content LIKE CONCAT('%',:query, '%')"
 		+ "OR post.titleContent.title LIKE CONCAT('%', :query, '%')")
 	Page<RepositoryPost> findAllByTitleOrContentContaining(String query, Pageable pageable);
 
-	@Query("SELECT post "
-		+ "FROM RepositoryPost post "
-		+ "WHERE (post.titleContent.content LIKE CONCAT('%',:query, '%')"
-		+ "OR post.titleContent.title LIKE CONCAT('%', :query, '%'))"
-		+ "AND post.repository = :repository")
-	Page<RepositoryPost> findAllTitleOrContentContainingInRepository(Repository repository, String query, Pageable pageable);
-
+	@Query(
+		"SELECT post " + "FROM RepositoryPost post " + "WHERE (post.titleContent.content LIKE CONCAT('%',:query, '%')"
+			+ "OR post.titleContent.title LIKE CONCAT('%', :query, '%'))" + "AND post.repository = :repository")
+	Page<RepositoryPost> findAllTitleOrContentContainingInRepository(Repository repository, String query,
+		Pageable pageable);
 
 }

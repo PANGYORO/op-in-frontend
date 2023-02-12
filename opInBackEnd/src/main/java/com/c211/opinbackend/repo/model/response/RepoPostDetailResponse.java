@@ -8,7 +8,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 public class RepoPostDetailResponse extends RepoPostSimpleResponse {
-	private List<CommentDetailReponse> commentList;
+	private List<CommentDetailResponse> commentList;
 	private String content;
 
 }

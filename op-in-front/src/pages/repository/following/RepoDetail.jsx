@@ -1,19 +1,36 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import FollowingPosts from "./FollowingPosts";
 import FollowingQnas from "./FollowingQnas";
 import Status from "@components/repository/Status";
 import { useLocation } from "react-router-dom";
+import http from "@api/http";
 
 const POSTS_TAB = "posts";
 const QNAS_TAB = "qnas";
 
-export default function RepoDetail() {
+const RepoDetail = () => {
   const [tab, setTab] = useState(POSTS_TAB);
 
   const location = useLocation();
-  const repoDetail = location.state;
+  const repoId = location.state;
+  // console.log(repoId);
+  const [repoDetail, setRepoDetail] = useState({});
 
-  console.log(repoDetail);
+  useEffect(() => {
+    getRepoDetail(repoId);
+  }, []);
+
+  const getRepoDetail = async (id) => {
+    await http
+      .get(`repo/${id}`)
+      .then(({ data }) => {
+        setRepoDetail({ ...data });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    console.log(repoDetail);
+  };
 
   const onClick = useCallback((item) => {
     setTab(item);
@@ -55,9 +72,9 @@ export default function RepoDetail() {
         </div>
         <div className="ml-4">
           {tab == POSTS_TAB ? (
-            <FollowingPosts repoId={repoDetail?.id} />
+            <FollowingPosts repoId={repoId} />
           ) : (
-            <FollowingQnas repoId={repoDetail.id} />
+            <FollowingQnas repoId={repoId} />
           )}
         </div>
       </div>
@@ -66,4 +83,5 @@ export default function RepoDetail() {
       </div>
     </div>
   );
-}
+};
+export default RepoDetail;

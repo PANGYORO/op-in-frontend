@@ -7,6 +7,9 @@ import PostComment from "./repository/PostComment";
 
 import http from "@api/http";
 import DefaultImg from "@assets/basicprofile.png";
+import ToLoginModal from "@components/modals/ToLoginModal";
+import { useRecoilValue } from "recoil";
+import { userInfo } from "@recoil/user/atoms";
 
 // 여기 css를 수정해서 코드 하이라이팅 커스텀 가능
 import "@toast-ui/editor/dist/toastui-editor.css";
@@ -25,8 +28,14 @@ const PostDetail = ({
 }) => {
   const textAreaRef = useRef();
   const { setToast } = useToast();
+  const [toLoginOpen, setToLoginOpen] = useState(false);
+  const user = useRecoilValue(userInfo);
+
   const [comments, setCommentList] = useState(commentList);
 
+  function toLoginToggleModal() {
+    setToLoginOpen((prev) => !prev);
+  }
   const createComment = async (comment) => {
     await http
       .post(`post/comment`, {
@@ -56,9 +65,7 @@ const PostDetail = ({
     <>
       <div className="lg:flex lg:items-center lg:justify-between w-full mx-auto py-12 px-4 sm:px-6 lg:py-5 lg:px-8 z-20">
         <h1 className="text-3xl font-extrabold text-black dark:text-white sm:text-4xl">
-          <span className="block flex flex-col place-items-center">
-            {title}
-          </span>
+          <span className="block flex flex-col place-items-center">{title}</span>
         </h1>
       </div>
 
@@ -67,11 +74,7 @@ const PostDetail = ({
         <div className="flex items-start text-left">
           <div className="flex-shrink-0">
             <div className="relative inline-block">
-              <Link
-                to={`/userdetail`}
-                state={authorMemberName}
-                className="relative block"
-              >
+              <Link to={`/userdetail`} state={authorMemberName} className="relative block">
                 <img
                   alt="profile"
                   src={authorMemberAvatar || DefaultImg}
@@ -84,9 +87,7 @@ const PostDetail = ({
             <span className="ml-2 font-bold text-gray-600 dark:text-gray-200">
               <h2>{authorMemberName}</h2>
             </span>
-            <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">
-              {createTime}
-            </span>
+            <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">{createTime}</span>
           </div>
         </div>
 
@@ -140,8 +141,10 @@ const PostDetail = ({
           <button
             // type="submit"
             onClick={() => {
-              createComment(textAreaRef.current.value);
-              textAreaRef.current.value = "";
+              if (user.logined) {
+                createComment(textAreaRef.current.value);
+                textAreaRef.current.value = "";
+              } else toLoginToggleModal();
             }}
             className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600"
           >
@@ -173,6 +176,7 @@ const PostDetail = ({
           );
         })}
       </div>
+      <ToLoginModal open={toLoginOpen} setOpen={setToLoginOpen} />
     </>
   );
 };
@@ -191,15 +195,15 @@ const PostView = () => {
       .get(`/post/${postId}`)
       .then(({ data }) => {
         setDetail(data);
+        console.log(data);
       })
       .catch((error) => console.log(error));
   };
 
   return (
-    <div className="w-full m-4 p-6 bg-white h-screen shadow-lg rounded-2xl dark:bg-gray-700 ">
+    <div className="w-full m-4 p-6 bg-white h-screen shadow-lg rounded-2xl dark:bg-gray-700 h-screen overflow-auto">
       {detail && <PostDetail {...detail} postId={postId} />}
     </div>
   );
 };
 export default PostView;
-

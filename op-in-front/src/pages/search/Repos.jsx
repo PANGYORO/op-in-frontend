@@ -14,7 +14,6 @@ const RepoList = ({ repos }) => {
             title={repo.title}
             content={repo.content}
             techLangs={repo.techLangs}
-            repoDetails={repo}
           />
         );
       })}
@@ -33,7 +32,7 @@ const repos = ({ value }) => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [value]);
 
   return (
     <>
@@ -42,3 +41,4 @@ const repos = ({ value }) => {
   );
 };
 export default repos;
+

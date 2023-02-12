@@ -2,30 +2,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const Repo = ({
-  id = 1,
-  title = "test",
-  content = "testrepo",
+  id = 423494644,
+  title = "JavaProject_PizzaOrder",
+  content = "2학년 2학기 '윈도우프로그래밍프로젝트' 과목 중 진행했던 팀 프로젝트 입니다.",
   techLangs = [{ title: "react" }, { title: "HTML" }],
-  repoDetails = [
-    {
-      id: 2,
-      title: "test title",
-      content: "test content",
-      techLangs: [],
-      contributors: [
-        {
-          nickname: "testmj",
-          id: "1",
-          profileImg: null,
-        },
-      ],
-      gitContributors: null,
-      star: "12345",
-      forkNum: "12345",
-      topicList: [],
-      updateDate: null,
-    },
-  ],
 }) => {
   const navigate = useNavigate();
 
@@ -35,7 +15,7 @@ const Repo = ({
         <div
           onClick={() =>
             navigate(`/repo/${id}`, {
-              state: repoDetails,
+              state: id,
             })
           }
         >

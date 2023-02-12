@@ -1,6 +1,5 @@
 package com.c211.opinbackend.auth.service;
 
-import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.mail.MailException;
@@ -28,7 +27,8 @@ public class MailService {
 	private final MemberRepository memberRepository;
 
 	public String mailSend(String email) {
-		Member member = memberRepository.findByEmail(email).orElseThrow(()-> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
+		Member member = memberRepository.findByEmail(email)
+			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
 
 		String temporaryPassword = createCode();
 

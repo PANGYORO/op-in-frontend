@@ -4,6 +4,7 @@ import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 import http from "@api/http";
+import axios from "axios";
 
 const RepoList = ({ repos }) => {
   console.log(repos);
@@ -18,7 +19,6 @@ const RepoList = ({ repos }) => {
             title={repo.title}
             content={repo.content}
             techLangs={repo.techLangs}
-            repoDetails={repo}
           />
         );
       })}

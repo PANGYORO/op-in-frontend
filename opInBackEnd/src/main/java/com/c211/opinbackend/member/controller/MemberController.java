@@ -19,11 +19,9 @@ import com.c211.opinbackend.auth.model.request.MemberLoginRequest;
 import com.c211.opinbackend.auth.model.request.MemberNicknameRequest;
 import com.c211.opinbackend.auth.model.request.MemberPasswordRequest;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
-import com.c211.opinbackend.auth.model.response.TechLanguageResponse;
 import com.c211.opinbackend.auth.service.MailService;
 import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
-import com.c211.opinbackend.exception.auth.AuthRuntimeException;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.member.model.request.TechLanguageRequest;
@@ -78,7 +76,7 @@ public class MemberController {
 		boolean exist = memberService.existNickname(request.getNickname());
 		return new ResponseEntity<>(exist, HttpStatus.OK);
 	}
-	
+
 	// 닉네임 변경
 	@PostMapping("/nickname/put")
 	public ResponseEntity<?> modifyNickname(@RequestBody MemberNicknameRequest request) {
@@ -101,7 +99,7 @@ public class MemberController {
 	}
 
 	// 로그인할 때 정보 리턴
-	@PostMapping("/member/info")
+	@PostMapping("/info")
 	public ResponseEntity<?> getMemberLogin() {
 		Member member = memberService.getMember();
 		return new ResponseEntity<>(member, HttpStatus.OK);
@@ -152,7 +150,7 @@ public class MemberController {
 			throw new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION);
 		}
 	}
-	
+
 	// Topic 따로 저장
 	@PostMapping("/topic/put")
 	public ResponseEntity<?> saveLoginTopic(@RequestBody TopicRequest request) {
@@ -178,7 +176,7 @@ public class MemberController {
 	public ResponseEntity<?> getListTechLanguage() {
 		return new ResponseEntity<>(memberService.getListTechLanguage(), HttpStatus.OK);
 	}
-	
+
 	// member - tech language 단건 삭제
 	@PostMapping("/language/delete")
 	public ResponseEntity<?> deleteLoginMemberTechLanguage(@RequestBody TechLanguageRequest request) {
