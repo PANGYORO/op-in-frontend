@@ -48,11 +48,22 @@ const RepoSelection = () => {
   }, []);
 
   return (
-    <div className="flex flex-col w-full pl-0 md:p-4 h-screen">
-      <div className="flex items-top w-full  pt-2 pb-24 pl-2 pr-2 overflow-auto md:pt-0 md:pr-0 md:pl-0">
-        <RepoList repos={repoDatas} />
+    <>
+      <div className="z-40 items-center w-full h-15 pb-3 dark:bg-gray-700 rounded-t-2xl">
+        <div className="grid grid-cols-1 gap-4 mt-4 ml-4">
+          <header className="z-40 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl">
+            <div className="relative flex items-center w-full h-full lg:w-64 group ml-3 text-2xl">
+              My Repos
+            </div>
+          </header>
+          <div className="flex flex-col w-full pl-0 md:p-4 h-screen">
+            <div className="flex items-top w-full pb-24 pr-2 overflow-auto md:pt-0 md:pr-0 md:pl-0">
+              <RepoList repos={repoDatas} />
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 export default RepoSelection;

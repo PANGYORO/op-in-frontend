@@ -125,6 +125,7 @@ function LoginForm({ setToast }) {
       navigate("/");
     } catch (error) {
       console.log(error);
+      setToast({ message: "로그인 정보가 잘못되었습니다." });
       //setToast({message:error.response.data.message})
     }
   };
