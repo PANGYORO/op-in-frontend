@@ -18,7 +18,7 @@ export default function Post({
     <>
       <div>
         <div
-          className=" w-full p-4 bg-white shadow-lg rounded-2xl dark:bg-gray-700 items-center group sm:flex space-x-6 "
+          className="w-full p-4 bg-white shadow-lg rounded-2xl dark:bg-gray-700 items-center group sm:flex space-x-6 "
           onClick={() => navigate(`/repo/postview`, { state: postId })}
         >
           <div className="grid grid-row gap-3 w-full">
@@ -42,6 +42,7 @@ export default function Post({
                       alt={authorMemberName}
                     />
                   </div>
+                  
                   <div className="py-1 rounded-lg flex space-x-2 flex-row flex-1">
                     <div className="cursor-pointer text-center text-md justify-center items-center flex">
                       <svg
