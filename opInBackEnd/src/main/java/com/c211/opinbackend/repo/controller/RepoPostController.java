@@ -80,6 +80,16 @@ public class RepoPostController {
 	}
 
 	/**
+	 * pagenation 을 적용한 최신수 post
+	 *
+	 * @return
+	 */
+	@GetMapping("/news")
+	public ResponseEntity<?> getNewsPost() {
+		return null;
+	}
+
+	/**
 	 * 래포지토리에 속한 포스트 가져오기
 	 *
 	 * @param repoId

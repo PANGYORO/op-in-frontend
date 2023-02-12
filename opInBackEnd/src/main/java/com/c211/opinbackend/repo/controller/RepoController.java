@@ -29,6 +29,7 @@ public class RepoController {
 	private final RepositoryService repositoryService;
 	private final RepositoryPostService repositoryPostService;
 
+	// TODO: 2023/02/12 api 지우기
 	@PostMapping("/member")
 	public ResponseEntity<?> getReposByEmail(@RequestBody MemberEmailRequest emailRequest) throws Exception {
 		String email = emailRequest.getEmail();
