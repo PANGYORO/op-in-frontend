@@ -13,6 +13,7 @@ import lombok.Getter;
 @Builder
 public class RepoDetailResponse {
 	private Long id;
+	private Long ownerId;
 	private String title;
 	private String content;
 	private List<RepoTechLangDto> techLangs;
