@@ -12,17 +12,14 @@ import { useRecoilValue } from "recoil";
 import { userInfo } from "@recoil/user/atoms";
 import PostDeleteModal from "./modals/PostDeleteModal";
 import PostModifyModal from "./modals/PostModifyModal";
+import useAuth from "@hooks/useAuth";
 
-// 여기 css를 수정해서 코드 하이라이팅 커스텀 가능
+// 여기 css를 수정해서 코드 하이라이팅 커스텀
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
 
-const View = ({ content }) => {
-  return (
-    <div className="mt-1 mx-4 font-light">
-      <Viewer initialValue={content} />
-    </div>
-  );
+const view = (data) => {
+  return <Viewer initialValue={data} />;
 };
 
 const HeartUnpressed = () => {
@@ -114,21 +111,37 @@ const PostDetail = ({
   const [likeState, setLikeState] = useState(false);
   const [modifyOpen, setModifyOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [postTitle, setPostTitle] = useState("");
-  const [postContent, setPostContent] = useState("");
+  const [postTitle, setPostTitle] = useState(title);
+  const [postContent, setPostContent] = useState(content);
+  const { hasAuth } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     setLikesCount(likeCount);
-    setPostTitle(title);
-    setPostContent(content);
     setCommentsCount(commentCount);
+    if (hasAuth) getLikeState();
   }, []);
+
+  const getLikeState = async () => {
+    await http
+      .get(`post/like/${id}`)
+      .then(({ data }) => {
+        if (data) {
+          setLikeState(true);
+        } else {
+          setLikeState(false);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const modifyHighFunction = ({ postTitle, postContent }) => {
     setPostTitle(postTitle);
     setPostContent(postContent);
     setToast({ message: "Post가 수정되었습니다." });
+    navigate(0);
   };
   const deleteHighFunction = () => {
     setToast({ message: "Post가 삭제되었습니다." });
@@ -145,9 +158,25 @@ const PostDetail = ({
 
   const changeHeartState = () => {
     if (likeState) {
-      setLikesCount((prev) => prev - 1);
+      http
+        .delete(`post/like/${id}`)
+        .then(() => {
+          setLikeState(false);
+          setLikesCount((prev) => prev - 1);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } else {
-      setLikesCount((prev) => prev + 1);
+      http
+        .post(`post/like/${id}`)
+        .then(() => {
+          setLikeState(true);
+          setLikesCount((prev) => prev + 1);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
     setLikeState((prev) => !prev);
   };
@@ -235,7 +264,7 @@ const PostDetail = ({
           </div>
         </div>
         <div className="mt-3">
-          <View content={postContent} />
+          <div className="my-3 mx-4 font-light ">{view(postContent)}</div>
         </div>
         {authorMemberName == user.nickname ? (
           <div className="">
@@ -259,7 +288,12 @@ const PostDetail = ({
         )}
         <div className="flex items-start mt-6 ">
           {/* 하트 */}
-          <button className="mx-3" onClick={changeHeartState}>
+          <button
+            className="mx-3"
+            onClick={() => {
+              if (hasAuth) changeHeartState();
+            }}
+          >
             {likeState ? <HeartPressed /> : <HeartUnpressed />}
           </button>
           {likesCount}
@@ -363,8 +397,8 @@ const PostView = () => {
     getPostData();
   }, []);
 
-  const getPostData = async () => {
-    await http
+  const getPostData = () => {
+    http
       .get(`/post/${postId}`)
       .then(({ data }) => {
         setDetail(data);

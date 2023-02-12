@@ -10,7 +10,6 @@ export default function PostModal({ open, setOpen, propFunction, repositoryId })
 
   const toastuiEditor = useRef();
   const [data, setData] = useState("");
-
   const [title, setText] = useState("");
 
   const textChangeHandler = (e) => {
