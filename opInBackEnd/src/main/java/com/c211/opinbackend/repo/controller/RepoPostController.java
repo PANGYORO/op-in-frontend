@@ -161,4 +161,16 @@ public class RepoPostController {
 		}
 	}
 
+	/**
+	 * 포스트 좋아요!!!
+	 *
+	 * @param postId
+	 * @return
+	 */
+	@PostMapping("/like/{postId}")
+	public ResponseEntity<?> likePost(@PathVariable("postId") Long postId) {
+		Boolean saveState = repositoryPostService.createLike(postId);
+		return ResponseEntity.ok().body(saveState);
+	}
+
 }
