@@ -42,4 +42,7 @@ public class UserDto {
 
 	@JsonProperty("date")
 	private LocalDateTime date;
+
+	@JsonProperty("name")
+	private String name;
 }

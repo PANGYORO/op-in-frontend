@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.Repository;
-
+@org.springframework.stereotype.Repository
 public interface RepoRepository extends JpaRepository<Repository, Long> {
 
 	Optional<Repository> findById(String id);

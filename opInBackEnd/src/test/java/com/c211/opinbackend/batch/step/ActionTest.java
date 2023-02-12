@@ -84,6 +84,7 @@ public class ActionTest {
 	// 	UserDto userDto = action.getMemberInfo("Djunnni");
 	// 	System.out.println(userDto);
 	// }
+
 	// @Test
 	// public void REPOSITORY_PULL_REQUEST_TEST() {
 	// 	RepositoryDto[] repoDtos = action.getMemberRepository("", "Djunnni");
@@ -96,6 +97,7 @@ public class ActionTest {
 	// 		repositoryPullRequestService.save(repository, pullRequests);
 	// 	}
 	// }
+
 	// @Test
 	// public void REPOSITORY_CONTRIBUTORS_REQUEST_TEST() {
 	// 	RepositoryDto[] repoDtos = action.getMemberRepository("", "Djunnni");
@@ -115,5 +117,5 @@ public class ActionTest {
 	// 			}
 	// 		}
 	// 	}
-	//}
+	// }
 }
