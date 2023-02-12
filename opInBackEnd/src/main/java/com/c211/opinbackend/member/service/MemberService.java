@@ -2,9 +2,9 @@ package com.c211.opinbackend.member.service;
 
 import java.util.List;
 
-import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.auth.model.response.TechLanguageResponse;
+import com.c211.opinbackend.member.model.dto.MemberDto;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.MemberFollow;
 
