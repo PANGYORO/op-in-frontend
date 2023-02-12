@@ -33,7 +33,6 @@ import com.c211.opinbackend.member.model.response.FileUploadResponse;
 import com.c211.opinbackend.member.service.MemberService;
 import com.c211.opinbackend.member.service.S3FileUploadService;
 import com.c211.opinbackend.persistence.entity.Member;
-import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.util.SecurityUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -143,11 +142,8 @@ public class MemberController {
 		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(() -> new MemberRuntimeException(
 			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION
 		));
-		Long saveRepoId = memberService.followRepo(repoId, memberEmail);
-		RepoDto build = RepoDto.builder()
-			.repoId(saveRepoId)
-			.build();
-		return ResponseEntity.ok().body(build);
+		Boolean saveState = memberService.followRepo(repoId, memberEmail);
+		return ResponseEntity.ok().body(saveState);
 	}
 
 	// 팔로우 취소
@@ -168,11 +164,8 @@ public class MemberController {
 		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(() -> new MemberRuntimeException(
 			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION
 		));
-		Long saveId = memberService.followDeleteRepo(repoId, memberEmail);
-		RepoDto build = RepoDto.builder()
-			.repoId(saveId)
-			.build();
-		return ResponseEntity.ok().body(build);
+		Boolean delState = memberService.followDeleteRepo(repoId, memberEmail);
+		return ResponseEntity.ok().body(delState);
 	}
 
 	/**
@@ -187,11 +180,8 @@ public class MemberController {
 		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(() -> new MemberRuntimeException(
 			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION
 		));
-		Long getFollowStateId = memberService.followCheckRepo(repoId, memberEmail);
-		RepoDto build = RepoDto.builder()
-			.repoId(getFollowStateId)
-			.build();
-		return ResponseEntity.ok().body(build);
+		Boolean res = memberService.followCheckRepo(repoId, memberEmail);
+		return ResponseEntity.ok().body(res);
 	}
 
 	//팔로우여부 확인 : true/ false
