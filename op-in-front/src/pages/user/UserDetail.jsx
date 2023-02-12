@@ -15,7 +15,7 @@ const PostList = ({ posts = [] }) =>
   posts.map((post) => (
     <Post
       key={post.id}
-      postId={post.id}
+      id={post.id}
       createTime={post.createTime}
       title={post.title}
       likeCount={post.likeCount}
@@ -190,6 +190,7 @@ const UserDetail = () => {
         <div className="grid grid-cols-3 gap-3 mb-8">
           {/* 프로필 이미지  */}
           <div className="flex flex-col place-items-center">
+            {isMe && <Tooltip anchorId="profile_img" content="Click to change Image" />}
             <div
               className="h-full"
               id="profile_img"
@@ -219,7 +220,6 @@ const UserDetail = () => {
                     onChange={onFileChange}
                     ref={fileInput}
                   />
-                  <Tooltip anchorId="profile_img" content="Click to change Image" />
                 </>
               )}
             </div>

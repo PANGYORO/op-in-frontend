@@ -13,7 +13,7 @@ const PostList = ({ posts = [] }) => {
         return (
           <Post
             key={post.id}
-            postId={post.id}
+            id={post.id}
             createTime={post.createTime}
             title={post.title}
             post_content={post.post_content}
@@ -71,7 +71,7 @@ function FollowingPosts({ repoId }) {
     setPosts((prev) => [
       ...prev,
       {
-        postId: data.id,
+        id: data.id,
         title: data.title,
         createTime: new Date(data.date),
         post_content: data.content,
