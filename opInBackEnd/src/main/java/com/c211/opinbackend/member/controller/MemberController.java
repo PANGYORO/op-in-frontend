@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.request.MemberEmailRequest;
 import com.c211.opinbackend.auth.model.request.MemberLoginRequest;
 import com.c211.opinbackend.auth.model.request.MemberNicknameRequest;
@@ -26,6 +25,7 @@ import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
+import com.c211.opinbackend.member.model.dto.MemberDto;
 import com.c211.opinbackend.member.model.request.TechLanguageRequest;
 import com.c211.opinbackend.member.model.request.TopicAndLanguageRequest;
 import com.c211.opinbackend.member.model.request.TopicRequest;
