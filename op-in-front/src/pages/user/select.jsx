@@ -124,7 +124,7 @@ function SelectTag() {
 
   const [topic, setTopic] = useState([])
   const [lan, setLan] = useState([])
-
+  
   const steps = [
     {
       title:"Topic Tag", 
@@ -149,9 +149,6 @@ function SelectTag() {
     run: false,
     steps: steps,
   });
-
-  
-  
 
   const handleTopic = (newTopic) => {
     if (topic.includes(newTopic)) {
@@ -244,7 +241,7 @@ function SelectTag() {
       </div>
       <div  id="tagButton" className='grid grid-cols-4 justify-center gap-4'>
         <div>
-        <button onClick={() => setJoyride({ run: true, steps: steps })}>
+          <button onClick={() => setJoyride({ run: true, steps: steps })}>
             Start Tour
           </button>
         </div>

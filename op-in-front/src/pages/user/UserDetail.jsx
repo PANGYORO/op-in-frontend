@@ -208,7 +208,7 @@ const UserDetail = () => {
     formData.append("upload", img);
 
     await http
-      .post(`/member/image/upload`, {
+      .post(`/member/profilePhoto`, {
         data: formData,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -235,8 +235,9 @@ const UserDetail = () => {
     <div className="flex items-start justify-between mx-44">
       <div className="w-full mx-4 my-4 h-screen overflow-auto">
         <div className="grid grid-cols-3 gap-3 mb-8">
-          <div className="flex flex-col justify-center h-full ml-44">
+          <div className="flex flex-col justify-center mx-20 h-full">
             <img
+              className='shadow-xl rounded-full h-25 w-25 align-middle border-none '
               id="profile_img"
               src={Image || DefaultImg}
               style={{ margin: "20px" }}
@@ -260,12 +261,12 @@ const UserDetail = () => {
                 <Tooltip anchorId="profile_img" content="Click to change Image" />
               </>
             )}
+          <div className="bg-prinavy self-center"> {myinfo.nickname}</div>
           </div>
           <div className="flex justify-center col-span-2 lg:text-3xl md:text-2xl sm:text-xl w-4/5">
             <div className="grid content-center">
               <div>
                 <div className="grid grid-cols-2 gap-2 justify-items-between">
-                  <div className="bg-prinavy self-center"> {myinfo.nickname}</div>
                   <div className="self-center">{renderButton()}</div>
                   {/* <img src={Setting} alt="setting" className="h-16 justify-self-end" /> */}
                 </div>
