@@ -123,7 +123,7 @@ public class RepositoryPostServiceImpl implements RepositoryPostService {
 		RepositoryPost repositoryPost = repoPostRepository.findById(post.getPostId()).orElseThrow(
 			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_EXIST_EXCEPTION)
 		);
-		repositoryPost.fetchTile(post.getPostTile());
+		repositoryPost.fetchTile(post.getPostTitle());
 		repositoryPost.fetchContent(post.getPostContent());
 		return true;
 	}
