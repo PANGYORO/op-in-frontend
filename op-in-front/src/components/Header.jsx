@@ -6,14 +6,9 @@ import Logo from "@components/Logo";
 import { Link, useNavigate } from "react-router-dom";
 import { menuState } from "@recoil/sidebar/atoms";
 import { repoMenuState } from "@recoil/sidebar/atoms2";
-import { userInfo } from "@recoil/user/atoms";
+import useAuth from "@hooks/useAuth";
 
-import { useToast } from "@hooks/useToast";
-
-import { useRecoilValue, useSetRecoilState } from "recoil";
-
-import http from "@api/http";
-import useToken from "@hooks/useToken";
+import { useSetRecoilState } from "recoil";
 
 const navigation = [
   //메뉴 목록
@@ -26,15 +21,11 @@ function classNames(...classes) {
 }
 
 const Header = () => {
-  const user = useRecoilValue(userInfo);
-  const setUser = useSetRecoilState(userInfo);
-
   const setCurrentMenu = useSetRecoilState(menuState);
   const setRepoCurrentMenu = useSetRecoilState(repoMenuState);
   const navigate = useNavigate();
-  const { setToast } = useToast();
-  const { removeToken } = useToken();
   const searchRef = useRef();
+  const { logout, auth } = useAuth();
 
   const selectMenu = (id) => {
     setCurrentMenu(id);
@@ -141,15 +132,15 @@ const Header = () => {
                     ></path>
                   </svg>
                 </button> */}
-                <span className="text-white">{user.nickname}</span>
+                <span className="text-white">{auth.nickname}</span>
 
-                {user.logined && (
+                {auth.logined && (
                   <Menu as="div" className="relative ml-3">
                     <div>
                       <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                         <img
                           className="h-8 w-8 rounded-full"
-                          src={user.img_url || DefaultImg}
+                          src={auth.img_url || DefaultImg}
                           alt=""
                         />
                       </Menu.Button>
@@ -168,9 +159,11 @@ const Header = () => {
                           {({ active }) => (
                             <Link
                               to="/userdetail"
-                              state={user.nickname}
+                              state={auth.nickname}
                               className={classNames(
-                                active ? "flex flex-col bg-gray-100 items-center" : "",
+                                active
+                                  ? "flex flex-col bg-gray-100 items-center"
+                                  : "",
                                 "flex flex-col items-center block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
@@ -185,20 +178,7 @@ const Header = () => {
                                 active && "w-full bg-gray-100",
                                 "w-full block px-4 py-2 text-sm text-gray-700"
                               )}
-                              onClick={() => {
-                                http.post("auth/logout");
-                                setToast({ message: "로그아웃 성공!" });
-                                setUser((before) => ({
-                                  ...before,
-                                  nickname: "",
-                                  email: "",
-                                  img_url: "",
-                                  logined: false,
-                                }));
-                                selectMenu("dashboard");
-                                removeToken();
-                                navigate("/");
-                              }}
+                              onClick={logout}
                             >
                               Sign out
                             </button>
@@ -209,7 +189,7 @@ const Header = () => {
                   </Menu>
                 )}
 
-                {!user.logined &&
+                {!auth.logined &&
                   navigation.map((item) => (
                     <Link
                       key={item.name}
@@ -245,3 +225,4 @@ const Header = () => {
   );
 };
 export default Header;
+
