@@ -154,8 +154,9 @@ public class RepositoryPostServiceImpl implements RepositoryPostService {
 			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_EXIST_EXCEPTION)
 		);
 
-		List<RepositoryPostMemberLike> findPostList = repositoryPostMemberLikeRepository.findByMemberIdAndRepositoryPostId(
-			findMember.getId(), postId);
+		List<RepositoryPostMemberLike> findPostList = repositoryPostMemberLikeRepository
+			.findByMemberIdAndRepositoryPostId(
+				findMember.getId(), postId);
 		if (findPostList.size() > 0) {
 			// 좋아요를 하고 있으면 좋아요를 누를수 없어야한다.
 			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_LIKE_SAVE_EXCEPTION);
@@ -180,8 +181,9 @@ public class RepositoryPostServiceImpl implements RepositoryPostService {
 		Member findMember = memberRepository.findByEmail(memberEmail).orElseThrow((
 			) -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
 		);
-		List<RepositoryPostMemberLike> findPostLike = repositoryPostMemberLikeRepository.findByMemberIdAndRepositoryPostId(
-			findMember.getId(), postId);
+		List<RepositoryPostMemberLike> findPostLike = repositoryPostMemberLikeRepository
+			.findByMemberIdAndRepositoryPostId(
+				findMember.getId(), postId);
 		if (findPostLike.size() == 0) {
 			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_LIKE_DELETE_EXCEPTION);
 		}
@@ -205,11 +207,14 @@ public class RepositoryPostServiceImpl implements RepositoryPostService {
 		Member findMember = memberRepository.findByEmail(memberEmail).orElseThrow((
 			) -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
 		);
-		List<RepositoryPostMemberLike> findPostLike = repositoryPostMemberLikeRepository.findByMemberIdAndRepositoryPostId(
-			findMember.getId(), postId);
+		List<RepositoryPostMemberLike> findPostLike = repositoryPostMemberLikeRepository
+			.findByMemberIdAndRepositoryPostId(
+				findMember.getId(), postId);
 		if (findPostLike.size() != 1) {
 			return false;
-		} else // 틀리면 false 리턴 맞으면 true 리턴
+		} else {
+			// 틀리면 false 리턴 맞으면 true 리턴
 			return Objects.equals(findPostLike.get(0).getRepositoryPost().getId(), postId);
+		}
 	}
 }
