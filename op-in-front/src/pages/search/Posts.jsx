@@ -11,7 +11,7 @@ const PostList = ({ posts }) => {
         return (
           <Post
             key={post.id}
-            postId={post.id}
+            id={post.id}
             createTime={post.createTime}
             title={post.title}
             likeCount={post.likeCount}
@@ -45,4 +45,3 @@ const Posts = ({ value }) => {
   );
 };
 export default Posts;
-

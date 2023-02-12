@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { Viewer } from "@toast-ui/react-editor";
 import { useToast } from "@hooks/useToast";
 
@@ -10,10 +10,20 @@ import DefaultImg from "@assets/basicprofile.png";
 import ToLoginModal from "@components/modals/ToLoginModal";
 import { useRecoilValue } from "recoil";
 import { userInfo } from "@recoil/user/atoms";
+import PostDeleteModal from "./modals/PostDeleteModal";
+import PostModifyModal from "./modals/PostModifyModal";
 
 // 여기 css를 수정해서 코드 하이라이팅 커스텀 가능
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
+
+const View = ({ content }) => {
+  return (
+    <div className="mt-1 mx-4 font-light">
+      <Viewer initialValue={content} />
+    </div>
+  );
+};
 
 const HeartUnpressed = () => {
   return (
@@ -79,15 +89,19 @@ const HeartPressed = () => {
 };
 
 const PostDetail = ({
-  title,
-  authorMemberName,
   authorMemberAvatar,
-  createTime,
-  content,
-  likeCount,
+  authorMemberName,
+  closeState,
   commentCount,
   commentList = [],
-  postId,
+  content,
+  date,
+  id,
+  likeCount,
+  mergeFl,
+  repoId,
+  repoName,
+  title,
 }) => {
   const textAreaRef = useRef();
   const { setToast } = useToast();
@@ -96,11 +110,38 @@ const PostDetail = ({
 
   const [comments, setCommentList] = useState(commentList);
   const [likesCount, setLikesCount] = useState(0);
+  const [commentsCount, setCommentsCount] = useState(0);
   const [likeState, setLikeState] = useState(false);
+  const [modifyOpen, setModifyOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [postTitle, setPostTitle] = useState("");
+  const [postContent, setPostContent] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLikesCount(likeCount);
+    setPostTitle(title);
+    setPostContent(content);
+    setCommentsCount(commentCount);
   }, []);
+
+  const modifyHighFunction = ({ postTitle, postContent }) => {
+    setPostTitle(postTitle);
+    setPostContent(postContent);
+    setToast({ message: "Post가 수정되었습니다." });
+  };
+  const deleteHighFunction = () => {
+    setToast({ message: "Post가 삭제되었습니다." });
+    navigate(-1);
+  };
+
+  const modifyPost = () => {
+    setModifyOpen(true);
+  };
+
+  const removePost = () => {
+    setDeleteOpen(true);
+  };
 
   const changeHeartState = () => {
     if (likeState) {
@@ -117,7 +158,7 @@ const PostDetail = ({
   const createComment = async (comment) => {
     await http
       .post(`post/comment`, {
-        postId: postId,
+        postId: id,
         commentContent: comment,
       })
       .then((response) => {
@@ -133,6 +174,7 @@ const PostDetail = ({
             date: new Date(comment.updateDate),
           },
         ]);
+        setCommentsCount((prev) => prev + 1);
       })
       .catch((error) => {
         console.log(error);
@@ -143,7 +185,7 @@ const PostDetail = ({
     <>
       <div className="lg:flex lg:items-center lg:justify-between w-full mx-auto py-12 px-4 sm:px-6 lg:py-5 lg:px-8 z-20">
         <h1 className="text-3xl font-extrabold text-black dark:text-white sm:text-4xl">
-          <span className="block flex flex-col place-items-center">{title}</span>
+          <span className="block flex flex-col place-items-center">{postTitle}</span>
         </h1>
       </div>
 
@@ -161,19 +203,60 @@ const PostDetail = ({
               </Link>
             </div>
           </div>
-          <div className="ml-6 mt-4 grid grid-col">
+          <div className="ml-6 grid grid-col">
             <span className="ml-2 font-bold text-gray-600 dark:text-gray-200">
               <h2>{authorMemberName}</h2>
             </span>
-            <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">{createTime}</span>
+            <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">{date}</span>
+            <button
+              onClick={() =>
+                navigate(`/repo/${repoId}`, {
+                  state: repoId,
+                })
+              }
+              className="text-xs inline-flex items-center font-bold leading-sm uppercase p-1 bg-green-200 text-green-700 rounded-full"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6 mr-1"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
+                />
+              </svg>
+              {repoName}
+            </button>
           </div>
         </div>
-
         <div className="mt-3">
-          <p className="mt-1 mx-4 font-light">
-            <Viewer initialValue={content} />
-          </p>
+          <View content={postContent} />
         </div>
+        {authorMemberName == user.nickname ? (
+          <div className="">
+            <button
+              type="button"
+              onClick={modifyPost}
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            >
+              Modify
+            </button>
+            <button
+              type="button"
+              onClick={removePost}
+              className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+            >
+              Delete
+            </button>
+          </div>
+        ) : (
+          <div></div>
+        )}
         <div className="flex items-start mt-6 ">
           {/* 하트 */}
           <button className="mx-3" onClick={changeHeartState}>
@@ -197,7 +280,7 @@ const PostDetail = ({
               />
             </svg>
           </button>
-          {commentCount}
+          {commentsCount}
         </div>
       </div>
       {/* 댓글 적는칸 */}
@@ -239,18 +322,33 @@ const PostDetail = ({
       {/* 댓글달리는 곳 */}
       {/* <div className="grid grid-rows-1 gap-2">{commentRender(details.commentList)}</div> */}
       <div className="grid grid-rows-1 gap-2 ml-4">
-        {comments.map((comment) => {
+        {comments.map((comment, index) => {
           return (
-            <PostComment
-              key={comment.id}
-              memberName={comment.memberName}
-              memberAvatarUrl={comment.memberAvatarUrl}
-              commentContent={comment.commentContent}
-              date={comment.date}
-            />
+            <div key={index} className="w-full">
+              <PostComment
+                memberName={comment.memberName}
+                memberAvatarUrl={comment.memberAvatarUrl}
+                commentContent={comment.commentContent}
+                date={comment.date}
+              />
+            </div>
           );
         })}
       </div>
+      <PostModifyModal
+        id={id}
+        title={title}
+        previousValue={postContent}
+        open={modifyOpen}
+        setOpen={setModifyOpen}
+        propFunction={modifyHighFunction}
+      />
+      <PostDeleteModal
+        open={deleteOpen}
+        setOpen={setDeleteOpen}
+        id={id}
+        propFunction={deleteHighFunction}
+      />
       <ToLoginModal open={toLoginOpen} setOpen={setToLoginOpen} />
     </>
   );
@@ -270,14 +368,13 @@ const PostView = () => {
       .get(`/post/${postId}`)
       .then(({ data }) => {
         setDetail(data);
-        console.log(data);
       })
       .catch((error) => console.log(error));
   };
 
   return (
     <div className="w-full m-4 p-6 bg-white h-screen shadow-lg rounded-2xl dark:bg-gray-700 h-screen overflow-auto">
-      {detail && <PostDetail {...detail} postId={postId} />}
+      {detail && <PostDetail {...detail} />}
     </div>
   );
 };
