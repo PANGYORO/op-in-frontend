@@ -30,4 +30,8 @@ public interface RepositoryPostService {
 
 	Boolean createLike(Long postId);
 
+	Boolean deleteLike(Long postId);
+
+	Boolean checkLike(Long postId);
+
 }

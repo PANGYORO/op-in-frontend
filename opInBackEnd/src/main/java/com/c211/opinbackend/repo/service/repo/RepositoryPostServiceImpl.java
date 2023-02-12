@@ -3,6 +3,7 @@ package com.c211.opinbackend.repo.service.repo;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.transaction.Transactional;
 
@@ -169,5 +170,46 @@ public class RepositoryPostServiceImpl implements RepositoryPostService {
 			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_SAVE_EXCEPTION);
 		}
 		return true;
+	}
+
+	@Override
+	public Boolean deleteLike(Long postId) {
+		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(
+			() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+		);
+		Member findMember = memberRepository.findByEmail(memberEmail).orElseThrow((
+			) -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+		);
+		List<RepositoryPostMemberLike> findPostLike = repositoryPostMemberLikeRepository.findByMemberIdAndRepositoryPostId(
+			findMember.getId(), postId);
+		if (findPostLike.size() == 0) {
+			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_LIKE_DELETE_EXCEPTION);
+		}
+		try {
+			for (RepositoryPostMemberLike like : findPostLike) {
+				like.setNullMemberAndRepo();
+				repositoryPostMemberLikeRepository.delete(like);
+			}
+		} catch (Exception exception) {
+			throw new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_POST_LIKE_SAVE_EXCEPTION);
+		}
+		return true;
+	}
+
+	@Override
+	public Boolean checkLike(Long postId) {
+		// 실패시 false 리턴
+		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(
+			() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+		);
+		Member findMember = memberRepository.findByEmail(memberEmail).orElseThrow((
+			) -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+		);
+		List<RepositoryPostMemberLike> findPostLike = repositoryPostMemberLikeRepository.findByMemberIdAndRepositoryPostId(
+			findMember.getId(), postId);
+		if (findPostLike.size() != 1) {
+			return false;
+		} else // 틀리면 false 리턴 맞으면 true 리턴
+			return Objects.equals(findPostLike.get(0).getRepositoryPost().getId(), postId);
 	}
 }

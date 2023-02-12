@@ -32,4 +32,9 @@ public class RepositoryPostMemberLike {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MEMBER_ID")
 	private Member member;
+
+	public void setNullMemberAndRepo() {
+		this.repositoryPost = null;
+		this.member = null;
+	}
 }
