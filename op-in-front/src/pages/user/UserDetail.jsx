@@ -111,6 +111,7 @@ const UserDetail = () => {
     getMember();
     getMyPosts();
     if (!isMe) setFollowButton();
+    console.log(myInfo);
   }, []);
 
   const setFollowButton = async () => {
@@ -227,10 +228,7 @@ const UserDetail = () => {
               <div>
                 {/* 오른쪽 상단 */}
                 <div className="grid grid-cols-2 gap-2 justify-items-between">
-                  <div className="bg-prinavy self-center">
-                    {" "}
-                    {myInfo.nickname}
-                  </div>
+                  <div className="bg-prinavy self-center"> {myInfo.nickname}</div>
 
                   <div className="self-center">
                     {isMe ? (
@@ -311,4 +309,3 @@ const UserDetail = () => {
   );
 };
 export default UserDetail;
-

@@ -28,7 +28,7 @@ const QnA = ({
   propFunction,
 }) => {
   const user = useRecoilValue(userInfo);
-  const [qnaContent, setQnaContent] = useState();
+  const [qnaContent, setQnaContent] = useState("");
   const [text, setText] = useState("");
   const [modifyOpen, setModifyOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);

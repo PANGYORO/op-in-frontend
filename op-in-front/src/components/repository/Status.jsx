@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Tooltip } from "react-tooltip";
 import ContributorsModal from "@components/modals/ContributorsModal";
 
-const GithubIcon = () => {
+const GithubSvg = () => {
   return (
     <svg
       version="1.0"
@@ -152,8 +152,15 @@ const Status = ({ repoDetail }) => {
           </div>
         </div>
         <div>
-          <a className="inline-flex" href={repoDetail.html} target="_blank" rel="noreferrer">
-            <GithubIcon />
+          <a
+            id="visitsite"
+            className="inline-flex"
+            href={repoDetail.html}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <GithubSvg />
+            <Tooltip anchorId="visitsite" content="go to Github page" />
             click to visit
           </a>
         </div>

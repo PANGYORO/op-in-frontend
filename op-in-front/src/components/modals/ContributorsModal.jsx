@@ -12,11 +12,7 @@ export default function ContributorsModal({ open, setOpen, contributors }) {
     const result = [];
     if (list != null)
       for (let i = 0; i < list.length; i++) {
-        result.push(
-          <>
-            <User key={i} profileImg={list[i].profileImg} nickname={list[i].nickname} />
-          </>
-        );
+        result.push(<User key={i} profileImg={list[i].profileImg} nickname={list[i].nickname} />);
       }
     return result;
   };
