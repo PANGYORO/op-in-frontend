@@ -18,6 +18,10 @@ import useAuth from "@hooks/useAuth";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
 
+const view = (data) => {
+  return <Viewer initialValue={data} />;
+};
+
 const HeartUnpressed = () => {
   return (
     <svg
@@ -137,6 +141,7 @@ const PostDetail = ({
     setPostTitle(postTitle);
     setPostContent(postContent);
     setToast({ message: "Post가 수정되었습니다." });
+    navigate(0);
   };
   const deleteHighFunction = () => {
     setToast({ message: "Post가 삭제되었습니다." });
@@ -259,9 +264,7 @@ const PostDetail = ({
           </div>
         </div>
         <div className="mt-3">
-          <div className="my-3 mx-4 font-light ">
-            <Viewer initialValue={postContent} />
-          </div>
+          <div className="my-3 mx-4 font-light ">{view(postContent)}</div>
         </div>
         {authorMemberName == user.nickname ? (
           <div className="">
