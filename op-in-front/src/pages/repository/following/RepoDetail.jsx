@@ -119,7 +119,7 @@ const RepoDetail = () => {
 
   return (
     <div className="flex flex-auto w-full mt-4">
-      <div className="w-2/3">
+      <div className="w-3/4">
         <div className="ml-4 mb-4">
           <header className="z-40 items-center w-full h-15 pb-3 bg-white shadow-lg dark:bg-gray-700 rounded-t-2xl">
             <div className="flex justify-between pt-3 pl-3 text-2xl">
@@ -157,7 +157,7 @@ const RepoDetail = () => {
           )}
         </div>
       </div>
-      <div className="w-1/3 h-full max-2xl:hidden">
+      <div className="w-1/4 h-full max-2xl:hidden">
         <Status repoDetail={repoDetail} />
       </div>
     </div>
