@@ -18,6 +18,7 @@ import com.c211.opinbackend.repo.model.requeset.RequestComment;
 import com.c211.opinbackend.repo.model.requeset.RequestQnA;
 import com.c211.opinbackend.repo.model.requeset.RequestUpdateQnA;
 import com.c211.opinbackend.repo.model.response.RepoQnAResponse;
+import com.c211.opinbackend.repo.service.commnet.CommentService;
 import com.c211.opinbackend.repo.service.repo.RepoQnAService;
 import com.c211.opinbackend.util.SecurityUtil;
 
@@ -31,32 +32,36 @@ import lombok.extern.slf4j.Slf4j;
 public class RepoQnAController {
 
 	private final RepoQnAService repoQnAService;
+	private final CommentService commentService;
 
 	@PostMapping
 	public ResponseEntity<?> createQnA(@RequestBody RequestQnA requestQnA) {
 		String memberEmail = SecurityUtil.getCurrentUserId()
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
-		Long saveId = repoQnAService.createRepoQnA(requestQnA, memberEmail);
-		if (saveId == null) {
+		RepoQnAResponse repoQnA = repoQnAService.createRepoQnA(requestQnA, memberEmail);
+		if (repoQnA == null) {
 			return ResponseEntity.badRequest().body(false);
 		}
-		return ResponseEntity.ok().body(saveId);
+		return ResponseEntity.ok().body(repoQnA);
 	}
 
 	@PostMapping("/comment")
 	public ResponseEntity<?> createComment(@RequestBody RequestComment comment) {
 		String memberEmail = SecurityUtil.getCurrentUserId()
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
-		if (!repoQnAService.creatQnAComment(comment, memberEmail)) {
-			return ResponseEntity.badRequest().body(false);
-		}
-		return ResponseEntity.ok().body(true);
+		return ResponseEntity.ok().body(commentService.creatQnAComment(comment, memberEmail));
 	}
 
+	/**
+	 * 특정 래포 qna 전체 조회
+	 *
+	 * @param repoId
+	 * @return
+	 */
 	@GetMapping("/repo/{repoId}")
 	public ResponseEntity<?> getQnaList(@PathVariable Long repoId) {
-		List<RepoQnAResponse> repoQnALIst = repoQnAService.getRepoQnALIst(repoId);
-		return ResponseEntity.ok().body(repoQnALIst);
+		List<RepoQnAResponse> repoQnAList = repoQnAService.getRepoQnAList(repoId);
+		return ResponseEntity.ok().body(repoQnAList);
 	}
 
 	@DeleteMapping("/{qnaId}")

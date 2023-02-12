@@ -23,22 +23,20 @@ import lombok.RequiredArgsConstructor;
 public class PostService {
 	private final RepoRepository repoRepository;
 	private final RepoPostRepository repoPostRepository;
-	public List<SearchPostDto> search(String query, Pageable pageable) {
-		List<RepositoryPost> result = repoPostRepository.findAllByTitleOrContentContaining(query, pageable).getContent();
 
-		return result.stream()
-			.map(repoPost -> PostMapper.toSearchPostDto(repoPost))
-			.collect(Collectors.toList());
+	public List<SearchPostDto> search(String query, Pageable pageable) {
+		List<RepositoryPost> result = repoPostRepository.findAllByTitleOrContentContaining(query, pageable)
+			.getContent();
+
+		return result.stream().map(PostMapper::toSearchPostDto).collect(Collectors.toList());
 	}
 
 	public List<SearchPostDto> searchInRepo(Long repoId, String query, Pageable pageable) {
-		Repository repository = repoRepository
-			.findById(repoId)
+		Repository repository = repoRepository.findById(repoId)
 			.orElseThrow(() -> new RepositoryRuntimeException(REPOSITORY_EXIST_EXCEPTION));
 
-		List<RepositoryPost> result = repoPostRepository.findAllTitleOrContentContainingInRepository(repository, query, pageable).getContent();
-		return result.stream()
-			.map(repoPost -> PostMapper.toSearchPostDto(repoPost))
-			.collect(Collectors.toList());
+		List<RepositoryPost> result = repoPostRepository.findAllTitleOrContentContainingInRepository(repository, query,
+			pageable).getContent();
+		return result.stream().map(repoPost -> PostMapper.toSearchPostDto(repoPost)).collect(Collectors.toList());
 	}
 }

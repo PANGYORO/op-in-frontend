@@ -32,7 +32,7 @@ const repos = ({ value }) => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [value]);
 
   return (
     <>
@@ -41,3 +41,4 @@ const repos = ({ value }) => {
   );
 };
 export default repos;
+

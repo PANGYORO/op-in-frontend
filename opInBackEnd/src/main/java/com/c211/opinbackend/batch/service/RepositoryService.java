@@ -1,14 +1,10 @@
 package com.c211.opinbackend.batch.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.c211.opinbackend.batch.dto.github.RepositoryDto;
 import com.c211.opinbackend.batch.dto.mapper.RepoMapper;
 import com.c211.opinbackend.persistence.entity.Member;
-import com.c211.opinbackend.persistence.entity.PullRequest;
 import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
 import com.c211.opinbackend.persistence.repository.PullRequestRepository;
@@ -27,12 +23,11 @@ public class RepositoryService {
 	public Repository findById(Long id) {
 		return repoRepository.findById(id).orElse(null);
 	}
+
 	public Repository saveOrUpdateRepository(RepositoryDto repositoryDto) {
 		Member member = memberRepository.findByGithubId(repositoryDto.getOwner().getId().toString()).orElseGet(null);
 		Repository repo = repoMapper.toRepository(repositoryDto, member);
-
 		return repoRepository.save(repo);
 	}
-
 
 }

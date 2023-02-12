@@ -1,24 +1,27 @@
-import { Fragment, useRef } from "react";
+import { Fragment, useRef, useState } from "react";
 import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import User from "@components/user/User";
+// import http from "api/http";
 import http from "@api/http";
-import { userInfo } from "@recoil/user/atoms";
-
-export default function ContributorsModal({ open, setOpen, contributors }) {
+export default function QnaModifyModal({ qnaId, previousValue, open, setOpen, propFunction }) {
   const cancelButtonRef = useRef(null);
 
-  const userRender = (list) => {
-    const result = [];
-    if (list != null)
-      for (let i = 0; i < list.length; i++) {
-        result.push(
-          <>
-            <User key={i} profileImg={list[i].profileImg} nickname={list[i].nickname} />
-          </>
-        );
-      }
-    return result;
+  const [text, setText] = useState("");
+
+  const textChangeHandler = (e) => {
+    setText(e.currentTarget.value);
+  };
+
+  const modifyQna = async () => {
+    // 서버에 데이터 보내는 로직
+    await http
+      .patch(`qna`, { postContent: previousValue + "\n" + text, qnaId: qnaId })
+      .then(() => {
+        propFunction({ postContent: previousValue + "\n" + text, qnaId: qnaId });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -55,9 +58,25 @@ export default function ContributorsModal({ open, setOpen, contributors }) {
                         as="h2"
                         className="text-3xl font-bold leading-6 text-gray-900 pt-4 pb-4"
                       >
-                        Contributors
+                        Qna Modify
                       </Dialog.Title>
-                      <div className="mt-2 grid grid-cols-2 gap-2">{userRender(contributors)}</div>
+                      <div className="mt-2">
+                        이전에 작성되었던 내용은 유지됩니다. 아래에 내용을 추가하세요.
+                        <textarea
+                          rows="6"
+                          disabled={true}
+                          value={previousValue}
+                          className="block p-2.5 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        ></textarea>
+                        <textarea
+                          id="qnamessage"
+                          rows="8"
+                          value={text}
+                          onChange={textChangeHandler}
+                          className="block p-2.5 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="Insert Qna..."
+                        ></textarea>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -68,7 +87,18 @@ export default function ContributorsModal({ open, setOpen, contributors }) {
                     onClick={() => setOpen(false)}
                     ref={cancelButtonRef}
                   >
-                    close
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                    onClick={() => {
+                      setOpen(false);
+                      modifyQna();
+                      setText("");
+                    }}
+                  >
+                    Write
                   </button>
                 </div>
               </Dialog.Panel>

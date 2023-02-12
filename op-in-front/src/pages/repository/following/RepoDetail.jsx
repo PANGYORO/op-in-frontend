@@ -18,6 +18,7 @@ const RepoDetail = () => {
 
   useEffect(() => {
     getRepoDetail(repoId);
+    console.log(repoDetail);
   }, []);
 
   const getRepoDetail = async (id) => {

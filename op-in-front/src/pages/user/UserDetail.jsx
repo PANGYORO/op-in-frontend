@@ -6,56 +6,83 @@ import MyInfo from "@components/user/MyInfo";
 import http from "@api/http";
 import { useLocation } from "react-router-dom";
 import { userInfo } from "@recoil/user/atoms";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import PasswordModifyModal from "@components/modals/PasswordModifyModal";
 import { Tooltip } from "react-tooltip";
 
-const PostList = ({ posts }) => {
-  // console.log(posts);
-  return (
-    <div className="grid grid-cols-1 ml-4 gap-4">
-      {posts.map((post) => {
-        // console.log(post.id);
-        return (
-          <Post
-            key={post.id}
-            postId={post.id}
-            createTime={post.createTime}
-            title={post.title}
-            likeCount={post.likeCount}
-            commentCount={post.commentCount}
-            pageContent={post.pageContent}
-            authorMemberAvatar={post.authorMemberAvatar}
-            authorMemberName={post.authorMemberName}
-          />
-        );
-      })}
-    </div>
-  );
-};
+const PostList = ({ posts = [] }) =>
+  posts.map((post) => (
+    <Post
+      key={post.id}
+      postId={post.id}
+      createTime={post.createTime}
+      title={post.title}
+      likeCount={post.likeCount}
+      commentCount={post.commentCount}
+      pageContent={post.pageContent}
+      authorMemberAvatar={post.authorMemberAvatar}
+      authorMemberName={post.authorMemberName}
+    />
+  ));
+
+const followClassState =
+  "py-1 px-3 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-red-200 text-white  transition ease-in duration-200 text-center font-semibold shadow-md focus:outline-none focus:ring-2  focus:ring-offset-2  opacity-70 rounded-lg ";
+
+const followingClassState =
+  "py-1 px-3 bg-orange-600 hover:bg-orange-700 focus:ring-orange-500  focus:ring-offset-red-200 text-white  transition ease-in duration-200 text-center font-semibold shadow-md focus:outline-none focus:ring-2   focus:ring-offset-2  opacity-70 rounded-lg ";
 
 const UserDetail = () => {
-  const [myinfo, setMyInfo] = useState("");
   const location = useLocation();
   const currentNick = location.state;
+
+  const [user, setUser] = useRecoilState(userInfo);
   const [open, setOpen] = useState(false);
-  const user = useRecoilValue(userInfo);
-
-  const [Image, setImage] = useState(DefaultImg);
-  const fileInput = useRef(null);
+  const [myInfo, setMyInfo] = useState("");
+  const [Image, setImage] = useState();
   const [myPosts, setMyPosts] = useState([]);
-
-  const followClassState =
-    "py-1 px-3 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-red-200 text-white  transition ease-in duration-200 text-center font-semibold shadow-md focus:outline-none focus:ring-2  focus:ring-offset-2  opacity-70 rounded-lg ";
-
-  const followingClassState =
-    "py-1 px-3 bg-orange-600 hover:bg-orange-700 focus:ring-orange-500  focus:ring-offset-red-200 text-white  transition ease-in duration-200 text-center font-semibold shadow-md focus:outline-none focus:ring-2   focus:ring-offset-2  opacity-70 rounded-lg ";
-
   const [followState, setFollowState] = useState({
     state: false,
     classValue: followClassState,
     value: "follow",
   });
+  const fileInput = useRef(null);
+
+  const isMe = user.nickname == currentNick;
+
+  useEffect(() => {
+    if (Image) {
+      imageUpload(Image);
+    }
+  }, [Image]);
+
+  const onFileChange = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+
+  const imageUpload = async (file) => {
+    let formData = new FormData();
+    formData.append("profilePhoto", file);
+    await http
+      .post(`member/profilePhoto`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(({ data }) => {
+        setImage(null);
+        setUser((prev) => ({
+          ...prev,
+          img_url: data.url,
+        }));
+        getMyPosts();
+        getMember();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const getMember = async () => {
     await http
@@ -63,12 +90,9 @@ const UserDetail = () => {
         nickname: currentNick,
       })
       .then(({ data }) => {
-        console.log(data);
         setMyInfo(data);
-        setImage(data.avataUrl);
       })
       .catch(() => alert("error"));
-    console.log(myinfo);
   };
 
   const getMyPosts = async () => {
@@ -86,7 +110,7 @@ const UserDetail = () => {
   useEffect(() => {
     getMember();
     getMyPosts();
-    if (user.nickname != currentNick) setFollowButton();
+    if (!isMe) setFollowButton();
   }, []);
 
   const setFollowButton = async () => {
@@ -115,22 +139,6 @@ const UserDetail = () => {
       .catch((error) => {
         console.log(error);
       });
-  };
-
-  const renderButton = () => {
-    if (user.nickname == currentNick) return <ModifyPasswordButton />;
-    else return <FollowButton />;
-  };
-  const FollowButton = () => {
-    return (
-      <button
-        type="button"
-        onClick={() => followStateChange()}
-        className={followState.classValue}
-      >
-        {followState.value}
-      </button>
-    );
   };
 
   const followStateChange = async () => {
@@ -171,121 +179,98 @@ const UserDetail = () => {
         });
     }
   };
-  const ModifyPasswordButton = () => {
-    return (
-      <button
-        type="button"
-        disabled=""
-        onClick={() => toggleModal()}
-        className={`py-1 px-3 bg-green-600 hover:bg-green-700 focus:ring-green-500
-        focus:ring-offset-red-200 text-white transition ease-in duration-200
-        text-center font-semibold shadow-md focus:outline-none focus:ring-2
-        focus:ring-offset-2 opacity-70 rounded-lg`}
-      >
-        Modify Password
-      </button>
-    );
-  };
-
-  const onChange = (e) => {
-    if (e.target.files[0]) {
-      setImage(e.target.files[0]);
-      //화면에 프로필 사진 표시
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setImage(reader.result);
-        }
-      };
-      reader.readAsDataURL(e.target.files[0]);
-      // 이미지 서버로 전송
-      imageUpload(e.target.files[0]);
-    } else {
-      //업로드 취소할 시
-      setImage(Image);
-      return;
-    }
-  };
-
-  const imageUpload = async (img) => {
-    let formData = new FormData();
-    formData.append("upload", img);
-
-    await http
-      .post(`/member/profilePhoto`, {
-        data: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then(() => {
-        console.log("success");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  function toggleModal() {
-    setOpen(true);
-  }
-
-  // const onImageChange = (e) => {
-  //   const img = e.target.files[0];
-  //   setUserImg(img);
-  // };
 
   return (
     <div className="flex items-start justify-between mx-44">
       <div className="w-full mx-4 my-4 h-screen overflow-auto">
+        {/* 위쪽 정보창 */}
         <div className="grid grid-cols-3 gap-3 mb-8">
-          <div className="flex flex-col justify-center h-full ml-44">
-            <img
+          {/* 프로필 이미지  */}
+          <div className="flex flex-col place-items-center">
+            <div
+              className="h-full"
               id="profile_img"
-              src={Image || DefaultImg}
-              style={{ margin: "20px" }}
-              size={200}
-              onClick={() => {
-                if (user.nickname == currentNick) fileInput.current.click();
+              style={{
+                width: "200px",
+                height: "200px",
+                border: "1px solid gray",
+                borderRadius: "200px",
+                position: "relative",
+                overflow: "hidden",
               }}
-            />
-            {user.nickname != currentNick ? (
-              <div></div>
-            ) : (
-              <>
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  accept="image/jpg,image/png,image/jpeg"
-                  name="profile_img"
-                  onChange={onChange}
-                  ref={fileInput}
-                />
-                <Tooltip
-                  anchorId="profile_img"
-                  content="Click to change Image"
-                />
-              </>
-            )}
+              onClick={() => {
+                if (isMe) fileInput.current.click();
+              }}
+            >
+              <img
+                src={myInfo.avataUrl || DefaultImg}
+                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              />
+              {isMe && (
+                <>
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    accept="image/jpg,image/png,image/jpeg"
+                    name="profile_img"
+                    onChange={onFileChange}
+                    ref={fileInput}
+                  />
+                </>
+              )}
+            </div>
           </div>
+          <Tooltip anchorId="profile_img" content="Click to change Image" />
           <div className="flex justify-center col-span-2 lg:text-3xl md:text-2xl sm:text-xl w-4/5">
+            {/* 오른쪽 전체 */}
             <div className="grid content-center">
               <div>
+                {/* 오른쪽 상단 */}
                 <div className="grid grid-cols-2 gap-2 justify-items-between">
                   <div className="bg-prinavy self-center">
                     {" "}
-                    {myinfo.nickname}
+                    {myInfo.nickname}
                   </div>
-                  <div className="self-center">{renderButton()}</div>
+
+                  <div className="self-center">
+                    {isMe ? (
+                      <button
+                        type="button"
+                        disabled=""
+                        onClick={() => setOpen(true)}
+                        className={`py-1 px-3 bg-green-600 hover:bg-green-700 focus:ring-green-500
+                      focus:ring-offset-red-200 text-white transition ease-in duration-200
+                      text-center font-semibold shadow-md focus:outline-none focus:ring-2
+                      focus:ring-offset-2 opacity-70 rounded-lg`}
+                      >
+                        Modify Password
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={followStateChange}
+                        className={followState.classValue}
+                      >
+                        {followState.value}
+                      </button>
+                    )}
+                  </div>
                   {/* <img src={Setting} alt="setting" className="h-16 justify-self-end" /> */}
                 </div>
-                <div className="grid grid-cols-3 gap-4 justify-items-between mt-6">
-                  <div>
-                    {" "}
-                    posts {myinfo.posts == null ? 0 : myinfo.posts.length}
+                {/* 오른쪽 하단 */}
+                <div className="grid grid-cols-3 gap-4 place-items-start mt-6 pt-4">
+                  <div className="text-center">
+                    <div>posts</div>
+                    <div>{myInfo.posts == null ? 0 : myInfo.posts.length}</div>
                   </div>
-                  <div> follower {myinfo.countFollower}</div>
-                  <div> following {myinfo.countFollowing}</div>
+                  <div className="text-center">
+                    <div>follower</div>
+                    <div>{myInfo.countFollower}</div>
+                  </div>
+                  <div className="text-center">
+                    <div>following</div>
+                    <div>{myInfo.countFollowing}</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -296,7 +281,7 @@ const UserDetail = () => {
           <div className="pt-2 pb-24 pl-2 pr-2  md:pt-0 md:pr-0 md:pl-0">
             <div className="flex flex-col flex-wrap sm:flex-row h-full">
               <div className="w-1/3 h-full ">
-                <MyInfo currentuser={myinfo} />
+                <MyInfo currentuser={myInfo} />
               </div>
 
               <div className=" w-2/3  h-screen overflow-auto">
@@ -313,17 +298,15 @@ const UserDetail = () => {
                     </div>
                   </header>
                 </div>
-                <PostList posts={myPosts} />
+                <div className="grid grid-cols-1 ml-4 gap-4">
+                  <PostList posts={myPosts} />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      {user.nickname != currentNick ? (
-        <div></div>
-      ) : (
-        <PasswordModifyModal open={open} setOpen={setOpen} />
-      )}
+      {isMe && <PasswordModifyModal open={open} setOpen={setOpen} />}
     </div>
   );
 };

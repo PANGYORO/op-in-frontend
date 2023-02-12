@@ -5,8 +5,7 @@ import java.util.List;
 
 import com.c211.opinbackend.persistence.entity.Comment;
 import com.c211.opinbackend.persistence.entity.RepositoryPost;
-import com.c211.opinbackend.repo.model.response.CommentDetailReponse;
-import com.c211.opinbackend.repo.model.response.CommentSimpleResponse;
+import com.c211.opinbackend.repo.model.response.CommentDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 
@@ -30,7 +29,7 @@ public class RepoPostMapper {
 	}
 
 	public static RepoPostDetailResponse toDetailResponse(RepositoryPost repositoryPost) {
-		List<CommentDetailReponse> detailCommentList = new ArrayList<>();
+		List<CommentDetailResponse> detailCommentList = new ArrayList<>();
 		for (Comment comment : repositoryPost.getCommentsList()) {
 			detailCommentList.add(CommentMapper.toDetailCommentDto(comment));
 		}
@@ -44,6 +43,8 @@ public class RepoPostMapper {
 			.commentCount(repositoryPost.getCommentsList().size())
 			.commentList(detailCommentList)
 			.content(repositoryPost.getTitleContent().getContent())
+			.repoId(repositoryPost.getRepository().getId())
+			.repoName(repositoryPost.getRepository().getName())
 			.build();
 	}
 }

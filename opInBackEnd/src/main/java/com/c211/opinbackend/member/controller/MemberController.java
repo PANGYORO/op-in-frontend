@@ -6,7 +6,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,11 +21,9 @@ import com.c211.opinbackend.auth.model.request.MemberLoginRequest;
 import com.c211.opinbackend.auth.model.request.MemberNicknameRequest;
 import com.c211.opinbackend.auth.model.request.MemberPasswordRequest;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
-import com.c211.opinbackend.auth.model.response.TechLanguageResponse;
 import com.c211.opinbackend.auth.service.MailService;
 import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
-import com.c211.opinbackend.exception.auth.AuthRuntimeException;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.member.model.request.TechLanguageRequest;
@@ -68,7 +68,7 @@ public class MemberController {
 		boolean exist = memberService.existNickname(request.getNickname());
 		return new ResponseEntity<>(exist, HttpStatus.OK);
 	}
-	
+
 	// 닉네임 변경
 	@PostMapping("/nickname/put")
 	public ResponseEntity<?> modifyNickname(@RequestBody MemberNicknameRequest request) {
@@ -121,10 +121,57 @@ public class MemberController {
 		return ResponseEntity.ok(true);
 	}
 
+	/**
+	 * 맴버의 가 래포 팔로우
+	 *
+	 * @param repoId
+	 * @return
+	 */
+	@PostMapping("/follow/repo/{repoId}")
+	public ResponseEntity<?> followRepo(@PathVariable("repoId") Long repoId) {
+		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(() -> new MemberRuntimeException(
+			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION
+		));
+		Boolean saveState = memberService.followRepo(repoId, memberEmail);
+		return ResponseEntity.ok().body(saveState);
+	}
+
 	// 팔로우 취소
+	// TODO: 2023/02/12 추후 델리트 매소드로 바꾸면 좋을거 같습니다.
 	@PostMapping("/follow/delete")
 	public ResponseEntity<?> followDeleteMember(@RequestBody MemberNicknameRequest request) {
 		return ResponseEntity.ok(memberService.followDeleteMember(request.getNickname()));
+	}
+
+	/**
+	 * 래포아이디를 받아 팔로우 취소
+	 *
+	 * @param repoId
+	 * @return 저장한 repoId
+	 */
+	@DeleteMapping("/follow/repo/{repoId}")
+	public ResponseEntity<?> followRepoDeleteMember(@PathVariable Long repoId) {
+		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(() -> new MemberRuntimeException(
+			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION
+		));
+		Boolean delState = memberService.followDeleteRepo(repoId, memberEmail);
+		return ResponseEntity.ok().body(delState);
+	}
+
+	/**
+	 * 래포지토리를 팔로우 하고 있는지 체크
+	 *
+	 * @param repoId
+	 * @return
+	 */
+
+	@GetMapping("/follow/repo/{repoId}")
+	public ResponseEntity<?> checkFollowRepo(@PathVariable Long repoId) {
+		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(() -> new MemberRuntimeException(
+			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION
+		));
+		Boolean res = memberService.followCheckRepo(repoId, memberEmail);
+		return ResponseEntity.ok().body(res);
 	}
 
 	//팔로우여부 확인 : true/ false
@@ -142,7 +189,7 @@ public class MemberController {
 			throw new ApiRuntimeException(ApiExceptionEnum.API_WORK_FAILED_EXCEPTION);
 		}
 	}
-	
+
 	// Topic 따로 저장
 	@PostMapping("/topic/put")
 	public ResponseEntity<?> saveLoginTopic(@RequestBody TopicRequest request) {
@@ -168,7 +215,7 @@ public class MemberController {
 	public ResponseEntity<?> getListTechLanguage() {
 		return new ResponseEntity<>(memberService.getListTechLanguage(), HttpStatus.OK);
 	}
-	
+
 	// member - tech language 단건 삭제
 	@PostMapping("/language/delete")
 	public ResponseEntity<?> deleteLoginMemberTechLanguage(@RequestBody TechLanguageRequest request) {

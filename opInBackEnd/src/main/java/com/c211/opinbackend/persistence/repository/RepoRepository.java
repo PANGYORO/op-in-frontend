@@ -16,8 +16,11 @@ public interface RepoRepository extends JpaRepository<Repository, Long> {
 
 	List<Repository> findByMember(Member member);
 
+	List<Repository> findByMemberEmail(String email);
+	
 	List<Repository> findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name,
 		String description);
-	Page<Repository> findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name,
-		String description, Pageable pageable);
+
+	Page<Repository> findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name, String description,
+		Pageable pageable);
 }

@@ -55,6 +55,13 @@ public class RepositoryServiceImp implements RepositoryService {
 		return repositoryResponseDtoList;
 	}
 
+	/**
+	 * 임시사용되는 컨트롤러 나중에 지워야함
+	 *
+	 * @param memberEmail
+	 * @param repoDto
+	 * @return
+	 */
 	@Override
 	@Transactional
 	public Boolean uploadRepository(String memberEmail, RepoDto repoDto) {

@@ -2,6 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import Post from "@components/Post";
 import PostModal from "@components/modals/PostModal";
 import http from "@api/http";
+import ToLoginModal from "@components/modals/ToLoginModal";
+import { useRecoilValue } from "recoil";
+import { userInfo } from "@recoil/user/atoms";
 
 const PostList = ({ posts = [] }) => {
   return (
@@ -27,8 +30,10 @@ const PostList = ({ posts = [] }) => {
 
 function FollowingPosts({ repoId }) {
   const [open, setOpen] = useState(false);
+  const [toLoginOpen, setToLoginOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const inputRef = useRef();
+  const user = useRecoilValue(userInfo);
 
   useEffect(() => {
     searchData({ page: 0, size: 100, query: "" });
@@ -52,6 +57,9 @@ function FollowingPosts({ repoId }) {
   };
   function toggleModal() {
     setOpen((prev) => !prev);
+  }
+  function toLoginToggleModal() {
+    setToLoginOpen((prev) => !prev);
   }
   const keyUpEvent = (e) => {
     if (e.keyCode == 13) {
@@ -113,7 +121,10 @@ function FollowingPosts({ repoId }) {
             <div className="w-auto h-auto h-full justify-self-end">
               <button
                 type="button"
-                onClick={toggleModal}
+                onClick={() => {
+                  if (user.logined) toggleModal();
+                  else toLoginToggleModal();
+                }}
                 disabled=""
                 className="py-2 px-4 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white 
                 w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none 
@@ -144,14 +155,9 @@ function FollowingPosts({ repoId }) {
       <div className="flex">
         <PostList posts={posts} />
       </div>
-      <PostModal
-        open={open}
-        setOpen={setOpen}
-        propFunction={highFunction}
-        repositoryId={repoId}
-      />
+      <PostModal open={open} setOpen={setOpen} propFunction={highFunction} repositoryId={repoId} />
+      <ToLoginModal open={toLoginOpen} setOpen={setToLoginOpen} />
     </>
   );
 }
 export default FollowingPosts;
-

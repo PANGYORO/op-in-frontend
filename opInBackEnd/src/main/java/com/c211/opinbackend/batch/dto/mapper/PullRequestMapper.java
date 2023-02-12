@@ -11,6 +11,7 @@ public class PullRequestMapper {
 	public static PullRequest toPullRequest(PullRequestDto dto) {
 		return toPullRequest(dto, null);
 	}
+
 	public static PullRequest toPullRequest(PullRequestDto dto, Repository repository) {
 		return PullRequest.builder()
 			.id(dto.getId())
