@@ -11,6 +11,7 @@ import UserDetail from "@pages/user/UserDetail";
 import SelectTag from "@pages/user/SelectTag";
 import PRTutorial from "@pages/education/tutorial/PRTutorial";
 
+
 import Search from "@pages/Search";
 import NotFound from "@pages/NotFound";
 import Sidebar from "@components/SideBar";

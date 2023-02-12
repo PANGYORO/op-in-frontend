@@ -184,38 +184,37 @@ const UserDetail = () => {
       <div className="w-full mx-4 my-4 h-screen overflow-auto">
         <div className="grid grid-cols-3 gap-3 mb-8">
           <div
-            className="flex flex-col justify-center h-full ml-44"
-            id="profile_img"
-            style={{
-              width: "200px",
-              height: "200px",
-              border: "1px solid gray",
-              borderRadius: "200px",
-              position: "relative",
-              overflow: "hidden",
-            }}
-            onClick={() => {
-              if (isMe) fileInput.current.click();
-            }}
-          >
-            <img
-              src={user.img_url || DefaultImg}
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
-            />
-            {isMe && (
-              <>
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  accept="image/jpg,image/png,image/jpeg"
-                  name="profile_img"
-                  onChange={onFileChange}
-                  ref={fileInput}
-                />
-              </>
-            )}
-          <div className="bg-prinavy self-center"> {myinfo.nickname}</div>
-          </div>
+              className="flex flex-col justify-center h-full ml-44"
+              id="profile_img"
+              style={{
+                width: "200px",
+                height: "200px",
+                border: "1px solid gray",
+                borderRadius: "200px",
+                position: "relative",
+                overflow: "hidden",
+              }}
+              onClick={() => {
+                if (isMe) fileInput.current.click();
+              }}
+            >
+              <img
+                src={user.img_url || DefaultImg}
+                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              />
+              {isMe && (
+                <>
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    accept="image/jpg,image/png,image/jpeg"
+                    name="profile_img"
+                    onChange={onFileChange}
+                    ref={fileInput}
+                  />
+                </>
+              )}
+            </div>
           <Tooltip anchorId="profile_img" content="Click to change Image" />
           <div className="flex justify-center col-span-2 lg:text-3xl md:text-2xl sm:text-xl w-4/5">
             <div className="grid content-center">
