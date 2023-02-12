@@ -69,8 +69,15 @@ const renderRepos = (list = [], flag) => {
       </div>
       <span className="mr-4">
         {flag ? (
-          <a className="inline-flex" href={item.html} target="_blank" rel="noreferrer">
+          <a
+            id={index + item.title}
+            className="inline-flex"
+            href={item.html}
+            target="_blank"
+            rel="noreferrer"
+          >
             <GithubSvg />
+            <Tooltip anchorId={index + item.title} content="go to Github page" />
           </a>
         ) : (
           <></>
