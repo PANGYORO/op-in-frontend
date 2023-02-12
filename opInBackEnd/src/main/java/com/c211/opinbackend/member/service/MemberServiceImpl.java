@@ -592,17 +592,19 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public Boolean followRepo(Long repoId, String memberEmail) {
-		// 팔로운 당하는 래포를 찾고 그중에 있다
-		// 중복되는 상태를 찾고 없으면 진행한다
-		List<RepositoryFollow> checkExist = repositoryFollowRepository.findByRepositoryIdAndMember_Email(
-			repoId, memberEmail);
-		if (checkExist.size() > 0) {
-			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_CREATE_FOLLOW_EXCEPTION);
-		}
+	@Transactional
+	public Long followRepo(Long repoId, String memberEmail) {
+		//맴버 아이디를 가져온다
 		Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
 			() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
 		);
+		// 중복되는 상태를 찾고 없으면 진행한다
+		List<RepositoryFollow> findRepoFollow = repositoryFollowRepository.findByRepositoryIdAndMemberId(
+			repoId, member.getId());
+		if (findRepoFollow.size() != 0) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_FOLLOW_EXIST_EXCEPTION);
+		}
+		// 래포 아이디를 가져온다.
 		Repository repository = repoRepository.findById(repoId).orElseThrow(
 			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION)
 		);
@@ -612,9 +614,48 @@ public class MemberServiceImpl implements MemberService {
 				.repository(repository)
 				.build();
 			repositoryFollowRepository.save(createItem);
-			return true;
+			return repository.getId();
 		} catch (Exception exception) {
-			return false;
+			// 저장실패시 다음 예외발생
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_CREATE_FOLLOW_SAVE_EXCEPTION);
 		}
+	}
+
+	@Override
+	@Transactional
+	public Long followDeleteRepo(Long repoId, String memberEmail) {
+		try {
+
+			Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
+				() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+			);
+			List<RepositoryFollow> findRepoFollowList = repositoryFollowRepository.findByRepositoryIdAndMemberId(
+				repoId,
+				member.getId());
+			// 외부키들을 다 널로 만들고 지워서 캐스케이드 를 방지합니다.
+			RepositoryFollow findRepoFollow = findRepoFollowList.get(0);
+			Long deletedRepoId = findRepoFollow.getRepository().getId();
+			findRepoFollow.setNullForeignKey();
+			repositoryFollowRepository.delete(findRepoFollow);
+			return deletedRepoId;
+		} catch (Exception exception) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_FOLLOW_DELETE_EXCEPTION);
+		}
+	}
+
+	@Override
+	public Long followCheckRepo(Long repoId, String memberEmail) {
+		Member member = memberRepository.findByEmail(memberEmail).orElseThrow(
+			() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
+		);
+		List<RepositoryFollow> findRepoFollowList = repositoryFollowRepository.findByRepositoryIdAndMemberId(
+			repoId,
+			member.getId());
+		if (findRepoFollowList.size() == 0) {
+			throw new MemberRuntimeException(MemberExceptionEnum.MEMBER_FOLLOW_REPO_DONT_EXIST_EXCEPTION);
+		}
+		RepositoryFollow findRepoFollow = findRepoFollowList.get(0);
+
+		return findRepoFollow.getRepository().getId();
 	}
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,7 @@ import com.c211.opinbackend.member.model.response.FileUploadResponse;
 import com.c211.opinbackend.member.service.MemberService;
 import com.c211.opinbackend.member.service.S3FileUploadService;
 import com.c211.opinbackend.persistence.entity.Member;
+import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.util.SecurityUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -131,7 +133,7 @@ public class MemberController {
 	}
 
 	/**
-	 * 맴버의 래포 팔로우
+	 * 맴버의 가 래포 팔로우
 	 *
 	 * @param repoId
 	 * @return
@@ -141,15 +143,55 @@ public class MemberController {
 		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(() -> new MemberRuntimeException(
 			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION
 		));
-		// TODO: 2023/02/12 이제 리턴 값 추가하기
-		memberService.followRepo(repoId, memberEmail);
-		return null;
+		Long saveRepoId = memberService.followRepo(repoId, memberEmail);
+		RepoDto build = RepoDto.builder()
+			.repoId(saveRepoId)
+			.build();
+		return ResponseEntity.ok().body(build);
 	}
 
 	// 팔로우 취소
+	// TODO: 2023/02/12 추후 델리트 매소드로 바꾸면 좋을거 같습니다.
 	@PostMapping("/follow/delete")
 	public ResponseEntity<?> followDeleteMember(@RequestBody MemberNicknameRequest request) {
 		return ResponseEntity.ok(memberService.followDeleteMember(request.getNickname()));
+	}
+
+	/**
+	 * 래포아이디를 받아 팔로우 취소
+	 *
+	 * @param repoId
+	 * @return 저장한 repoId
+	 */
+	@DeleteMapping("/follow/repo/{repoId}")
+	public ResponseEntity<?> followRepoDeleteMember(@PathVariable Long repoId) {
+		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(() -> new MemberRuntimeException(
+			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION
+		));
+		Long saveId = memberService.followDeleteRepo(repoId, memberEmail);
+		RepoDto build = RepoDto.builder()
+			.repoId(saveId)
+			.build();
+		return ResponseEntity.ok().body(build);
+	}
+
+	/**
+	 * 래포지토리를 팔로우 하고 있는지 체크
+	 *
+	 * @param repoId
+	 * @return
+	 */
+
+	@GetMapping("/follow/repo/{repoId}")
+	public ResponseEntity<?> checkFollowRepo(@PathVariable Long repoId) {
+		String memberEmail = SecurityUtil.getCurrentUserId().orElseThrow(() -> new MemberRuntimeException(
+			MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION
+		));
+		Long getFollowStateId = memberService.followCheckRepo(repoId, memberEmail);
+		RepoDto build = RepoDto.builder()
+			.repoId(getFollowStateId)
+			.build();
+		return ResponseEntity.ok().body(build);
 	}
 
 	//팔로우여부 확인 : true/ false

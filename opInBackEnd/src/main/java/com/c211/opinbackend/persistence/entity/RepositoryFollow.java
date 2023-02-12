@@ -33,5 +33,10 @@ public class RepositoryFollow {
 	@JoinColumn(name = "REPOSITORY_ID")
 	private Repository repository;
 
+	public void setNullForeignKey() {
+		this.member = null;
+		this.repository = null;
+	}
+
 }
 
