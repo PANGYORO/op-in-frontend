@@ -32,7 +32,7 @@ function useAuth() {
           setUser((prev) => ({
             ...prev,
             nickname: data.nickname,
-            email: data.email,
+            email: decodeAccessTokenUserInfo.email, // data.email,
             img_url: data.avataUrl,
             logined: true,
           }));
@@ -54,7 +54,7 @@ function useAuth() {
           setUser((prev) => ({
             ...prev,
             nickname: data.nickname,
-            email: data.email,
+            email: decodeAccessTokenUserInfo.email, // data.email,
             img_url: data.avataUrl,
             logined: true,
           }));
@@ -79,7 +79,7 @@ function useAuth() {
           setUser((prev) => ({
             ...prev,
             nickname: data.nickname,
-            email: data.email,
+            email: decodeAccessTokenUserInfo.email, // data.email,
             img_url: data.avataUrl,
             logined: true,
           }));
@@ -107,7 +107,6 @@ function useAuth() {
   }, []);
 
   const _getUserInfo = useCallback((nickname, callback = () => {}) => {
-    // TODO: 명진이 형 API 새로 GET으로 부탁하기
     http
       .post(`member/mypage`, {
         nickname,
