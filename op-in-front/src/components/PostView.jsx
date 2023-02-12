@@ -15,6 +15,69 @@ import { userInfo } from "@recoil/user/atoms";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
 
+const HeartUnpressed = () => {
+  return (
+    <svg
+      version="1.0"
+      xmlns="http://www.w3.org/2000/svg"
+      width="512.000000pt"
+      height="512.000000pt"
+      className="w-6 h-6"
+      viewBox="0 0 512.000000 512.000000"
+      preserveAspectRatio="xMidYMid meet"
+    >
+      <g
+        transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+        fill="#000000"
+        stroke="none"
+      >
+        <path
+          d="M1262 4830 c-319 -40 -586 -171 -812 -399 -203 -204 -325 -420 -395
+          -701 -124 -487 -34 -967 264 -1418 191 -289 438 -554 891 -958 288 -257 1167
+          -1007 1210 -1032 40 -24 55 -27 140 -27 85 0 100 3 140 27 43 25 924 776 1210
+          1032 455 406 700 670 891 958 298 451 388 931 264 1418 -70 281 -192 497 -395
+          701 -202 203 -418 320 -701 380 -142 30 -404 33 -528 5 -346 -75 -611 -248
+          -853 -556 l-28 -35 -27 35 c-239 302 -500 475 -833 551 -99 23 -327 33 -438
+          19z m334 -305 c284 -50 529 -214 723 -485 33 -47 74 -103 90 -126 74 -104 228
+          -104 302 0 16 23 57 79 90 126 265 370 634 544 1036 489 446 -61 794 -373 927
+          -832 105 -363 59 -744 -132 -1087 -160 -287 -427 -588 -892 -1005 -225 -201
+          -1171 -1015 -1180 -1015 -10 0 -952 811 -1180 1015 -715 641 -997 1041 -1065
+          1510 -44 303 19 629 172 886 230 387 678 599 1109 524z"
+        />
+      </g>
+    </svg>
+  );
+};
+
+const HeartPressed = () => {
+  return (
+    <svg
+      version="1.0"
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-6 h-6"
+      width="512.000000pt"
+      height="512.000000pt"
+      viewBox="0 0 512.000000 512.000000"
+      preserveAspectRatio="xMidYMid meet"
+    >
+      <g
+        transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+        fill="#000000"
+        stroke="none"
+      >
+        <path
+          d="M1180 4635 c-373 -64 -690 -257 -907 -551 -118 -161 -214 -386 -248
+-584 -22 -125 -22 -328 -1 -449 71 -396 330 -816 785 -1272 417 -417 904 -793
+1516 -1171 238 -147 228 -142 267 -122 152 79 620 382 865 560 921 671 1486
+1341 1622 1922 98 419 -19 878 -307 1205 -417 472 -1073 608 -1646 343 -181
+-83 -396 -259 -511 -416 -26 -36 -50 -65 -55 -65 -4 0 -34 36 -68 81 -122 162
+-281 292 -477 389 -210 104 -392 146 -630 144 -71 -1 -164 -7 -205 -14z"
+        />
+      </g>
+    </svg>
+  );
+};
+
 const PostDetail = ({
   title,
   authorMemberName,
@@ -32,6 +95,21 @@ const PostDetail = ({
   const user = useRecoilValue(userInfo);
 
   const [comments, setCommentList] = useState(commentList);
+  const [likesCount, setLikesCount] = useState(0);
+  const [likeState, setLikeState] = useState(false);
+
+  useEffect(() => {
+    setLikesCount(likeCount);
+  }, []);
+
+  const changeHeartState = () => {
+    if (likeState) {
+      setLikesCount((prev) => prev - 1);
+    } else {
+      setLikesCount((prev) => prev + 1);
+    }
+    setLikeState((prev) => !prev);
+  };
 
   function toLoginToggleModal() {
     setToLoginOpen((prev) => !prev);
@@ -98,28 +176,25 @@ const PostDetail = ({
         </div>
         <div className="flex items-start mt-6 ">
           {/* 하트 */}
-          <button className="mx-3">
-            <svg
-              width="25"
-              height="25"
-              fill="currentColor"
-              viewBox="0 0 1792 1792"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M1664 596q0-81-21.5-143t-55-98.5-81.5-59.5-94-31-98-8-112 25.5-110.5 64-86.5 72-60 61.5q-18 22-49 22t-49-22q-24-28-60-61.5t-86.5-72-110.5-64-112-25.5-98 8-94 31-81.5 59.5-55 98.5-21.5 143q0 168 187 355l581 560 580-559q188-188 188-356zm128 0q0 221-229 450l-623 600q-18 18-44 18t-44-18l-624-602q-10-8-27.5-26t-55.5-65.5-68-97.5-53.5-121-23.5-138q0-220 127-344t351-124q62 0 126.5 21.5t120 58 95.5 68.5 76 68q36-36 76-68t95.5-68.5 120-58 126.5-21.5q224 0 351 124t127 344z"></path>
-            </svg>
+          <button className="mx-3" onClick={changeHeartState}>
+            {likeState ? <HeartPressed /> : <HeartUnpressed />}
           </button>
-          {likeCount}
-          {/* 포크 */}
+          {likesCount}
+          {/* 댓글 */}
           <button className="mx-3">
             <svg
-              width="25"
-              height="25"
-              fill="currentColor"
-              viewBox="0 0 1792 1792"
               xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="w-6 h-6"
             >
-              <path d="M1344 1024q133 0 226.5 93.5t93.5 226.5-93.5 226.5-226.5 93.5-226.5-93.5-93.5-226.5q0-12 2-34l-360-180q-92 86-218 86-133 0-226.5-93.5t-93.5-226.5 93.5-226.5 226.5-93.5q126 0 218 86l360-180q-2-22-2-34 0-133 93.5-226.5t226.5-93.5 226.5 93.5 93.5 226.5-93.5 226.5-226.5 93.5q-126 0-218-86l-360 180q2 22 2 34t-2 34l360 180q92-86 218-86z"></path>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 01.778-.332 48.294 48.294 0 005.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"
+              />
             </svg>
           </button>
           {commentCount}
