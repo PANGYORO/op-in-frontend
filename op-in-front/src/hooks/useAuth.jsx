@@ -31,9 +31,13 @@ function useAuth() {
         _getUserInfo(decodeAccessTokenUserInfo.nickname, ({ data }) => {
           setUser((prev) => ({
             ...prev,
+            id: data.id,
             nickname: data.nickname,
-            email: decodeAccessTokenUserInfo.email, // data.email,
+            email: data.email || decodeAccessTokenUserInfo.email,
             img_url: data.avataUrl,
+            role: data.role,
+            githubSync: data.githubSync,
+            githubId: data.githubId,
             logined: true,
           }));
           setToast({ message: "로그인 성공!" });
@@ -53,9 +57,13 @@ function useAuth() {
         _getUserInfo(decodeAccessTokenUserInfo.nickname, ({ data }) => {
           setUser((prev) => ({
             ...prev,
+            id: data.id,
             nickname: data.nickname,
-            email: decodeAccessTokenUserInfo.email, // data.email,
+            email: data.email || decodeAccessTokenUserInfo.email,
             img_url: data.avataUrl,
+            role: data.role,
+            githubSync: data.githubSync,
+            githubId: data.githubId,
             logined: true,
           }));
         });
@@ -78,9 +86,13 @@ function useAuth() {
         _getUserInfo(decodeAccessTokenUserInfo.nickname, ({ data }) => {
           setUser((prev) => ({
             ...prev,
+            id: data.id,
             nickname: data.nickname,
-            email: decodeAccessTokenUserInfo.email, // data.email,
+            email: data.email || decodeAccessTokenUserInfo.email,
             img_url: data.avataUrl,
+            role: data.role,
+            githubSync: data.githubSync,
+            githubId: data.githubId,
             logined: true,
           }));
         });

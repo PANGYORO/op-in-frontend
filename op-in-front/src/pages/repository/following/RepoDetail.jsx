@@ -20,12 +20,16 @@ const RepoDetail = () => {
   const followingClassState =
     "py-1 px-3 bg-orange-600 hover:bg-orange-700 focus:ring-orange-500  focus:ring-offset-red-200 text-white  transition ease-in duration-200 text-center font-semibold shadow-md focus:outline-none focus:ring-2   focus:ring-offset-2  opacity-70 rounded-lg ";
   const [followState, setFollowState] = useState({});
-  const { hasAuth } = useAuth();
+  const { hasAuth, auth } = useAuth();
   const { setToast } = useToast();
 
   const FollowButton = () => {
     return (
-      <button type="button" onClick={() => followStateChange()} className={followState.classValue}>
+      <button
+        type="button"
+        onClick={() => followStateChange()}
+        className={followState.classValue}
+      >
         {followState.value}
       </button>
     );
@@ -70,7 +74,9 @@ const RepoDetail = () => {
             classValue: followClassState,
             value: "follow",
           });
-          setToast({ message: repoDetail.title + "레포 팔로우가 취소되었습니다." });
+          setToast({
+            message: repoDetail.title + "레포 팔로우가 취소되었습니다.",
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -86,7 +92,9 @@ const RepoDetail = () => {
             classValue: followingClassState,
             value: "following",
           });
-          setToast({ message: repoDetail.title + " 레포 팔로우가 추가되었습니다." });
+          setToast({
+            message: repoDetail.title + " 레포 팔로우가 추가되었습니다.",
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -121,10 +129,17 @@ const RepoDetail = () => {
           <header className="z-40 items-center w-full h-15 pb-3 bg-white shadow-lg dark:bg-gray-700 rounded-t-2xl">
             <div className="flex justify-between pt-3 pl-3 text-2xl">
               <span>
-                <span className="font-semibold"> Current Repository :&nbsp;</span>
+                <span className="font-semibold">
+                  {" "}
+                  Current Repository :&nbsp;
+                </span>
                 <span className="font-bold"> {repoDetail?.title}</span>
               </span>
-              <span className="mr-3">{hasAuth ? <FollowButton /> : <></>}</span>
+              {hasAuth && repoDetail.ownerId != auth.id && (
+                <span className="mr-3">
+                  <FollowButton />
+                </span>
+              )}
             </div>
             <ul className="pt-3 pl-3 flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
               <li className="mr-2">
@@ -161,3 +176,4 @@ const RepoDetail = () => {
   );
 };
 export default RepoDetail;
+
