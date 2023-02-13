@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
-@RequestMapping("/qna")
+@RequestMapping("/api/qna")
 @AllArgsConstructor
 public class RepoQnAController {
 
