@@ -23,6 +23,7 @@ import com.c211.opinbackend.persistence.entity.RepositoryPost;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.model.requeset.RequestCommentCreateToPost;
 import com.c211.opinbackend.repo.model.requeset.RequestUpdatePost;
+import com.c211.opinbackend.repo.model.response.PageResponsePost;
 import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 import com.c211.opinbackend.repo.service.commnet.CommentService;
@@ -89,8 +90,15 @@ public class RepoPostController {
 	@GetMapping("/news")
 	public ResponseEntity<?> getNewsPost(
 		@PageableDefault(size = 10, page = 0) Pageable pageable) {
-		List<RepoPostSimpleResponse> newsPost = repositoryPostService.getNewsPost(pageable);
+		PageResponsePost newsPost = repositoryPostService.getNewsPosts(pageable);
 		return ResponseEntity.ok().body(newsPost);
+	}
+
+	@GetMapping("/hot")
+	public ResponseEntity<?> getHotPost(@PageableDefault(size = 10, page = 0) Pageable pageable) {
+
+		PageResponsePost hotPosts = repositoryPostService.getHotPosts(pageable);
+		return ResponseEntity.ok().body(hotPosts);
 	}
 
 	/**

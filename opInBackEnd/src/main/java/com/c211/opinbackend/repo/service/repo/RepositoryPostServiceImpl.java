@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ import com.c211.opinbackend.persistence.repository.RepoRepository;
 import com.c211.opinbackend.persistence.repository.RepositoryPostMemberLikeRepository;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.model.requeset.RequestUpdatePost;
+import com.c211.opinbackend.repo.model.response.PageResponsePost;
 import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 import com.c211.opinbackend.repo.service.mapper.RepoPostMapper;
@@ -221,15 +223,40 @@ public class RepositoryPostServiceImpl implements RepositoryPostService {
 
 	@Override
 	@Transactional
-	public List<RepoPostSimpleResponse> getNewsPost(Pageable pageable) {
+	public PageResponsePost getNewsPosts(Pageable pageable) {
 
 		// 로직을 매버까지 한번에 가져오게 해야한다.
-		List<RepositoryPost> findNewPosts = repoPostRepository.findDistinctByRepositoryCreatedAt(
-			pageable).getContent();
+		Page<RepositoryPost> findPages = repoPostRepository.findDistinctByRepositoryCreatedAt(
+			pageable);
+		List<RepositoryPost> findNewPosts = findPages.getContent();
 		List<RepoPostSimpleResponse> res = new ArrayList<>();
 		for (RepositoryPost post : findNewPosts) {
 			res.add(RepoPostMapper.toSimpleResponse(post));
 		}
-		return res;
+		return PageResponsePost.builder()
+			.number(findPages.getNumber())
+			.totalPages(findPages.getTotalPages())
+			.totalElements(findPages.getTotalElements())
+			.size(findPages.getSize())
+			.repoPostSimpleResponseList(res)
+			.build();
+	}
+
+	@Override
+	public PageResponsePost getHotPosts(Pageable pageable) {
+		Page<RepositoryPost> findPages = repoPostRepository.findDistinctByRepositoryLike(pageable);
+		List<RepositoryPost> findNewPosts = findPages.getContent();
+
+		List<RepoPostSimpleResponse> res = new ArrayList<>();
+		for (RepositoryPost post : findNewPosts) {
+			res.add(RepoPostMapper.toSimpleResponse(post));
+		}
+		return PageResponsePost.builder()
+			.number(findPages.getNumber())
+			.totalPages(findPages.getTotalPages())
+			.totalElements(findPages.getTotalElements())
+			.size(findPages.getSize())
+			.repoPostSimpleResponseList(res)
+			.build();
 	}
 }
