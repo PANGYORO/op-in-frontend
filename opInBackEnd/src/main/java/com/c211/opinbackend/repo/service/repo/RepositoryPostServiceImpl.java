@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
@@ -216,5 +217,19 @@ public class RepositoryPostServiceImpl implements RepositoryPostService {
 			// 틀리면 false 리턴 맞으면 true 리턴
 			return Objects.equals(findPostLike.get(0).getRepositoryPost().getId(), postId);
 		}
+	}
+
+	@Override
+	@Transactional
+	public List<RepoPostSimpleResponse> getNewsPost(Pageable pageable) {
+
+		// 로직을 매버까지 한번에 가져오게 해야한다.
+		List<RepositoryPost> findNewPosts = repoPostRepository.findDistinctByRepositoryCreatedAt(
+			pageable).getContent();
+		List<RepoPostSimpleResponse> res = new ArrayList<>();
+		for (RepositoryPost post : findNewPosts) {
+			res.add(RepoPostMapper.toSimpleResponse(post));
+		}
+		return res;
 	}
 }

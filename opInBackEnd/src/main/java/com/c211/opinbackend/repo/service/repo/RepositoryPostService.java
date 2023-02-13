@@ -2,6 +2,8 @@ package com.c211.opinbackend.repo.service.repo;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+
 import com.c211.opinbackend.persistence.entity.RepositoryPost;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.model.requeset.RequestUpdatePost;
@@ -19,6 +21,8 @@ public interface RepositoryPostService {
 	List<RepoPostSimpleResponse> getRepoAllPostList(Long repoId);
 
 	List<RepoPostSimpleResponse> getAllPost();
+
+	List<RepoPostSimpleResponse> getNewsPost(Pageable pageable);
 
 	RepoPostDetailResponse getPostDetail(Long postId);
 

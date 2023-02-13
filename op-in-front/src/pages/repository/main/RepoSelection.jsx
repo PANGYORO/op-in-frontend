@@ -4,7 +4,6 @@ import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 import http from "@api/http";
-import axios from "axios";
 
 const RepoList = ({ repos }) => {
   console.log(repos);
@@ -34,9 +33,7 @@ const RepoSelection = () => {
     if (!user.logined) navigate(`/repo/recommand`);
     else
       http
-        .post(`repo/member`, {
-          email: user.email,
-        })
+        .get(`repo/member/${user.id}`)
         .then(({ data }) => {
           console.log(data);
           setRepoData([...data]);

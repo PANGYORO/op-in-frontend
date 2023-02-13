@@ -2,6 +2,8 @@ package com.c211.opinbackend.repo.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -77,6 +79,18 @@ public class RepoPostController {
 		} catch (Exception exception) {
 			return ResponseEntity.badRequest().body("조회에 실패 했습니다.");
 		}
+	}
+
+	/**
+	 * pagenation 을 적용한 최신수 post
+	 *
+	 * @return
+	 */
+	@GetMapping("/news")
+	public ResponseEntity<?> getNewsPost(
+		@PageableDefault(size = 10, page = 0) Pageable pageable) {
+		List<RepoPostSimpleResponse> newsPost = repositoryPostService.getNewsPost(pageable);
+		return ResponseEntity.ok().body(newsPost);
 	}
 
 	/**

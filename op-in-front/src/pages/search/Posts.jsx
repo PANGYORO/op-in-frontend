@@ -5,7 +5,7 @@ import http from "@api/http";
 const PostList = ({ posts }) => {
   // console.log(posts);
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-2 gap-4 ml-4">
       {posts.map((post) => {
         // console.log(post.id);
         return (
