@@ -30,9 +30,8 @@ public class GetRepoTechLanguageReader implements ItemReader<RepoTechLanguageDto
 	private boolean checkRestCall = false; //RestAPI 호출여부 판단
 	private int nextIndex = 0;//리스트의 데이터를 하나씩 인덱스를 통해 가져온다.
 	private final Action action;
+	private final String githubToken;
 
-	@Value("${githubToken2}")
-	private String githubToken;
 
 	@Override
 	public RepoTechLanguageDto read() throws Exception,

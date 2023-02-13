@@ -30,8 +30,7 @@ public class GetMemberRepositoryReader implements ItemReader<RepositoryDto> {
 	private boolean checkRestCall = false; //RestAPI 호출여부 판단
 	private int nextIndex = 0;//리스트의 데이터를 하나씩 인덱스를 통해 가져온다.
 
-	@Value("${githubToken1}")
-	private String githubToken;
+	private final String githubToken;
 
 	@Override
 	public RepositoryDto read() throws Exception,
