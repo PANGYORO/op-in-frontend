@@ -59,7 +59,7 @@ export default function DashBoard() {
             </ul>
           </header>
         </div>
-        <div id="dashboardcontent" className="h-screen overflow-auto">
+        <div id="dashboardcontent">
           {tab == "posts" ? (
             <Posts value={searchValue} />
           ) : tab == "repos" ? (

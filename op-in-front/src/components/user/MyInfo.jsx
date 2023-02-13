@@ -99,13 +99,13 @@ const MyInfo = ({ currentuser }) => {
   return (
     <div className="mx-0 mb-4 h-full ">
       <div className="w-full h-full bg-white shadow-lg rounded-2xl dark:bg-gray-700">
-        <p className="p-4 font-bold text-black text-md dark:text-white">
+        {/* <p className="p-4 font-bold text-black text-md dark:text-white">
           Badges
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
             ({currentuser.badges == null ? 0 : currentuser.badges.length})
           </span>
-        </p>
-        <div className="grid grid-cols-8 gap-4 px-3 mb-3">
+        </p> */}
+        {/* <div className="grid grid-cols-8 gap-4 px-3 mb-3">
           <img id="badge-1" src={BasicBadge} alt="badge" />
           <Tooltip anchorId="badge-1" content="normal badge" />
           <img id="badge-2" src={BasicBadge} alt="badge" />
@@ -120,7 +120,7 @@ const MyInfo = ({ currentuser }) => {
           <Tooltip anchorId="badge-6" content="normal badge" />
           <img id="badge-7" src={BasicBadge} alt="badge" />
           <Tooltip anchorId="badge-7" content="normal badge" />
-        </div>
+        </div> */}
         <hr />
         <div className="mr-3">
           <TagInfo

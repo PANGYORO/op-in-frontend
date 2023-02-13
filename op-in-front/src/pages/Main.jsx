@@ -38,7 +38,7 @@ function RepoTemplate() {
 
 export default function Main() {
   return (
-    <div className="Main">
+    <div className="Main bg-gray-100">
       <Header />
       <main className="relative bg-gray-100 dark:bg-gray-800">
         <Routes>
