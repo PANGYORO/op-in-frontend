@@ -1,17 +1,16 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react'
-import useWindowSize from 'react-use/lib/useWindowSize'
-import Confetti from 'react-confetti'
 import { useNavigate } from 'react-router-dom'
 import { useTransition, animated } from '@react-spring/web'
-
+import { userInfo } from "@recoil/user/atoms";
+import { useRecoilValue } from 'recoil'
 import styles from './styles.module.css'
 
-function TutorialComplete() {
-  const { width, height } = useWindowSize()
+function ChooseTutorial() {
+  const user = useRecoilValue(userInfo)
   const navigate = useNavigate()
   const ref = useRef([]);
-  const [items, set] = useState([]);
-  const transitions = useTransition(items, {
+  const [_items, _set] = useState([]);
+  const _transitions = useTransition(_items, {
     from: {
         opacity: 0,
         height: 0,
@@ -30,10 +29,10 @@ function TutorialComplete() {
 const reset = useCallback(() => {
     ref.current.forEach(clearTimeout);
     ref.current = [];
-    set([]);
-    ref.current.push(setTimeout(() => set(['Congratulation', 'Your first', 'Contribute']), 2000));
-    ref.current.push(setTimeout(() => set(['Congratulation', 'Contribute']), 5000));
-    ref.current.push(setTimeout(() => set(['Congratulation', 'Your first', 'Contribute']), 8000));
+    _set([]);
+    ref.current.push(setTimeout(() => _set(['welcome', 'to op-in', user.nickname]), 2000));
+    ref.current.push(setTimeout(() => _set(['welcome', user.nickname]), 5000));
+    ref.current.push(setTimeout(() => _set(['welcome', 'to op-in', user.nickname]), 8000));
 }, []);
 useEffect(() => {
     reset();
@@ -41,18 +40,14 @@ useEffect(() => {
 }, []);
   return (
     <div className="mx-44">
-      <Confetti
-        width={width}
-        height={height}
-      />
       <div className='py-8'>
       </div>
       <div className='py-4'></div>
       <div className={styles.container}>
         <div className={styles.main}>
-          {transitions(({ innerHeight, ...rest }, item) => (
+          {_transitions(({ innerHeight, ...rest }, _items) => (
             <animated.div className={styles.transitionsItem} style={rest} onClick={reset}>
-              <animated.div style={{ overflow: 'hidden', height: innerHeight }}>{item}</animated.div>
+              <animated.div style={{ overflow: 'hidden', height: innerHeight }}>{_items}</animated.div>
             </animated.div>
           ))}
         </div>
@@ -66,7 +61,7 @@ useEffect(() => {
             navigate('/tutorial/pr')
           }}
         >
-          RETRY
+          TUTORIAL
         </button>
         <button
           type="button"
@@ -86,4 +81,4 @@ useEffect(() => {
   );
 }
 
-export default TutorialComplete
+export default ChooseTutorial
