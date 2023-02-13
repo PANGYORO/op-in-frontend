@@ -2,6 +2,7 @@ package com.c211.opinbackend.repo.service.repo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -18,6 +19,7 @@ import com.c211.opinbackend.persistence.repository.RepoRepository;
 import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.repo.model.response.RepoDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
+import com.c211.opinbackend.repo.model.response.RepositoryResponseSimpleDto;
 import com.c211.opinbackend.repo.service.mapper.RepoMapper;
 
 import lombok.AllArgsConstructor;
@@ -53,6 +55,13 @@ public class RepositoryServiceImp implements RepositoryService {
 			repositoryResponseDtoList.add(repositoryResponseDto);
 		}
 		return repositoryResponseDtoList;
+	}
+
+	@Override
+	public List<RepositoryResponseSimpleDto> findRepositorySimpleList(Long memberId) {
+		List<Repository> findRepos = repoRepository.findAllByMemberId(memberId);
+
+		return findRepos.stream().map(repo -> RepoMapper.toSimepleRepoDto(repo)).collect(Collectors.toList());
 	}
 
 	/**

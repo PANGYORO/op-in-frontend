@@ -15,6 +15,7 @@ import com.c211.opinbackend.auth.model.request.MemberEmailRequest;
 import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.repo.model.response.RepoDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
+import com.c211.opinbackend.repo.model.response.RepositoryResponseSimpleDto;
 import com.c211.opinbackend.repo.service.repo.RepositoryPostService;
 import com.c211.opinbackend.repo.service.repo.RepositoryService;
 
@@ -45,6 +46,12 @@ public class RepoController {
 			log.info(dto.toString());
 		}
 		return new ResponseEntity<>(repositoryResponseDtoList, HttpStatus.OK);
+	}
+
+	@GetMapping("/member/{memberId}")
+	public ResponseEntity<?> getUserRepos(@PathVariable Long memberId) {
+		List<RepositoryResponseSimpleDto> results = repositoryService.findRepositorySimpleList(memberId);
+		return ResponseEntity.ok().body(results);
 	}
 
 	/**
