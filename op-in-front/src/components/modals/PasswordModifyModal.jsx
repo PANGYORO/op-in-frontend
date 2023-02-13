@@ -7,7 +7,7 @@ import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
 import { useToast } from "@hooks/useToast";
 
-function Button({ onClick = () => {}, loading = false, children }) {
+function Button({ onClick = () => { }, loading = false, children }) {
   return (
     <button
       type="submit"
@@ -126,7 +126,7 @@ export default function PasswordModifyModal({ open, setOpen }) {
         setToast({ message: "비밀번호가 변경되었습니다." });
       })
       .catch((err) => {
-        console.log(err);
+        console.debug(err);
       });
   };
   return (

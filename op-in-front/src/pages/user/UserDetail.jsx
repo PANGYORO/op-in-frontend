@@ -82,7 +82,7 @@ const UserDetail = () => {
         getMember();
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   };
 
@@ -101,11 +101,11 @@ const UserDetail = () => {
     await http
       .get(`post/member/${currentNick}`)
       .then(({ data }) => {
-        console.log(data);
+        console.debug(data);
         setMyPosts([...data]);
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   };
 
@@ -113,7 +113,7 @@ const UserDetail = () => {
     getMember();
     getMyPosts();
     if (!isMe) setFollowButton();
-    console.log(myInfo);
+    console.debug(myInfo);
   }, []);
 
   const setFollowButton = async () => {
@@ -122,25 +122,25 @@ const UserDetail = () => {
         nickname: currentNick,
       })
       .then(({ data }) => {
-        console.log("팔로우 체크 : " + (data ? "following" : "nofollow"));
+        console.debug("팔로우 체크 : " + (data ? "following" : "nofollow"));
         if (data) {
           setFollowState({
             state: true,
             classValue: followingClassState,
             value: "following",
           });
-          console.log("initial following setted");
+          console.debug("initial following setted");
         } else {
           setFollowState({
             state: false,
             classValue: followClassState,
             value: "follow",
           });
-          console.log("initial nofollow setted");
+          console.debug("initial nofollow setted");
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   };
 
@@ -160,7 +160,7 @@ const UserDetail = () => {
           setToast({ message: currentNick + "님 팔로우가 취소되었습니다." });
         })
         .catch((error) => {
-          console.log(error);
+          console.debug(error);
         });
     }
     // 언팔로우 상태라면 팔로우
@@ -178,7 +178,7 @@ const UserDetail = () => {
           setToast({ message: currentNick + "님을 팔로우합니다." });
         })
         .catch((error) => {
-          console.log(error);
+          console.debug(error);
         });
     }
   };

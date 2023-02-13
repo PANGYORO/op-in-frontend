@@ -5,11 +5,11 @@ import { useToast } from "@hooks/useToast";
 
 
 const PostList = ({ posts }) => {
-  // console.log(posts);
+  // console.debug(posts);
   return (
     <div className="grid grid-cols-2 gap-4 ml-4">
       {posts.map((post) => {
-        // console.log(post.id);
+        // console.debug(post.id);
         return (
           <Post
             key={post.id}
@@ -46,7 +46,7 @@ const News = () => {
         setResults([...data.repoPostSimpleResponseList]);
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   }, [])
 
@@ -58,7 +58,7 @@ const News = () => {
         setResults([...data.repoPostSimpleResponseList]);
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   }
 
@@ -82,8 +82,8 @@ const News = () => {
   }
 
   const Pagination = ({ curPage, totalPage }) => {
-    let start = Math.floor((curPage + 1) / 10) * 10;
-    let tenend = Math.ceil((curPage + 1) / 10) * 10;
+    let start = Math.floor(((curPage % 10) == 9 ? curPage : (curPage + 1)) / 10) * 10;
+    let tenend = Math.ceil(((curPage % 10) == 9 ? curPage : (curPage + 1)) / 10) * 10;
     let end = tenend > totalPage ? totalPage : tenend;
     let result = [];
     for (let i = start; i < end; i++) {

@@ -4,8 +4,8 @@ import { useToast } from "@hooks/useToast";
 import http from "@api/http";
 
 const TagInfo = ({ title, taglist = [], ismine }) => {
-  // console.log(taglist);
-  // console.log(taglist.length);
+  // console.debug(taglist);
+  // console.debug(taglist.length);
   const [openState, setOpenState] = useState(false);
   const [curlength, setCurlength] = useState(0);
   const [amount, setAmount] = useState(0);
@@ -16,7 +16,7 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
     setAmount(taglist.length);
   });
 
-  // console.log(curlength + " " + amount);
+  // console.debug(curlength + " " + amount);
   const { setToast } = useToast();
 
   useEffect(() => {

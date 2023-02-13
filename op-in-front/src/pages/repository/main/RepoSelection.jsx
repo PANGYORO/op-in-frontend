@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import http from "@api/http";
 
 const RepoList = ({ repos }) => {
-  console.log(repos);
+  console.debug(repos);
   return (
     <div className="grid grid-cols-3 gap-4">
       {repos.map((repo) => {
@@ -28,18 +28,18 @@ const RepoSelection = () => {
   const user = useRecoilValue(userInfo);
   const navigate = useNavigate();
   const [repoDatas, setRepoData] = useState([]);
-  console.log(user);
+  console.debug(user);
   useEffect(() => {
     if (!user.logined) navigate(`/repo/recommand`);
     else
       http
         .get(`repo/member/${user.id}`)
         .then(({ data }) => {
-          console.log(data);
+          console.debug(data);
           setRepoData([...data]);
         })
         .catch((error) => {
-          console.log(error);
+          console.debug(error);
         });
   }, []);
 

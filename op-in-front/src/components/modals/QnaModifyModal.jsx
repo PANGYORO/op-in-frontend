@@ -20,7 +20,7 @@ export default function QnaModifyModal({ qnaId, previousValue, open, setOpen, pr
         propFunction({ postContent: previousValue + "\n" + text, qnaId: qnaId });
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   };
 

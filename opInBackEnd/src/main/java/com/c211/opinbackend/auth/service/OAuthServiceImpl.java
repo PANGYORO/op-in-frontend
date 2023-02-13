@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,25 +28,13 @@ import com.c211.opinbackend.auth.jwt.TokenProvider;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.response.OAuthAccessTokenResponse;
-import com.c211.opinbackend.batch.dto.RepoTechLanguageDto;
-import com.c211.opinbackend.batch.dto.github.CommitDto;
-import com.c211.opinbackend.batch.dto.github.ContributorDto;
-import com.c211.opinbackend.batch.dto.github.RepositoryDto;
 import com.c211.opinbackend.batch.dto.mapper.CommitHistoryMapper;
 import com.c211.opinbackend.batch.dto.mapper.PullRequestMapper;
-import com.c211.opinbackend.batch.dto.mapper.RepoMapper;
 import com.c211.opinbackend.batch.service.RepositoryService;
 import com.c211.opinbackend.batch.step.Action;
 import com.c211.opinbackend.constant.GitHub;
-import com.c211.opinbackend.exception.api.ApiExceptionEnum;
-import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.persistence.entity.Member;
-import com.c211.opinbackend.persistence.entity.PullRequest;
-import com.c211.opinbackend.persistence.entity.Repository;
-import com.c211.opinbackend.persistence.entity.RepositoryContributor;
-import com.c211.opinbackend.persistence.entity.RepositoryTechLanguage;
 import com.c211.opinbackend.persistence.entity.Role;
-import com.c211.opinbackend.persistence.entity.TechLanguage;
 import com.c211.opinbackend.persistence.repository.CommitHistoryRepository;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
 import com.c211.opinbackend.persistence.repository.PullRequestRepository;
@@ -64,16 +53,8 @@ public class OAuthServiceImpl implements OAuthService {
 	private final TokenProvider tokenProvider;
 	private final Action action;
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
-	private final RepositoryService repositoryService;
-	private final TechLanguageRepository techLanguageRepository;
-	private final RepoTechLanguageRepository repoTechLanguageRepository;
-	private final RepoMapper repoMapper;
-	private final CommitHistoryRepository commitHistoryRepository;
-	private final CommitHistoryMapper commitHistoryMapper;
-	private final PullRequestMapper pullRequestMapper;
-	private final RepoContributorRepository repoContributorRepository;
-	private final PullRequestRepository pullRequestRepository;
 	private final MemberRepository memberRepository;
+	private final AsyncService asyncService;
 	@Value("${security.oauth.github.client-id}")
 	private String clientId;
 	@Value("${security.oauth.github.client-secret}")
@@ -97,6 +78,10 @@ public class OAuthServiceImpl implements OAuthService {
 		OAuthAccessTokenResponse tokenResponse = getToken(code, redirectUri);
 		MemberDto memberDto = getUserProfile(tokenResponse);
 		Member member = saveOrUpdate(memberDto);
+		final CompletableFuture<String> certResult = asyncService.process(member);
+		certResult.thenAccept(result -> {
+			log.info("GITHUB REPOSITORY UPDATE STATUS: {}",result);
+		});
 		TokenDto token = authorize(member);
 		return token;
 	}
