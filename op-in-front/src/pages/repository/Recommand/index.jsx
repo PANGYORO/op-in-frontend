@@ -5,13 +5,13 @@ import Repo from "@components/repository/Repo";
 //axios 사용해서 정보 전달
 // const arr = ['배열 요소1', '배열 요소2', '배열 요소3'];
 // arr.map((elem, index) => {
-//   console.log(elem);
-//   console.log(index);
+//   console.debug(elem);
+//   console.debug(index);
 // });
 
 // repos.map((elem, index) => {
-//   console.log(elem);
-//   console.log(index);
+//   console.debug(elem);
+//   console.debug(index);
 // })
 
 function RecommandIndex() {
@@ -23,11 +23,11 @@ function RecommandIndex() {
     await http
       .post("post/")
       .then((response) => {
-        console.log(myinfo);
+        console.debug(myinfo);
         setMyInfo(response.data);
       })
-      .catch(() => console.log("error"));
-    console.log("error");
+      .catch(() => console.debug("error"));
+    console.debug("error");
   }
 
   // async function RepoData() {
@@ -38,11 +38,11 @@ function RecommandIndex() {
   //   //   .then((response) => {
   //   //     // alert(currentEmail);
   //   //     // alert(response.data.nickname);
-  //   //     console.log(response.data);
+  //   //     console.debug(response.data);
   //   //     setMyInfo(response.data);
   //   //   })
   //   //   .catch(() => alert("error"));
-  //   console.log(myinfo);
+  //   console.debug(myinfo);
   // }
 
   useEffect(() => {

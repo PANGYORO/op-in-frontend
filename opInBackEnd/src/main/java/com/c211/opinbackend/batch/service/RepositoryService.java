@@ -19,8 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 public class RepositoryService {
 	private final RepoRepository repoRepository;
 	private final MemberRepository memberRepository;
-	private final PullRequestRepository pullRequestRepository;
-	private final RepoMapper repoMapper;
 
 	public Repository findById(Long id) {
 		return repoRepository.findById(id).orElse(null);
@@ -28,7 +26,7 @@ public class RepositoryService {
 
 	public Repository saveOrUpdateRepository(RepositoryDto repositoryDto) {
 		Member member = memberRepository.findByGithubId(repositoryDto.getOwner().getId().toString()).orElse(null);
-		Repository repo = repoMapper.toRepository(repositoryDto, member);
+		Repository repo = RepoMapper.toRepository(repositoryDto, member);
 		return repoRepository.save(repo);
 	}
 

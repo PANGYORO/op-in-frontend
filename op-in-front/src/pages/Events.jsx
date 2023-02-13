@@ -3,7 +3,7 @@ import Event from "@components/event/event";
 import axios from "axios";
 
 const EventList = ({ events }) => {
-  // console.log(events);
+  // console.debug(events);
   return (
     <div className="w-full pt-4">
       <header className="z-40 items-center w-full mx-4 mb-4 h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl">
@@ -29,12 +29,12 @@ const Eventselect = () => {
     await axios
       .get("http://i8c211.p.ssafy.io:5001/event")
       .then(({ data }) => {
-        // console.log(data);
+        // console.debug(data);
         setEventData([...data]);
-        // console.log(data,'호호')
+        // console.debug(data,'호호')
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   };
 

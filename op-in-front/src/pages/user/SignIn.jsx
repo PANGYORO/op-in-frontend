@@ -110,7 +110,7 @@ function LoginForm() {
         login(data.accessToken);
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
         setToast({
           message: error?.response?.data?.message || "로그인에 실패했습니다.",
         });
