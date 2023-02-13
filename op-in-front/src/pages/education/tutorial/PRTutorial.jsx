@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSpring, animated } from '@react-spring/web'
+import { useSpring, animated, useTransition, useSpringRef } from '@react-spring/web'
 import { useNavigate } from 'react-router';
 import Joyride from 'react-joyride'
 import ReactPlayer from 'react-player'
@@ -17,6 +17,7 @@ import cpr from '@assets/video/cpr.mov'
 import complete from '@assets/video/complete.mov'
 import { Progress } from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
+import styles from './styles.module.css';
 
 
 
@@ -25,8 +26,53 @@ import "react-sweet-progress/lib/style.css";
 
 
 function PRTutorial() {
+  const [index, set] = useState(0);
+    const onClick = () => set(state => (state + 1) % 3);
+    const transRef = useSpringRef();
+    const transitions = useTransition(index, {
+        ref: transRef,
+        keys: null,
+        from: { opacity: 0, transform: 'translate3d(100%,0,0)' },
+        enter: { opacity: 1, transform: 'translate3d(0%,0,0)' },
+        leave: { opacity: 0, transform: 'translate3d(-50%,0,0)' },
+    });
+    useEffect(() => {
+        transRef.start();
+    }, [index]);
   
 
+  const pages = [
+    ({ style }) => React.createElement(animated.div, { style: Object.assign(Object.assign({}, style), { background: 'white' }) },
+      <ReactPlayer className='shadow-md'
+        url={curContent} 
+        loop={true} 
+        playing={true}
+        muted={true} 
+        height='400px'
+        width='800px'
+      />
+    ),
+    ({ style }) => React.createElement(animated.div, { style: Object.assign(Object.assign({}, style), { background: 'white' }) },
+      <ReactPlayer className='shadow-md'
+        url={curContent} 
+        loop={true} 
+        playing={true}
+        muted={true} 
+        height='400px'
+        width='800px'
+      />
+    ),
+    ({ style }) => React.createElement(animated.div, { style: Object.assign(Object.assign({}, style), { background: 'white' }) },
+      <ReactPlayer className='shadow-md'
+        url={curContent} 
+        loop={true} 
+        playing={true}
+        muted={true} 
+        height='400px'
+        width='800px'
+      />
+    ),
+  ];
   const navigate =  useNavigate()
   const contentsList = [fork1, fork2, clone, clone2, branch, contributor, add, commit, push, pullReque, cpr, complete]
   const [curNum, setCurNum] = useState(0)
@@ -162,6 +208,7 @@ function PRTutorial() {
     if(!state){
       toggle(!state)
     }
+    set(state => (state + 1) % 3);
     
   }
 
@@ -170,6 +217,7 @@ function PRTutorial() {
     if(!state){
       toggle(!state)
     }
+    set(state => (state + 1) % 3);
     
   }
 
@@ -203,16 +251,14 @@ function PRTutorial() {
           }}
           
         />
-      <div className='py-8'>
+      <div className='py-4'>
       </div>
-      <div className="grid justify-center shadow-md py-10 bg-white">
-        <div className='grid grid-cols-4 '>
+      <div className="grid shadow-md pt-2 bg-white">
+      <div className='grid grid-cols-4 '>
           <div></div>
           <div></div>
           <div></div>
           <div className='grid grid-cols-2'>
-          <div>
-          </div>
           { curNum !== contentsList.length - 1 ? (<button 
               className="flex justify-center shadow-md rounded-md border border-transparent bg-green-400 py-2 my-3  text-sm font-medium text-white hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-200 focus:ring-offset-2"
               onClick={() => {
@@ -236,31 +282,33 @@ function PRTutorial() {
           )}
           </div>
         </div>
-        <div id="player" className='shadow-md rounded-xl border '>
+
+      </div>
+
+      <div className="grid justify-center shadow-md py-2 bg-white">
+  
+        <div id="player" className='rounded-xl '>
           
-            <ReactPlayer className='shadow-md'
+            {/* <ReactPlayer className='shadow-md'
               url={curContent} 
               loop={true} 
               playing={true}
               muted={true} 
-              height='500px'
-              width='1000px'
-            />
+              height='400px'
+              width='800px'
+            /> */}
+            <div className={`fill ${styles.player}`} onClick={onClick}>
+              {transitions((style, i) => {
+                const Page = pages[i]
+                return <Page style={style} />
+              })}
+            </div>
 
         </div>
       </div>
-      <div className=" shadow-md py-8 px-10 bg-white">
+      <div className=" shadow-md py-4 px-10 bg-white">
         <p className='text-3xl'>
-          <animated.div
-                style={{
-                  opacity: x.to({ range: [0, 1], output: [0.3, 1] }),
-                  scale: x.to({
-                    range: [0, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 1],
-                    output: [1, 0.97, 0.9, 1.1, 0.9, 1.1, 1.03, 1],
-                  }),
-                }}>
-                {joyRideSteps[curNum][0].title}
-          </animated.div>
+          {joyRideSteps[curNum][0].title}
         </p>
         { curNum !== 0 ?(<Progress percent={(parseInt(100/contentsList.length + 1 )* curNum)+1 } />
         ):(
@@ -270,7 +318,7 @@ function PRTutorial() {
         <div className='grid grid-cols-4 shadow-md bg-white '>
           <div className='grid' >
             { curNum !== contentsList.length - 1 ? (<button
-              className="flex justify-center shadow-md rounded-md border border-transparent bg-yellow-400 mx-7 my-3 py-4 px-4 text-sm font-medium text-white hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-200 focus:ring-offset-2"
+              className="flex justify-center shadow-md rounded-md border border-transparent bg-yellow-400 mx-7 my-3 py-2 px-4 text-sm font-medium text-white hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-200 focus:ring-offset-2"
               onClick={(e) =>{
                 e.preventDefault()
                 navigate('/')}}
@@ -285,7 +333,7 @@ function PRTutorial() {
           <div></div>
           <div className='grid grid-cols-2'>
             { curNum ? (<button 
-                className='flex justify-center shadow-md rounded-md border border-transparent bg-indigo-400 mx-3 my-3 py-4 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+                className='flex justify-center shadow-md rounded-md border border-transparent bg-indigo-400 mx-3 my-3 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
                 onClick={preBtn}
               >
                 PREVIOUS
@@ -295,17 +343,17 @@ function PRTutorial() {
               )}
 
             { curNum !== contentsList.length - 1 ?(<button 
-              className='flex justify-center rounded-md shadow-md border border-transparent bg-indigo-400 mx-3 my-3 py-4 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+              className='flex justify-center rounded-md shadow-md border border-transparent bg-indigo-400 mx-3 my-3 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
               onClick={nextBtn}
             >
               NEXT
             </button>
             ) : (
               <button 
-              className='flex justify-center rounded-md shadow-md border border-transparent bg-indigo-400 mx-3 my-3 py-4 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+              className='flex justify-center rounded-md shadow-md border border-transparent bg-indigo-400 mx-3 my-3 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
               onClick={(e) =>{
                 e.preventDefault()
-                navigate('/')}}
+                navigate('/tutorial/complete')}}
             >
               
               COMPLETE
