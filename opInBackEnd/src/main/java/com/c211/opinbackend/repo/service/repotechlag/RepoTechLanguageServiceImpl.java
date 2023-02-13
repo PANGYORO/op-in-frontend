@@ -12,10 +12,10 @@ import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.entity.RepositoryTechLanguage;
 import com.c211.opinbackend.persistence.repository.RepoTechLanguageRepository;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RepoTechLanguageServiceImpl implements RepoTechLanguageService {
 	private final RepoTechLanguageRepository repoTechLanguageRepository;
 

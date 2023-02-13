@@ -1,7 +1,7 @@
 import React from "react";
 import PackageDocuments from "./education/documents/PackageDocuments";
 import { Tooltip } from "react-tooltip";
-import OpenSourceContribute from "@assets/OpenSourceContribute.png";
+import OpenSourceContribute from "@assets/oscontribute.png";
 import { useNavigate } from "react-router-dom";
 
 const TutorialContent = () => {
@@ -9,9 +9,16 @@ const TutorialContent = () => {
   return (
     <div className="p-3">
       <div className="grid grid-cols-5 gap-4 pb-4">
-        <img src={OpenSourceContribute} alt="OpenSource Contribute" className="col-span-2" />
+        <img
+          src={OpenSourceContribute}
+          alt="OpenSource Contribute"
+          className="col-span-2"
+        />
         <div className="col-span-3">
-          <Tooltip anchorId="firstcontribute" content="go to First Contribute Github page" />
+          <Tooltip
+            anchorId="firstcontribute"
+            content="go to First Contribute Github page"
+          />
           <p>
             Op-in에서는{" "}
             <a
@@ -23,7 +30,8 @@ const TutorialContent = () => {
             >
               &ldquo;firstcontributions&rdquo; github
             </a>
-            에서 readme.md 파일을 수정하여 오픈소스에 기여해보는 방식으로 튜토리얼을 제공합니다.
+            에서 readme.md 파일을 수정하여 오픈소스에 기여해보는 방식으로
+            튜토리얼을 제공합니다.
             <br />
             <br />
           </p>

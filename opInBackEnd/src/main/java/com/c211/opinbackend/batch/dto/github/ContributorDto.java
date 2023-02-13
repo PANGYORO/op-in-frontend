@@ -1,5 +1,6 @@
 package com.c211.opinbackend.batch.dto.github;
 
+import com.c211.opinbackend.persistence.entity.Repository;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
@@ -30,4 +31,6 @@ public class ContributorDto {
 	private String reposUrl;
 
 	public Long contributions;
+
+	private Repository repository;
 }
