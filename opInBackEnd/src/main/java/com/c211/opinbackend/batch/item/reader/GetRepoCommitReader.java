@@ -29,8 +29,7 @@ public class GetRepoCommitReader implements ItemReader<CommitDto> {
 	private int nextIndex = 0;//리스트의 데이터를 하나씩 인덱스를 통해 가져온다.
 	private final RepoRepository repoRepository;
 	private final Action action;
-	@Value("${githubToken2}")
-	private String githubToken;
+	private final String githubToken;
 
 	@Override
 	public CommitDto read() throws Exception,

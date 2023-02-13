@@ -32,9 +32,7 @@ public class GetRepoPullRequestReader implements ItemReader<PullRequest> {
 	private final RepoRepository repoRepository;
 	private final PullRequestMapper pullRequestMapper;
 	private final Action action;
-
-	@Value("${githubToken3}")
-	private String githubToken;
+	private final String githubToken;
 
 	@Override
 	public PullRequest read() throws

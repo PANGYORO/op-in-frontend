@@ -6,6 +6,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,6 +33,8 @@ public class GetRepoTechLanguageJobConfig {
 	private final TechLanguageRepository techLanguageRepository;
 	private final RepoTechLanguageRepository repoTechLanguageRepository;
 	private final Action action;
+	@Value("${githubToken2}")
+	private String githubToken;
 
 
 	@Bean
@@ -49,7 +52,7 @@ public class GetRepoTechLanguageJobConfig {
 		return stepBuilderFactory.get("getAllRepositoryTechLanguageStep")
 			.<RepoTechLanguageDto
 				, RepoTechLanguageDto>chunk(1)
-			.reader(new GetRepoTechLanguageReader(repoRepository, action))
+			.reader(new GetRepoTechLanguageReader(repoRepository, action, githubToken))
 			.writer(new GetRepoTechLanguageWriter(techLanguageRepository, repoTechLanguageRepository))
 			.build();
 	}
