@@ -2,7 +2,7 @@ import React from "react";
 // import OpenSource from "@assets/opensource.png";
 
 export default function post({ event }) {
-  // console.log(event)
+  // console.debug(event)
   const targetDate = new Date(event.endDate);
   const today = new Date();
   const diff = targetDate - today;

@@ -110,10 +110,10 @@ function Button({ topic, lan }) {
       });
 
       setToast({ message: "관심tag를 저장했습니다! 로그인 후 op-in을 사용해보세요" });
-      navigate("/signin");
+      navigate("/tutorial/choose");
     } catch (error) {
-      console.log(user.email);
-      console.log(error);
+      console.debug(user.email);
+      console.debug(error);
     }
   };
 
@@ -165,10 +165,10 @@ function SelectTag() {
     if (topic.includes(newTopic)) {
       const newTopicList = topic.filter((it) => it !== newTopic);
       setTopic(newTopicList);
-      console.log(topic);
+      console.debug(topic);
     } else {
       setTopic([newTopic, ...topic]);
-      console.log(topic);
+      console.debug(topic);
     }
   };
 
@@ -176,11 +176,11 @@ function SelectTag() {
     if (lan.includes(newLan)) {
       const newLanList = lan.filter((it) => it !== newLan);
       setLan(newLanList);
-      console.log(lan);
+      console.debug(lan);
     } else {
       setLan([newLan, ...lan]);
-      console.log(lan);
-      console.log(topic);
+      console.debug(lan);
+      console.debug(topic);
     }
   };
 

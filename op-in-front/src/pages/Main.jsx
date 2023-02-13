@@ -7,6 +7,8 @@ import UserFind from "@pages/user/UserFind";
 import UserDetail from "@pages/user/UserDetail";
 import SelectTag from "@pages/user/SelectTag";
 import PRTutorial from "@pages/education/tutorial/PRTutorial";
+import TutorialComplete from '@pages/education/tutorial/tutorialComplete';
+import ChooseTutorial from '@pages/education/tutorial/ChooseTutorial';
 
 import Search from "@pages/Search";
 import NotFound from "@pages/NotFound";
@@ -49,6 +51,9 @@ export default function Main() {
           <Route path="userdetail" element={<UserDetail />} />
           <Route path="selecttag" element={<SelectTag />} />
           <Route path="/tutorial/pr" element={<PRTutorial />} />
+          <Route path="/tutorial/complete" element={<TutorialComplete />} />
+          <Route path="/tutorial/choose" element={<ChooseTutorial />} />
+          
           <Route exact path="/" element={<MainTemplate />}>
             <Route exact index element={<DashBoard />} />
             <Route path="repo" element={<RepoTemplate />}>

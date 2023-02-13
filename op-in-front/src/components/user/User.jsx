@@ -21,15 +21,15 @@ const User = ({ profileimg = BasicProfile, nickname = "test", isfollow = false }
     setFollowState(
       isfollow
         ? {
-            state: true,
-            classValue: followingClassState,
-            value: "following",
-          }
+          state: true,
+          classValue: followingClassState,
+          value: "following",
+        }
         : {
-            state: false,
-            classValue: followClassState,
-            value: "follow",
-          }
+          state: false,
+          classValue: followClassState,
+          value: "follow",
+        }
     );
   }, []);
 
@@ -57,7 +57,7 @@ const User = ({ profileimg = BasicProfile, nickname = "test", isfollow = false }
           setToast({ message: nickname + "님 팔로우가 취소되었습니다." });
         })
         .catch((error) => {
-          console.log(error);
+          console.debug(error);
         });
     }
     // 언팔로우 상태라면 팔로우
@@ -75,7 +75,7 @@ const User = ({ profileimg = BasicProfile, nickname = "test", isfollow = false }
           setToast({ message: nickname + "님을 팔로우합니다." });
         })
         .catch((error) => {
-          console.log(error);
+          console.debug(error);
         });
     }
   };

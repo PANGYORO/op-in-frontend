@@ -9,7 +9,7 @@ const PostDeleteModal = ({ open, setOpen, id, propFunction }) => {
 
   const deleteLogic = async () => {
     // 서버에 데이터 보내는 로직
-    console.log(id);
+    console.debug(id);
     await http
       .post(`post/delete/${id}`)
       .then(() => {
@@ -17,7 +17,7 @@ const PostDeleteModal = ({ open, setOpen, id, propFunction }) => {
         setOpen(false);
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   };
 
