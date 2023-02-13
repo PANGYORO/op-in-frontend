@@ -5,9 +5,11 @@ import axios from "axios";
 const EventList = ({ events }) => {
   // console.log(events);
   return (
-    <div className="h-screen overflow-auto w-full pt-4">
+    <div className="w-full pt-4">
       <header className="z-40 items-center w-full mx-4 mb-4 h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl">
-        <div className="relative flex items-center w-full h-full group ml-3 text-2xl">Events</div>
+        <div className="relative flex items-center w-full h-full group ml-3 text-2xl">
+          Events
+        </div>
       </header>
       {events.map((event) => {
         return <Event key={event.id} event={event} />;

@@ -214,7 +214,9 @@ const PostDetail = ({
     <>
       <div className="lg:flex lg:items-center lg:justify-between w-full mx-auto py-12 px-4 sm:px-6 lg:py-5 lg:px-8 z-20">
         <h1 className="text-3xl font-extrabold text-black dark:text-white sm:text-4xl">
-          <span className="block flex flex-col place-items-center">{postTitle}</span>
+          <span className="block flex flex-col place-items-center">
+            {postTitle}
+          </span>
         </h1>
       </div>
 
@@ -223,7 +225,11 @@ const PostDetail = ({
         <div className="flex items-start text-left">
           <div className="flex-shrink-0">
             <div className="relative inline-block">
-              <Link to={`/userdetail`} state={authorMemberName} className="relative block">
+              <Link
+                to={`/userdetail`}
+                state={authorMemberName}
+                className="relative block"
+              >
                 <img
                   alt="profile"
                   src={authorMemberAvatar || DefaultImg}
@@ -236,7 +242,9 @@ const PostDetail = ({
             <span className="ml-2 font-bold text-gray-600 dark:text-gray-200">
               <h2>{authorMemberName}</h2>
             </span>
-            <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">{date}</span>
+            <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">
+              {date}
+            </span>
             <button
               onClick={() =>
                 navigate(`/repo/${repoId}`, {
@@ -407,7 +415,7 @@ const PostView = () => {
   };
 
   return (
-    <div className="w-full m-4 p-6 bg-white h-screen shadow-lg rounded-2xl dark:bg-gray-700 h-screen overflow-auto">
+    <div className="w-full m-4 p-6 bg-white shadow-lg rounded-2xl dark:bg-gray-700">
       {detail && <PostDetail {...detail} />}
     </div>
   );
