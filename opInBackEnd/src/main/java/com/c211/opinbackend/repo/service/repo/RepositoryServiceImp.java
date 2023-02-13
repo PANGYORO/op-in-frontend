@@ -12,8 +12,10 @@ import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
 import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
+import com.c211.opinbackend.persistence.entity.Enterprise;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.Repository;
+import com.c211.opinbackend.persistence.repository.EnterpriseRepository;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
 import com.c211.opinbackend.repo.model.dto.RepoDto;
@@ -31,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RepositoryServiceImp implements RepositoryService {
 	private final RepoRepository repoRepository;
 	private final MemberRepository memberRepository;
+	private final EnterpriseRepository enterpriseRepository;
 
 	@Override
 	@Transactional
@@ -95,5 +98,16 @@ public class RepositoryServiceImp implements RepositoryService {
 		);
 
 		return RepoMapper.toDetailResponse(repository);
+	}
+
+	@Override
+	public boolean addEnter(String title) {
+		boolean val = true;
+		try {
+			enterpriseRepository.save(Enterprise.builder().title(title).build());
+		}catch (Exception e) {
+			val = false;
+		}
+		return val;
 	}
 }

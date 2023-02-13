@@ -1,6 +1,9 @@
 package com.c211.opinbackend.member.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -21,6 +24,7 @@ import com.c211.opinbackend.auth.model.request.MemberNicknameRequest;
 import com.c211.opinbackend.auth.model.request.MemberPasswordRequest;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.auth.service.MailService;
+import com.c211.opinbackend.batch.step.Recommend;
 import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
@@ -33,6 +37,8 @@ import com.c211.opinbackend.member.model.response.FileUploadResponse;
 import com.c211.opinbackend.member.service.MemberService;
 import com.c211.opinbackend.member.service.S3FileUploadService;
 import com.c211.opinbackend.persistence.entity.Member;
+import com.c211.opinbackend.persistence.entity.RepositoryFollow;
+import com.c211.opinbackend.persistence.repository.RepositoryFollowRepository;
 import com.c211.opinbackend.util.SecurityUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -47,6 +53,33 @@ public class MemberController {
 	private final MemberService memberService;
 	private final MailService mailService;
 	private final S3FileUploadService s3FileUploadService;
+
+	private final RepositoryFollowRepository repositoryFollowRepository;
+
+	@GetMapping("/test1")
+	public ResponseEntity<?> getReco() {
+		Map<String, List<String>> repoFollowMap = new HashMap<>();
+
+		// repository_follow 관계를 돌면서 map에 key = from member, value = to member (String 값 더하기) 후 return
+		List<RepositoryFollow> repoFollow = repositoryFollowRepository.findAll();
+
+		for (RepositoryFollow follow : repoFollow) {
+			String memberId = String.valueOf(follow.getMember().getId());
+			List<String> followRepo = new ArrayList<>();
+			followRepo.add(String.valueOf(follow.getRepository().getId()));
+
+			if (repoFollowMap.get(memberId) == null) {
+				repoFollowMap.put(memberId, followRepo);
+			}else {
+				List<String> on = repoFollowMap.get(memberId);
+				on.addAll(followRepo);
+				repoFollowMap.put(memberId, on);
+			}
+
+		}
+
+		return ResponseEntity.ok().body(repoFollow.toString());
+	}
 
 	/**
 	 * 로그인 되어 있다면 내정보를 가져올수 있는 api
