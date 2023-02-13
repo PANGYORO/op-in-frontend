@@ -52,7 +52,7 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="ms:absolute h-screen my-4 ml-4 shadow-lg lg:block w-64">
+    <div className="ms:absolute h-screen my-4 ml-4 shadow-lg lg:block " >
       <div className="h-full bg-white rounded-2xl dark:bg-gray-700 w-64">
         <div className="flex items-center justify-center pt-6">
           <Link

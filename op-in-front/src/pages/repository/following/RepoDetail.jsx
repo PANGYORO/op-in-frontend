@@ -25,11 +25,7 @@ const RepoDetail = () => {
 
   const FollowButton = () => {
     return (
-      <button
-        type="button"
-        onClick={() => followStateChange()}
-        className={followState.classValue}
-      >
+      <button type="button" onClick={() => followStateChange()} className={followState.classValue}>
         {followState.value}
       </button>
     );
@@ -125,15 +121,12 @@ const RepoDetail = () => {
   return (
     repoDetail && (
       <div className="flex flex-auto w-full mt-4">
-        <div className="w-2/3">
+        <div className="w-3/4">
           <div className="ml-4 mb-4">
             <header className="z-40 items-center w-full h-15 pb-3 bg-white shadow-lg dark:bg-gray-700 rounded-t-2xl">
               <div className="flex justify-between pt-3 pl-3 text-2xl">
                 <span>
-                  <span className="font-semibold">
-                    {" "}
-                    Current Repository :&nbsp;
-                  </span>
+                  <span className="font-semibold"> Current Repository :&nbsp;</span>
                   <span className="font-bold"> {repoDetail?.title}</span>
                 </span>
                 {hasAuth && auth.id !== repoDetail.ownerId && (
@@ -170,7 +163,7 @@ const RepoDetail = () => {
             )}
           </div>
         </div>
-        <div className="w-1/3 h-full max-2xl:hidden">
+        <div className="w-1/4 h-full max-xl:hidden">
           <Status repoDetail={repoDetail} />
         </div>
       </div>
@@ -178,4 +171,3 @@ const RepoDetail = () => {
   );
 };
 export default RepoDetail;
-
