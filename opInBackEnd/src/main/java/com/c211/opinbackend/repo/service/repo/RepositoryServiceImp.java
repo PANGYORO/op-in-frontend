@@ -2,6 +2,7 @@ package com.c211.opinbackend.repo.service.repo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -15,7 +16,10 @@ import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
+import com.c211.opinbackend.repo.model.dto.RepoDto;
+import com.c211.opinbackend.repo.model.response.RepoDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
+import com.c211.opinbackend.repo.model.response.RepositoryResponseSimpleDto;
 import com.c211.opinbackend.repo.service.mapper.RepoMapper;
 
 import lombok.AllArgsConstructor;
@@ -53,4 +57,43 @@ public class RepositoryServiceImp implements RepositoryService {
 		return repositoryResponseDtoList;
 	}
 
+	@Override
+	public List<RepositoryResponseSimpleDto> findRepositorySimpleList(Long memberId) {
+		List<Repository> findRepos = repoRepository.findAllByMemberId(memberId);
+
+		return findRepos.stream().map(repo -> RepoMapper.toSimepleRepoDto(repo)).collect(Collectors.toList());
+	}
+
+	/**
+	 * 임시사용되는 컨트롤러 나중에 지워야함
+	 *
+	 * @param memberEmail
+	 * @param repoDto
+	 * @return
+	 */
+	@Override
+	@Transactional
+	public Boolean uploadRepository(String memberEmail, RepoDto repoDto) {
+		// 맴버 없이 래포지토리가 등록 가능해야한다
+		Member member = memberRepository.findByEmail(memberEmail)
+			.orElseGet(null);
+		try {
+
+			Repository repository = RepoMapper.toEntity(member, repoDto);
+			log.info(repository.getName());
+			repoRepository.save(repository);
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+		return true;
+	}
+
+	@Override
+	public RepoDetailResponse getDetailResponse(Long repoId) {
+		Repository repository = repoRepository.findById(repoId).orElseThrow(
+			() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_EXIST_EXCEPTION)
+		);
+
+		return RepoMapper.toDetailResponse(repository);
+	}
 }

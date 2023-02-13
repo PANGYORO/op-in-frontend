@@ -83,8 +83,8 @@ public class Repository {
 	List<PullRequest> pullRequestList = new ArrayList<>();
 
 	public void setPullRequestList(List<PullRequest> pullRequestList) {
-		for(PullRequest pr : pullRequestList) {
-			if(!pullRequestList.contains(pr)) {
+		for (PullRequest pr : pullRequestList) {
+			if (!pullRequestList.contains(pr)) {
 				pr.setRepository(this);
 				this.pullRequestList.add(pr);
 			}

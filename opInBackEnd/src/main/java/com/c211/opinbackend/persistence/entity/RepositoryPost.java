@@ -15,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.BatchSize;
+
 import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
 import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
 import com.sun.istack.NotNull;
@@ -23,12 +25,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
+@BatchSize(size = 100)
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class RepositoryPost {
 	@Id
 	@GeneratedValue
@@ -58,9 +63,6 @@ public class RepositoryPost {
 	private LocalDateTime date;
 	@NotNull
 	private Boolean closeState;
-
-	@NotNull
-	private String imageUrl;
 
 	public void createPostToRepo(Repository repository) {
 		if (repository != null) {

@@ -1,54 +1,55 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-// import axios from "axios";
-
-// const Reopitem = ({ repos }) => {
-//     const { img, name, contributor, star } = repos;
-//     return (
-
-//     )
-//   }
-
-export default function Repo({ _id, _title, _content, _techLangs, _repoDetails }) {
+const Repo = ({
+  id = 423494644,
+  title = "JavaProject_PizzaOrder",
+  content = "2학년 2학기 '윈도우프로그래밍프로젝트' 과목 중 진행했던 팀 프로젝트 입니다.",
+  techLangs = [],
+}) => {
   const navigate = useNavigate();
-  const RepoTagList = () => {
-    const result = [];
-    const length = _techLangs == null ? 0 : _techLangs.length;
-    for (let i = 0; i < length; i++) {
-      result.push(
-        <span key={i} className="px-4 py-1  text-base rounded-full text-red-600  bg-red-200 ">
-          {_techLangs[i]}
-        </span>
-      );
-    }
-    return result;
-  };
+
   return (
     <>
       <div className="w-full inset-x-0 bottom-0 bg-white dark:bg-gray-800 shadow-lg rounded-xl p-4 flex flex-col">
         <div
           onClick={() =>
-            navigate(`/repo/${_id}`, {
-              state: _repoDetails,
+            navigate(`/repo/${id}`, {
+              state: id,
             })
           }
         >
           <div className="truncate">
-            <span className="text-lg font-bold">{_title}</span>
+            <span className="text-lg font-bold">{title}</span>
           </div>
           <div className="w-full h-24 text-clip overflow-hidden">
-            <p className="text-gray-600 dark:text-white my-5 pl-2">{_content}</p>
+            <p className="text-gray-600 dark:text-white my-5">{content}</p>
           </div>
         </div>
 
         {/* 여기 언어 공간 */}
-        <div>
-          <div className="inline-flex items-center bg-white leading-none ${props.textColor} rounded-lg p-2 shadow text-teal text-sm w-full">
-            <div className="overflow-hidden flex flex-wrap items-center gap-4">{RepoTagList()}</div>
+        {techLangs?.length > 0 && (
+          <div>
+            <div
+              className={`inline-flex items-center bg-white leading-none rounded-lg py-2 text-teal text-sm w-full`}
+            >
+              <div className="overflow-hidden flex flex-wrap items-center gap-2">
+                {techLangs.map((techLang, index) => {
+                  return (
+                    <span
+                      key={index}
+                      className="px-4 py-1  text-xs rounded-full text-red-600  bg-red-200 "
+                    >
+                      {techLang.title}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );
-}
+};
+export default Repo;

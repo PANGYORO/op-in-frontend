@@ -42,10 +42,12 @@ public class AuthController {
 
 	private final AuthService authService;
 	private final MemberService memberService;
+
 	@Value("${jwt.access-token-validity-in-seconds}")
-	private long accessTokenValidityInSeconds;
+	private int accessTokenValidityInSeconds;
+
 	@Value("${jwt.refresh-token-validity-in-seconds}")
-	private long refreshTokenValidityInSeconds;
+	private int refreshTokenValidityInSeconds;
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody MemberLoginRequest request, HttpServletResponse response) {
@@ -59,12 +61,12 @@ public class AuthController {
 		// 쿠키 생성
 		Cookie cookie = new Cookie("accessToken", token.getAccessToken());
 		cookie.setPath("/");
-		cookie.setMaxAge(((int)accessTokenValidityInSeconds/1000)-1);
+		cookie.setMaxAge(accessTokenValidityInSeconds);
 		response.addCookie(cookie);
 
 		Cookie cookie2 = new Cookie("refreshToken", token.getRefreshToken());
 		cookie2.setPath("/");
-		cookie2.setMaxAge(((int)refreshTokenValidityInSeconds/1000)-1);
+		cookie2.setMaxAge(refreshTokenValidityInSeconds);
 		response.addCookie(cookie2);
 
 		return new ResponseEntity<TokenDto>(token, httpHeaders, HttpStatus.OK);

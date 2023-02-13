@@ -5,5 +5,5 @@ import lombok.Getter;
 @Getter
 public class Request {
 	private String postContent;
-	private String postTile;
+	private String postTitle;
 }

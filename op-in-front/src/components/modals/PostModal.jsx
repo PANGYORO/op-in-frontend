@@ -3,19 +3,13 @@ import { Fragment, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
-import Prism from "prismjs";
-import "prismjs/themes/prism.css";
-import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
-import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
-import fontSize from "tui-editor-plugin-font-size";
 import http from "@api/http";
 
-export default function PostModal({ open, setOpen, propFunction }) {
+export default function PostModal({ open, setOpen, propFunction, repositoryId }) {
   const cancelButtonRef = useRef(null);
 
   const toastuiEditor = useRef();
   const [data, setData] = useState("");
-
   const [title, setText] = useState("");
 
   const textChangeHandler = (e) => {
@@ -31,21 +25,18 @@ export default function PostModal({ open, setOpen, propFunction }) {
     // 서버에 데이터 보내는 로직
     await http
       .post(`post`, {
-        repositoryId: 1,
+        repositoryId,
         title: title,
         content: data,
       })
-      .then(() => {
-        console.log("success");
+      .then(({ data }) => {
+        console.log(data);
+        propFunction(data);
       })
       .catch((error) => {
         console.log(error);
       });
 
-    propFunction({
-      title: title,
-      content: data,
-    });
     setText("");
   };
 
@@ -106,7 +97,6 @@ export default function PostModal({ open, setOpen, propFunction }) {
                     ["table", "image", "link"],
                     ["code", "codeblock"],
                   ]}
-                  plugins={[[codeSyntaxHighlight, { highlighter: Prism }, colorSyntax, fontSize]]}
                 />
                 <div className="bg-gray-50 px-4 p-4 sm:flex sm:flex-row-reverse sm:px-6">
                   <button

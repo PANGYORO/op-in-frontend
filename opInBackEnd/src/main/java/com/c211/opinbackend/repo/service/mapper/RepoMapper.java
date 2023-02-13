@@ -10,25 +10,63 @@ import com.c211.opinbackend.persistence.entity.RepositoryTechLanguage;
 import com.c211.opinbackend.persistence.entity.RepositoryTopic;
 import com.c211.opinbackend.repo.model.contributor.RepositoryContributorDto;
 import com.c211.opinbackend.repo.model.dto.RepoDto;
+import com.c211.opinbackend.repo.model.response.RepoDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoTechLangDto;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
+import com.c211.opinbackend.repo.model.response.RepositoryResponseSimpleDto;
 
 public class RepoMapper {
+
+	public static RepositoryResponseSimpleDto toSimepleRepoDto(Repository repository) {
+		List<RepoTechLangDto> repoTechLangDtoList = getRepoTechLangDtoList(repository);
+		return RepositoryResponseSimpleDto.builder()
+			.id(repository.getId())
+			.ownerId(repository.getMember().getId())
+			.title(repository.getName())
+			.content(repository.getName())
+			.techLangs(repoTechLangDtoList)
+			.star(repository.getStargazersCount())
+			.forkNum(repository.getForks())
+			.updateDate(repository.getUpdatedAt().toLocalDate())
+			.build();
+	}
 
 	public static RepositoryResponseDto toMyRepoDto(Repository repository) {
 		List<RepoTechLangDto> repoTechLangDtoList = getRepoTechLangDtoList(repository);
 		List<RepositoryContributorDto> repositoryContributorDtoList = getRepoTechContributorDtoList(repository);
 		List<String> topics = getTopicList(repository);
+		Member member = repository.getMember();
 		RepositoryResponseDto repositoryResponseDto = RepositoryResponseDto.builder()
 			.id(repository.getId())
+			.ownerId(member == null ? null : member.getId())
 			.title(repository.getName())
 			.content(repository.getName())
 			.techLangs(repoTechLangDtoList)
 			.contributors(repositoryContributorDtoList)
-			.star("1233455565")
-			.forkNum("123214141")
+			.star(repository.getStargazersCount())
+			.forkNum(repository.getForks())
 			.topicList(topics)
-			.gitContributors(null)
+			.build();
+		return repositoryResponseDto;
+	}
+
+	public static RepoDetailResponse toDetailResponse(Repository repository) {
+		List<RepoTechLangDto> repoTechLangDtoList = getRepoTechLangDtoList(repository);
+		List<String> topics = getTopicList(repository);
+		Member member = repository.getMember();
+		List<RepositoryContributorDto> repositoryContributorDtoList = getRepoTechContributorDtoList(repository);
+		RepoDetailResponse repositoryResponseDto = RepoDetailResponse.builder()
+			.id(repository.getId())
+			.ownerId(member == null ? null : member.getId())
+			.title(repository.getName())
+			.content(repository.getName())
+			.techLangs(repoTechLangDtoList)
+			.star(repository.getStargazersCount())
+			.contributors(repositoryContributorDtoList)
+			.forkNum(repository.getForks())
+			.topicList(topics)
+			.date(repository.getUpdatedAt())
+			.html(repository.getHtmlUrl())
 			.build();
 		return repositoryResponseDto;
 	}

@@ -19,8 +19,6 @@ public class RepositoryPostResponse {
 
 	private String content;
 
-	private String imageUrl;
-
 	private Boolean mergeFL;
 
 	private LocalDateTime date;

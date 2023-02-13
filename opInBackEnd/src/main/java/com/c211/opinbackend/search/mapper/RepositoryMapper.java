@@ -9,15 +9,15 @@ import com.c211.opinbackend.persistence.entity.RepositoryTechLanguage;
 import com.c211.opinbackend.persistence.entity.RepositoryTopic;
 import com.c211.opinbackend.repo.model.contributor.RepositoryContributorDto;
 import com.c211.opinbackend.repo.model.response.RepoTechLangDto;
-import com.c211.opinbackend.search.dto.RepositoryResponseDto;
+import com.c211.opinbackend.search.dto.response.RepositoryDto;
 
 public class RepositoryMapper {
-	public static RepositoryResponseDto toMyRepoDto(Repository repository) {
+	public static RepositoryDto toMyRepoDto(Repository repository) {
 		List<RepoTechLangDto> repoTechLangDtoList = getRepoTechLangDtoList(repository);
 		List<RepositoryContributorDto> repositoryContributorDtoList = getRepoTechContributorDtoList(repository);
 		List<String> topics = getTopicList(repository);
 
-		return RepositoryResponseDto.builder()
+		return RepositoryDto.builder()
 			.id(repository.getId())
 			.title(repository.getName())
 			.content(repository.getDescription())

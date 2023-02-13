@@ -1,16 +1,16 @@
 package com.c211.opinbackend.member.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.auth.model.response.TechLanguageResponse;
+import com.c211.opinbackend.member.model.dto.MemberDto;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.MemberFollow;
 
 public interface MemberService {
 
-	Optional<Member> findByEmail(String email);
+	MemberDto getMemberInfoBySecurityContext();
 
 	MypageResponse getMemberInfo(String email);
 
@@ -47,4 +47,12 @@ public interface MemberService {
 	boolean deleteLoginMemberTopic(String title);
 
 	boolean deleteLoginMemberTechLanguage(String title);
+
+	Boolean followRepo(Long repoId, String memberEmail);
+
+	Boolean followDeleteRepo(Long repoId, String memberEmail);
+
+	Boolean followCheckRepo(Long repoId, String memberEmail);
+
+	boolean changePwEmail(String email);
 }

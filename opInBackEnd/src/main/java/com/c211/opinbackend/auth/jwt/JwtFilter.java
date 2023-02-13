@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.Claims;
@@ -37,8 +36,9 @@ public class JwtFilter extends OncePerRequestFilter {
 	}
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-		throws IOException, ServletException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws
+		IOException,
+		ServletException {
 
 		String accessToken = null;
 		String refreshToken = null;
@@ -47,14 +47,15 @@ public class JwtFilter extends OncePerRequestFilter {
 			Cookie[] cookies = request.getCookies();
 			if (cookies != null) {
 				for (Cookie cookie : cookies) {
-					if ("accessToken".equals(cookie.getName()))
+					if ("accessToken".equals(cookie.getName())) {
 						accessToken = cookie.getValue();
-					if ("refreshToken".equals(cookie.getName()))
+					}
+					if ("refreshToken".equals(cookie.getName())) {
 						refreshToken = cookie.getValue();
+					}
 				}
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			throw new RemoteException("JwtFilter -> get Cookies error");
 		}
 
@@ -67,7 +68,7 @@ public class JwtFilter extends OncePerRequestFilter {
 					Authentication authentication = tokenProvider.getAuthentication(accessToken);
 					SecurityContextHolder.getContext().setAuthentication(authentication);
 				}
-			// 어세스 토큰이 없다면
+				// 어세스 토큰이 없다면
 			} else {
 				// 리프레쉬 토큰 유효성 검사
 				if (tokenProvider.validateToken(refreshToken)) {
@@ -85,7 +86,7 @@ public class JwtFilter extends OncePerRequestFilter {
 					//쿠키에 토큰 추가
 					Cookie cookie = new Cookie("accessToken", newAccessToken);
 					cookie.setPath("/");
-					cookie.setMaxAge(((int)accessTokenValidityInSeconds/1000)-1);
+					cookie.setMaxAge(((int)accessTokenValidityInSeconds / 1000) - 1);
 					response.addCookie(cookie);
 
 					// 컨텍스트에 넣기

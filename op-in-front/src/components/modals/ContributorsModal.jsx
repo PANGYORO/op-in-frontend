@@ -2,7 +2,8 @@ import { Fragment, useRef } from "react";
 import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import User from "@components/user/User";
-// import http from "api/http";
+import http from "@api/http";
+import { userInfo } from "@recoil/user/atoms";
 
 export default function ContributorsModal({ open, setOpen, contributors }) {
   const cancelButtonRef = useRef(null);
@@ -11,11 +12,7 @@ export default function ContributorsModal({ open, setOpen, contributors }) {
     const result = [];
     if (list != null)
       for (let i = 0; i < list.length; i++) {
-        result.push(
-          <>
-            <User profileImg={list[i].profileImg} nickname={list[i].nickname} />
-          </>
-        );
+        result.push(<User key={i} profileImg={list[i].profileImg} nickname={list[i].nickname} />);
       }
     return result;
   };

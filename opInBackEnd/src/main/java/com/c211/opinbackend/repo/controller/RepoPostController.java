@@ -2,8 +2,11 @@ package com.c211.opinbackend.repo.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,12 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
+import com.c211.opinbackend.persistence.entity.Comment;
+import com.c211.opinbackend.persistence.entity.RepositoryPost;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.model.requeset.RequestCommentCreateToPost;
 import com.c211.opinbackend.repo.model.requeset.RequestUpdatePost;
+import com.c211.opinbackend.repo.model.response.PageResponsePost;
 import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 import com.c211.opinbackend.repo.service.commnet.CommentService;
+import com.c211.opinbackend.repo.service.mapper.CommentMapper;
+import com.c211.opinbackend.repo.service.mapper.RepoPostMapper;
 import com.c211.opinbackend.repo.service.repo.RepositoryPostService;
 import com.c211.opinbackend.util.SecurityUtil;
 
@@ -50,10 +58,10 @@ public class RepoPostController {
 				() -> new MemberRuntimeException(
 					MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION)
 			);
-			log.info(memberEmail);
-			repositoryPostService.createPostToRepository(createPostRequest, memberEmail);
-			return ResponseEntity.ok(HttpStatus.ACCEPTED);
+			RepositoryPost post = repositoryPostService.createPostToRepository(createPostRequest, memberEmail);
+			return ResponseEntity.ok().body(RepoPostMapper.toSimpleResponse(post));
 		} catch (Exception exception) {
+			exception.printStackTrace();
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body(RepositoryExceptionEnum.REPOSITORY_POST_SAVE_EXCEPTION.getErrorMessage());
 		}
@@ -72,6 +80,25 @@ public class RepoPostController {
 		} catch (Exception exception) {
 			return ResponseEntity.badRequest().body("조회에 실패 했습니다.");
 		}
+	}
+
+	/**
+	 * pagenation 을 적용한 최신수 post
+	 *
+	 * @return
+	 */
+	@GetMapping("/news")
+	public ResponseEntity<?> getNewsPost(
+		@PageableDefault(size = 10, page = 0) Pageable pageable) {
+		PageResponsePost newsPost = repositoryPostService.getNewsPosts(pageable);
+		return ResponseEntity.ok().body(newsPost);
+	}
+
+	@GetMapping("/hot")
+	public ResponseEntity<?> getHotPost(@PageableDefault(size = 10, page = 0) Pageable pageable) {
+
+		PageResponsePost hotPosts = repositoryPostService.getHotPosts(pageable);
+		return ResponseEntity.ok().body(hotPosts);
 	}
 
 	/**
@@ -94,7 +121,7 @@ public class RepoPostController {
 	/**
 	 * 맴버에 속한 포스트들 조회
 	 *
-	 * @param memberId
+	 * @param nickName
 	 * @return
 	 */
 	@GetMapping("member/{nickName}")
@@ -110,7 +137,7 @@ public class RepoPostController {
 	 */
 	@GetMapping("/{postId}")
 	public ResponseEntity<?> getDetailPost(@PathVariable("postId") Long postId) {
-		RepoPostDetailResponse repoDetail = repositoryPostService.getRepoDetail(postId);
+		RepoPostDetailResponse repoDetail = repositoryPostService.getPostDetail(postId);
 		return ResponseEntity.ok().body(repoDetail);
 	}
 
@@ -124,9 +151,9 @@ public class RepoPostController {
 	public ResponseEntity<?> createCommentToPost(@RequestBody RequestCommentCreateToPost requestCommentCreateToPost) {
 		String memberEmail = SecurityUtil.getCurrentUserId()
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_WRONG_EXCEPTION));
-		commentService.createCommentToPost(memberEmail, requestCommentCreateToPost);
 
-		return ResponseEntity.ok().body("댓글 저장 성공");
+		Comment comment = commentService.createCommentToPost(memberEmail, requestCommentCreateToPost);
+		return ResponseEntity.ok().body(CommentMapper.toDetailCommentDto(comment));
 
 	}
 
@@ -157,4 +184,27 @@ public class RepoPostController {
 		}
 	}
 
+	/**
+	 * 포스트 좋아요!!!
+	 *
+	 * @param postId
+	 * @return
+	 */
+	@PostMapping("/like/{postId}")
+	public ResponseEntity<?> likePost(@PathVariable("postId") Long postId) {
+		Boolean saveState = repositoryPostService.createLike(postId);
+		return ResponseEntity.ok().body(saveState);
+	}
+
+	@DeleteMapping("/like/{postId}")
+	public ResponseEntity<?> cancelLikePost(@PathVariable("postId") Long postId) {
+		Boolean deleteState = repositoryPostService.deleteLike(postId);
+		return ResponseEntity.ok().body(deleteState);
+	}
+
+	@GetMapping("/like/{postId}")
+	public ResponseEntity<?> checkLikePost(@PathVariable("postId") Long posId) {
+		Boolean checkLike = repositoryPostService.checkLike(posId);
+		return ResponseEntity.ok().body(checkLike);
+	}
 }

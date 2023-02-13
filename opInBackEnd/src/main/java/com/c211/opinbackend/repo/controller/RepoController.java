@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.c211.opinbackend.auth.model.request.MemberEmailRequest;
 import com.c211.opinbackend.repo.model.dto.RepoDto;
+import com.c211.opinbackend.repo.model.response.RepoDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
+import com.c211.opinbackend.repo.model.response.RepositoryResponseSimpleDto;
 import com.c211.opinbackend.repo.service.repo.RepositoryPostService;
 import com.c211.opinbackend.repo.service.repo.RepositoryService;
 
@@ -26,6 +30,7 @@ public class RepoController {
 	private final RepositoryService repositoryService;
 	private final RepositoryPostService repositoryPostService;
 
+	// TODO: 2023/02/12 api 지우기
 	@PostMapping("/member")
 	public ResponseEntity<?> getReposByEmail(@RequestBody MemberEmailRequest emailRequest) throws Exception {
 		String email = emailRequest.getEmail();
@@ -37,6 +42,12 @@ public class RepoController {
 		return new ResponseEntity<>(repositoryResponseDtoList, HttpStatus.OK);
 	}
 
+	@GetMapping("/member/{memberId}")
+	public ResponseEntity<?> getUserRepos(@PathVariable Long memberId) {
+		List<RepositoryResponseSimpleDto> results = repositoryService.findRepositorySimpleList(memberId);
+		return ResponseEntity.ok().body(results);
+	}
+
 	/**
 	 * 임시 로 레포지토리를 넣는 컨트롤러입니다
 	 * 추후 api 조회랑 배치가 돌면 서비스로 대체하겠습니다
@@ -45,14 +56,18 @@ public class RepoController {
 	 */
 	@PostMapping
 	public ResponseEntity<?> testPost(@RequestBody RepoDto dto) {
-		log.info("input test");
-		log.info(dto.toString());
 		try {
-			repositoryPostService.uploadRepository(dto.getMemberEmail(), dto);
+			repositoryService.uploadRepository(dto.getMemberEmail(), dto);
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
 		return null;
+	}
+
+	@GetMapping("/{repoId}")
+	public ResponseEntity<?> repoDetail(@PathVariable Long repoId) {
+		RepoDetailResponse detailResponse = repositoryService.getDetailResponse(repoId);
+		return ResponseEntity.ok().body(detailResponse);
 	}
 
 }
