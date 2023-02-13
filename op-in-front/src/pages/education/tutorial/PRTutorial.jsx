@@ -288,15 +288,6 @@ function PRTutorial() {
       <div className="grid justify-center shadow-md py-2 bg-white">
   
         <div id="player" className='rounded-xl '>
-          
-            {/* <ReactPlayer className='shadow-md'
-              url={curContent} 
-              loop={true} 
-              playing={true}
-              muted={true} 
-              height='400px'
-              width='800px'
-            /> */}
             <div className={`fill ${styles.player}`} onClick={onClick}>
               {transitions((style, i) => {
                 const Page = pages[i]

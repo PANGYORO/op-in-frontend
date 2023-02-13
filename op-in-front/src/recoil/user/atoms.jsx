@@ -19,4 +19,3 @@ export const userInfo = atom({
   default: Object.assign(DEFAULT_USERINFO),
   effects_UNSTABLE: [persistAtom],
 });
-

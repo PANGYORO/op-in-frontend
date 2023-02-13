@@ -8,7 +8,7 @@ import { userInfo } from "@recoil/user/atoms";
 
 const PostList = ({ posts = [] }) => {
   return (
-    <div className="grid grid-cols-2 max-2xl:grid-cols-1 gap-4 w-full overflow-auto">
+    <div className="grid grid-cols-2 max-2xl:grid-cols-1 gap-4 w-full">
       {posts.map((post) => {
         return (
           <Post
@@ -85,10 +85,15 @@ function FollowingPosts({ repoId }) {
   return (
     <>
       <header className="z-20 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl mb-4 ">
+
         <div className="relative z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">
+
           <div className="relative grid grid-cols-2 items-center w-full pl-1 lg:max-w-68 sm:pr-2 sm:ml-0">
+
             <div className="container relative left-0 z-20 flex w-3/4 h-auto h-full">
+
               <div className="relative flex items-center w-full h-full lg:w-64 group">
+                {/* 사진 부분 */}
                 <div className="absolute z-20 flex items-center justify-center block w-auto h-10 p-3 pr-2 text-sm text-gray-500 uppercase cursor-pointer sm:hidden">
                   <svg
                     fill="none"
@@ -118,6 +123,8 @@ function FollowingPosts({ repoId }) {
                 />
               </div>
             </div>
+            
+            {/* 모달창  연결 부분 */}
             <div className="w-auto h-auto h-full justify-self-end">
               <button
                 type="button"
@@ -139,6 +146,7 @@ function FollowingPosts({ repoId }) {
                   strokeWidth="1.5"
                   stroke="currentColor"
                   className="w-6 h-6"
+                  
                 >
                   <path
                     strokeLinecap="round"
@@ -152,7 +160,7 @@ function FollowingPosts({ repoId }) {
           </div>
         </div>
       </header>
-      <div className="flex">
+      <div className="minwidth: 600px">
         <PostList posts={posts} />
       </div>
       <PostModal open={open} setOpen={setOpen} propFunction={highFunction} repositoryId={repoId} />

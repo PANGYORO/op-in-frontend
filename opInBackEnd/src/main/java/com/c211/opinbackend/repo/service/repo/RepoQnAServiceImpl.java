@@ -35,7 +35,6 @@ import lombok.extern.slf4j.Slf4j;
 public class RepoQnAServiceImpl implements RepoQnAService {
 	private final CommentRepository commentRepository;
 	private final RepoRepository repoRepository;
-
 	private final RepoQnARepository repoQnARepository;
 	private final MemberRepository memberRepository;
 

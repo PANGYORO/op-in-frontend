@@ -7,7 +7,7 @@ import http from "@api/http";
 import { useToast } from "@hooks/useToast";
 import useAuth from "@hooks/useAuth";
 
-function Button({ onClick = () => {}, loading = false, children }) {
+function Button({ onClick = () => { }, loading = false, children }) {
   return (
     <button
       type="submit"

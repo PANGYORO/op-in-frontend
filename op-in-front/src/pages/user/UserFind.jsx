@@ -2,7 +2,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 
 import Logo from "@components/Logo";
-import http from "@api/http"
+import http from "@api/http";
+import { useToast } from "@hooks/useToast";
 
 function Button({ onClick = () => {}, loading = false, children }) {
   return (
@@ -67,6 +68,7 @@ function EmailInput({ register, error }) {
   );
 }
 function SignUpForm() {
+  const { setToast } = useToast();
   const {
     register,
     handleSubmit,
@@ -87,10 +89,12 @@ function SignUpForm() {
       let res = await http.post("member/password/email", {
         email: data.email,
       });
-      
-      console.log(res)
+
+      console.log(res);
+      setToast({ message: "임시 비밀번호가 전송되었습니다. 메일함을 확인해주세요." });
     } catch (error) {
-      console.log('hi')
+      setToast({ message: "이메일이 존재하지 않거나 형식이 잘못되었습니다." });
+      console.log("hi");
       console.log(error);
     }
   };
