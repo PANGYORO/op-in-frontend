@@ -10,7 +10,7 @@ import { useSetRecoilState } from "recoil";
 import { userInfo } from "@recoil/user/atoms";
 
 
-function Button({ onClick = () => {}, loading = false, children }) {
+function Button({ onClick = () => { }, loading = false, children }) {
   return (
     <button
       type="submit"
@@ -66,7 +66,7 @@ function Nickname({ register, error, name }) {
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.debug(err);
       });
   }, 2000);
 
@@ -218,7 +218,7 @@ function EmailInput({ register, error, name }) {
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.debug(err);
       });
   }, 2000);
 
@@ -295,7 +295,7 @@ function SignUpForm({ setToast }) {
   } = useForm({ mode: "onChange" });
 
   const setUser = useSetRecoilState(userInfo);
-  
+
 
 
   const navigate = useNavigate();
@@ -310,14 +310,14 @@ function SignUpForm({ setToast }) {
       .then((res) => {
         setUser((before) => ({
           ...before,
-          nickname : data.nickname,
-          email:res.data
+          nickname: data.nickname,
+          email: res.data
         }));
         setToast({ message: "회원가입 성공! 관심있는 tag를 골라주세요!!" });
         navigate("/selecttag");
       })
       .catch((err) => {
-        console.log(err);
+        console.debug(err);
       });
   };
 

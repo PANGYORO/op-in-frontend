@@ -30,11 +30,11 @@ export default function PostModal({ open, setOpen, propFunction, repositoryId })
         content: data,
       })
       .then(({ data }) => {
-        console.log(data);
+        console.debug(data);
         propFunction(data);
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
 
     setText("");

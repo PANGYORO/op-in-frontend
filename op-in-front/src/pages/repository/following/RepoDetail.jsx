@@ -55,7 +55,7 @@ const RepoDetail = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   };
 
@@ -75,7 +75,7 @@ const RepoDetail = () => {
           });
         })
         .catch((error) => {
-          console.log(error);
+          console.debug(error);
         });
     }
     // 언팔로우 상태라면 팔로우
@@ -93,7 +93,7 @@ const RepoDetail = () => {
           });
         })
         .catch((error) => {
-          console.log(error);
+          console.debug(error);
         });
     }
   };
@@ -105,7 +105,7 @@ const RepoDetail = () => {
         setRepoDetail({ ...data });
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   };
 

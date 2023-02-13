@@ -28,7 +28,7 @@ export default function QnaModal({
         });
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   };
 

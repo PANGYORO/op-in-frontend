@@ -28,7 +28,7 @@ const PostModifyModal = ({ id, title, previousValue, open, setOpen, propFunction
         propFunction({ postTitle: curTitle, postContent: data });
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   };
 

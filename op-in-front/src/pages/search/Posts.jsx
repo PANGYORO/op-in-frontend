@@ -4,11 +4,11 @@ import http from "@api/http";
 import { useToast } from "@hooks/useToast";
 
 const PostList = ({ posts }) => {
-  // console.log(posts);
+  // console.debug(posts);
   return (
     <div className="grid grid-cols-2 gap-4 ml-4">
       {posts.map((post) => {
-        // console.log(post.id);
+        // console.debug(post.id);
         return (
           <Post
             key={post.id}
@@ -40,7 +40,7 @@ const Posts = ({ value }) => {
         setResults([...data]);
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   }, [value]);
   const getPreviousData = (pageNum) => {
@@ -50,14 +50,14 @@ const Posts = ({ value }) => {
         setResults([...data]);
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   }
   const getNextData = (pageNum) => {
     http
       .get(`search/posts?query=${value}&size=${size}&page=${pageNum}`)
       .then(({ data }) => {
-        console.log(data);
+        console.debug(data);
         if (data?.length > 0) {
           setResults([...data]);
           setPage(page + 1);
@@ -65,10 +65,10 @@ const Posts = ({ value }) => {
         else {
           setToast({ message: "마지막 페이지입니다." });
         }
-        console.log(page);
+        console.debug(page);
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   }
   return (

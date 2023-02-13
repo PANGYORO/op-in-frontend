@@ -5,7 +5,7 @@ import { useToast } from "@hooks/useToast";
 
 
 const RepoList = ({ repos }) => {
-  console.log(repos);
+  console.debug(repos);
   return (
     <div className="grid grid-cols-3 gap-4 ml-4">
       {repos.map((repo) => {
@@ -36,7 +36,7 @@ const repos = ({ value }) => {
         setResults([...data]);
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   }, [value]);
   const getPreviousData = (pageNum) => {
@@ -46,14 +46,14 @@ const repos = ({ value }) => {
         setResults([...data]);
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   }
   const getNextData = (pageNum) => {
     http
       .get(`search/repos?query=${value}&size=${size}&page=${pageNum}`)
       .then(({ data }) => {
-        console.log(data);
+        console.debug(data);
         if (data?.length > 0) {
           setResults([...data]);
           setPage(page + 1);
@@ -61,10 +61,10 @@ const repos = ({ value }) => {
         else {
           if (page != 0) setToast({ message: "마지막 페이지입니다." });
         }
-        console.log(page);
+        console.debug(page);
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   }
 
