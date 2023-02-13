@@ -36,6 +36,7 @@ const Posts = ({ value }) => {
     http
       .get(`search/posts?query=${value}&size=${size}&page=${page}`)
       .then(({ data }) => {
+        if (!(data?.length)) setToast({ message: "Post 검색 결과가 존재하지 않습니다." });
         setResults([...data]);
       })
       .catch((error) => {
@@ -62,7 +63,7 @@ const Posts = ({ value }) => {
           setPage(page + 1);
         }
         else {
-          if (page != 0) setToast({ message: "마지막 페이지입니다." });
+          setToast({ message: "마지막 페이지입니다." });
         }
         console.log(page);
       })

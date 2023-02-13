@@ -31,6 +31,7 @@ const Users = ({ value }) => {
     http
       .get(`search/users?query=${value}&size=${size}&page=0`)
       .then(({ data }) => {
+        if (!(data?.length)) setToast({ message: "User 검색 결과가 존재하지 않습니다." });
         setResults([...data]);
       })
       .catch((error) => {

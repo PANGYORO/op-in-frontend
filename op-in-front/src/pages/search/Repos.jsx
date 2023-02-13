@@ -32,6 +32,7 @@ const repos = ({ value }) => {
     http
       .get(`search/repos?query=${value}&size=${size}&page=0`)
       .then(({ data }) => {
+        if (!(data?.length)) setToast({ message: "Repo 검색 결과가 존재하지 않습니다." });
         setResults([...data]);
       })
       .catch((error) => {
