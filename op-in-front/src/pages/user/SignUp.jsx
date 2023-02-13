@@ -310,6 +310,7 @@ function SignUpForm({ setToast }) {
       .then((res) => {
         setUser((before) => ({
           ...before,
+          nickname : data.nickname,
           email:res.data
         }));
         setToast({ message: "회원가입 성공! 관심있는 tag를 골라주세요!!" });
