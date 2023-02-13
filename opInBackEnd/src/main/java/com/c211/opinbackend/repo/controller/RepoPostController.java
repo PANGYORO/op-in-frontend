@@ -2,6 +2,8 @@ package com.c211.opinbackend.repo.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -85,8 +87,10 @@ public class RepoPostController {
 	 * @return
 	 */
 	@GetMapping("/news")
-	public ResponseEntity<?> getNewsPost() {
-		return null;
+	public ResponseEntity<?> getNewsPost(
+		@PageableDefault(size = 10, page = 0) Pageable pageable) {
+		List<RepoPostSimpleResponse> newsPost = repositoryPostService.getNewsPost(pageable);
+		return ResponseEntity.ok().body(newsPost);
 	}
 
 	/**

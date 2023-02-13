@@ -49,8 +49,6 @@ public class RepoController {
 	 */
 	@PostMapping
 	public ResponseEntity<?> testPost(@RequestBody RepoDto dto) {
-		log.info("input test");
-		log.info(dto.toString());
 		try {
 			repositoryService.uploadRepository(dto.getMemberEmail(), dto);
 		} catch (Exception exception) {
