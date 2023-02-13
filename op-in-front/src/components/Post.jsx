@@ -16,17 +16,17 @@ export default function Post({
 
   return (
     <>
-      <div className=''>
+      <div>
         <div
-          className="w-full p-3 bg-white shadow-lg rounded-2xl dark:bg-gray-700 items-center group sm:flex space-x-6 h-32 "
+          className="w-full p-4 bg-white shadow-lg rounded-2xl dark:bg-gray-700 items-center group sm:flex space-x-6 "
           onClick={() => navigate(`/repo/postview`, { state: id })}
         >
           <div className="xl:text-clip grid grid-row gap-3 w-full ">
-            <div className="sm:w-full p-5">
+            <div className="sm:w-full p-5 ">
               <div className="space-y-2 ">
                 <div className="space-y-4 ">
                   <div className="">
-                  <h3 className="text-2xl font-semibold text-black-900 w-64 truncate">{title}</h3>
+                    <h3 className="text-2xl font-semibold text-black-900 w-64 truncate">{title}</h3>
                   </div>
                 </div>
                 {/* <div className="flex items-center space-x-4 justify-between">
@@ -36,10 +36,10 @@ export default function Post({
                     </span>
                   </div>
                 </div> */}
-                <div className="flex items-center space-x-4 justify-between">
+                <div className="flex items-center space-x-0.5 justify-between">
                   <div>
                     <img
-                      className="inline-block h-8 w-8 rounded-full object-cover ring-2 ring-white"
+                      className="inline-block h-10 w-10 rounded-full object-cover ring-2 ring-white"
                       src={authorMemberAvatar || DefaultImg}
                       alt={authorMemberName}
                     />

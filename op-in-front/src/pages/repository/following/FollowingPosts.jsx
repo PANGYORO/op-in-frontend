@@ -14,7 +14,7 @@ const PostList = ({ posts = [] }) => {
           <Post
             key={post.id}
             id={post.id}
-            createTime={post.createTime}
+            createTime={post.date}
             title={post.title}
             post_content={post.post_content}
             likeCount={post.likeCount}
@@ -123,7 +123,7 @@ function FollowingPosts({ repoId }) {
                 />
               </div>
             </div>
-            
+
             {/* 모달창  연결 부분 */}
             <div className="w-auto h-auto h-full justify-self-end">
               <button
@@ -146,7 +146,7 @@ function FollowingPosts({ repoId }) {
                   strokeWidth="1.5"
                   stroke="currentColor"
                   className="w-6 h-6"
-                  
+
                 >
                   <path
                     strokeLinecap="round"
