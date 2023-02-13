@@ -8,10 +8,12 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.c211.opinbackend.batch.dto.github.PullRequestDto;
 import com.c211.opinbackend.batch.dto.mapper.PullRequestMapper;
+import com.c211.opinbackend.batch.step.Action;
 import com.c211.opinbackend.constant.GitHub;
 import com.c211.opinbackend.persistence.entity.PullRequest;
 import com.c211.opinbackend.persistence.entity.Repository;
@@ -29,6 +31,10 @@ public class GetRepoPullRequestReader implements ItemReader<PullRequest> {
 	private int nextIndex = 0;//리스트의 데이터를 하나씩 인덱스를 통해 가져온다.
 	private final RepoRepository repoRepository;
 	private final PullRequestMapper pullRequestMapper;
+	private final Action action;
+
+	@Value("${githubToken3}")
+	private String githubToken;
 
 	@Override
 	public PullRequest read() throws
@@ -41,7 +47,7 @@ public class GetRepoPullRequestReader implements ItemReader<PullRequest> {
 			List<Repository> repos = repoRepository.findAll();
 
 			for (Repository repo : repos) {
-				PullRequest[] pullRequests = Arrays.stream(getRepositoryPulls(repo.getFullName())).map(
+				PullRequest[] pullRequests = Arrays.stream(action.getRepositoryPulls(githubToken, repo.getFullName())).map(
 					prDto -> pullRequestMapper.toPullRequest(prDto, repo)
 				).toArray(PullRequest[]::new);
 
@@ -63,10 +69,4 @@ public class GetRepoPullRequestReader implements ItemReader<PullRequest> {
 		return nextCollect;//DTO 하나씩 반환한다. Rest 호출시 데이터가 없으면 null로 반환.
 	}
 
-	public static PullRequestDto[] getRepositoryPulls(String repositoryFullName) {
-		return WebClient.create()
-			.get()
-			.uri(GitHub.getPublicRepositoryPullsUrl(repositoryFullName))
-			.retrieve().bodyToMono(PullRequestDto[].class).block();
-	}
 }

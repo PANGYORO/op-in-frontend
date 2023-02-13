@@ -8,6 +8,7 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.c211.opinbackend.batch.dto.github.RepositoryDto;
@@ -29,6 +30,9 @@ public class GetMemberRepositoryReader implements ItemReader<RepositoryDto> {
 	private boolean checkRestCall = false; //RestAPI 호출여부 판단
 	private int nextIndex = 0;//리스트의 데이터를 하나씩 인덱스를 통해 가져온다.
 
+	@Value("${githubToken1}")
+	private String githubToken;
+
 	@Override
 	public RepositoryDto read() throws Exception,
 		UnexpectedInputException, ParseException, NonTransientResourceException {
@@ -39,7 +43,7 @@ public class GetMemberRepositoryReader implements ItemReader<RepositoryDto> {
 
 			for (Member member : members) {
 
-				RepositoryDto[] memberRepository = action.getMemberRepository("", member.getGithubUserName());
+				RepositoryDto[] memberRepository = action.getMemberRepository(githubToken, member.getGithubUserName());
 				List<RepositoryDto> repos = Arrays.asList(memberRepository);
 				collectData.addAll(repos);
 			}

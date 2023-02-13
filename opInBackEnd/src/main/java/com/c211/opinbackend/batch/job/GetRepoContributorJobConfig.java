@@ -13,6 +13,7 @@ import com.c211.opinbackend.batch.dto.github.ContributorDto;
 import com.c211.opinbackend.batch.item.reader.GetRepoContributorReader;
 import com.c211.opinbackend.batch.item.writer.GetRepoContributorWriter;
 import com.c211.opinbackend.batch.listener.LoggerListener;
+import com.c211.opinbackend.batch.step.Action;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
 import com.c211.opinbackend.persistence.repository.RepoContributorRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
@@ -24,12 +25,13 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @RequiredArgsConstructor
 public class GetRepoContributorJobConfig {
-/*
+
 	private final JobBuilderFactory jobBuilderFactory;
 	private final StepBuilderFactory stepBuilderFactory;
 	private final RepoRepository repoRepository;
 	private final MemberRepository memberRepository;
 	private final RepoContributorRepository repoContributorRepository;
+	private final Action action;
 
 	@Bean
 	public Job getRepoContributorJob(Step getRepoContributorStep) {
@@ -46,10 +48,8 @@ public class GetRepoContributorJobConfig {
 		return stepBuilderFactory.get("getRepoContributorStep")
 			.<ContributorDto
 				, ContributorDto>chunk(1)
-			.reader(new GetRepoContributorReader(repoRepository))
+			.reader(new GetRepoContributorReader(repoRepository, action))
 			.writer(new GetRepoContributorWriter(memberRepository, repoContributorRepository))
 			.build();
 	}
-
- */
 }

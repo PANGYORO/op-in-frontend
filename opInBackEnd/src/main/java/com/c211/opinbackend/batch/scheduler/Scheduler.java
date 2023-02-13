@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class Scheduler {
-/*
 	private final Job getMemberRepositoryJob;
 	private final Job getRepoTechLanguageJob;
 	private final Job getRepoCommitJob;
@@ -27,8 +26,7 @@ public class Scheduler {
 
 	private final JobLauncher jobLauncher;
 
-	// @Scheduled(cron = "0 0 24 * * ?")
-	@Scheduled(cron = "0 1 * * * *")
+	@Scheduled(cron = "0 35 * * * *") // 매 시간 35분에
 	public void getMemberRepositoryJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -41,8 +39,7 @@ public class Scheduler {
 		jobLauncher.run(getMemberRepositoryJob, jobParameters);
 	}
 
-	// @Scheduled(fixedDelay=60*60*1000)
-	@Scheduled(fixedDelay = 60 * 1000)
+	@Scheduled(cron = "0 40 * * * *") // 매 시간 40분에
 	public void getRepoTechLanguageJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -55,8 +52,7 @@ public class Scheduler {
 		jobLauncher.run(getRepoTechLanguageJob, jobParameters);
 	}
 
-	// @Scheduled(fixedDelay=60*60*1000)
-	@Scheduled(fixedDelay = 60 * 1000)
+	@Scheduled(cron = "0 45 * * * *") // 매 시간 45분에
 	public void getRepoCommitJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -69,8 +65,7 @@ public class Scheduler {
 		jobLauncher.run(getRepoCommitJob, jobParameters);
 	}
 
-	// @Scheduled(fixedDelay=60*60*1000)
-	@Scheduled(fixedDelay = 60 * 1000)
+	@Scheduled(cron = "0 50 * * * *") // 매 시간 50분에
 	public void getRepoPullRequestJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -83,7 +78,7 @@ public class Scheduler {
 		jobLauncher.run(getRepoPullRequestJob, jobParameters);
 	}
 
-	@Scheduled(fixedDelay = 60 * 1000)
+	@Scheduled(cron = "0 55 * * * *") // 매 시간 55분에
 	public void getRepoContributorJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -95,5 +90,5 @@ public class Scheduler {
 
 		jobLauncher.run(getRepoContributorJob, jobParameters);
 	}
-*/
+
 }

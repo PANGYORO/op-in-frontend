@@ -58,24 +58,27 @@ public class Action {
 			}).block();
 	}
 
-	public static CommitDto[] getRepositoryCommits(String repositoryFullName) {
+	public static CommitDto[] getRepositoryCommits(String githubToken, String repositoryFullName) {
 		return WebClient.create()
 			.get()
 			.uri(GitHub.getPublicRepositoryCommitUrl(repositoryFullName))
+			.header("Authorization", "token "+githubToken)
 			.retrieve().bodyToMono(CommitDto[].class).block();
 	}
 
-	public static PullRequestDto[] getRepositoryPulls(String repositoryFullName) {
+	public static PullRequestDto[] getRepositoryPulls(String githubToken, String repositoryFullName) {
 		return WebClient.create()
 			.get()
 			.uri(GitHub.getPublicRepositoryPullsUrl(repositoryFullName))
+			.header("Authorization", "token "+githubToken)
 			.retrieve().bodyToMono(PullRequestDto[].class).block();
 	}
 
-	public static ContributorDto[] getContributors(String repositoryFullName) {
+	public static ContributorDto[] getContributors(String githubToken, String repositoryFullName) {
 		return WebClient.create()
 			.get()
 			.uri(GitHub.getPublicRepositoryContributorsUrl(repositoryFullName))
+			.header("Authorization", "token "+githubToken)
 			.retrieve().bodyToMono(ContributorDto[].class).block();
 
 	}

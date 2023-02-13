@@ -8,9 +8,11 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.c211.opinbackend.batch.dto.github.CommitDto;
+import com.c211.opinbackend.batch.step.Action;
 import com.c211.opinbackend.constant.GitHub;
 import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
@@ -26,6 +28,9 @@ public class GetRepoCommitReader implements ItemReader<CommitDto> {
 	private boolean checkRestCall = false; //RestAPI 호출여부 판단
 	private int nextIndex = 0;//리스트의 데이터를 하나씩 인덱스를 통해 가져온다.
 	private final RepoRepository repoRepository;
+	private final Action action;
+	@Value("${githubToken2}")
+	private String githubToken;
 
 	@Override
 	public CommitDto read() throws Exception,
@@ -35,7 +40,7 @@ public class GetRepoCommitReader implements ItemReader<CommitDto> {
 			List<Repository> repos = repoRepository.findAll();
 
 			for (Repository repo : repos) {
-				CommitDto[] commits = getRepositoryCommits(repo.getFullName());
+				CommitDto[] commits = action.getRepositoryCommits(githubToken, repo.getFullName());
 				for (CommitDto com : commits) {
 					com.setRepo(repo);
 				}
@@ -55,14 +60,6 @@ public class GetRepoCommitReader implements ItemReader<CommitDto> {
 		}
 
 		return nextCollect;//DTO 하나씩 반환한다. Rest 호출시 데이터가 없으면 null로 반환.
-	}
-
-	public static CommitDto[] getRepositoryCommits(String repositoryFullName) {
-		return WebClient.create()
-			.get()
-			.uri(GitHub.getPublicRepositoryCommitUrl(repositoryFullName))
-			.header("Authorization", "token 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")
-			.retrieve().bodyToMono(CommitDto[].class).block();
 	}
 
 }

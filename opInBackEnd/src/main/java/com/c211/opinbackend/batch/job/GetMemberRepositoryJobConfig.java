@@ -14,6 +14,7 @@ import com.c211.opinbackend.batch.item.reader.GetMemberRepositoryReader;
 import com.c211.opinbackend.batch.item.writer.GetMemberRepositoryWriter;
 import com.c211.opinbackend.batch.listener.LoggerListener;
 import com.c211.opinbackend.batch.service.RepositoryService;
+import com.c211.opinbackend.batch.step.Action;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -23,11 +24,11 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @RequiredArgsConstructor
 public class GetMemberRepositoryJobConfig {
-/*
 	private final JobBuilderFactory jobBuilderFactory;
 	private final StepBuilderFactory stepBuilderFactory;
 	private final RepositoryService repositoryService;
 	private final MemberRepository memberRepository;
+	private final Action action;
 
 	@Bean
 	public Job getMemberRepositoryJob(Step getMemberRepositoryStep) {
@@ -43,9 +44,8 @@ public class GetMemberRepositoryJobConfig {
 	public Step getMemberRepositoryStep() {
 		return stepBuilderFactory.get("getMemberRepositoryStep")
 			.<RepositoryDto, RepositoryDto>chunk(1)
-			.reader(new GetMemberRepositoryReader(memberRepository))
+			.reader(new GetMemberRepositoryReader(memberRepository, action))
 			.writer(new GetMemberRepositoryWriter(repositoryService))
 			.build();
 	}
-*/
 }

@@ -13,6 +13,7 @@ import com.c211.opinbackend.batch.dto.RepoTechLanguageDto;
 import com.c211.opinbackend.batch.item.reader.GetRepoTechLanguageReader;
 import com.c211.opinbackend.batch.item.writer.GetRepoTechLanguageWriter;
 import com.c211.opinbackend.batch.listener.LoggerListener;
+import com.c211.opinbackend.batch.step.Action;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
 import com.c211.opinbackend.persistence.repository.RepoTechLanguageRepository;
 import com.c211.opinbackend.persistence.repository.TechLanguageRepository;
@@ -24,12 +25,13 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @RequiredArgsConstructor
 public class GetRepoTechLanguageJobConfig {
-/*
+
 	private final JobBuilderFactory jobBuilderFactory;
 	private final StepBuilderFactory stepBuilderFactory;
 	private final RepoRepository repoRepository;
 	private final TechLanguageRepository techLanguageRepository;
 	private final RepoTechLanguageRepository repoTechLanguageRepository;
+	private final Action action;
 
 
 	@Bean
@@ -47,11 +49,8 @@ public class GetRepoTechLanguageJobConfig {
 		return stepBuilderFactory.get("getAllRepositoryTechLanguageStep")
 			.<RepoTechLanguageDto
 				, RepoTechLanguageDto>chunk(1)
-			.reader(new GetRepoTechLanguageReader(repoRepository))
+			.reader(new GetRepoTechLanguageReader(repoRepository, action))
 			.writer(new GetRepoTechLanguageWriter(techLanguageRepository, repoTechLanguageRepository))
 			.build();
 	}
-
- */
-
 }

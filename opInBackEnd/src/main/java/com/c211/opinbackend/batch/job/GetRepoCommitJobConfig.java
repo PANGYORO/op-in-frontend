@@ -14,6 +14,7 @@ import com.c211.opinbackend.batch.dto.mapper.CommitHistoryMapper;
 import com.c211.opinbackend.batch.item.reader.GetRepoCommitReader;
 import com.c211.opinbackend.batch.item.writer.GetRepoCommitWriter;
 import com.c211.opinbackend.batch.listener.LoggerListener;
+import com.c211.opinbackend.batch.step.Action;
 import com.c211.opinbackend.persistence.repository.CommitHistoryRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
 
@@ -22,11 +23,12 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @RequiredArgsConstructor
 public class GetRepoCommitJobConfig {
-/*
 	private final JobBuilderFactory jobBuilderFactory;
 	private final StepBuilderFactory stepBuilderFactory;
 	private final RepoRepository repoRepository;
 	private final CommitHistoryRepository commitHistoryRepository;
+	private final CommitHistoryMapper commitHistoryMapper;
+	private final Action action;
 
 	@Bean
 	public Job getRepoCommitJob(Step getRepoCommitStep) {
@@ -43,10 +45,8 @@ public class GetRepoCommitJobConfig {
 		return stepBuilderFactory.get("getRepoCommitStep")
 			.<CommitDto
 				, CommitDto>chunk(1)
-			.reader(new GetRepoCommitReader(repoRepository))
-			.writer(new GetRepoCommitWriter(commitHistoryRepository))
+			.reader(new GetRepoCommitReader(repoRepository, action))
+			.writer(new GetRepoCommitWriter(commitHistoryRepository, commitHistoryMapper))
 			.build();
 	}
-
- */
 }

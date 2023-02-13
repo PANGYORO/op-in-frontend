@@ -8,10 +8,12 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.c211.opinbackend.batch.dto.RepoTechLanguageDto;
+import com.c211.opinbackend.batch.step.Action;
 import com.c211.opinbackend.constant.GitHub;
 import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
@@ -27,6 +29,10 @@ public class GetRepoTechLanguageReader implements ItemReader<RepoTechLanguageDto
 	private List<RepoTechLanguageDto> collectData = new ArrayList<>(); //Rest로 가져온 데이터를 리스트에 넣는다.
 	private boolean checkRestCall = false; //RestAPI 호출여부 판단
 	private int nextIndex = 0;//리스트의 데이터를 하나씩 인덱스를 통해 가져온다.
+	private final Action action;
+
+	@Value("${githubToken2}")
+	private String githubToken;
 
 	@Override
 	public RepoTechLanguageDto read() throws Exception,
@@ -36,7 +42,7 @@ public class GetRepoTechLanguageReader implements ItemReader<RepoTechLanguageDto
 			List<Repository> repos = repoRepository.findAll();
 
 			for (Repository repo : repos) {
-				Map<String, Long> languages = getRepositoryLanguages(repo.getFullName());
+				Map<String, Long> languages = action.getRepositoryLanguages(githubToken, repo.getFullName());
 				for (String lan : languages.keySet()) {
 					collectData.add(RepoTechLanguageDto.builder().repository(repo).language(lan).build());
 				}
@@ -54,17 +60,6 @@ public class GetRepoTechLanguageReader implements ItemReader<RepoTechLanguageDto
 		}
 
 		return nextCollect;
-	}
-
-	public static Map<String, Long> getRepositoryLanguages(String repositoryFullName) {
-		return WebClient.create()
-			.get()
-			.uri(
-				GitHub.getPublicRepositoryLanguageUrl(repositoryFullName)
-			)
-			.header("Authorization", "token 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")
-			.retrieve().bodyToMono(new ParameterizedTypeReference<Map<String, Long>>() {
-			}).block();
 	}
 
 }
