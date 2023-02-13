@@ -1,14 +1,19 @@
-import React, { Fragment, useRef } from "react";
-import DefaultImg from "@assets/basicprofile.png";
+import React, { Fragment, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import cx from "classnames";
+
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import Logo from "@components/Logo";
-import { Link, useNavigate } from "react-router-dom";
-import { menuState } from "@recoil/sidebar/atoms";
-import { repoMenuState } from "@recoil/sidebar/atoms2";
-import useAuth from "@hooks/useAuth";
 
 import { useSetRecoilState } from "recoil";
+import { menuState } from "@recoil/sidebar/atoms";
+import { repoMenuState } from "@recoil/sidebar/atoms2";
+
+import Logo from "@components/Logo";
+import useAuth from "@hooks/useAuth";
+import { useToast } from "@hooks/useToast";
+
+import DefaultImg from "@assets/basicprofile.png";
 
 const navigation = [
   //메뉴 목록
@@ -16,21 +21,76 @@ const navigation = [
   { name: "SignUp", href: "/signup", current: true },
 ];
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+const Search = ({ search }) => {
+  const [value, setValue] = useState();
+
+  const onKeyDown = (e) => {
+    if (e.key == "Enter") {
+      search(value);
+      setValue("");
+    }
+  };
+
+  const onChange = (e) => {
+    setValue(e.target.value);
+  };
+
+  return (
+    <div className="relative flex items-center w-full h-full lg:w-64 group">
+      <div className="absolute z-50 flex items-center justify-center block w-auto h-10 p-3 pr-2 text-sm text-gray-500 uppercase cursor-pointer sm:hidden">
+        <svg
+          fill="none"
+          className="relative w-5 h-5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+      </div>
+      <svg
+        className="absolute left-0 z-20 hidden w-4 h-4 ml-4 text-gray-500 pointer-events-none fill-current group-hover:text-gray-400 sm:block"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+      >
+        <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
+      </svg>
+      <input
+        value={value}
+        type="text"
+        className="block w-full py-1.5 pl-10 pr-4 leading-normal rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-400 aa-input"
+        placeholder="Search"
+        onKeyUp={onKeyDown}
+        onChange={onChange}
+      />
+    </div>
+  );
+};
 
 const Header = () => {
   const setCurrentMenu = useSetRecoilState(menuState);
   const setRepoCurrentMenu = useSetRecoilState(repoMenuState);
   const navigate = useNavigate();
-  const searchRef = useRef();
   const { logout, auth } = useAuth();
+  const { setToast } = useToast();
 
   const selectMenu = (id) => {
     setCurrentMenu(id);
     setRepoCurrentMenu("myrepo");
   };
+
+  const search = (value) => {
+    if (value != "") {
+      navigate(`/search`, {
+        state: value,
+      });
+    } else {
+      setToast({ message: "검색 키워드를 입력해주세요" });
+    }
+  };
+
   return (
     <Disclosure as="nav" className="bg-gray-800 sticky top-0 z-50">
       {({ open }) => (
@@ -64,74 +124,11 @@ const Header = () => {
 
                 <div className="hidden sm:ml-6 sm:block w-1/3">
                   <div className="flex space-x-4">
-                    <div className="relative flex items-center w-full h-full lg:w-64 group">
-                      <div className="absolute z-50 flex items-center justify-center block w-auto h-10 p-3 pr-2 text-sm text-gray-500 uppercase cursor-pointer sm:hidden">
-                        <svg
-                          fill="none"
-                          className="relative w-5 h-5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                      </div>
-                      <svg
-                        className="absolute left-0 z-20 hidden w-4 h-4 ml-4 text-gray-500 pointer-events-none fill-current group-hover:text-gray-400 sm:block"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
-                      </svg>
-                      <input
-                        ref={searchRef}
-                        type="text"
-                        className="block w-full py-1.5 pl-10 pr-4 leading-normal rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-400 aa-input"
-                        placeholder="Search"
-                        onKeyUp={(e) => {
-                          if (e.key == "Enter") {
-                            navigate(`/search`, {
-                              state: searchRef.current.value,
-                            });
-                            searchRef.current.value = "";
-                          }
-                        }}
-                      />
-                    </div>
+                    <Search search={search} />
                   </div>
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                {/* <button
-                  id="theme-toggle"
-                  type="button"
-                  className="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
-                >
-                  <svg
-                    id="theme-toggle-dark-icon"
-                    className="hidden w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                  </svg>
-                  <svg
-                    id="theme-toggle-light-icon"
-                    className="hidden w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                    ></path>
-                  </svg>
-                </button> */}
                 <span className="text-white">{auth.nickname}</span>
 
                 {auth.logined && (
@@ -160,10 +157,9 @@ const Header = () => {
                             <Link
                               to="/userdetail"
                               state={auth.nickname}
-                              className={classNames(
-                                active
-                                  ? "flex flex-col bg-gray-100 items-center"
-                                  : "",
+                              className={cx(
+                                active &&
+                                  "flex flex-col bg-gray-100 items-center",
                                 "flex flex-col items-center block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
@@ -174,7 +170,7 @@ const Header = () => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              className={classNames(
+                              className={cx(
                                 active && "w-full bg-gray-100",
                                 "w-full block px-4 py-2 text-sm text-gray-700"
                               )}
@@ -194,7 +190,7 @@ const Header = () => {
                     <Link
                       key={item.name}
                       to={item.href}
-                      className={classNames(
+                      className={cx(
                         item.current
                           ? "bg-[#ffffff] text-[#000000] mx-2"
                           : "text-gray-300 hover:bg-gray-700 hover:text-white",
