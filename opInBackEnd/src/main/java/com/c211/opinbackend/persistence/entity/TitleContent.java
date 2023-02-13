@@ -1,6 +1,7 @@
 package com.c211.opinbackend.persistence.entity;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Lob;
 
 import com.sun.istack.NotNull;
 
@@ -18,6 +19,7 @@ public class TitleContent {
 	@NotNull
 	private String title;
 	@NotNull
+	@Lob
 	private String content;
 
 	public void changeTitle(String newTitle) {
