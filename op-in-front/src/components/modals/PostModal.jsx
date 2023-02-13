@@ -5,17 +5,11 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
 import http from "@api/http";
 
-export default function PostModal({
-  open,
-  setOpen,
-  propFunction,
-  repositoryId,
-}) {
+export default function PostModal({ open, setOpen, propFunction, repositoryId }) {
   const cancelButtonRef = useRef(null);
 
   const toastuiEditor = useRef();
   const [data, setData] = useState("");
-
   const [title, setText] = useState("");
 
   const textChangeHandler = (e) => {
@@ -36,6 +30,7 @@ export default function PostModal({
         content: data,
       })
       .then(({ data }) => {
+        console.log(data);
         propFunction(data);
       })
       .catch((error) => {
@@ -47,12 +42,7 @@ export default function PostModal({
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog
-        as="div"
-        className="relative z-40"
-        initialFocus={cancelButtonRef}
-        onClose={setOpen}
-      >
+      <Dialog as="div" className="relative z-40" initialFocus={cancelButtonRef} onClose={setOpen}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -77,10 +67,7 @@ export default function PostModal({
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-4/5">
-                <Dialog.Title
-                  as="h2"
-                  className="text-3xl font-bold leading-6 text-gray-900 p-4"
-                >
+                <Dialog.Title as="h2" className="text-3xl font-bold leading-6 text-gray-900 p-4">
                   New Post
                 </Dialog.Title>
                 <div className=" relative  p-4">
@@ -139,4 +126,3 @@ export default function PostModal({
     </Transition.Root>
   );
 }
-

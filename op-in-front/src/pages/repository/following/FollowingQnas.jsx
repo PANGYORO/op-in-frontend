@@ -167,10 +167,15 @@ const FollowingQnas = ({ repoId }) => {
         </div>
       </header>
 
-      <div className="w-full h-screen overflow-auto">{rendering(qnaData)}</div>
+      <div className="w-full ">{rendering(qnaData)}</div>
       <ToLoginModal open={toLoginOpen} setOpen={setToLoginOpen} />
 
-      <QnaModal open={open} setOpen={setOpen} repositoryId={repoId} propFunction={highFunction} />
+      <QnaModal
+        open={open}
+        setOpen={setOpen}
+        repositoryId={repoId}
+        propFunction={highFunction}
+      />
     </>
   );
 };

@@ -4,8 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
 import http from "@api/http";
+import { useToast } from "@hooks/useToast";
 
 const User = ({ profileimg = BasicProfile, nickname = "test", isfollow = false }) => {
+  const { setToast } = useToast();
+
   const followClassState =
     "py-1 px-3 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-red-200 text-white  transition ease-in duration-200 text-center font-semibold shadow-md focus:outline-none focus:ring-2  focus:ring-offset-2  opacity-70 rounded-lg ";
 
@@ -51,7 +54,7 @@ const User = ({ profileimg = BasicProfile, nickname = "test", isfollow = false }
             classValue: followClassState,
             value: "follow",
           });
-          console.log("no follow set");
+          setToast({ message: nickname + "님 팔로우가 취소되었습니다." });
         })
         .catch((error) => {
           console.log(error);
@@ -69,7 +72,7 @@ const User = ({ profileimg = BasicProfile, nickname = "test", isfollow = false }
             classValue: followingClassState,
             value: "following",
           });
-          console.log("following set");
+          setToast({ message: nickname + "님을 팔로우합니다." });
         })
         .catch((error) => {
           console.log(error);

@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import http from "@api/http";
 import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
+import { useToast } from "@hooks/useToast";
 
 function Button({ onClick = () => {}, loading = false, children }) {
   return (
@@ -104,6 +105,7 @@ function PasswordConfirm({ register, error, name, label, password }) {
 }
 export default function PasswordModifyModal({ open, setOpen }) {
   const user = useRecoilValue(userInfo);
+  const { setToast } = useToast();
 
   const cancelButtonRef = useRef(null);
   const {
@@ -115,12 +117,13 @@ export default function PasswordModifyModal({ open, setOpen }) {
 
   const onSubmit = async (data) => {
     await http
-      .post("auth/password/put", {
+      .post("member/password/put", {
         email: user.email,
         password: data.password,
       })
       .then(() => {
         setOpen(false);
+        setToast({ message: "비밀번호가 변경되었습니다." });
       })
       .catch((err) => {
         console.log(err);

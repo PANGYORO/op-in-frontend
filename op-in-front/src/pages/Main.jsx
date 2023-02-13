@@ -1,8 +1,5 @@
 import React, { useEffect } from "react";
 import { Route, Routes, Outlet } from "react-router-dom";
-import jwt_decode from "jwt-decode";
-import { Cookies } from "react-cookie";
-import http from "@api/http";
 import Header from "@components/Header";
 import SignIn from "@pages/user/SignIn";
 import SignUp from "@pages/user/SignUp";
@@ -21,10 +18,10 @@ import RepoSelection from "@pages/repository/main/RepoSelection";
 import RecommandIndex from "@pages/repository/Recommand";
 import RepoDetail from "./repository/following/RepoDetail";
 import PostView from "@components/PostView";
-import useToken from "@hooks/useToken";
-import { useSetRecoilState } from "recoil";
-import { userInfo } from "@recoil/user/atoms";
 import "@assets/css/editor.css";
+
+import useAuth from "@hooks/useAuth";
+import { ScrollToTop } from "@components/ScrollToTop";
 
 function MainTemplate() {
   return (
@@ -40,34 +37,10 @@ function RepoTemplate() {
 }
 
 export default function Main() {
-  const { token } = useToken();
-  const cookies = new Cookies();
-  const setUser = useSetRecoilState(userInfo);
-
-  useEffect(() => {
-    const accessToken = cookies.get("accessToken");
-    if (accessToken) {
-      const decodedUserInfo = jwt_decode(accessToken);
-      http
-        .post(`member/mypage`, {
-          nickname: decodedUserInfo.nickname,
-        })
-        .then(({ data }) => {
-          setUser((prev) => ({
-            ...prev,
-            nickname: data.nickname,
-            email: data.email,
-            img_url: data.avataUrl,
-            logined: true,
-          }));
-        });
-    }
-  }, [token]);
-
   return (
-    <div className="Main overflow-auto">
+    <div className="Main bg-gray-100">
       <Header />
-      <main className="relative h-screen overflow-hidden bg-gray-100 dark:bg-gray-800">
+      <main className="relative bg-gray-100 dark:bg-gray-800">
         <Routes>
           <Route path="search" element={<Search />} />
           <Route path="signin" element={<SignIn />} />
@@ -90,8 +63,8 @@ export default function Main() {
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ScrollToTop />
       </main>
     </div>
   );
 }
-

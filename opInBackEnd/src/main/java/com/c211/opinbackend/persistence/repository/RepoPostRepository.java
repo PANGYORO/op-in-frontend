@@ -29,4 +29,7 @@ public interface RepoPostRepository extends JpaRepository<RepositoryPost, Long> 
 	Page<RepositoryPost> findAllTitleOrContentContainingInRepository(Repository repository, String query,
 		Pageable pageable);
 
+	@Query("SELECT DISTINCT post FROM RepositoryPost post JOIN post.member order by  post.date desc")
+	Page<RepositoryPost> findDistinctByRepositoryCreatedAt(Pageable pageable);
+
 }

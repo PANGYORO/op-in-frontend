@@ -2,8 +2,11 @@ package com.c211.opinbackend.repo.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -79,6 +82,18 @@ public class RepoPostController {
 	}
 
 	/**
+	 * pagenation 을 적용한 최신수 post
+	 *
+	 * @return
+	 */
+	@GetMapping("/news")
+	public ResponseEntity<?> getNewsPost(
+		@PageableDefault(size = 10, page = 0) Pageable pageable) {
+		List<RepoPostSimpleResponse> newsPost = repositoryPostService.getNewsPost(pageable);
+		return ResponseEntity.ok().body(newsPost);
+	}
+
+	/**
 	 * 래포지토리에 속한 포스트 가져오기
 	 *
 	 * @param repoId
@@ -98,7 +113,7 @@ public class RepoPostController {
 	/**
 	 * 맴버에 속한 포스트들 조회
 	 *
-	 * @param memberId
+	 * @param nickName
 	 * @return
 	 */
 	@GetMapping("member/{nickName}")
@@ -114,7 +129,7 @@ public class RepoPostController {
 	 */
 	@GetMapping("/{postId}")
 	public ResponseEntity<?> getDetailPost(@PathVariable("postId") Long postId) {
-		RepoPostDetailResponse repoDetail = repositoryPostService.getRepoDetail(postId);
+		RepoPostDetailResponse repoDetail = repositoryPostService.getPostDetail(postId);
 		return ResponseEntity.ok().body(repoDetail);
 	}
 
@@ -161,4 +176,27 @@ public class RepoPostController {
 		}
 	}
 
+	/**
+	 * 포스트 좋아요!!!
+	 *
+	 * @param postId
+	 * @return
+	 */
+	@PostMapping("/like/{postId}")
+	public ResponseEntity<?> likePost(@PathVariable("postId") Long postId) {
+		Boolean saveState = repositoryPostService.createLike(postId);
+		return ResponseEntity.ok().body(saveState);
+	}
+
+	@DeleteMapping("/like/{postId}")
+	public ResponseEntity<?> cancelLikePost(@PathVariable("postId") Long postId) {
+		Boolean deleteState = repositoryPostService.deleteLike(postId);
+		return ResponseEntity.ok().body(deleteState);
+	}
+
+	@GetMapping("/like/{postId}")
+	public ResponseEntity<?> checkLikePost(@PathVariable("postId") Long posId) {
+		Boolean checkLike = repositoryPostService.checkLike(posId);
+		return ResponseEntity.ok().body(checkLike);
+	}
 }

@@ -4,7 +4,47 @@ import { Link } from "react-router-dom";
 import { Tooltip } from "react-tooltip";
 import ContributorsModal from "@components/modals/ContributorsModal";
 
-export default function Status({ repoDetail }) {
+const GithubSvg = () => {
+  return (
+    <svg
+      version="1.0"
+      xmlns="http://www.w3.org/2000/svg"
+      width="512.000000pt"
+      height="512.000000pt"
+      viewBox="0 0 512.000000 512.000000"
+      className="w-6 h-6"
+      preserveAspectRatio="xMidYMid meet"
+    >
+      <g
+        transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+        fill="#000000"
+        stroke="none"
+      >
+        <path
+          d="M2247 4995 c-1043 -126 -1913 -881 -2167 -1880 -59 -234 -74 -356
+-74 -610 -1 -129 5 -259 13 -315 108 -783 536 -1431 1212 -1841 206 -124 479
+-239 570 -239 45 0 55 4 85 34 22 22 34 44 35 63 2 40 -3 448 -4 449 -1 1 -42
+-5 -92 -13 -108 -17 -273 -12 -360 12 -115 30 -202 79 -279 158 -64 63 -81 90
+-144 217 -83 169 -138 244 -230 308 -142 100 -165 144 -87 171 31 10 54 11
+103 3 136 -22 259 -109 355 -251 120 -178 219 -247 389 -271 78 -11 185 1 285
+31 71 22 71 22 98 131 18 70 67 163 111 209 l25 26 -63 7 c-103 12 -293 55
+-386 88 -168 59 -276 123 -395 237 -222 212 -326 520 -314 931 4 141 9 178 31
+255 36 121 88 223 164 323 48 64 60 86 53 100 -21 40 -41 168 -41 261 0 107
+18 219 50 317 25 73 38 78 145 63 136 -19 330 -99 506 -209 71 -45 80 -48 111
+-39 84 24 309 59 450 69 228 17 538 -10 737 -64 l54 -15 91 56 c175 108 358
+183 495 203 108 15 117 10 145 -79 13 -42 29 -111 36 -154 17 -103 8 -293 -17
+-372 l-19 -60 46 -56 c150 -187 212 -376 211 -645 -1 -671 -304 -1054 -930
+-1179 -64 -12 -142 -26 -174 -30 l-58 -7 35 -38 c43 -48 88 -135 112 -216 15
+-51 18 -122 23 -504 5 -334 9 -451 19 -467 17 -31 63 -53 108 -53 93 0 453
+163 659 297 165 109 299 219 435 359 385 395 615 869 691 1424 20 144 17 507
+-5 655 -172 1140 -1081 2015 -2234 2150 -154 18 -464 18 -615 0z"
+        />
+      </g>
+    </svg>
+  );
+};
+
+const Status = ({ repoDetail }) => {
   const [open, setOpen] = useState(false);
   const toggleModal = () => {
     setOpen(true);
@@ -15,14 +55,22 @@ export default function Status({ repoDetail }) {
       for (let i = 0; i < (list.length < 5 ? list.length : 5); i++) {
         result.push(
           <span key={i}>
-            <Link id={"cont" + list[i].id} to={`/userdetail`} state={list[i].nickname} key={i}>
+            <Link
+              id={"cont" + list[i].id}
+              to={`/userdetail`}
+              state={list[i].nickname}
+              key={i}
+            >
               <img
                 className="inline-block h-10 w-10 rounded-full object-cover ring-2 ring-white"
                 src={DefaultImg}
                 alt={list[i].nickname}
               />
             </Link>
-            <Tooltip anchorId={"cont" + list[i].id} content={list[i].nickname} />
+            <Tooltip
+              anchorId={"cont" + list[i].id}
+              content={list[i].nickname}
+            />
           </span>
         );
       }
@@ -45,21 +93,29 @@ export default function Status({ repoDetail }) {
     return result;
   };
   const moreContributors = () => {
-    if (repoDetail?.contributors != null && repoDetail?.contributors.length > 4) {
+    if (
+      repoDetail?.contributors != null &&
+      repoDetail?.contributors.length > 4
+    ) {
       return repoDetail?.contributors.length - 4 + " more Contributors...";
     } else return "";
   };
   return (
-    <div className="overflow-hidden relative max-w-xs p-4 h-screen bg-white shadow-lg rounded-xl dark:bg-gray-800 ml-3 ">
+    <div className="relative max-w-xs p-4 bg-white shadow-lg rounded-xl dark:bg-gray-800 ml-3 ">
       <div className="my-2">
         <span className="font-bold">Contributors</span>
         <div className="relative max-w-xs  my-2 h-full">
           <div className="block w-full h-full">
             <div className="w-full">
               <div className="flex items-center">
-                <div className="flex -space-x-2">{contributerRender(repoDetail?.contributors)}</div>
+                <div className="flex -space-x-2">
+                  {contributerRender(repoDetail?.contributors)}
+                </div>
               </div>
-              <div className="mt-2 text-blue-500 dark:text-gray-300" onClick={toggleModal}>
+              <div
+                className="mt-2 text-blue-500 dark:text-gray-300"
+                onClick={toggleModal}
+              >
                 {moreContributors()}
               </div>
             </div>
@@ -71,28 +127,12 @@ export default function Status({ repoDetail }) {
         {repoDetail?.updateDate == null ? "no data" : repoDetail?.updateDate}
       </div>
       <div className="my-2 font-bold">About</div>
-      <div className="grid grid-cols-3 my-2">{tagRender(repoDetail?.techLangs)}</div>
+      <div className="grid grid-cols-3 my-2">
+        {tagRender(repoDetail?.techLangs)}
+      </div>
+      <div className="my-2 font-bold">Last Update</div>
+      <div>{repoDetail.date}</div>
       <div className="m-4">
-        {/* <div>
-          <div className="inline-flex">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
-              />
-            </svg>
-            Readme
-          </div>
-        </div> */}
-
         <div className="inline-flex">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -110,31 +150,6 @@ export default function Status({ repoDetail }) {
           </svg>
           stars : {repoDetail?.star}
         </div>
-        {/* 
-        <div>
-          <div className="inline-flex">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
-            31watching
-          </div>
-        </div> */}
         <div>
           <div className="inline-flex">
             <svg
@@ -154,8 +169,26 @@ export default function Status({ repoDetail }) {
             forks : {repoDetail?.forkNum}
           </div>
         </div>
+        <div>
+          <a
+            id="visitsite"
+            className="inline-flex"
+            href={repoDetail.html}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <GithubSvg />
+            <Tooltip anchorId="visitsite" content="go to Github page" />
+            click to visit
+          </a>
+        </div>
       </div>
-      <ContributorsModal open={open} setOpen={setOpen} contributors={repoDetail?.contributors} />
+      <ContributorsModal
+        open={open}
+        setOpen={setOpen}
+        contributors={repoDetail?.contributors}
+      />
     </div>
   );
-}
+};
+export default Status;

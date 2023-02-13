@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import DefaultImg from "@assets/basicprofile.png";
 
 export default function Post({
-  postId = 1,
+  id = 1,
   createTime = "2022-02-09",
   title = "basic title",
   likeCount = 0,
@@ -18,14 +18,16 @@ export default function Post({
     <>
       <div>
         <div
-          className=" w-full p-4 bg-white shadow-lg rounded-2xl dark:bg-gray-700 items-center group sm:flex space-x-6 "
-          onClick={() => navigate(`/repo/postview`, { state: postId })}
+          className="w-full p-4 bg-white shadow-lg rounded-2xl dark:bg-gray-700 items-center group sm:flex space-x-6 "
+          onClick={() => navigate(`/repo/postview`, { state: id })}
         >
-          <div className="grid grid-row gap-3 w-full">
-            <div className="sm:w-full p-5">
-              <div className="space-y-2">
+          <div className="xl:text-clip grid grid-row gap-3 w-full ">
+            <div className="sm:w-full p-5 ">
+              <div className="space-y-2 ">
                 <div className="space-y-4 ">
-                  <h3 className="text-2xl font-semibold text-black-900 text-justify">{title}</h3>
+                  <div className="">
+                  <h3 className="text-2xl font-semibold text-black-900 w-64 truncate">{title}</h3>
+                  </div>
                 </div>
                 {/* <div className="flex items-center space-x-4 justify-between">
                   <div className="flex gap-3 space-y-1">
@@ -42,6 +44,7 @@ export default function Post({
                       alt={authorMemberName}
                     />
                   </div>
+
                   <div className="py-1 rounded-lg flex space-x-2 flex-row flex-1">
                     <div className="cursor-pointer text-center text-md justify-center items-center flex">
                       <svg
@@ -93,7 +96,7 @@ export default function Post({
                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                       ></path>
                     </svg>
-                    <p className="text-xs">{new Date(createTime).toLocaleString()}</p>
+                    <p className="text-xs truncate">{new Date(createTime).toLocaleString()}</p>
                   </div>
                 </div>
               </div>

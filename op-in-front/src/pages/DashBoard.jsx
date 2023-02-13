@@ -2,15 +2,11 @@ import React, { useCallback, useState } from "react";
 import News from "@pages/dashboard/News";
 import Hots from "@pages/dashboard/Hots";
 
-
-
 const NEWS_TAB = "news";
 const HOTS_TAB = "hots";
 
 export default function DashBoard() {
   const [tab, setTab] = useState(NEWS_TAB);
-  
-
 
   const onClick = useCallback((item) => {
     setTab(item);
@@ -23,7 +19,12 @@ export default function DashBoard() {
   return (
     <div className="w-full mt-4">
       <div className="ml-4 mb-4">
-        <header className="z-40 items-center w-full h-15 pb-3 bg-white shadow-lg dark:bg-gray-700 rounded-t-2xl">
+        <header className="z-40 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl">
+          <div className="relative flex items-center w-full h-full group ml-3 text-2xl">
+            DashBoard
+          </div>
+        </header>
+        <header className="z-40 items-center w-full h-15 mt-4 pb-3 bg-white shadow-lg dark:bg-gray-700 rounded-t-2xl">
           <ul className="pt-3 pl-3 flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
             <li className="mr-2">
               <div
@@ -44,7 +45,7 @@ export default function DashBoard() {
           </ul>
         </header>
       </div>
-      <div id="dashboardcontent" className="h-screen overflow-auto">
+      <div id="dashboardcontent">
         {tab == "news" ? <News /> : <Hots />}
       </div>
     </div>
