@@ -8,7 +8,7 @@ import fork2 from '@assets/video/fork2.mov'
 import clone from '@assets/video/clone.mov'
 import clone2 from '@assets/video/clone2.mov'
 import branch from '@assets/video/branch.mov'
-import contributor from '@assets/video/contributor.mov'
+import fix from '@assets/video/contributor.mov'
 import add from '@assets/video/add.mov'
 import commit from '@assets/video/commit.mov'
 import push from '@assets/video/push.mov'
@@ -74,7 +74,7 @@ function PRTutorial() {
     ),
   ];
   const navigate =  useNavigate()
-  const contentsList = [fork1, fork2, clone, clone2, branch, contributor, add, commit, push, pullReque, cpr, complete]
+  const contentsList = [fork1, fork2, clone, clone2, branch, fix, add, commit, push, pullReque, cpr, complete]
   const [curNum, setCurNum] = useState(0)
   const [curContent, setCurContent] = useState(contentsList[curNum])
   const joyRideSteps = [
@@ -112,31 +112,78 @@ function PRTutorial() {
     [
       {
         title:"CLONE", 
-        content: "create fork를 눌러 복제를 완료하세요! ",
+        content: "Visual Studio Code 를 실행하여 터미널을 실행시켜주세요! ",
         target: "#player",
         placement:"top-end",
       },
+      {
+        title:"CLONE", 
+        content: "터미널에 복사한 repository 주소를 clone 하여 내컴퓨터에 repository를 설치해 봅시다 ",
+        target: "#player",
+        placement:"top-end",
+      },
+      {
+        title:"CLONE", 
+        content: " 터미널에 'git clone 복사한 주소' 를 입력하고 enter를 눌러주세요 ",
+        target: "#player",
+        placement:"bottom",
+      },
+      {
+        title:"CLONE", 
+        content: " 축하합니다! clone을 통해 내 컴퓨터에 repository를 설치하는데 성공했습니다!  ",
+        target: "#player",
+        placement:"bottom",
+      },
+
     ],
     [
       {
         title:"BRANCH", 
-        content: "create fork를 눌러 복제를 완료하세요! ",
+        content: "컴퓨터에 설치된 first-contribution에 접근하여 나만의 branch를 만들어 봅시다",
         target: "#player",
         placement:"top-end",
       },
-    ],
-    [
       {
-        title:"FORK", 
-        content: "create fork를 눌러 복제를 완료하세요! ",
+        title:"BRANCH", 
+        content: "터미널에 'cd first-contribution'을 입력하고 enter를 눌러주세요",
         target: "#player",
         placement:"top-end",
+      },
+      {
+        title:"BRANCH", 
+        content: "이제 branch를 생성하여 작업환경을 나의 branch로 바꾸어 봅시다",
+        target: "#player",
+        placement:"bottom",
+      },
+      {
+        title:"BRANCH", 
+        content: "'git switch -c branchName'을 입력하세요. branchName은 여러분이 사용하고 싶은 단어를 사용해도 됩니다. ",
+        target: "#player",
+        placement:"bottom",
+      },
+      {
+        title:"BRANCH", 
+        content: "'git switch -c branchName'을 입력하고 enter를 눌렀다면 이제 나만의 branch가 생성되어 작업환경으로 변경됐습니다 ",
+        target: "#player",
+        placement:"bottom",
       },
     ],
     [
       {
         title:"FIX", 
-        content: "create fork를 눌러 복제를 완료하세요! ",
+        content: "이제 Contributor.md 파일에 이름을 남겨 기여를 해봅시다! ",
+        target: "#player",
+        placement:"top-end",
+      },
+      {
+        title:"FIX", 
+        content: "Visual Studio Code를 통해 first-contribution을 열어주세요",
+        target: "#player",
+        placement:"top-end",
+      },
+      {
+        title:"FIX", 
+        content: "Contributor.md 파일을 열어 첫줄과 마지막줄을 제외하고 이름과 github주소를 남겨주세요!",
         target: "#player",
         placement:"top-end",
       },
@@ -144,7 +191,7 @@ function PRTutorial() {
     [
       {
         title:"ADD", 
-        content: "create fork를 눌러 복제를 완료하세요! ",
+        content: "Contributor.md 파일을 수정하고 저장했다면 'git add Contributors.md' 를 입력하여 변경 내용을 스테이징 영역에 추가하세요",
         target: "#player",
         placement:"top-end",
       },
@@ -152,7 +199,7 @@ function PRTutorial() {
     [
       {
         title:"COMMIT", 
-        content: "create fork를 눌러 복제를 완료하세요! ",
+        content: "변경 내용에 대해 message를 남겨 봅시다. git commit -m 'Add your-name to Contributors list' 을 입력하세요",
         target: "#player",
         placement:"top-end",
       },
@@ -160,7 +207,19 @@ function PRTutorial() {
     [
       {
         title:"PUSH", 
-        content: "create fork를 눌러 복제를 완료하세요! ",
+        content: "이제 변경된 파일을 다시 웹상의 repository로 업로드 해봅시다.",
+        target: "#player",
+        placement:"top-end",
+      },
+      {
+        title:"PUSH", 
+        content: "우리는 아까 우리만의 branch를 생성하고 작업했기 때문에 이 branch를 통해 웹상의 repository로 업로드 해야 합니다",
+        target: "#player",
+        placement:"top-end",
+      },
+      {
+        title:"PUSH", 
+        content: "'git push -u origin your-branch-name' 를 입력하여 push를 진행하세요!",
         target: "#player",
         placement:"top-end",
       },
@@ -168,7 +227,13 @@ function PRTutorial() {
     [
       {
         title:"PULL & REQUEST", 
-        content: "create fork를 눌러 복제를 완료하세요! ",
+        content: "다시 fork 받은 repository로 돌아가보면 아까는 보이지 않던 compare & pull request 버튼이 활성화된걸 볼 수 있습니다",
+        target: "#player",
+        placement:"top-end",
+      },
+      {
+        title:"PULL & REQUEST", 
+        content: "compare & pull request 버튼을 눌러주세요!",
         target: "#player",
         placement:"top-end",
       },
@@ -176,7 +241,7 @@ function PRTutorial() {
     [
       {
         title:"PULL & REQUEST", 
-        content: "create fork를 눌러 복제를 완료하세요! ",
+        content: "마지막으로 Create pull request 버튼을 눌러주세요",
         target: "#player",
         placement:"top-end",
       },
@@ -184,7 +249,7 @@ function PRTutorial() {
     [
       {
         title:"COMPLETE", 
-        content: "create fork를 눌러 복제를 완료하세요! ",
+        content: "first-contriburions repository로 Pull request가 날라갔습니다! 관리자가 확인한 후 문제가 없다면 merge 시켜줄 것입니다",
         target: "#player",
         placement:"top-end",
       },
@@ -259,7 +324,7 @@ function PRTutorial() {
           <div></div>
           <div></div>
           <div className='grid grid-cols-2'>
-          { curNum !== contentsList.length - 1 ? (<button 
+          { curNum !== contentsList.length ? (<button 
               className="flex justify-center shadow-md rounded-md border border-transparent bg-green-400 py-2 my-3  text-sm font-medium text-white hover:bg-green-300 focus:outline-none focus:ring-2 focus:ring-green-200 focus:ring-offset-2"
               onClick={() => {
                 toggle(!state)
