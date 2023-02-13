@@ -22,6 +22,7 @@ import PostView from "@components/PostView";
 import "@assets/css/editor.css";
 
 import useAuth from "@hooks/useAuth";
+import { ScrollToTop } from "@components/ScrollToTop";
 
 function MainTemplate() {
   return (
@@ -63,6 +64,7 @@ export default function Main() {
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ScrollToTop />
       </main>
     </div>
   );
