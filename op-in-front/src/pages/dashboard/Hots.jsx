@@ -82,8 +82,8 @@ const Hots = () => {
   }
 
   const Pagination = ({ curPage, totalPage }) => {
-    let start = Math.floor((curPage + 1) / 10) * 10;
-    let tenend = Math.ceil((curPage + 1) / 10) * 10;
+    let start = Math.floor(((curPage % 10) == 9 ? curPage : (curPage + 1)) / 10) * 10;
+    let tenend = Math.ceil(((curPage % 10) == 9 ? curPage : (curPage + 1)) / 10) * 10;
     let end = tenend > totalPage ? totalPage : tenend;
     let result = [];
     for (let i = start; i < end; i++) {
