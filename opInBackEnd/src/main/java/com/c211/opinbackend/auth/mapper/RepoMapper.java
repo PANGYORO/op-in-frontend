@@ -1,6 +1,8 @@
-package com.c211.opinbackend.batch.dto.mapper;
+package com.c211.opinbackend.auth.mapper;
 
-import com.c211.opinbackend.batch.dto.github.RepositoryDto;
+import org.springframework.stereotype.Component;
+
+import com.c211.opinbackend.auth.model.RepositoryDto;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.Repository;
 
