@@ -16,7 +16,7 @@ const PostList = ({ posts = [] }) =>
     <Post
       key={post.id}
       id={post.id}
-      createTime={post.createTime}
+      date={post.date}
       title={post.title}
       likeCount={post.likeCount}
       commentCount={post.commentCount}
