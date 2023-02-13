@@ -52,7 +52,7 @@ export default function DeleteModal({ open, setOpen }) {
           }
         }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.debug(error));
   };
 
   return (

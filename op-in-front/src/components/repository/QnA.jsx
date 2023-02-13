@@ -55,9 +55,9 @@ const QnA = ({
         comment: data,
         qnaId: qnaId,
       })
-      .then(() => console.log("댓글 추가 성공"))
+      .then(() => console.debug("댓글 추가 성공"))
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
     setCommentList([
       ...CommentList,
@@ -66,7 +66,7 @@ const QnA = ({
         comment: data,
       },
     ]);
-    console.log(CommentList);
+    console.debug(CommentList);
     setToast({ message: "Comment가 추가되었습니다." });
   };
 

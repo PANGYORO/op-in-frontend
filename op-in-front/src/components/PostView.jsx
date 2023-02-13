@@ -133,7 +133,7 @@ const PostDetail = ({
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   };
 
@@ -165,7 +165,7 @@ const PostDetail = ({
           setLikesCount((prev) => prev - 1);
         })
         .catch((error) => {
-          console.log(error);
+          console.debug(error);
         });
     } else {
       http
@@ -175,7 +175,7 @@ const PostDetail = ({
           setLikesCount((prev) => prev + 1);
         })
         .catch((error) => {
-          console.log(error);
+          console.debug(error);
         });
     }
     setLikeState((prev) => !prev);
@@ -206,7 +206,7 @@ const PostDetail = ({
         setCommentsCount((prev) => prev + 1);
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   };
 
@@ -414,7 +414,7 @@ const PostView = () => {
       .then(({ data }) => {
         setDetail(data);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.debug(error));
   };
 
   return (

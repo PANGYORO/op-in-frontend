@@ -9,7 +9,7 @@ const QnaDeleteModal = ({ open, setOpen, qnaId, propFunction }) => {
 
   const deleteLogic = async () => {
     // 서버에 데이터 보내는 로직
-    console.log(qnaId);
+    console.debug(qnaId);
     await http
       .delete(`qna/${qnaId}`)
       .then(() => {
@@ -17,7 +17,7 @@ const QnaDeleteModal = ({ open, setOpen, qnaId, propFunction }) => {
         setOpen(false);
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   };
 

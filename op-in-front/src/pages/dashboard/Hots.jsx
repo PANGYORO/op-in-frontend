@@ -4,11 +4,11 @@ import http from "@api/http";
 import { useToast } from "@hooks/useToast";
 
 const PostList = ({ posts }) => {
-  // console.log(posts);
+  // console.debug(posts);
   return (
     <div className="grid grid-cols-2 gap-4 ml-4">
       {posts.map((post) => {
-        // console.log(post.id);
+        // console.debug(post.id);
         return (
           <Post
             key={post.id}
@@ -46,7 +46,7 @@ const Hots = () => {
         setResults([...data.repoPostSimpleResponseList]);
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   }, []);
 
@@ -58,7 +58,7 @@ const Hots = () => {
         setResults([...data.repoPostSimpleResponseList]);
       })
       .catch((error) => {
-        console.log(error);
+        console.debug(error);
       });
   }
 
