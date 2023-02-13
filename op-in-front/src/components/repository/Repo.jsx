@@ -5,7 +5,7 @@ const Repo = ({
   id = 423494644,
   title = "JavaProject_PizzaOrder",
   content = "2학년 2학기 '윈도우프로그래밍프로젝트' 과목 중 진행했던 팀 프로젝트 입니다.",
-  techLangs = ["react", "html"],
+  techLangs = [{ title: "react" }, { title: "html" }],
 }) => {
   const navigate = useNavigate();
 
