@@ -14,6 +14,7 @@ import lombok.ToString;
 @ToString
 public class RepositoryResponseDto {
 	private Long id;
+	private Long ownerId;
 	private String title;
 	private String content;
 	private List<RepoTechLangDto> techLangs;

@@ -4,6 +4,10 @@ import { recoilPersist } from "recoil-persist";
 const { persistAtom } = recoilPersist();
 
 export const DEFAULT_USERINFO = {
+  id: null,
+  role: null,
+  githubSync: null,
+  githubId: null,
   nickname: "",
   email: "",
   img_url: "",
@@ -15,4 +19,3 @@ export const userInfo = atom({
   default: Object.assign(DEFAULT_USERINFO),
   effects_UNSTABLE: [persistAtom],
 });
-

@@ -2,15 +2,20 @@ import { useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useRecoilState } from "recoil";
+
 import jwt_decode from "jwt-decode";
 
 import { userInfo, DEFAULT_USERINFO } from "@recoil/user/atoms";
+import { menuState, repoMenuState } from "@recoil/sidebar/atoms";
 import http from "@api/http";
 import { useToast } from "@hooks/useToast";
 
 function useAuth() {
   const [cookie, setCookie, removeCookie] = useCookies();
   const [user, setUser] = useRecoilState(userInfo);
+  const [menu, setMenu] = useRecoilState(menuState);
+  const [repoMenu, setRepoMenu] = useRecoilState(repoMenuState);
+
   const navigate = useNavigate();
   const { setToast } = useToast();
 
@@ -28,12 +33,16 @@ function useAuth() {
       // console.debug("@login", token);
       if (token) {
         const decodeAccessTokenUserInfo = jwt_decode(token);
-        _getUserInfo(decodeAccessTokenUserInfo.nickname, ({ data }) => {
+        _getUserInfo(({ data }) => {
           setUser((prev) => ({
             ...prev,
+            id: data.id,
             nickname: data.nickname,
-            email: decodeAccessTokenUserInfo.email, // data.email,
+            email: data.email || decodeAccessTokenUserInfo.email,
             img_url: data.avataUrl,
+            role: data.role,
+            githubSync: data.githubSync,
+            githubId: data.githubId,
             logined: true,
           }));
           setToast({ message: "로그인 성공!" });
@@ -50,12 +59,16 @@ function useAuth() {
       const decodeRefreshTokenUserInfo = jwt_decode(cookie.refreshToken);
 
       if (!_isExpiredToken(decodeAccessTokenUserInfo.exp)) {
-        _getUserInfo(decodeAccessTokenUserInfo.nickname, ({ data }) => {
+        _getUserInfo(({ data }) => {
           setUser((prev) => ({
             ...prev,
+            id: data.id,
             nickname: data.nickname,
-            email: decodeAccessTokenUserInfo.email, // data.email,
+            email: data.email || decodeAccessTokenUserInfo.email,
             img_url: data.avataUrl,
+            role: data.role,
+            githubSync: data.githubSync,
+            githubId: data.githubId,
             logined: true,
           }));
         });
@@ -63,6 +76,7 @@ function useAuth() {
         _isExpiredToken(decodeAccessTokenUserInfo.exp) &&
         _isExpiredToken(decodeRefreshTokenUserInfo.exp)
       ) {
+        _removeToken();
         // 둘 다 만료가 됐으면 로그아웃 시키기
         setUser(DEFAULT_USERINFO);
         setToast({ message: "인증이 만료되었습니다. 다시 로그인 해주세요!" });
@@ -75,12 +89,16 @@ function useAuth() {
     if (cookie.accessToken) {
       const decodeAccessTokenUserInfo = jwt_decode(cookie.accessToken);
       if (!_isExpiredToken(decodeAccessTokenUserInfo.exp)) {
-        _getUserInfo(decodeAccessTokenUserInfo.nickname, ({ data }) => {
+        _getUserInfo(({ data }) => {
           setUser((prev) => ({
             ...prev,
+            id: data.id,
             nickname: data.nickname,
-            email: decodeAccessTokenUserInfo.email, // data.email,
+            email: data.email || decodeAccessTokenUserInfo.email,
             img_url: data.avataUrl,
+            role: data.role,
+            githubSync: data.githubSync,
+            githubId: data.githubId,
             logined: true,
           }));
         });
@@ -94,11 +112,13 @@ function useAuth() {
 
   const _removeToken = useCallback(() => {
     removeCookie("accessToken", { path: "/" });
-    removeCookie("removeToken", { path: "/" });
+    removeCookie("refreshToken", { path: "/" });
     removeCookie("type", { path: "/" });
   }, []);
 
   const _goHome = useCallback(() => {
+    setMenu("dashboard");
+    setRepoMenu("myrepo");
     navigate("/");
   }, []);
 
@@ -106,11 +126,9 @@ function useAuth() {
     http.post("auth/logout");
   }, []);
 
-  const _getUserInfo = useCallback((nickname, callback = () => {}) => {
+  const _getUserInfo = useCallback((callback = () => {}) => {
     http
-      .post(`member/mypage`, {
-        nickname,
-      })
+      .get(`member`)
       .then(callback)
       .catch((e) => {
         console.error("[useAuth ERROR]", e);
@@ -126,4 +144,3 @@ function useAuth() {
 }
 
 export default useAuth;
-
