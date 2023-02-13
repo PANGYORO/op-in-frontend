@@ -1,7 +1,7 @@
 import React from "react";
 import PackageDocuments from "./education/documents/PackageDocuments";
 import { Tooltip } from "react-tooltip";
-import OpenSourceContribute from "@assets/opensourceContribute.png";
+import OpenSourceContribute from "@assets/oscontribute.png";
 import { useNavigate } from "react-router-dom";
 
 const TutorialContent = () => {
