@@ -5,7 +5,7 @@ import http from "@api/http";
 const UserList = ({ users }) => {
   console.log(users);
   return (
-    <div className="grid grid-cols-3 gap-4 ml-4">
+    <div className="grid grid-cols-3 gap-4 ml-4" >
       {users.map((user) => {
         return (
           <User
