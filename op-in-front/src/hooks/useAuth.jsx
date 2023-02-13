@@ -107,7 +107,7 @@ function useAuth() {
 
   const _removeToken = useCallback(() => {
     removeCookie("accessToken", { path: "/" });
-    removeCookie("removeToken", { path: "/" });
+    removeCookie("refreshToken", { path: "/" });
     removeCookie("type", { path: "/" });
   }, []);
 
