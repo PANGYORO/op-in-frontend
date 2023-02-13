@@ -2,15 +2,20 @@ import { useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useRecoilState } from "recoil";
+
 import jwt_decode from "jwt-decode";
 
 import { userInfo, DEFAULT_USERINFO } from "@recoil/user/atoms";
+import { menuState, repoMenuState } from "@recoil/sidebar/atoms";
 import http from "@api/http";
 import { useToast } from "@hooks/useToast";
 
 function useAuth() {
   const [cookie, setCookie, removeCookie] = useCookies();
   const [user, setUser] = useRecoilState(userInfo);
+  const [menu, setMenu] = useRecoilState(menuState);
+  const [repoMenu, setRepoMenu] = useRecoilState(repoMenuState);
+
   const navigate = useNavigate();
   const { setToast } = useToast();
 
@@ -112,6 +117,8 @@ function useAuth() {
   }, []);
 
   const _goHome = useCallback(() => {
+    setMenu("dashboard");
+    setRepoMenu("myrepo");
     navigate("/");
   }, []);
 
