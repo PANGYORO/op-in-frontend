@@ -9,8 +9,7 @@ import axios from "axios";
 const RepoList = ({ repos }) => {
   console.log(repos);
   return (
-    <div className="grid grid-cols-3 gap-4 ml-4">
-      <Repo />
+    <div className="grid grid-cols-3 gap-4">
       {repos.map((repo) => {
         return (
           <Repo
@@ -49,11 +48,15 @@ const RepoSelection = () => {
 
   return (
     <div className="flex flex-col w-full pl-0 md:p-4 h-screen">
-      <div className="flex items-top w-full  pt-2 pb-24 pl-2 pr-2 overflow-auto md:pt-0 md:pr-0 md:pl-0">
+      <header className="z-40 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl">
+        <div className="relative flex items-center w-full h-full group ml-3 text-2xl">
+          Select from My Repos
+        </div>
+      </header>
+      <div className="flex items-top w-full mt-4 pt-2 pb-24 pl-2 pr-2 overflow-auto md:pt-0 md:pr-0 md:pl-0">
         <RepoList repos={repoDatas} />
       </div>
     </div>
   );
 };
 export default RepoSelection;
-
