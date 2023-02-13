@@ -26,7 +26,7 @@ export default function Post({
               <div className="space-y-2 ">
                 <div className="space-y-4 ">
                   <div className="">
-                  <h3 className="text-2xl font-semibold text-black-900 w-64 truncate">{title}</h3>
+                    <h3 className="text-2xl font-semibold text-black-900 w-64 truncate">{title}</h3>
                   </div>
                 </div>
                 {/* <div className="flex items-center space-x-4 justify-between">
@@ -36,7 +36,7 @@ export default function Post({
                     </span>
                   </div>
                 </div> */}
-                <div className="flex items-center space-x-4 justify-between">
+                <div className="flex items-center space-x-0.5 justify-between">
                   <div>
                     <img
                       className="inline-block h-10 w-10 rounded-full object-cover ring-2 ring-white"
