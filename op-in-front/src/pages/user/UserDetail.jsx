@@ -185,12 +185,14 @@ const UserDetail = () => {
 
   return (
     <div className="flex items-start justify-between mx-44">
-      <div className="w-full mx-4 my-4 h-screen overflow-auto">
+      <div className="w-full mx-4 my-4">
         {/* 위쪽 정보창 */}
         <div className="grid grid-cols-3 gap-3 mb-8">
           {/* 프로필 이미지  */}
           <div className="flex flex-col place-items-center">
-            {isMe && <Tooltip anchorId="profile_img" content="Click to change Image" />}
+            {isMe && (
+              <Tooltip anchorId="profile_img" content="Click to change Image" />
+            )}
             <div
               className="h-full"
               id="profile_img"
@@ -230,7 +232,10 @@ const UserDetail = () => {
               <div>
                 {/* 오른쪽 상단 */}
                 <div className="grid grid-cols-2 gap-2 justify-items-between">
-                  <div className="bg-prinavy self-center"> {myInfo.nickname}</div>
+                  <div className="bg-prinavy self-center">
+                    {" "}
+                    {myInfo.nickname}
+                  </div>
 
                   <div className="self-center">
                     {isMe ? (
@@ -284,7 +289,7 @@ const UserDetail = () => {
                 <MyInfo currentuser={myInfo} />
               </div>
 
-              <div className=" w-2/3  h-screen overflow-auto">
+              <div className=" w-2/3  ">
                 <div className="ml-4 mb-4 ">
                   <header className="z-40 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl">
                     <div className="relative z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">

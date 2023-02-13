@@ -8,7 +8,6 @@ import UserDetail from "@pages/user/UserDetail";
 import SelectTag from "@pages/user/SelectTag";
 import PRTutorial from "@pages/education/tutorial/PRTutorial";
 
-
 import Search from "@pages/Search";
 import NotFound from "@pages/NotFound";
 import Sidebar from "@components/SideBar";
@@ -22,6 +21,7 @@ import PostView from "@components/PostView";
 import "@assets/css/editor.css";
 
 import useAuth from "@hooks/useAuth";
+import { ScrollToTop } from "@components/ScrollToTop";
 
 function MainTemplate() {
   return (
@@ -38,9 +38,9 @@ function RepoTemplate() {
 
 export default function Main() {
   return (
-    <div className="Main overflow-auto">
+    <div className="Main bg-gray-100">
       <Header />
-      <main className="relative h-screen overflow-hidden bg-gray-100 dark:bg-gray-800">
+      <main className="relative bg-gray-100 dark:bg-gray-800">
         <Routes>
           <Route path="search" element={<Search />} />
           <Route path="signin" element={<SignIn />} />
@@ -63,8 +63,8 @@ export default function Main() {
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ScrollToTop />
       </main>
     </div>
   );
 }
-

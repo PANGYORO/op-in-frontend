@@ -8,7 +8,7 @@ import { userInfo } from "@recoil/user/atoms";
 
 const PostList = ({ posts = [] }) => {
   return (
-    <div className="grid grid-cols-2 max-xl:grid-cols-1 gap-4 overflow-auto">
+    <div className="grid grid-cols-2 max-2xl:grid-cols-1 gap-4 w-full">
       {posts.map((post) => {
         return (
           <Post

@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import BoxLogo from "@assets/box-logo.png";
 import { Link, useMatch, useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { menuState } from "@recoil/sidebar/atoms";
-import { repoMenuState } from "@recoil/sidebar/atoms2";
+import { menuState, repoMenuState } from "@recoil/sidebar/atoms";
 
 import { userInfo } from "@recoil/user/atoms";
 import ToLoginModal from "./modals/ToLoginModal";
@@ -52,7 +51,7 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="ms:absolute h-screen my-4 ml-4 shadow-lg lg:block " >
+    <div className="ms:absolute  my-4 ml-4 shadow-lg lg:block w-64">
       <div className="h-full bg-white rounded-2xl dark:bg-gray-700 w-64">
         <div className="flex items-center justify-center pt-6">
           <Link
@@ -62,7 +61,11 @@ export default function Sidebar() {
               selectMenu(ITEMS.DASHBOARD);
             }}
           >
-            <img src={BoxLogo} alt="none" className="object-contain h-30 w-48" />
+            <img
+              src={BoxLogo}
+              alt="none"
+              className="object-contain h-30 w-48"
+            />
           </Link>
         </div>
 
@@ -140,7 +143,9 @@ export default function Sidebar() {
                     <li className="mb-3">
                       <Link
                         id="myrepo"
-                        className={repoCurrentMenu == "myrepo" ? "text-blue-500" : ""}
+                        className={
+                          repoCurrentMenu == "myrepo" ? "text-blue-500" : ""
+                        }
                         to="/repo"
                         onClick={() => {
                           selectRepoMenu("myrepo");
@@ -152,7 +157,9 @@ export default function Sidebar() {
                     <li>
                       <Link
                         id="recommand"
-                        className={repoCurrentMenu == "recommand" ? "text-blue-500" : ""}
+                        className={
+                          repoCurrentMenu == "recommand" ? "text-blue-500" : ""
+                        }
                         to="/repo/recommand"
                         onClick={() => {
                           selectRepoMenu("recommand");

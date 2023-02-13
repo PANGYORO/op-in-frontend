@@ -2,6 +2,8 @@ package com.c211.opinbackend.repo.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,6 +23,7 @@ import com.c211.opinbackend.persistence.entity.RepositoryPost;
 import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.model.requeset.RequestCommentCreateToPost;
 import com.c211.opinbackend.repo.model.requeset.RequestUpdatePost;
+import com.c211.opinbackend.repo.model.response.PageResponsePost;
 import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 import com.c211.opinbackend.repo.service.commnet.CommentService;
@@ -77,6 +80,25 @@ public class RepoPostController {
 		} catch (Exception exception) {
 			return ResponseEntity.badRequest().body("조회에 실패 했습니다.");
 		}
+	}
+
+	/**
+	 * pagenation 을 적용한 최신수 post
+	 *
+	 * @return
+	 */
+	@GetMapping("/news")
+	public ResponseEntity<?> getNewsPost(
+		@PageableDefault(size = 10, page = 0) Pageable pageable) {
+		PageResponsePost newsPost = repositoryPostService.getNewsPosts(pageable);
+		return ResponseEntity.ok().body(newsPost);
+	}
+
+	@GetMapping("/hot")
+	public ResponseEntity<?> getHotPost(@PageableDefault(size = 10, page = 0) Pageable pageable) {
+
+		PageResponsePost hotPosts = repositoryPostService.getHotPosts(pageable);
+		return ResponseEntity.ok().body(hotPosts);
 	}
 
 	/**
