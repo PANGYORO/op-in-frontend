@@ -39,4 +39,10 @@ public class UserDto {
 
 	@JsonProperty("updated_at")
 	private LocalDateTime updatedAt;
+
+	@JsonProperty("date")
+	private LocalDateTime date;
+
+	@JsonProperty("name")
+	private String name;
 }

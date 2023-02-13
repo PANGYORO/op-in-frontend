@@ -8,10 +8,6 @@ import com.c211.opinbackend.persistence.entity.Repository;
 
 @Component
 public class RepoMapper {
-	public static Repository toRepository(RepositoryDto repo) {
-		return toRepository(repo, null);
-	}
-
 	public static Repository toRepository(RepositoryDto repoDto, Member member) {
 		return new Repository().builder()
 			.id(repoDto.getId())

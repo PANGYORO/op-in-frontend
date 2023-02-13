@@ -1,6 +1,7 @@
 package com.c211.opinbackend.auth.service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,40 +27,58 @@ import com.c211.opinbackend.auth.jwt.TokenProvider;
 import com.c211.opinbackend.auth.model.MemberDto;
 import com.c211.opinbackend.auth.model.TokenDto;
 import com.c211.opinbackend.auth.model.response.OAuthAccessTokenResponse;
+import com.c211.opinbackend.batch.dto.RepoTechLanguageDto;
+import com.c211.opinbackend.batch.dto.github.CommitDto;
+import com.c211.opinbackend.batch.dto.github.ContributorDto;
+import com.c211.opinbackend.batch.dto.github.RepositoryDto;
+import com.c211.opinbackend.batch.dto.mapper.CommitHistoryMapper;
+import com.c211.opinbackend.batch.dto.mapper.PullRequestMapper;
+import com.c211.opinbackend.batch.dto.mapper.RepoMapper;
+import com.c211.opinbackend.batch.service.RepositoryService;
+import com.c211.opinbackend.batch.step.Action;
 import com.c211.opinbackend.constant.GitHub;
+import com.c211.opinbackend.exception.api.ApiExceptionEnum;
+import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.persistence.entity.Member;
+import com.c211.opinbackend.persistence.entity.PullRequest;
+import com.c211.opinbackend.persistence.entity.Repository;
+import com.c211.opinbackend.persistence.entity.RepositoryContributor;
+import com.c211.opinbackend.persistence.entity.RepositoryTechLanguage;
 import com.c211.opinbackend.persistence.entity.Role;
+import com.c211.opinbackend.persistence.entity.TechLanguage;
+import com.c211.opinbackend.persistence.repository.CommitHistoryRepository;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
+import com.c211.opinbackend.persistence.repository.PullRequestRepository;
+import com.c211.opinbackend.persistence.repository.RepoContributorRepository;
+import com.c211.opinbackend.persistence.repository.RepoTechLanguageRepository;
+import com.c211.opinbackend.persistence.repository.TechLanguageRepository;
 import com.c211.opinbackend.util.RandomString;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Service
 @Slf4j
+@Service
+@RequiredArgsConstructor
 public class OAuthServiceImpl implements OAuthService {
 	private final TokenProvider tokenProvider;
+	private final Action action;
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
-	private final String clientId;
-	private final String clientSecret;
-	MemberRepository memberRepository;
-
+	private final RepositoryService repositoryService;
+	private final TechLanguageRepository techLanguageRepository;
+	private final RepoTechLanguageRepository repoTechLanguageRepository;
+	private final RepoMapper repoMapper;
+	private final CommitHistoryRepository commitHistoryRepository;
+	private final CommitHistoryMapper commitHistoryMapper;
+	private final PullRequestMapper pullRequestMapper;
+	private final RepoContributorRepository repoContributorRepository;
+	private final PullRequestRepository pullRequestRepository;
+	private final MemberRepository memberRepository;
+	@Value("${security.oauth.github.client-id}")
+	private String clientId;
+	@Value("${security.oauth.github.client-secret}")
+	private String clientSecret;
 	private final PasswordEncoder passwordEncoder;
-
-	@Autowired
-	public OAuthServiceImpl(
-		PasswordEncoder passwordEncoder,
-		TokenProvider tokenProvider,
-		AuthenticationManagerBuilder authenticationManagerBuilder,
-		MemberRepository memberRepository,
-		@Value("${security.oauth.github.client-id}") String clientId,
-		@Value("${security.oauth.github.client-secret}") String clientSecret) {
-		this.memberRepository = memberRepository;
-		this.clientId = clientId;
-		this.clientSecret = clientSecret;
-		this.tokenProvider = tokenProvider;
-		this.authenticationManagerBuilder = authenticationManagerBuilder;
-		this.passwordEncoder = passwordEncoder;
-	}
 
 	/**
 	 * github OAuth를 위한 Redirect 주소를 리턴합니다.
@@ -78,9 +97,7 @@ public class OAuthServiceImpl implements OAuthService {
 		OAuthAccessTokenResponse tokenResponse = getToken(code, redirectUri);
 		MemberDto memberDto = getUserProfile(tokenResponse);
 		Member member = saveOrUpdate(memberDto);
-
 		TokenDto token = authorize(member);
-
 		return token;
 	}
 
@@ -112,7 +129,6 @@ public class OAuthServiceImpl implements OAuthService {
 		Member member = memberRepository.findByGithubId(memberDto.getGithubId())
 			.map(entity ->
 				entity.fetch(memberDto.getGithubToken(),
-					memberDto.getAvatarUrl(),
 					memberDto.getGithubUserName()
 				))
 			.orElseGet(memberDto::toMember);
