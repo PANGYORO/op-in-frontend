@@ -22,7 +22,7 @@ const navigation = [
 ];
 
 const Search = ({ search }) => {
-  const [value, setValue] = useState();
+  const [value, setValue] = useState("");
 
   const onKeyDown = (e) => {
     if (e.key == "Enter") {
