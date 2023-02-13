@@ -1,4 +1,4 @@
-import React, { Fragment, useRef, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import cx from "classnames";
 
@@ -6,8 +6,7 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import { useSetRecoilState } from "recoil";
-import { menuState } from "@recoil/sidebar/atoms";
-import { repoMenuState } from "@recoil/sidebar/atoms2";
+import { menuState, repoMenuState } from "@recoil/sidebar/atoms";
 
 import Logo from "@components/Logo";
 import useAuth from "@hooks/useAuth";
@@ -221,4 +220,3 @@ const Header = () => {
   );
 };
 export default Header;
-
