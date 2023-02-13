@@ -71,6 +71,7 @@ function useAuth() {
         _isExpiredToken(decodeAccessTokenUserInfo.exp) &&
         _isExpiredToken(decodeRefreshTokenUserInfo.exp)
       ) {
+        _removeToken();
         // 둘 다 만료가 됐으면 로그아웃 시키기
         setUser(DEFAULT_USERINFO);
         setToast({ message: "인증이 만료되었습니다. 다시 로그인 해주세요!" });
@@ -106,7 +107,7 @@ function useAuth() {
 
   const _removeToken = useCallback(() => {
     removeCookie("accessToken", { path: "/" });
-    removeCookie("removeToken", { path: "/" });
+    removeCookie("refreshToken", { path: "/" });
     removeCookie("type", { path: "/" });
   }, []);
 
@@ -136,4 +137,3 @@ function useAuth() {
 }
 
 export default useAuth;
-
