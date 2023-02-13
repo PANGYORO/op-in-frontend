@@ -110,7 +110,7 @@ function Button({ topic, lan }) {
       });
 
       setToast({ message: "관심tag를 저장했습니다! 로그인 후 op-in을 사용해보세요" });
-      navigate("/signin");
+      navigate("/tutorial/choose");
     } catch (error) {
       console.log(user.email);
       console.log(error);
