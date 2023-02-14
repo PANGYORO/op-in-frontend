@@ -46,15 +46,14 @@ export default function PostModal({
     const formData = new FormData();
     formData.append("uploadImage", file);
 
-    await http
+    http
       .post("post/upload/image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
       .then(({ data }) => {
-        console.debug(data);
-        callback(data.url, data.fileName);
+        callback(data.url, "");
       })
       .catch((e) => {
         console.error(e);
