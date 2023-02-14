@@ -27,7 +27,7 @@ public class Scheduler {
 
 	private final JobLauncher jobLauncher;
 
-	@Scheduled(cron = "0 0/1 * * * *")
+	@Scheduled(cron = "0 0/60 10 * * *")
 	public void getMemberRepositoryJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -40,7 +40,7 @@ public class Scheduler {
 		jobLauncher.run(getMemberRepositoryJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 0/1 * * * *")
+	@Scheduled(cron = "0 0/60 11 * * *")
 	public void getEnterRepositoryJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -53,7 +53,7 @@ public class Scheduler {
 		jobLauncher.run(getEnterRepositoryJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 0/10 * * * *")
+	@Scheduled(cron = "0 0/60 12 * * *")
 	public void getRepoTechLanguageJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -66,7 +66,7 @@ public class Scheduler {
 		jobLauncher.run(getRepoTechLanguageJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 0/60 9 * * *") // 매 3시간 마다
+	@Scheduled(cron = "0 0/60 13 * * *") // 매 3시간 마다
 	public void getRepoCommitJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -79,7 +79,7 @@ public class Scheduler {
 		jobLauncher.run(getRepoCommitJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 0/60 10 * * *") // 매 4시간 마다
+	@Scheduled(cron = "0 0/60 14 * * *") // 매 4시간 마다
 	public void getRepoPullRequestJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -92,7 +92,7 @@ public class Scheduler {
 		jobLauncher.run(getRepoPullRequestJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 0/60 11 * * *") // 매 시간 55분에
+	@Scheduled(cron = "0 0/60 15 * * *") // 매 시간 55분에
 	public void getRepoContributorJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
