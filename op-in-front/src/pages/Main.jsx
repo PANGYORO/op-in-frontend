@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes, Outlet } from "react-router-dom";
+import { Route, Routes, Outlet, Navigate } from "react-router-dom";
 import Header from "@components/Header";
 import SignIn from "@pages/user/SignIn";
 import SignUp from "@pages/user/SignUp";
@@ -24,6 +24,8 @@ import "@assets/css/editor.css";
 
 import { ScrollToTop } from "@components/ScrollToTop";
 
+import useAuth from "@hooks/useAuth";
+
 function MainTemplate() {
   return (
     <div className="flex items-start justify-between mx-44">
@@ -38,14 +40,22 @@ function RepoTemplate() {
 }
 
 export default function Main() {
+  const { hasAuth } = useAuth();
+
   return (
     <div className="Main bg-gray-100">
       <Header />
       <main className="relative bg-gray-100 ">
         <Routes>
           <Route path="search" element={<Search />} />
-          <Route path="signin" element={<SignIn />} />
-          <Route path="signup" element={<SignUp />} />
+          <Route
+            path="signin"
+            element={hasAuth ? <Navigate to="/" /> : <SignIn />}
+          />
+          <Route
+            path="signup"
+            element={hasAuth ? <Navigate to="/" /> : <SignUp />}
+          />
           <Route path="userfind" element={<UserFind />} />
           <Route path="userdetail" element={<UserDetail />} />
           <Route path="selecttag" element={<SelectTag />} />
