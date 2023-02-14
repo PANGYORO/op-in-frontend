@@ -11,10 +11,13 @@ import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.c211.opinbackend.batch.dto.github.CommitDto;
 import com.c211.opinbackend.batch.dto.github.ContributorDto;
 import com.c211.opinbackend.batch.step.Action;
 import com.c211.opinbackend.constant.GitHub;
+import com.c211.opinbackend.persistence.entity.BatchToken;
 import com.c211.opinbackend.persistence.entity.Repository;
+import com.c211.opinbackend.persistence.repository.BatchTokenRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +32,8 @@ public class GetRepoContributorReader implements ItemReader<ContributorDto> {
 	private int nextIndex = 0;//리스트의 데이터를 하나씩 인덱스를 통해 가져온다.
 	private final RepoRepository repoRepository;
 	private final Action action;
-	private final String githubToken;
+	private final BatchTokenRepository batchTokenRepository;
+
 
 	@Override
 	public ContributorDto read() throws
@@ -39,15 +43,34 @@ public class GetRepoContributorReader implements ItemReader<ContributorDto> {
 		NonTransientResourceException {
 
 		if (checkRestCall == false) {//한번도 호출 않았는지 체크
-			List<Repository> repos = repoRepository.findAll();
+			// token 초기화
+			List<BatchToken> batchTokens = batchTokenRepository.findAll();
+			int index = 0;
+			String githubToken = batchTokens.get(index).getAccessToken();
 
+			List<Repository> repos = repoRepository.findAll();
 			for (Repository repo : repos) {
-				ContributorDto[] contributorDtos = action.getContributors(githubToken, repo.getFullName());
-				for (ContributorDto con : contributorDtos) {
-					con.setRepository(repo);
+				List<ContributorDto> result = new ArrayList<>();
+				int page = 1;
+
+				while (true) {
+					try {
+						ContributorDto[] contributorDtos = action.getContributors(githubToken, repo.getFullName(), String.valueOf(page));
+						result.addAll(Arrays.asList(contributorDtos));
+						if (contributorDtos.length < 100) {
+							break;
+						}
+						page += 1;
+					} catch (Exception e) {
+						index += 1;
+						if (batchTokens.size() <= index) {
+							break;
+						}
+						githubToken = batchTokens.get(index).getAccessToken();
+					}
 				}
-				List<ContributorDto> contributorDtoList = Arrays.asList(contributorDtos);
-				collectData.addAll(contributorDtoList);
+
+				collectData.addAll(result);
 			}
 
 			log.info("Rest Call result : >>>>>>>" + collectData.size());

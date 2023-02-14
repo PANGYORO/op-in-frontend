@@ -26,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @RequiredArgsConstructor
 public class GetRepoPullRequestJobConfig {
-	/**
 
 	private final JobBuilderFactory jobBuilderFactory;
 	private final StepBuilderFactory stepBuilderFactory;
@@ -57,5 +56,4 @@ public class GetRepoPullRequestJobConfig {
 			.build();
 	}
 
-	*/
 }

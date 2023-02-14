@@ -23,7 +23,9 @@ public class GetRepoCommitWriter implements ItemWriter<CommitDto> {
 	public void write(List<? extends CommitDto> items) throws Exception {
 		for (CommitDto commit : items) {
 			try {
-				commitHistoryRepository.save(commitHistoryMapper.toCommitHistory(commit));
+				if (commitHistoryRepository.findBySha(commit.getSha()).orElse(null) == null) {
+					commitHistoryRepository.save(commitHistoryMapper.toCommitHistory(commit));
+				}
 			} catch (Exception e) {
 				log.info(e.toString());
 			}

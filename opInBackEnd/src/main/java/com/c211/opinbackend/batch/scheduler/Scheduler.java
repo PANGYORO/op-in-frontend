@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class Scheduler {
-	/**
 	private final Job getMemberRepositoryJob;
 	private final Job getRepoTechLanguageJob;
 	private final Job getRepoCommitJob;
@@ -28,7 +27,7 @@ public class Scheduler {
 
 	private final JobLauncher jobLauncher;
 
-	@Scheduled(cron = "0 0/60 10 * * *")
+	@Scheduled(cron = "0 31 2 * * *")
 	public void getMemberRepositoryJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -41,7 +40,7 @@ public class Scheduler {
 		jobLauncher.run(getMemberRepositoryJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 0/60 11 * * *")
+	@Scheduled(cron = "0 38 2 * * *")
 	public void getEnterRepositoryJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -54,7 +53,7 @@ public class Scheduler {
 		jobLauncher.run(getEnterRepositoryJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 0/60 12 * * *")
+	@Scheduled(cron = "0 40 3 * * *")
 	public void getRepoTechLanguageJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -67,7 +66,7 @@ public class Scheduler {
 		jobLauncher.run(getRepoTechLanguageJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 0/60 13 * * *") // 매 3시간 마다
+	@Scheduled(cron = "0 10 3 * * *") // 매 3시간 마다
 	public void getRepoCommitJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -93,7 +92,7 @@ public class Scheduler {
 		jobLauncher.run(getRepoPullRequestJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 0/60 15 * * *") // 매 시간 55분에
+	@Scheduled(cron = "0 0/25 3 * * *") // 매 시간 55분에
 	public void getRepoContributorJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -106,5 +105,4 @@ public class Scheduler {
 		jobLauncher.run(getRepoContributorJob, jobParameters);
 	}
 
-	*/
 }

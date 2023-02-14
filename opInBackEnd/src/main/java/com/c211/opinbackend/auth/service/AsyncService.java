@@ -47,7 +47,7 @@ public class AsyncService {
 	public static RepositoryDto[] getMemberRepository(String githubToken, String githubUserName) {
 		return WebClient.create()
 			.get()
-			.uri(GitHub.getUserRepoUrl(githubUserName))
+			.uri(GitHub.getUserRepoUrl(githubUserName, "1"))
 			.header("Authorization", "token "+githubToken)
 			.retrieve().bodyToMono(RepositoryDto[].class).block();
 	}

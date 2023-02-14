@@ -16,6 +16,7 @@ import com.c211.opinbackend.batch.item.reader.GetRepoCommitReader;
 import com.c211.opinbackend.batch.item.writer.GetRepoCommitWriter;
 import com.c211.opinbackend.batch.listener.LoggerListener;
 import com.c211.opinbackend.batch.step.Action;
+import com.c211.opinbackend.persistence.repository.BatchTokenRepository;
 import com.c211.opinbackend.persistence.repository.CommitHistoryRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
 
@@ -24,23 +25,23 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @RequiredArgsConstructor
 public class GetRepoCommitJobConfig {
-	/**
 	private final JobBuilderFactory jobBuilderFactory;
 	private final StepBuilderFactory stepBuilderFactory;
 	private final RepoRepository repoRepository;
 	private final CommitHistoryRepository commitHistoryRepository;
 	private final CommitHistoryMapper commitHistoryMapper;
+	private final BatchTokenRepository batchTokenRepository;
 	private final Action action;
 
-	@Value("${githubToken2}")
-	private String githubToken;
-
 	@Bean
-	public Job getRepoCommitJob(Step getRepoCommitStep) {
+	public Job getRepoCommitJob(Step accessTokenTestStep, Step getRepoCommitStep, Step batchTokenResetStep) {
 		return jobBuilderFactory.get("getRepoCommitJob")
 			.incrementer(new RunIdIncrementer())
 			.listener(new LoggerListener())
-			.start(getRepoCommitStep)
+			.start(accessTokenTestStep)
+				.on("FAILED").to(batchTokenResetStep).on("*").end()
+			.from(accessTokenTestStep)
+				.on("*").to(getRepoCommitStep).on("*").to(batchTokenResetStep).end()
 			.build();
 	}
 
@@ -50,9 +51,8 @@ public class GetRepoCommitJobConfig {
 		return stepBuilderFactory.get("getRepoCommitStep")
 			.<CommitDto
 				, CommitDto>chunk(1)
-			.reader(new GetRepoCommitReader(repoRepository, action, githubToken))
+			.reader(new GetRepoCommitReader(repoRepository, action, batchTokenRepository))
 			.writer(new GetRepoCommitWriter(commitHistoryRepository, commitHistoryMapper))
 			.build();
 	}
-	*/
 }

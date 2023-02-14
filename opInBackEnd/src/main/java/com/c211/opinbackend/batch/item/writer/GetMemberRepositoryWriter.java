@@ -6,6 +6,8 @@ import org.springframework.batch.item.ItemWriter;
 
 import com.c211.opinbackend.batch.dto.github.RepositoryDto;
 import com.c211.opinbackend.batch.service.RepositoryService;
+import com.c211.opinbackend.persistence.entity.Repository;
+import com.c211.opinbackend.persistence.repository.RepoRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,12 +17,13 @@ import lombok.extern.slf4j.Slf4j;
 public class GetMemberRepositoryWriter implements ItemWriter<RepositoryDto> {
 
 	private final RepositoryService repositoryService;
+	private final RepoRepository repoRepository;
 
 	@Override
 	public void write(List<? extends RepositoryDto> items) throws Exception {
 		for (RepositoryDto repo : items) {
-			log.info(repo.toString());
 			try {
+				Repository repository = repoRepository.findById(repo.getId()).orElse(null);
 				repositoryService.saveOrUpdateRepository(repo);
 			} catch (Exception e) {
 				log.info(e.toString());
