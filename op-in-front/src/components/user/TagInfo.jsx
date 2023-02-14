@@ -7,12 +7,12 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
   // console.debug(taglist);
   // console.debug(taglist.length);
   const [openState, setOpenState] = useState(false);
-  const [curlength, setCurlength] = useState(0);
+  // const [curlength, setCurlength] = useState(0);
   const [amount, setAmount] = useState(0);
   const inputRef = useRef();
 
   useEffect(() => {
-    setCurlength(taglist.length);
+    // setCurlength(taglist.length);
     setAmount(taglist.length);
   });
 
@@ -27,7 +27,7 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
 
   const rendering = (list) => {
     const result = [];
-    for (let i = 0; i < curlength; i++) {
+    for (let i = 0; i < list.length; i++) {
       let tempid = title + "-minus-" + i;
       result.push(
         <span id={tempid} key={i}>
@@ -44,6 +44,7 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
                 type="button"
                 onClick={() => {
                   MinusTag(list[i].title, document.getElementById(tempid));
+                  console.log(amount);
                   //document.getElementById(tempid).remove();
                   //setAmount(amount - 1);
                 }}
@@ -66,8 +67,8 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
           title: data,
         })
         .then(() => {
+          setAmount((prev) => (prev - 1));
           e.remove();
-          setAmount(amount - 1);
           setToast({ message: data + " 언어 태그가 삭제되었습니다." });
         })
         .catch(() => {
@@ -79,8 +80,8 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
           title: data,
         })
         .then(() => {
+          setAmount((prev) => (prev - 1));
           e.remove();
-          setAmount(amount - 1);
           setToast({ message: data + " 토픽 태그가 삭제되었습니다." });
         })
         .catch(() => {
@@ -91,6 +92,11 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
     }
   };
   const PlusTag = async (data) => {
+
+    if (amount == 10) {
+      setToast({ message: "태그 갯수는 최대 10개까지 입니다." });
+      return;
+    }
     if (title == "Language") {
       await http
         .post(`member/language/put`, {
@@ -101,8 +107,8 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
             id: "",
             title: data,
           });
-          setCurlength(Number(curlength) + 1);
-          setAmount(Number(amount) + 1);
+          // setCurlength((prev) => (prev + 1));
+          setAmount((prev) => (prev + 1));
           setToast({ message: data + " 언어 태그가 추가되었습니다." });
         })
         .catch(() => {
@@ -118,8 +124,8 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
             id: "",
             title: data,
           });
-          setCurlength(Number(curlength) + 1);
-          setAmount(Number(amount) + 1);
+          // setCurlength((prev) => (prev + 1));
+          setAmount((prev) => (prev + 1));
           setToast({ message: data + " 토픽 태그가 추가되었습니다." });
         })
         .catch(() => {
@@ -145,7 +151,8 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
               placeholder="Insert Name..."
               onKeyUp={(e) => {
                 if (e.key == "Enter") {
-                  PlusTag(document.getElementById("add" + title).value);
+                  PlusTag(document.getElementById("add" + title).value.toUpperCase());
+                  console.log(amount);
                   setOpenState(false);
                 }
               }}
@@ -157,6 +164,7 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
               type="button"
               onClick={() => {
                 PlusTag(document.getElementById("add" + title).value);
+                console.log(amount);
                 setOpenState(false);
               }}
             >
@@ -180,10 +188,11 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
   return (
     <>
       <p className="p-4 font-bold text-black text-md dark:text-white">
-        {title}
+        {title}s
         <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
           ({amount})
         </span>
+
       </p>
       <div className="mb-3">
         <span id={title}>{rendering(taglist)}</span>
