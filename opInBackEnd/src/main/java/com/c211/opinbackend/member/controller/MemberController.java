@@ -1,9 +1,6 @@
 package com.c211.opinbackend.member.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -24,7 +21,6 @@ import com.c211.opinbackend.auth.model.request.MemberNicknameRequest;
 import com.c211.opinbackend.auth.model.request.MemberPasswordRequest;
 import com.c211.opinbackend.auth.model.response.MypageResponse;
 import com.c211.opinbackend.auth.service.MailService;
-import com.c211.opinbackend.batch.step.Recommend;
 import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
@@ -37,7 +33,6 @@ import com.c211.opinbackend.member.model.response.FileUploadResponse;
 import com.c211.opinbackend.member.service.MemberService;
 import com.c211.opinbackend.member.service.S3FileUploadService;
 import com.c211.opinbackend.persistence.entity.Member;
-import com.c211.opinbackend.persistence.entity.RepositoryFollow;
 import com.c211.opinbackend.persistence.repository.RepositoryFollowRepository;
 import com.c211.opinbackend.util.SecurityUtil;
 
@@ -53,15 +48,8 @@ public class MemberController {
 	private final MemberService memberService;
 	private final MailService mailService;
 	private final S3FileUploadService s3FileUploadService;
-	private final Recommend recommend;
 
 	private final RepositoryFollowRepository repositoryFollowRepository;
-
-	@GetMapping("/test1")
-	public ResponseEntity<?> getReco() {
-		recommend.prepareMatrix();
-		return ResponseEntity.ok().body(null);
-	}
 
 	/**
 	 * 로그인 되어 있다면 내정보를 가져올수 있는 api

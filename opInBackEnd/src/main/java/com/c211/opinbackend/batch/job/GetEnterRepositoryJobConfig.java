@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @RequiredArgsConstructor
 public class GetEnterRepositoryJobConfig {
+	/**
 	private final JobBuilderFactory jobBuilderFactory;
 	private final StepBuilderFactory stepBuilderFactory;
 	private final RepositoryService repositoryService;
@@ -53,4 +54,5 @@ public class GetEnterRepositoryJobConfig {
 			.writer(new GetMemberRepositoryWriter(repositoryService))
 			.build();
 	}
+	*/
 }

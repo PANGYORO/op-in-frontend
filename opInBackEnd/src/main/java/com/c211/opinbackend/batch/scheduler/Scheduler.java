@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class Scheduler {
+	/**
 	private final Job getMemberRepositoryJob;
 	private final Job getRepoTechLanguageJob;
 	private final Job getRepoCommitJob;
@@ -105,4 +106,5 @@ public class Scheduler {
 		jobLauncher.run(getRepoContributorJob, jobParameters);
 	}
 
+	*/
 }
