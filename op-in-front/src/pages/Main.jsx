@@ -7,7 +7,7 @@ import UserFind from "@pages/user/UserFind";
 import UserDetail from "@pages/user/UserDetail";
 import SelectTag from "@pages/user/SelectTag";
 import PRTutorial from "@pages/education/tutorial/PRTutorial";
-import TutorialComplete from '@pages/education/tutorial/tutorialComplete';
+import TutorialComplete from '@pages/education/tutorial/TutorialComplete';
 import ChooseTutorial from '@pages/education/tutorial/ChooseTutorial';
 
 import Search from "@pages/Search";
