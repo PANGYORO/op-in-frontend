@@ -22,20 +22,16 @@ public class GitHub {
 		return PUBLIC_USER_REPO_URL.replace("{USERNAME}", githubUserName)+"?page="+page+"&per_page=100";
 	}
 
-	public static String getPublicRepositoryLanguageUrl(String repositoryFullName) {
-		return PUBLIC_REPOSITORY_LANGUAGE_URL.replace("{REPOSITORY_FULLNAME}", repositoryFullName);
-	}
-
-	public static String getPublicRepositoryLanguageUrl(String repositoryName, String githubUserName) {
-		return PUBLIC_REPOSITORY_LANGUAGE_URL.replace("{REPOSITORY_FULLNAME}", githubUserName + "/" + repositoryName);
+	public static String getPublicRepositoryLanguageUrl(String repositoryFullName, String page) {
+		return PUBLIC_REPOSITORY_LANGUAGE_URL.replace("{REPOSITORY_FULLNAME}", repositoryFullName)+"?page="+page+"&per_page=100";
 	}
 
 	public static String getPublicRepositoryCommitUrl(String repositoryFullName, String page) {
 		return PUBLIC_REPOSITORY_COMMIT_URL.replace("{REPOSITORY_FULLNAME}", repositoryFullName)+"?page="+page+"&per_page=100";
 	}
 
-	public static String getPublicRepositoryPullsUrl(String repositoryFullName) {
-		return PUBLIC_REPOSITORY_PULLS_URL.replace("{REPOSITORY_FULLNAME}", repositoryFullName);
+	public static String getPublicRepositoryPullsUrl(String repositoryFullName, String page) {
+		return PUBLIC_REPOSITORY_PULLS_URL.replace("{REPOSITORY_FULLNAME}", repositoryFullName)+"?page="+page+"&per_page=100";
 	}
 
 	public static String getPublicRepositoryContributorsUrl(String repositoryFullName, String page) {

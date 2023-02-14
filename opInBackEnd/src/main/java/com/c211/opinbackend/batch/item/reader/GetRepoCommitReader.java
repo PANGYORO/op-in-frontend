@@ -52,6 +52,10 @@ public class GetRepoCommitReader implements ItemReader<CommitDto> {
 				while (true) {
 					try {
 						CommitDto[] commits = action.getRepositoryCommits(githubToken, repo.getFullName(), String.valueOf(page));
+						for (CommitDto com : commits) {
+							com.setRepo(repo);
+						}
+
 						result.addAll(Arrays.asList(commits));
 						if (commits.length < 100) {
 							break;

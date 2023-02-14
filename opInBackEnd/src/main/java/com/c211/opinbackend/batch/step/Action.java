@@ -45,11 +45,11 @@ public class Action {
 			.retrieve().bodyToMono(RepositoryDto[].class).block();
 	}
 
-	public static Map<String, Long> getRepositoryLanguages(String githubToken, String repositoryFullName) {
-		return WebClient.create()
+	public Map<String, Long> getRepositoryLanguages(String githubToken, String repositoryFullName, String page) {
+		return webClient
 			.get()
 			.uri(
-				GitHub.getPublicRepositoryLanguageUrl(repositoryFullName)
+				GitHub.getPublicRepositoryLanguageUrl(repositoryFullName, page)
 			)
 			.header("Authorization", "token "+githubToken)
 			.retrieve().bodyToMono(new ParameterizedTypeReference<Map<String, Long>>() {
@@ -74,10 +74,10 @@ public class Action {
 			.retrieve().bodyToMono(CommitDto[].class).block();
 	}
 
-	public static PullRequestDto[] getRepositoryPulls(String githubToken, String repositoryFullName) {
-		return WebClient.create()
+	public PullRequestDto[] getRepositoryPulls(String githubToken, String repositoryFullName, String page) {
+		return webClient
 			.get()
-			.uri(GitHub.getPublicRepositoryPullsUrl(repositoryFullName))
+			.uri(GitHub.getPublicRepositoryPullsUrl(repositoryFullName,page))
 			.header("Authorization", "token "+githubToken)
 			.retrieve().bodyToMono(PullRequestDto[].class).block();
 	}

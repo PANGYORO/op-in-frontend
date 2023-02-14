@@ -24,7 +24,9 @@ public class GetMemberRepositoryWriter implements ItemWriter<RepositoryDto> {
 		for (RepositoryDto repo : items) {
 			try {
 				Repository repository = repoRepository.findById(repo.getId()).orElse(null);
-				repositoryService.saveOrUpdateRepository(repo);
+				if (repository == null) {
+					repositoryService.saveOrUpdateRepository(repo);
+				}
 			} catch (Exception e) {
 				log.info(e.toString());
 			}

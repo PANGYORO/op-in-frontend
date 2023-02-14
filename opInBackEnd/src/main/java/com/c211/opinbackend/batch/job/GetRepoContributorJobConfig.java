@@ -34,14 +34,17 @@ public class GetRepoContributorJobConfig {
 	private final RepoContributorRepository repoContributorRepository;
 	private final Action action;
 	private final BatchTokenRepository batchTokenRepository;
-	
+
 
 	@Bean
-	public Job getRepoContributorJob(Step getRepoContributorStep) {
+	public Job getRepoContributorJob(Step accessTokenTestStep, Step getRepoContributorStep, Step batchTokenResetStep) {
 		return jobBuilderFactory.get("getRepoContributorJob")
 			.incrementer(new RunIdIncrementer())
 			.listener(new LoggerListener())
-			.start(getRepoContributorStep)
+			.start(accessTokenTestStep)
+				.on("FAILED").to(batchTokenResetStep).on("*").end()
+			.from(accessTokenTestStep)
+				.on("*").to(getRepoContributorStep).on("*").to(batchTokenResetStep).end()
 			.build();
 	}
 
