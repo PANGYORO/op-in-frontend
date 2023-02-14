@@ -1,63 +1,53 @@
 import React, { useState, useEffect } from "react";
 import http from "@api/http";
-import { useLocation } from "react-router-dom";
 import Repo from "@components/repository/Repo";
-//axios 사용해서 정보 전달
-// const arr = ['배열 요소1', '배열 요소2', '배열 요소3'];
-// arr.map((elem, index) => {
-//   console.debug(elem);
-//   console.debug(index);
-// });
 
-// repos.map((elem, index) => {
-//   console.debug(elem);
-//   console.debug(index);
-// })
+
+const RepoList = ({ repos }) => {
+  console.debug(repos);
+  return (
+    <div className="grid grid-cols-3 gap-4">
+      {repos.map((repo) => {
+        return (
+          <Repo
+            key={repo.id}
+            id={repo.id}
+            title={repo.title}
+            content={repo.content}
+            techLangs={repo.techLangs}
+          />
+        );
+      })}
+    </div>
+  );
+};
 
 function RecommandIndex() {
-  const [myinfo, setMyInfo] = useState("");
-  // const location = useLocation();
-  // const currentEmail = location.state;
+  const [repoDatas, setRepoData] = useState([]);
 
-  async function getRepo() {
-    await http
-      .post("post/")
-      .then((response) => {
-        console.debug(myinfo);
-        setMyInfo(response.data);
+  const getRepo = () => {
+    http
+      .get("member/repo/recommend")
+      .then(({ data }) => {
+        console.log(data);
+        setRepoData([...data]);
       })
       .catch(() => console.debug("error"));
-    console.debug("error");
   }
-
-  // async function RepoData() {
-  //   // await http
-  //   //   .post(`repo/member`, {
-  //   //     email: currentEmail,
-  //   //   })
-  //   //   .then((response) => {
-  //   //     // alert(currentEmail);
-  //   //     // alert(response.data.nickname);
-  //   //     console.debug(response.data);
-  //   //     setMyInfo(response.data);
-  //   //   })
-  //   //   .catch(() => alert("error"));
-  //   console.debug(myinfo);
-  // }
 
   useEffect(() => {
     getRepo();
   }, []);
 
   return (
-    <div className="z-40 items-center w-full h-15 pb-3  rounded-t-2xl">
-      <div className="grid grid-cols-1 gap-4 mt-4 ml-4">
-        <header className="z-40 items-center w-full h-16 bg-white shadow-lg  rounded-2xl">
-          <div className="relative flex items-center w-full h-full lg:w-64 group ml-3 text-2xl">
-            Recommand Repos
-          </div>
-        </header>
-        <Repo />
+    <div className="flex flex-col w-full pl-0 md:p-4 ">
+      <header className="z-40 items-center w-full h-16 bg-white shadow-lg  rounded-2xl">
+        <div className="relative flex items-center w-full h-full group ml-3 text-2xl">
+          Recommand Repos
+        </div>
+      </header>
+      <div className="flex items-top w-full mt-4 pt-2 pb-24 pl-2 pr-2 md:pt-0 md:pr-0 md:pl-0">
+        <RepoList repos={repoDatas} />
       </div>
     </div>
   );

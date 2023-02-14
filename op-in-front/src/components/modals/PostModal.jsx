@@ -2,6 +2,8 @@ import React, { Fragment, useState, useRef, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Editor } from "@toast-ui/react-editor";
 import http from "@api/http";
+import { useToast } from "@hooks/useToast";
+
 
 export default function PostModal({
   open,
@@ -13,6 +15,7 @@ export default function PostModal({
   const [title, setText] = useState("");
   const cancelButtonRef = useRef();
   const editorRef = useRef();
+  const { setToast } = useToast();
 
   const textChangeHandler = (e) => {
     setText(e.target.value);
@@ -31,7 +34,7 @@ export default function PostModal({
         content: data,
       })
       .then(({ data }) => {
-        console.debug(data);
+        // console.debug(data);
         propFunction(data);
       })
       .catch((error) => {
@@ -142,8 +145,12 @@ export default function PostModal({
                     type="button"
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                     onClick={() => {
-                      setOpen(false);
-                      createPost();
+                      if (title?.length == 0) {
+                        setToast({ message: "제목을 입력해주세요." });
+                      } else {
+                        setOpen(false);
+                        createPost();
+                      }
                     }}
                   >
                     Write
