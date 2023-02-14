@@ -1,5 +1,6 @@
 package com.c211.opinbackend.persistence.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +14,8 @@ public interface MemberFollowRepository extends JpaRepository<MemberFollow, Long
 	long countByFromMember(Member member);
 
 	long countByToMember(Member member);
+
+	List<MemberFollow> findByFromMember(Member member);
 
 	@Override
 	void delete(MemberFollow entity);

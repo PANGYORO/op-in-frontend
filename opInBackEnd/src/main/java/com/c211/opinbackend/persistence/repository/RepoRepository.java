@@ -29,4 +29,6 @@ public interface RepoRepository extends JpaRepository<Repository, Long> {
 
 	Page<Repository> findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name, String description,
 		Pageable pageable);
+
+	List<Repository> findTop10ByOrderByStargazersCountDesc();
 }

@@ -1,6 +1,7 @@
 package com.c211.opinbackend.repo.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +69,11 @@ public class RepoController {
 	public ResponseEntity<?> repoDetail(@PathVariable Long repoId) {
 		RepoDetailResponse detailResponse = repositoryService.getDetailResponse(repoId);
 		return ResponseEntity.ok().body(detailResponse);
+	}
+
+	@PostMapping("/enter")
+	public ResponseEntity<?> addEnter(@RequestBody Map<String, String> title) {
+		return new ResponseEntity<>(repositoryService.addEnter(title.get("title")), HttpStatus.OK);
 	}
 
 }

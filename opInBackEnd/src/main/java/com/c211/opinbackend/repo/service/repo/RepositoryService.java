@@ -15,4 +15,6 @@ public interface RepositoryService {
 	Boolean uploadRepository(String memberEmail, RepoDto repoDto);
 
 	RepoDetailResponse getDetailResponse(Long repoId);
+
+	boolean addEnter(String title);
 }
