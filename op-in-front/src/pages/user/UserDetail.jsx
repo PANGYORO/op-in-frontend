@@ -189,6 +189,10 @@ const UserDetail = () => {
         setToast({ message: "이미 등록된 언어 입니다." });
         return;
       }
+      if (_isOverTenLanguage()) {
+        setToast({ message: "언어는 10개까지 설정 가능합니다." });
+        return;
+      }
 
       http
         .post(`member/language/put`, { title })
@@ -204,7 +208,10 @@ const UserDetail = () => {
         setToast({ message: "이미 등록된 태그 입니다." });
         return;
       }
-
+      if (_isOverTenTopic()) {
+        setToast({ message: "태그는 10개까지 설정 가능합니다." });
+        return;
+      }
       http
         .post(`member/topic/put`, { title })
         .then(() => {
@@ -220,6 +227,16 @@ const UserDetail = () => {
   const _isExistLanguage = (title) => {
     let { techLanguages = [] } = myInfo;
     return techLanguages.findIndex((c) => c.title === title) > 0;
+  };
+
+  const _isOverTenLanguage = () => {
+    let { techLanguages = [] } = myInfo;
+    return techLanguages.length > 10;
+  };
+
+  const _isOverTenTopic = () => {
+    let { topicResponses = [] } = myInfo;
+    return topicResponses.length > 10;
   };
 
   const _isExistTopic = (title) => {
