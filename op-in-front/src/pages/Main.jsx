@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Route, Routes, Outlet } from "react-router-dom";
 import Header from "@components/Header";
 import SignIn from "@pages/user/SignIn";
@@ -22,7 +22,6 @@ import RepoDetail from "./repository/following/RepoDetail";
 import PostView from "@components/PostView";
 import "@assets/css/editor.css";
 
-import useAuth from "@hooks/useAuth";
 import { ScrollToTop } from "@components/ScrollToTop";
 
 function MainTemplate() {

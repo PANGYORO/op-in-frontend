@@ -4,12 +4,17 @@ import { useTransition, animated } from '@react-spring/web'
 import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from 'recoil'
 import styles from './styles.module.css'
+import TutorialModal from '@components/modals/TutorialModal'
 
 function ChooseTutorial() {
   const user = useRecoilValue(userInfo)
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate()
   const ref = useRef([]);
   const [_items, _set] = useState([]);
+  function toggleModal() {
+    setOpen((prev) => !prev);
+  }
   const _transitions = useTransition(_items, {
     from: {
         opacity: 0,
@@ -25,19 +30,21 @@ function ChooseTutorial() {
     ],
     leave: [{ color: '#c23369' }, { innerHeight: 0 }, { opacity: 0, height: 0 }],
     update: { color: '#28b4d7' },
-});
-const reset = useCallback(() => {
-    ref.current.forEach(clearTimeout);
-    ref.current = [];
-    _set([]);
-    ref.current.push(setTimeout(() => _set(['welcome', 'to op-in', user.nickname]), 2000));
-    ref.current.push(setTimeout(() => _set(['welcome', user.nickname]), 5000));
-    ref.current.push(setTimeout(() => _set(['welcome', 'to op-in', user.nickname]), 8000));
-}, []);
-useEffect(() => {
-    reset();
-    return () => ref.current.forEach(clearTimeout);
-}, []);
+  });
+  
+  const reset = useCallback(() => {
+      ref.current.forEach(clearTimeout);
+      ref.current = [];
+      _set([]);
+      ref.current.push(setTimeout(() => _set(['welcome', 'to op-in', user.nickname]), 2000));
+      ref.current.push(setTimeout(() => _set(['welcome', user.nickname]), 5000));
+      ref.current.push(setTimeout(() => _set(['welcome', 'to op-in', user.nickname]), 8000));
+  }, []);
+  
+  useEffect(() => {
+      reset();
+      return () => ref.current.forEach(clearTimeout);
+  }, []);
   return (
     <div className="mx-44">
       <div className='py-8'>
@@ -57,8 +64,8 @@ useEffect(() => {
           type="button"
           className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-5 text-center mx-10 mb-2"
           onClick={(e) => {
-            e.preventDefault()
-            navigate('/tutorial/pr')
+            e.preventDefault();
+            toggleModal();
           }}
         >
           TUTORIAL
@@ -74,6 +81,7 @@ useEffect(() => {
           SIGN-IN
         </button>
       </div>
+      <TutorialModal open={open} setOpen={setOpen} />
     </div>
 
     
