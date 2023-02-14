@@ -94,7 +94,7 @@ export default function post({ event }) {
 
             <img
               src={event.img}
-              className="mx-auto w-full block w-4/12 h-40 rounded-lg"
+              className="mx-auto block w-4/12 h-40 rounded-lg"
               alt="art cover"
               loading="lazy"
             />
