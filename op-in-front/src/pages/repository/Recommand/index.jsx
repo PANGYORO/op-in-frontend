@@ -23,14 +23,13 @@ const RepoList = ({ repos }) => {
 };
 
 function RecommandIndex() {
-  const [myinfo, setMyInfo] = useState("");
   const [repoDatas, setRepoData] = useState([]);
-
 
   const getRepo = () => {
     http
-      .get("member/api/recommend")
+      .get("member/repo/recommend")
       .then(({ data }) => {
+        console.log(data);
         setRepoData([...data]);
       })
       .catch(() => console.debug("error"));

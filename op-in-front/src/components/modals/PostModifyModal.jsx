@@ -1,7 +1,6 @@
 import { Fragment, useRef, useState } from "react";
 import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
-// import http from "api/http";
 import { Editor } from "@toast-ui/react-editor";
 import http from "@api/http";
 
@@ -29,6 +28,24 @@ const PostModifyModal = ({ id, title, previousValue, open, setOpen, propFunction
       })
       .catch((error) => {
         console.debug(error);
+      });
+  };
+
+  const uploadImage = async (file, callback) => {
+    const formData = new FormData();
+    formData.append("uploadImage", file);
+
+    http
+      .post("post/upload/image", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(({ data }) => {
+        callback(data.url, "");
+      })
+      .catch((e) => {
+        console.error(e);
       });
   };
 
@@ -89,6 +106,9 @@ const PostModifyModal = ({ id, title, previousValue, open, setOpen, propFunction
                           ref={toastuiEditor}
                           onChange={onChange}
                           language="ko-KR"
+                          hooks={{
+                            addImageBlobHook: uploadImage,
+                          }}
                           toolbarItems={[
                             // 툴바 옵션 설정
                             ["heading", "bold", "italic", "strike"],
