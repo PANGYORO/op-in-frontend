@@ -24,7 +24,7 @@ import com.c211.opinbackend.auth.service.OAuthServiceImpl;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
 
 @RestController
-@RequestMapping("/oauth")
+@RequestMapping("/api/oauth")
 public class OAuthController {
 
 	private static final Logger logger = LoggerFactory.getLogger(OAuthController.class);

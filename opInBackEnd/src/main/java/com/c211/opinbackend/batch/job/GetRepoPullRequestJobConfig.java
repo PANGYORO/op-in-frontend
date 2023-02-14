@@ -6,6 +6,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,6 +33,8 @@ public class GetRepoPullRequestJobConfig {
 	private final PullRequestMapper pullRequestMapper;
 	private final PullRequestRepository pullRequestRepository;
 	private final Action action;
+	@Value("${githubToken3}")
+	private String githubToken;
 
 	@Bean
 	public Job getRepoPullRequestJob(Step getRepoPullRequestStep) {
@@ -48,7 +51,7 @@ public class GetRepoPullRequestJobConfig {
 		return stepBuilderFactory.get("getRepoPullRequestStep")
 			.<PullRequest
 				, PullRequest>chunk(1)
-			.reader(new GetRepoPullRequestReader(repoRepository, pullRequestMapper, action))
+			.reader(new GetRepoPullRequestReader(repoRepository, pullRequestMapper, action, githubToken))
 			.writer(new GetRepoPullRequestWriter(pullRequestRepository))
 			.build();
 	}
