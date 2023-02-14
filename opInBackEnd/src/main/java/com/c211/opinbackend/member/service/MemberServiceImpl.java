@@ -735,13 +735,15 @@ public class MemberServiceImpl implements MemberService {
 			.map(m-> RepoMapper.toMyRepoDto(m))
 			.collect(Collectors.toList());
 
-		Member me = getMember();
-		if (me == null) {
+		Member me = new Member();
+		try {
+			 me = getMember();
+		}catch (Exception e) {
 			return starResult;
 		}
 
 		List<MemberTechLanguage> memberTechs = memberTechLanguageRepository.findByMember(me);
-		if (memberTechs == null || memberTechs.size() < 0) {
+		if (memberTechs == null || memberTechs.size() <= 0) {
 			return starResult;
 		}
 
