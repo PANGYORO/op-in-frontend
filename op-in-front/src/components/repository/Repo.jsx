@@ -11,7 +11,7 @@ const Repo = ({
 
   return (
     <>
-      <div className="w-full inset-x-0 bottom-0 bg-white dark:bg-gray-800 shadow-lg rounded-xl p-4 flex flex-col">
+      <div className="w-full inset-x-0 bottom-0 bg-white  shadow-lg rounded-xl p-4 flex flex-col">
         <div
           onClick={() =>
             navigate(`/repo/${id}`, {
@@ -23,7 +23,7 @@ const Repo = ({
             <span className="text-lg font-bold">{title}</span>
           </div>
           <div className="w-full h-24 text-clip overflow-hidden">
-            <p className="text-gray-600 dark:text-white my-5">{content}</p>
+            <p className="text-gray-600  my-5">{content}</p>
           </div>
         </div>
 

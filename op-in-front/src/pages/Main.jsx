@@ -41,7 +41,7 @@ export default function Main() {
   return (
     <div className="Main bg-gray-100">
       <Header />
-      <main className="relative bg-gray-100 dark:bg-gray-800">
+      <main className="relative bg-gray-100 ">
         <Routes>
           <Route path="search" element={<Search />} />
           <Route path="signin" element={<SignIn />} />

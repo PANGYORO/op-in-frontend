@@ -187,9 +187,9 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
 
   return (
     <>
-      <p className="p-4 font-bold text-black text-md dark:text-white">
+      <p className="p-4 font-bold text-black text-md ">
         {title}s
-        <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
+        <span className="ml-2 text-sm text-gray-500 ">
           ({amount})
         </span>
 
@@ -204,7 +204,7 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
               onClick={() => {
                 setOpenState(true);
               }}
-              className="ml-4 px-3 py-1 text-white bg-slate-700 hover:bg-slate-800 focus:ring-4 focus:outline-none focus:ring-slate-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-slate-600 dark:hover:bg-slate-700 dark:focus:ring-slate-800"
+              className="ml-4 px-3 py-1 text-white bg-slate-700 hover:bg-slate-800 focus:ring-4 focus:outline-none focus:ring-slate-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center mr-2 "
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

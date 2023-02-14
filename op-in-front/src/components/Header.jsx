@@ -58,7 +58,7 @@ const Search = ({ search }) => {
       <input
         value={value}
         type="text"
-        className="block w-full py-1.5 pl-10 pr-4 leading-normal rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-400 aa-input"
+        className="block w-full py-1.5 pl-10 pr-4 leading-normal rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ring-opacity-90 bg-gray-100  text-gray-400 aa-input"
         placeholder="Search"
         onKeyUp={onKeyDown}
         onChange={onChange}
@@ -96,7 +96,7 @@ const Header = () => {
           <div className="mx-44 px-2 sm:px-6 lg:px-8" style={{ minWidth: '720px' }} >
             <div className="relative flex h-16 items-center justify-between">
               {/* 사인 자리 가져와바 */}
-              
+
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
                   {/* 로고자리 */}
@@ -147,7 +147,7 @@ const Header = () => {
                               state={auth.nickname}
                               className={cx(
                                 active &&
-                                  "flex flex-col bg-gray-100 items-center",
+                                "flex flex-col bg-gray-100 items-center",
                                 "flex flex-col items-center block px-4 py-2 text-sm text-gray-700"
                               )}
                             >

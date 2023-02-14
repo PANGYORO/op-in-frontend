@@ -27,9 +27,9 @@ export default function Sidebar() {
     setOpen((prev) => !prev);
   }
   const deselected =
-    "flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500";
+    "flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 hover:text-blue-500";
   const selected =
-    "flex items-center justify-start w-full p-4 my-2 font-thin text-blue-500 uppercase transition-colors duration-200 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800";
+    "flex items-center justify-start w-full p-4 my-2 font-thin text-blue-500 uppercase transition-colors duration-200 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 ";
   function selectMenu(id) {
     if (id == ITEMS.MYPAGE) {
       if (!user.logined) {
@@ -52,7 +52,7 @@ export default function Sidebar() {
 
   return (
     <div className="ms:absolute  my-4 ml-4 shadow-lg lg:block w-64">
-      <div className="h-full bg-white rounded-2xl dark:bg-gray-700 w-64">
+      <div className="h-full bg-white rounded-2xl ">
         <div className="flex items-center justify-center pt-6">
           <Link
             to="/"

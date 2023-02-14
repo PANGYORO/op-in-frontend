@@ -45,8 +45,8 @@ const TutorialContent = () => {
               }}
               className="text-white bg-gradient-to-r from-blue-500 via-blue-600 
             to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none 
-            focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 
-            dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-3xl px-10 py-2.5 text-center mt-1 mb-4 "
+            focus:ring-blue-300  shadow-lg shadow-blue-500/50 
+             font-medium rounded-lg text-3xl px-10 py-2.5 text-center mt-1 mb-4 "
             >
               Try Contribute -&gt;
             </button>
@@ -75,12 +75,12 @@ export default function Education() {
   return (
     <>
       <div className="flex flex-col w-full pl-0 md:p-4 md:space-y-4">
-        <header className="z-40 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl">
+        <header className="z-40 items-center w-full h-16 bg-white shadow-lg  rounded-2xl">
           <div className="relative flex items-center w-full h-full group ml-3 text-2xl">
             Educations
           </div>
         </header>
-        <header className="z-10 items-center w-full bg-white shadow-lg dark:bg-gray-700 rounded-2xl">
+        <header className="z-10 items-center w-full bg-white shadow-lg  rounded-2xl">
           <div className="p-5">
             <h3 className="text-3xl font-bold">Tutorials</h3>
           </div>
@@ -92,7 +92,7 @@ export default function Education() {
             </div>
           </div>
         </header>
-        <header className="items-center w-full bg-white shadow-lg dark:bg-gray-700 rounded-2xl ">
+        <header className="items-center w-full bg-white shadow-lg  rounded-2xl ">
           <div className="p-5">
             <h3 className="text-3xl font-bold">Documentations</h3>
           </div>

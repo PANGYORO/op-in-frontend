@@ -80,7 +80,7 @@ const QnA = ({
 
   return (
     <>
-      <div className="w-full p-4 mb-6 bg-white rounded-lg shadow dark:bg-gray-800 sm:inline-block">
+      <div className="w-full p-4 mb-6 bg-white rounded-lg shadow  sm:inline-block">
         <div className="flex items-start text-left">
           <div className="flex-shrink-0">
             <div className="relative inline-block">
@@ -98,26 +98,26 @@ const QnA = ({
             <div className="flex flex-cols justify-between">
               <div>
                 <p className="flex items-baseline">
-                  <span className="font-bold text-gray-600 dark:text-gray-200">{nickname}</span>
-                  <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">
+                  <span className="font-bold text-gray-600 ">{nickname}</span>
+                  <span className="ml-2 text-sm text-gray-500 ">
                     {new Date(createTime).toLocaleString()}
                   </span>
                 </p>
-                <div className="mt-4 dark:text-white whitespace-pre">{qnaContent}</div>
+                <div className="mt-4 whitespace-pre">{qnaContent}</div>
               </div>
               {nickname == user.nickname ? (
                 <div className="">
                   <button
                     type="button"
                     onClick={modifyQnA}
-                    className="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    className="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 mr-2 mb-2  focus:outline-none "
                   >
                     Modify
                   </button>
                   <button
                     type="button"
                     onClick={removeQnA}
-                    className="focus:outline-none text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                    className="focus:outline-none text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1 mr-2 mb-2 "
                   >
                     Delete
                   </button>
@@ -131,7 +131,7 @@ const QnA = ({
               <label htmlFor="chat" className="sr-only">
                 Leave a Comment...
               </label>
-              <div className="flex items-center px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-700">
+              <div className="flex items-center px-3 py-2 rounded-lg bg-gray-50 ">
                 <textarea
                   id="chat"
                   rows="1"
@@ -139,7 +139,7 @@ const QnA = ({
                   onChange={(e) => {
                     setText(e.target.value);
                   }}
-                  className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
                   placeholder="Leave a Comment..."
                 ></textarea>
                 <button
@@ -148,7 +148,7 @@ const QnA = ({
                     createComment(text);
                     setText("");
                   }}
-                  className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600"
+                  className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 "
                 >
                   <svg
                     aria-hidden="true"

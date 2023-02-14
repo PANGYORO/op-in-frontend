@@ -6,9 +6,9 @@ export default function RepoPostDetail() {
   return (
     <>
       {/* 제목 */}
-      <div className="dark:bg-gray-800 border-4">
+      <div className=" border-4">
         <div className="lg:flex lg:items-center lg:justify-between w-full mx-auto py-12 px-4 sm:px-6 lg:py-5 lg:px-8 z-20">
-          <h1 className="text-3xl font-extrabold text-black dark:text-white sm:text-4xl">
+          <h1 className="text-3xl font-extrabold text-black  sm:text-4xl">
             <span className="block flex felx-col place-items-center">
               {/* <div>
                 <svg
@@ -47,8 +47,8 @@ export default function RepoPostDetail() {
               </div>
             </div>
             <div className="ml-6 mt-4 grid grid-col">
-              <span className="ml-2 font-bold text-gray-600 dark:text-gray-200"><h2>nickname</h2></span>
-              <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">2 months ago</span>
+              <span className="ml-2 font-bold text-gray-600 "><h2>nickname</h2></span>
+              <span className="ml-2 text-sm text-gray-500 ">2 months ago</span>
             </div>
           </div>
 
@@ -92,7 +92,7 @@ export default function RepoPostDetail() {
           <label htmlFor="chat" className="sr-only">
             Leave a Comment...
           </label>
-          <div className="flex items-center px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-700">
+          <div className="flex items-center px-3 py-2 rounded-lg bg-gray-50 ">
             <textarea
               id="chat"
               rows="1"
@@ -100,7 +100,7 @@ export default function RepoPostDetail() {
               // onChange={(e) => {
               //   setText(e.target.value);
               // }}
-              className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
               placeholder="Leave a Comment..."
             ></textarea>
             <button
@@ -109,7 +109,7 @@ export default function RepoPostDetail() {
                 // createComment(text);
                 // setText("");
               }}
-              className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600"
+              className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 "
             >
               <svg
                 aria-hidden="true"
