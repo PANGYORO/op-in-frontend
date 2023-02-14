@@ -185,6 +185,11 @@ const UserDetail = () => {
 
   const addTag = async (type, title) => {
     if (type === "Language") {
+      if (_isExistLanguage(title)) {
+        setToast({ message: "이미 등록된 언어 입니다." });
+        return;
+      }
+
       http
         .post(`member/language/put`, { title })
         .then(() => {
@@ -195,6 +200,11 @@ const UserDetail = () => {
           setToast({ message: "삭제 중 에러가 발생했습니다." });
         });
     } else if (type === "Topic") {
+      if (_isExistTopic(title)) {
+        setToast({ message: "이미 등록된 태그 입니다." });
+        return;
+      }
+
       http
         .post(`member/topic/put`, { title })
         .then(() => {
@@ -207,10 +217,19 @@ const UserDetail = () => {
     }
   };
 
+  const _isExistLanguage = (title) => {
+    let { techLanguages = [] } = myInfo;
+    return techLanguages.findIndex((c) => c.title === title) > 0;
+  };
+
+  const _isExistTopic = (title) => {
+    let { topicResponses = [] } = myInfo;
+    return topicResponses.findIndex((c) => c.title === title) > 0;
+  };
+
   const _addLanguageList = (title) => {
     let { techLanguages = [] } = myInfo;
-    const isExist = techLanguages.findIndex((c) => c.title === title);
-    if (isExist < 0) {
+    if (!_isExistLanguage(title)) {
       techLanguages = [...techLanguages, { title, id: "" }];
     }
     setMyInfo((prev) => ({
@@ -220,8 +239,7 @@ const UserDetail = () => {
   };
   const _addTopicList = (title) => {
     let { topicResponses = [] } = myInfo;
-    const isExist = topicResponses.findIndex((c) => c.title === title);
-    if (isExist < 0) {
+    if (!_isExistTopic(title)) {
       topicResponses = [...topicResponses, { title, id: "" }];
     }
     setMyInfo((prev) => ({
