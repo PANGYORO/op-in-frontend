@@ -80,7 +80,10 @@ const TagInfo = ({ title, taglist = [], ismine, addTag, deleteTag }) => {
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="button"
               onClick={() => {
-                addTag(title, document.getElementById("add" + title).value);
+                addTag(
+                  title,
+                  document.getElementById("add" + title).value.toUpperCase()
+                );
                 setOpenState(false);
               }}
             >
