@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import DefaultImg from "@assets/basicprofile.png";
 // import Setting from "@assets/settings.png";
 import Post from "@components/Post";
@@ -183,6 +183,118 @@ const UserDetail = () => {
     }
   };
 
+  const addTag = async (type, title) => {
+    if (type === "Language") {
+      if (_isExistLanguage(title)) {
+        setToast({ message: "이미 등록된 언어 입니다." });
+        return;
+      }
+      if (_isOverTenLanguage()) {
+        setToast({ message: "언어는 10개까지 설정 가능합니다." });
+        return;
+      }
+
+      http
+        .post(`member/language/put`, { title })
+        .then(() => {
+          _addLanguageList(title);
+          setToast({ message: title + " 언어 태그가 추가되었습니다." });
+        })
+        .catch(() => {
+          setToast({ message: "삭제 중 에러가 발생했습니다." });
+        });
+    } else if (type === "Topic") {
+      if (_isExistTopic(title)) {
+        setToast({ message: "이미 등록된 태그 입니다." });
+        return;
+      }
+      if (_isOverTenTopic()) {
+        setToast({ message: "태그는 10개까지 설정 가능합니다." });
+        return;
+      }
+      http
+        .post(`member/topic/put`, { title })
+        .then(() => {
+          _addTopicList(title);
+          setToast({ message: title + " 토픽 태그가 추가되었습니다." });
+        })
+        .catch(() => {
+          setToast({ message: "삭제 중 에러가 발생했습니다." });
+        });
+    }
+  };
+
+  const _isExistLanguage = (title) => {
+    let { techLanguages = [] } = myInfo;
+    return techLanguages.findIndex((c) => c.title === title) > 0;
+  };
+
+  const _isOverTenLanguage = () => {
+    let { techLanguages = [] } = myInfo;
+    return techLanguages.length > 10;
+  };
+
+  const _isOverTenTopic = () => {
+    let { topicResponses = [] } = myInfo;
+    return topicResponses.length > 10;
+  };
+
+  const _isExistTopic = (title) => {
+    let { topicResponses = [] } = myInfo;
+    return topicResponses.findIndex((c) => c.title === title) > 0;
+  };
+
+  const _addLanguageList = (title) => {
+    let { techLanguages = [] } = myInfo;
+    if (!_isExistLanguage(title)) {
+      techLanguages = [...techLanguages, { title, id: "" }];
+    }
+    setMyInfo((prev) => ({
+      ...prev,
+      techLanguages,
+    }));
+  };
+  const _addTopicList = (title) => {
+    let { topicResponses = [] } = myInfo;
+    if (!_isExistTopic(title)) {
+      topicResponses = [...topicResponses, { title, id: "" }];
+    }
+    setMyInfo((prev) => ({
+      ...prev,
+      topicResponses,
+    }));
+  };
+
+  const deleteTag = async (type, title) => {
+    if (type === "Language") {
+      http.post(`member/language/delete`, { title }).then(() => {
+        _removeLanguageList(title);
+      });
+    } else if (type === "Topic") {
+      http.post(`member/topic/delete`, { title }).then(() => {
+        _removeTopicList(title);
+      });
+    }
+  };
+
+  const _removeLanguageList = (title) => {
+    const { techLanguages = [] } = myInfo;
+    const updateTechLanguages = techLanguages.filter((c) => c.title !== title);
+    setMyInfo((prev) => ({
+      ...prev,
+      techLanguages: updateTechLanguages,
+    }));
+  };
+
+  const _removeTopicList = (title) => {
+    const { topicResponses = [] } = myInfo;
+    const updateTopicResponse = topicResponses.filter((c) => c.title !== title);
+    setMyInfo((prev) => ({
+      ...prev,
+      topicResponses: updateTopicResponse,
+    }));
+  };
+
   return (
     <div className="flex items-start justify-between mx-44">
       <div className="w-full mx-4 my-4">
@@ -283,7 +395,11 @@ const UserDetail = () => {
           <div className="pt-2 pb-24 pl-2 pr-2  md:pt-0 md:pr-0 md:pl-0">
             <div className="flex flex-col flex-wrap sm:flex-row h-full">
               <div className="w-1/3 h-full ">
-                <MyInfo currentUser={myInfo} />
+                <MyInfo
+                  currentUser={myInfo}
+                  deleteTag={deleteTag}
+                  addTag={addTag}
+                />
               </div>
 
               <div className=" w-2/3  ">

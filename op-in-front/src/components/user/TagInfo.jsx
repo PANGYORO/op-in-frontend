@@ -1,23 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Tooltip } from "react-tooltip";
-import { useToast } from "@hooks/useToast";
-import http from "@api/http";
 
-const TagInfo = ({ title, taglist = [], ismine }) => {
-  // console.debug(taglist);
-  // console.debug(taglist.length);
+const TagInfo = ({ title, taglist = [], ismine, addTag, deleteTag }) => {
   const [openState, setOpenState] = useState(false);
-  // const [curlength, setCurlength] = useState(0);
-  const [amount, setAmount] = useState(0);
   const inputRef = useRef();
-
-  useEffect(() => {
-    // setCurlength(taglist.length);
-    setAmount(taglist.length);
-  });
-
-  // console.debug(curlength + " " + amount);
-  const { setToast } = useToast();
 
   useEffect(() => {
     if (openState && inputRef.current) {
@@ -37,110 +23,39 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
           >
             {list[i].title}
           </div>
-          {ismine ? (
-            <Tooltip anchorId={tempid} clickable variant="light" events={["hover"]}>
+          {ismine && (
+            <Tooltip
+              anchorId={tempid}
+              clickable
+              variant="light"
+              events={["hover"]}
+            >
               <button
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 type="button"
                 onClick={() => {
-                  MinusTag(list[i].title, document.getElementById(tempid));
-                  console.log(amount);
-                  //document.getElementById(tempid).remove();
-                  //setAmount(amount - 1);
+                  deleteTag(title, list[i].title);
                 }}
               >
                 delete
               </button>
             </Tooltip>
-          ) : (
-            <span></span>
           )}
         </span>
       );
     }
     return result;
   };
-  const MinusTag = async (data, e) => {
-    if (title == "Language") {
-      await http
-        .post(`member/language/delete`, {
-          title: data,
-        })
-        .then(() => {
-          setAmount((prev) => (prev - 1));
-          e.remove();
-          setToast({ message: data + " 언어 태그가 삭제되었습니다." });
-        })
-        .catch(() => {
-          setToast({ message: "삭제 중 에러가 발생했습니다." });
-        });
-    } else if (title == "Topic") {
-      await http
-        .post(`member/topic/delete`, {
-          title: data,
-        })
-        .then(() => {
-          setAmount((prev) => (prev - 1));
-          e.remove();
-          setToast({ message: data + " 토픽 태그가 삭제되었습니다." });
-        })
-        .catch(() => {
-          setToast({ message: "삭제 중 에러가 발생했습니다." });
-        });
-    } else {
-      setToast({ message: "잘못된 접근입니다." });
-    }
-  };
-  const PlusTag = async (data) => {
 
-    if (amount == 10) {
-      setToast({ message: "태그 갯수는 최대 10개까지 입니다." });
-      return;
-    }
-    if (title == "Language") {
-      await http
-        .post(`member/language/put`, {
-          title: data,
-        })
-        .then(() => {
-          taglist.push({
-            id: "",
-            title: data,
-          });
-          // setCurlength((prev) => (prev + 1));
-          setAmount((prev) => (prev + 1));
-          setToast({ message: data + " 언어 태그가 추가되었습니다." });
-        })
-        .catch(() => {
-          setToast({ message: "삭제 중 에러가 발생했습니다." });
-        });
-    } else if (title == "Topic") {
-      await http
-        .post(`member/topic/put`, {
-          title: data,
-        })
-        .then(() => {
-          taglist.push({
-            id: "",
-            title: data,
-          });
-          // setCurlength((prev) => (prev + 1));
-          setAmount((prev) => (prev + 1));
-          setToast({ message: data + " 토픽 태그가 추가되었습니다." });
-        })
-        .catch(() => {
-          setToast({ message: "삭제 중 에러가 발생했습니다." });
-        });
-    } else {
-      setToast({ message: "잘못된 접근입니다." });
-    }
-  };
   const AddTag = () => {
     return (
       <div className="w-full max-w-xs z-50 ">
         <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 grid justify-items-center">
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={"add" + title}>
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor={"add" + title}
+            >
               add New
             </label>
             <input
@@ -151,8 +66,10 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
               placeholder="Insert Name..."
               onKeyUp={(e) => {
                 if (e.key == "Enter") {
-                  PlusTag(document.getElementById("add" + title).value.toUpperCase());
-                  console.log(amount);
+                  addTag(
+                    title,
+                    document.getElementById("add" + title).value.toUpperCase()
+                  );
                   setOpenState(false);
                 }
               }}
@@ -163,8 +80,10 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="button"
               onClick={() => {
-                PlusTag(document.getElementById("add" + title).value);
-                console.log(amount);
+                addTag(
+                  title,
+                  document.getElementById("add" + title).value.toUpperCase()
+                );
                 setOpenState(false);
               }}
             >
@@ -189,14 +108,11 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
     <>
       <p className="p-4 font-bold text-black text-md ">
         {title}s
-        <span className="ml-2 text-sm text-gray-500 ">
-          ({amount})
-        </span>
-
+        <span className="ml-2 text-sm text-gray-500 ">({taglist.length})</span>
       </p>
       <div className="mb-3">
         <span id={title}>{rendering(taglist)}</span>
-        {ismine ? (
+        {ismine && (
           <>
             <button
               id={title + "-plus"}
@@ -214,7 +130,11 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
                 stroke="currentColor"
                 className="w-5 h-5"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 4.5v15m7.5-7.5h-15"
+                />
               </svg>
 
               <span className="sr-only">Icon description</span>
@@ -233,8 +153,6 @@ const TagInfo = ({ title, taglist = [], ismine }) => {
               <AddTag />
             </Tooltip>
           </>
-        ) : (
-          <div></div>
         )}
       </div>
     </>
