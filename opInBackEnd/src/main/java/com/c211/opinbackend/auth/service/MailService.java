@@ -7,8 +7,6 @@ import java.util.Random;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -48,8 +46,10 @@ public class MailService {
 		String mimeMessage = "Op-in 임시 비밀번호 발급 안내";
 
 		try {
-			javaMailSender.send(simpleMailMessage);
-		} catch (MailException ex) {
+			sendTemplateMessage("Op-in 임시 비밀번호 발급 안내", member.getEmail(), temporaryPassword);
+
+		} catch (MessagingException ex) {
+			log.info("메일 발송 실패");
 			throw new ApiRuntimeException(ApiExceptionEnum.API_CENTER_CALL_EXCEPTION);
 		}
 
@@ -82,7 +82,7 @@ public class MailService {
 		return key.toString();
 	}
 
-	public void sendTemplateMessage(String title, String address, String content, String template) throws
+	public void sendTemplateMessage(String title, String address, String token) throws
 		MessagingException {
 		MimeMessage message = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -92,25 +92,16 @@ public class MailService {
 		//수신자 설정
 		helper.setTo(address);
 
-		//참조자 설정
-		helper.setCc(content);
-
 		//템플릿에 전달할 데이터 설정
 		Map<String, String> emailValues = new HashMap<>();
-		emailValues.put("name", "jimin");
+		emailValues.put("code", token);
 
 		Context context = new Context();
-		emailValues.forEach((key, value) -> {
-			context.setVariable(key, value);
-		});
+		emailValues.forEach(context::setVariable);
 
 		//메일 내용 설정 : 템플릿 프로세스
-		String html = templateEngine.process(template, context);
+		String html = templateEngine.process("email", context);
 		helper.setText(html, true);
-
-		//템플릿에 들어가는 이미지 cid로 삽입
-		helper.addInline("image1", new ClassPathResource("static/images/image-1.jpeg"));
-
 		//메일 보내기
 		javaMailSender.send(message);
 	}
