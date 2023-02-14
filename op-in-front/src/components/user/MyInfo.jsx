@@ -53,7 +53,7 @@ const renderRepos = (list = [], flag) => {
   return list.map((item, index) => (
     <li
       key={item.id}
-      className="flex items-center justify-between py-3 text-gray-600 border-b-2 border-gray-100 dark:text-gray-200 dark:border-gray-800"
+      className="flex items-center justify-between py-3 text-gray-600 border-b-2 border-gray-100 "
     >
       <div
         className="flex items-center justify-start text-sm hover:text-blue-400"
@@ -97,29 +97,7 @@ const MyInfo = ({ currentuser }) => {
 
   return (
     <div className="mx-0 mb-4 h-full ">
-      <div className="w-full h-full bg-white shadow-lg rounded-2xl dark:bg-gray-700">
-        {/* <p className="p-4 font-bold text-black text-md dark:text-white">
-          Badges
-          <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
-            ({currentuser.badges == null ? 0 : currentuser.badges.length})
-          </span>
-        </p> */}
-        {/* <div className="grid grid-cols-8 gap-4 px-3 mb-3">
-          <img id="badge-1" src={BasicBadge} alt="badge" />
-          <Tooltip anchorId="badge-1" content="normal badge" />
-          <img id="badge-2" src={BasicBadge} alt="badge" />
-          <Tooltip anchorId="badge-2" content="normal badge" />
-          <img id="badge-3" src={BasicBadge} alt="badge" />
-          <Tooltip anchorId="badge-3" content="normal badge" />
-          <img id="badge-4" src={BasicBadge} alt="badge" />
-          <Tooltip anchorId="badge-4" content="normal badge" />
-          <img id="badge-5" src={BasicBadge} alt="badge" />
-          <Tooltip anchorId="badge-5" content="normal badge" />
-          <img id="badge-6" src={BasicBadge} alt="badge" />
-          <Tooltip anchorId="badge-6" content="normal badge" />
-          <img id="badge-7" src={BasicBadge} alt="badge" />
-          <Tooltip anchorId="badge-7" content="normal badge" />
-        </div> */}
+      <div className="w-full h-full bg-white shadow-lg rounded-2xl ">
         <hr />
         <div className="mr-3">
           <TagInfo
@@ -137,17 +115,17 @@ const MyInfo = ({ currentuser }) => {
           />
         </div>
         <hr />
-        <p className="p-4 font-bold text-black text-md dark:text-white">
+        <p className="p-4 font-bold text-black text-md ">
           Completed Contributes
-          <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
+          <span className="ml-2 text-sm text-gray-500 ">
             ({currentuser.contributeRepo == null ? 0 : currentuser.contributeRepo.length})
           </span>
         </p>
         <ul>{renderRepos(currentuser.contributeRepo, true)}</ul>
         <hr />
-        <p className="p-4 font-bold text-black text-md dark:text-white">
+        <p className="p-4 font-bold text-black text-md ">
           following Respsitories
-          <span className="ml-2 text-sm text-gray-500 dark:text-gray-300 dark:text-white">
+          <span className="ml-2 text-sm text-gray-500 ">
             ({currentuser.followRepos == null ? 0 : currentuser.followRepos.length})
           </span>
         </p>

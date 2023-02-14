@@ -209,7 +209,7 @@ const PostDetail = ({
   return (
     <>
       <div className="lg:flex lg:items-center lg:justify-between w-full mx-auto py-12 px-4 sm:px-6 lg:py-5 lg:px-8 z-20">
-        <h1 className="text-3xl font-extrabold  w-full text-black dark:text-white sm:text-4xl">
+        <h1 className="text-3xl font-extrabold  w-full text-black  sm:text-4xl">
           <div className="flex justify-between">
             <div>{postTitle}</div>
             <button
@@ -217,7 +217,7 @@ const PostDetail = ({
               onClick={() => {
                 navigate(-1);
               }}
-              className="focus:outline-none bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-lg px-5 py-2.5 dark:focus:ring-yellow-900"
+              className="focus:outline-none bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-lg px-5 py-2.5"
             >
               {"< "}Back
             </button>
@@ -244,10 +244,10 @@ const PostDetail = ({
             </div>
           </div>
           <div className="ml-6 grid grid-col">
-            <span className="ml-2 font-bold text-gray-600 dark:text-gray-200">
+            <span className="ml-2 font-bold text-gray-600 ">
               <h2>{authorMemberName}</h2>
             </span>
-            <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">
+            <span className="ml-2 text-sm text-gray-500 ">
               {date}
             </span>
             <button
@@ -284,14 +284,14 @@ const PostDetail = ({
             <button
               type="button"
               onClick={modifyPost}
-              className="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              className="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 mr-2 mb-2  focus:outline-none "
             >
               Modify
             </button>
             <button
               type="button"
               onClick={removePost}
-              className="focus:outline-none text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+              className="focus:outline-none text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1 mr-2 mb-2  "
             >
               Delete
             </button>
@@ -335,12 +335,12 @@ const PostDetail = ({
         <label htmlFor="chat" className="sr-only">
           Leave a Comment...
         </label>
-        <div className="flex items-center px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-700">
+        <div className="flex items-center px-3 py-2 rounded-lg bg-gray-50 ">
           <textarea
             id="chat"
             rows="1"
             ref={textAreaRef}
-            className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Leave a Comment..."
           ></textarea>
           <button
@@ -351,7 +351,7 @@ const PostDetail = ({
                 textAreaRef.current.value = "";
               } else toLoginToggleModal();
             }}
-            className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600"
+            className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100  "
           >
             <svg
               aria-hidden="true"
@@ -420,7 +420,7 @@ const PostView = () => {
   };
 
   return (
-    <div className="w-full m-4 p-6 bg-white shadow-lg rounded-2xl dark:bg-gray-700">
+    <div className="w-full m-4 p-6 bg-white shadow-lg rounded-2xl">
       {detail && <PostDetail {...detail} />}
     </div>
   );

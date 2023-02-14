@@ -10,12 +10,12 @@ export default function Recommend() {
             src="/images/blog/1.jpg"
             className="object-cover w-full max-h-40"
           />
-          <div className="w-full p-4 bg-white dark:bg-gray-800">
+          <div className="w-full p-4 bg-white ">
             <p className="font-medium text-indigo-500 text-md">Article</p>
-            <p className="mb-2 text-xl font-medium text-gray-800 dark:text-white">
+            <p className="mb-2 text-xl font-medium text-gray-800 ">
               Supercharged !
             </p>
-            <p className="font-light text-gray-400 dark:text-gray-300 text-md">
+            <p className="font-light text-gray-400  text-md">
               The new supercar is here, 543 cv and 140 000$. This is best racing
               GT about 7 years on...
             </p>
@@ -28,8 +28,8 @@ export default function Recommend() {
                 />
               </a>
               <div className="flex flex-col justify-between ml-4 text-sm">
-                <p className="text-gray-800 dark:text-white">Jean Jacques</p>
-                <p className="text-gray-400 dark:text-gray-300">
+                <p className="text-gray-800 ">Jean Jacques</p>
+                <p className="text-gray-400 ">
                   20 mars 2029 - 6 min read
                 </p>
               </div>

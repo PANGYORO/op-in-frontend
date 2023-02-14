@@ -101,7 +101,7 @@ const Status = ({ repoDetail }) => {
     } else return "";
   };
   return (
-    <div className="relative max-w-xs p-4 bg-white shadow-lg rounded-xl dark:bg-gray-800 ml-3 ">
+    <div className="relative max-w-xs p-4 bg-white shadow-lg rounded-xl  ">
       <div className="my-2">
         <span className="font-bold">Contributors</span>
         <div className="relative max-w-xs  my-2 h-full">
@@ -113,7 +113,7 @@ const Status = ({ repoDetail }) => {
                 </div>
               </div>
               <div
-                className="mt-2 text-blue-500 dark:text-gray-300"
+                className="mt-2 text-blue-500 "
                 onClick={toggleModal}
               >
                 {moreContributors()}
@@ -123,7 +123,7 @@ const Status = ({ repoDetail }) => {
         </div>
       </div>
       <div className="my-2">{repoDetail?.content}</div>
-      <div className="my-2 text-gray-400 dark:text-white-300">
+      <div className="my-2 text-gray-400 ">
         {repoDetail?.updateDate == null ? "no data" : repoDetail?.updateDate}
       </div>
       <div className="my-2 font-bold">About</div>

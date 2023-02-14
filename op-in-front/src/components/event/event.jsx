@@ -12,7 +12,7 @@ export default function post({ event }) {
     <>
       <a href={event.link} target="_blank" rel="noreferrer">
         <div className="ml-4 mb-4">
-          <div className=" w-full p-4 bg-white shadow-lg rounded-2xl dark:bg-gray-700 items-center justify-center group sm:flex space-x-6 ">
+          <div className=" w-full p-4 bg-white shadow-lg rounded-2xl  items-center justify-center group sm:flex space-x-6 ">
             <div className="sm:w-8/12 pl-0 p-5">
               <div className="space-y-2">
                 <div className="space-y-4 ">

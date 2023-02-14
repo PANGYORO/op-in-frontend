@@ -18,7 +18,7 @@ export default function Post({
     <>
       <div>
         <div
-          className="w-full p-4 bg-white shadow-lg rounded-2xl dark:bg-gray-700 items-center group sm:flex space-x-6 "
+          className="w-full p-4 bg-white shadow-lg rounded-2xl items-center group sm:flex space-x-6 "
           onClick={() => navigate(`/repo/postview`, { state: id })}
         >
           <div className="xl:text-clip grid grid-row gap-3 w-full ">

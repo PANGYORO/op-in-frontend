@@ -84,7 +84,7 @@ function FollowingPosts({ repoId }) {
   };
   return (
     <>
-      <header className="z-20 items-center w-full h-16 bg-white shadow-lg dark:bg-gray-700 rounded-2xl mb-4 ">
+      <header className="z-20 items-center w-full h-16 bg-white shadow-lg  rounded-2xl mb-4 ">
 
         <div className="relative z-20 flex flex-col justify-center h-full px-3 mx-auto flex-center">
 
@@ -116,7 +116,7 @@ function FollowingPosts({ repoId }) {
                 </svg>
                 <input
                   type="text"
-                  className="block w-full py-1.5 pl-10 pr-4 leading-normal rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ring-opacity-90 bg-gray-100 dark:bg-gray-800 text-gray-400 aa-input"
+                  className="block w-full py-1.5 pl-10 pr-4 leading-normal rounded-2xl focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 ring-opacity-90 bg-gray-100  text-gray-400 aa-input"
                   placeholder="Post Search"
                   ref={inputRef}
                   onKeyUp={keyUpEvent}
