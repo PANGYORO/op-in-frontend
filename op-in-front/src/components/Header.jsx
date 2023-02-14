@@ -93,7 +93,10 @@ const Header = () => {
     <Disclosure as="nav" className="bg-gray-800 sticky top-0 z-50">
       {({ open }) => (
         <>
-          <div className="mx-44 px-2 sm:px-6 lg:px-8" style={{ minWidth: '720px' }} >
+          <div
+            className="mx-44 px-2 sm:px-6 lg:px-8"
+            style={{ minWidth: "720px" }}
+          >
             <div className="relative flex h-16 items-center justify-between">
               {/* 사인 자리 가져와바 */}
 
@@ -117,7 +120,9 @@ const Header = () => {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                {auth.logined && (<span className="text-white">{auth.nickname}</span>)}
+                {auth.logined && (
+                  <span className="text-white">{auth.nickname}</span>
+                )}
 
                 {auth.logined && (
                   <Menu as="div" className="relative ml-3">
@@ -147,7 +152,7 @@ const Header = () => {
                               state={auth.nickname}
                               className={cx(
                                 active &&
-                                "flex flex-col bg-gray-100 items-center",
+                                  "flex flex-col bg-gray-100 items-center",
                                 "flex flex-col items-center block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
@@ -209,3 +214,4 @@ const Header = () => {
   );
 };
 export default Header;
+

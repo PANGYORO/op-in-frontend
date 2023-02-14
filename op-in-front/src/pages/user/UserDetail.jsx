@@ -114,7 +114,7 @@ const UserDetail = () => {
     getMyPosts();
     if (!isMe) setFollowButton();
     console.debug(myInfo);
-  }, []);
+  }, [currentNick]);
 
   const setFollowButton = async () => {
     await http
@@ -429,3 +429,4 @@ const UserDetail = () => {
   );
 };
 export default UserDetail;
+
