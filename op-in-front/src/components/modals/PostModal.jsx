@@ -1,6 +1,5 @@
 import React, { Fragment, useState, useRef, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
 import http from "@api/http";
 
@@ -98,7 +97,7 @@ export default function PostModal({
                 >
                   New Post
                 </Dialog.Title>
-                <div className=" relative  p-4">
+                <div className=" relative p-4">
                   <input
                     type="text"
                     id="name-with-label"

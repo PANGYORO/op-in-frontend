@@ -13,5 +13,8 @@ module.exports = {
       },
     },
   },
+  corePlugins: {
+    backgroundImage: false,
+  },
   plugins: [require("@tailwindcss/forms"), require("@tailwindcss/colors")],
 };
