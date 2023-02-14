@@ -47,7 +47,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/member")
+@RequestMapping("/api/member")
 public class MemberController {
 
 	private final MemberService memberService;
@@ -262,5 +262,10 @@ public class MemberController {
 		//S3 Bucket 내부에 "/profile"
 		FileUploadResponse profile = s3FileUploadService.upload(multipartFile, "profile");
 		return ResponseEntity.ok(profile);
+	}
+
+	@GetMapping("/repo/recommend")
+	public ResponseEntity<?> getRecommendRepositories() {
+		return new ResponseEntity<>(memberService.getRecommendRepositories(), HttpStatus.OK);
 	}
 }

@@ -7,6 +7,7 @@ import com.c211.opinbackend.auth.model.response.TechLanguageResponse;
 import com.c211.opinbackend.member.model.dto.MemberDto;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.MemberFollow;
+import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
 
 public interface MemberService {
 
@@ -55,4 +56,6 @@ public interface MemberService {
 	Boolean followCheckRepo(Long repoId, String memberEmail);
 
 	boolean changePwEmail(String email);
+
+	List<RepositoryResponseDto> getRecommendRepositories();
 }

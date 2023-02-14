@@ -1,5 +1,6 @@
 package com.c211.opinbackend.repo.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.c211.opinbackend.exception.member.MemberExceptionEnum;
 import com.c211.opinbackend.exception.member.MemberRuntimeException;
@@ -24,12 +27,14 @@ import com.c211.opinbackend.repo.model.requeset.CreatePostRequest;
 import com.c211.opinbackend.repo.model.requeset.RequestCommentCreateToPost;
 import com.c211.opinbackend.repo.model.requeset.RequestUpdatePost;
 import com.c211.opinbackend.repo.model.response.PageResponsePost;
+import com.c211.opinbackend.repo.model.response.PostImageUploadResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostDetailResponse;
 import com.c211.opinbackend.repo.model.response.RepoPostSimpleResponse;
 import com.c211.opinbackend.repo.service.commnet.CommentService;
 import com.c211.opinbackend.repo.service.mapper.CommentMapper;
 import com.c211.opinbackend.repo.service.mapper.RepoPostMapper;
 import com.c211.opinbackend.repo.service.repo.RepositoryPostService;
+import com.c211.opinbackend.repo.service.s3.FileUploadService;
 import com.c211.opinbackend.util.SecurityUtil;
 
 import lombok.AllArgsConstructor;
@@ -37,13 +42,14 @@ import lombok.extern.slf4j.Slf4j;
 
 // TODO: 2023/02/07 권한 검사 필요
 @Slf4j
-@RequestMapping("/post")
+@RequestMapping("/api/post")
 @RestController
 @AllArgsConstructor
 public class RepoPostController {
 
 	private final RepositoryPostService repositoryPostService;
 	private final CommentService commentService;
+	private final FileUploadService fileUploadService;
 
 	/**
 	 * 포스트 만들기
@@ -206,5 +212,12 @@ public class RepoPostController {
 	public ResponseEntity<?> checkLikePost(@PathVariable("postId") Long posId) {
 		Boolean checkLike = repositoryPostService.checkLike(posId);
 		return ResponseEntity.ok().body(checkLike);
+	}
+
+	@PostMapping("/upload/image")
+	public ResponseEntity<?> uplaodPostImage(@RequestParam("uploadImage") MultipartFile multipartFile) throws
+		IOException {
+		PostImageUploadResponse reponse = fileUploadService.upload(multipartFile);
+		return ResponseEntity.ok(reponse);
 	}
 }

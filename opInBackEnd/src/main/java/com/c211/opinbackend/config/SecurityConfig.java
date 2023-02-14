@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -100,8 +99,10 @@ public class SecurityConfig {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-					.allowedOrigins("http://127.0.0.1:5050", "http://i8c211.p.ssafy.io:5050", "http://localhost:5050", "http://127.0.0.1:5001", "http://i8c211.p.ssafy.io:5001", "http://localhost:5001", "\t\n"
-						+ "http://43.201.35.140", "http://43.201.35.140:5050", "http://i8c211.p.ssafy.io")
+					.allowedOrigins("http://127.0.0.1:5050", "http://i8c211.p.ssafy.io:5050", "http://localhost:5050",
+						"http://127.0.0.1:5001", "http://i8c211.p.ssafy.io:5001", "http://localhost:5001", "\t\n"
+							+ "http://43.201.35.140", "http://43.201.35.140:5050", "http://i8c211.p.ssafy.io",
+						"https://op-in.dev")
 					.allowedMethods("GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS")
 					.allowedHeaders("*")
 					.allowCredentials(true);

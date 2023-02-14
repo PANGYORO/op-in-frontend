@@ -1,11 +1,15 @@
 package com.c211.opinbackend.member.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.PriorityQueue;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -27,6 +31,7 @@ import com.c211.opinbackend.exception.member.MemberRuntimeException;
 import com.c211.opinbackend.exception.repositroy.RepositoryExceptionEnum;
 import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
 import com.c211.opinbackend.member.model.dto.MemberDto;
+import com.c211.opinbackend.member.model.dto.SimilarDto;
 import com.c211.opinbackend.persistence.entity.Badge;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.MemberBadge;
@@ -37,6 +42,7 @@ import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.entity.RepositoryContributor;
 import com.c211.opinbackend.persistence.entity.RepositoryFollow;
 import com.c211.opinbackend.persistence.entity.RepositoryPost;
+import com.c211.opinbackend.persistence.entity.RepositoryTechLanguage;
 import com.c211.opinbackend.persistence.entity.TechLanguage;
 import com.c211.opinbackend.persistence.entity.Topic;
 import com.c211.opinbackend.persistence.repository.BadgeRepository;
@@ -49,13 +55,16 @@ import com.c211.opinbackend.persistence.repository.MemberTopicRepository;
 import com.c211.opinbackend.persistence.repository.RepoContributorRepository;
 import com.c211.opinbackend.persistence.repository.RepoPostRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
+import com.c211.opinbackend.persistence.repository.RepoTechLanguageRepository;
 import com.c211.opinbackend.persistence.repository.RepositoryFollowRepository;
 import com.c211.opinbackend.persistence.repository.RepositoryPostMemberLikeRepository;
 import com.c211.opinbackend.persistence.repository.TechLanguageRepository;
 import com.c211.opinbackend.persistence.repository.TopicRepository;
 import com.c211.opinbackend.repo.model.response.RepositoryPostResponse;
+import com.c211.opinbackend.repo.model.response.RepositoryResponseDto;
 import com.c211.opinbackend.repo.model.response.RepositoryTitleResponse;
 import com.c211.opinbackend.repo.model.response.TopicResponse;
+import com.c211.opinbackend.repo.service.mapper.RepoMapper;
 import com.c211.opinbackend.util.SecurityUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -76,6 +85,7 @@ public class MemberServiceImpl implements MemberService {
 	private final MemberTechLanguageRepository memberTechLanguageRepository;
 	private final MemberTopicRepository memberTopicRepository;
 	private final BadgeRepository badgeRepository;
+	private final RepoTechLanguageRepository repoTechLanguageRepository;
 	private final TopicRepository topicRepository;
 	private final TechLanguageRepository techLanguageRepository;
 	private final RepoRepository repoRepository;
@@ -716,5 +726,77 @@ public class MemberServiceImpl implements MemberService {
 			return false;
 		}
 
+	}
+
+	@Override
+	public List<RepositoryResponseDto> getRecommendRepositories(){
+		List<Repository> list = repoRepository.findTop10ByOrderByStargazersCountDesc();
+		List<RepositoryResponseDto> starResult = list.stream()
+			.map(m-> RepoMapper.toMyRepoDto(m))
+			.collect(Collectors.toList());
+
+		Member me = getMember();
+		if (me == null) {
+			return starResult;
+		}
+
+		List<MemberTechLanguage> memberTechs = memberTechLanguageRepository.findByMember(me);
+		if (memberTechs == null || memberTechs.size() < 0) {
+			return starResult;
+		}
+
+		String myTechs = "";
+		for (MemberTechLanguage memberTechLanguage : memberTechs) {
+			myTechs += memberTechLanguage.getTechLanguage().getTitle();
+		}
+
+		List<Repository> targetRepos = findTargetRepositories(me);
+		PriorityQueue<SimilarDto> qQueue = new PriorityQueue<>(Collections.reverseOrder());
+		for (Repository repo : targetRepos) {
+			// 중에서 repo 각각의 언어랑
+			List<RepositoryTechLanguage> repoTechRelation = repoTechLanguageRepository.findAllByRepository(repo);
+
+			String repoTechs = "";
+			for (RepositoryTechLanguage repositoryTechLanguage : repoTechRelation) {
+				repoTechs += repositoryTechLanguage.getTechLanguage().getTitle();
+			}
+			Double dou = findSimilarity(repoTechs, myTechs);
+			// 내 언어 10개랑 비교
+			qQueue.offer(new SimilarDto(dou,repo));
+		}
+
+		List<RepositoryResponseDto> followResults = new ArrayList<>();
+		for(int i = 0, size  = Math.min(10,qQueue.size()); i < size ;i++){
+			followResults.add(RepoMapper.toMyRepoDto(qQueue.poll().repo));
+		}
+
+		return followResults;
+	}
+
+	public List<Repository> findTargetRepositories(Member me) {
+		List<Repository> result = new ArrayList<>();
+
+		// 내가 팔로우하고 있는 사람들 최대 10명 중에서 각각이 가지고 있는 레포지토리(팔로우)
+		// 스타 수가 가장 많은 레포지토리 10개
+		List<MemberFollow> myFollows = memberFollowRepository.findByFromMember(me);
+		for (int i = 0; i < Math.min(10,myFollows.size()); i++) {
+			List<Repository> toMemberRepos = repoRepository.findByMember(myFollows.get(i).getToMember());
+			result.addAll(toMemberRepos);
+		}
+
+		List<Repository> findAll = repoRepository.findTop10ByOrderByStargazersCountDesc();
+		List<Repository> starDescRepositories = findAll.subList(0, 10);
+		result.addAll(starDescRepositories);
+
+		return result;
+	}
+
+	public static double findSimilarity(String x, String y) {
+		double maxLength = Double.max(x.length(), y.length());
+		if (maxLength > 0) {
+			// 필요한 경우 선택적으로 대소문자를 무시합니다.
+			return (maxLength - StringUtils.getLevenshteinDistance(x, y)) / maxLength;
+		}
+		return 1.0;
 	}
 }

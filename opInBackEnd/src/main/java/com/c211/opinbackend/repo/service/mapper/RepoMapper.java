@@ -23,7 +23,7 @@ public class RepoMapper {
 			.id(repository.getId())
 			.ownerId(repository.getMember().getId())
 			.title(repository.getName())
-			.content(repository.getName())
+			.content(repository.getDescription())
 			.techLangs(repoTechLangDtoList)
 			.star(repository.getStargazersCount())
 			.forkNum(repository.getForks())
