@@ -87,10 +87,10 @@ const renderRepos = (list = [], flag) => {
   ));
 };
 
-// Language , Topic
-const MyInfo = ({ currentUser }) => {
+const MyInfo = ({ currentUser, addTag, deleteTag }) => {
   const [open, setOpen] = useState(false);
   const user = useRecoilValue(userInfo);
+  const isMine = user.nickname == currentUser.nickname;
 
   function toggleModal() {
     setOpen((prev) => !prev);
@@ -104,7 +104,9 @@ const MyInfo = ({ currentUser }) => {
           <TagInfo
             title="Language"
             taglist={currentUser?.techLanguages}
-            ismine={user.nickname == currentUser.nickname ? true : false}
+            ismine={isMine}
+            addTag={addTag}
+            deleteTag={deleteTag}
           />
         </div>
         <hr />
@@ -112,18 +114,16 @@ const MyInfo = ({ currentUser }) => {
           <TagInfo
             title="Topic"
             taglist={currentUser?.topicResponses}
-            ismine={user.nickname == currentUser.nickname ? true : false}
+            ismine={isMine}
+            addTag={addTag}
+            deleteTag={deleteTag}
           />
         </div>
         <hr />
         <p className="p-4 font-bold text-black text-md ">
           Completed Contributes
           <span className="ml-2 text-sm text-gray-500 ">
-            (
-            {currentUser.contributeRepo == null
-              ? 0
-              : currentUser.contributeRepo.length}
-            )
+            ({currentUser.contributeRepo?.length || 0})
           </span>
         </p>
         <ul>{renderRepos(currentUser.contributeRepo, true)}</ul>
@@ -131,22 +131,15 @@ const MyInfo = ({ currentUser }) => {
         <p className="p-4 font-bold text-black text-md ">
           following Respsitories
           <span className="ml-2 text-sm text-gray-500 ">
-            (
-            {currentUser.followRepos == null
-              ? 0
-              : currentUser.followRepos.length}
-            )
+            ({currentUser.followRepos?.length || 0})
           </span>
         </p>
         <ul>{renderRepos(currentUser.followRepos, false)}</ul>
-        {currentUser.nickname == user.nickname ? (
+        {isMine && (
           <div className="grid grid-cols-1 justify-items-center py-4">
             <button
               type="button"
-              disabled=""
-              onClick={() => {
-                toggleModal();
-              }}
+              onClick={toggleModal}
               className={`py-3 px-4 bg-red-600 hover:bg-red-700 focus:ring-red-500
         focus:ring-offset-red-200 text-white transition ease-in duration-200
         text-center font-semibold shadow-md focus:outline-none focus:ring-2
@@ -155,8 +148,6 @@ const MyInfo = ({ currentUser }) => {
               Delete Member
             </button>
           </div>
-        ) : (
-          <div></div>
         )}
       </div>
       <DeleteModal open={open} setOpen={setOpen} />
