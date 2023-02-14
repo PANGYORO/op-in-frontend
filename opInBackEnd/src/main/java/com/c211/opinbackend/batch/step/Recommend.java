@@ -6,19 +6,22 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import com.c211.opinbackend.persistence.entity.RepositoryFollow;
 import com.c211.opinbackend.persistence.repository.RepositoryFollowRepository;
 
 import lombok.RequiredArgsConstructor;
 
+@Component
 @RequiredArgsConstructor
 public class Recommend {
 
-	private final List<Map<String, Double>> similarity;
+	// private final List<Map<String, Double>> similarity;
 	// private final Map<Long, Map<Long, ItemCounter>> matrix;
 	// private final Map<Long, Map<Long, Double>> dataByMember;
 	private final RepositoryFollowRepository repositoryFollowRepository;
+
 
 	public Map<String, List<String>> findRelationship() {
 		// repository_follow 관계를 돌면서 map에 key = from member, value = to repository (String 값 더하기) 후 return
@@ -49,7 +52,7 @@ public class Recommend {
 
 		// 자기 자신과 나머지들의 문자열 유사도 계산 후
 		// 유사도 List의 0번 값보다 유사도가 높으면 그 앞에, 아니라면 그 뒤에 추가 후 return
-		// 자기 자신 제거하기
+		// TODO: 2023-02-14 자기 자신 제거하기
 		for (Map.Entry<String, List<String>> entry : repoFollowMap.entrySet()) {
 			String fromMember = entry.getKey();
 			String repositories = String.join("", entry.getValue());

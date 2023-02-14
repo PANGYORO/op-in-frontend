@@ -53,32 +53,14 @@ public class MemberController {
 	private final MemberService memberService;
 	private final MailService mailService;
 	private final S3FileUploadService s3FileUploadService;
+	private final Recommend recommend;
 
 	private final RepositoryFollowRepository repositoryFollowRepository;
 
 	@GetMapping("/test1")
 	public ResponseEntity<?> getReco() {
-		Map<String, List<String>> repoFollowMap = new HashMap<>();
-
-		// repository_follow 관계를 돌면서 map에 key = from member, value = to member (String 값 더하기) 후 return
-		List<RepositoryFollow> repoFollow = repositoryFollowRepository.findAll();
-
-		for (RepositoryFollow follow : repoFollow) {
-			String memberId = String.valueOf(follow.getMember().getId());
-			List<String> followRepo = new ArrayList<>();
-			followRepo.add(String.valueOf(follow.getRepository().getId()));
-
-			if (repoFollowMap.get(memberId) == null) {
-				repoFollowMap.put(memberId, followRepo);
-			}else {
-				List<String> on = repoFollowMap.get(memberId);
-				on.addAll(followRepo);
-				repoFollowMap.put(memberId, on);
-			}
-
-		}
-
-		return ResponseEntity.ok().body(repoFollow.toString());
+		recommend.prepareMatrix();
+		return ResponseEntity.ok().body(null);
 	}
 
 	/**
