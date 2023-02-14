@@ -43,6 +43,7 @@ function ChooseTutorial() {
 
   useEffect(() => {
     reset();
+    console.log(user)
     return () => ref.current.forEach(clearTimeout);
   }, []);
   return (
@@ -70,7 +71,7 @@ function ChooseTutorial() {
         >
           TUTORIAL
         </button>
-        { user.logind ? (<button
+        { !user.logined ? (<button
           type="button"
           className="text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300  shadow-lg shadow-cyan-500/50   font-medium rounded-lg text-sm px-5 py-5 text-center mx-10 mb-2"
           onClick={(e) => {
@@ -78,7 +79,7 @@ function ChooseTutorial() {
             navigate('/signin')
           }}
         >
-          OP-IN
+          SIGN-IN
         </button>
         ):(
           <button
@@ -89,7 +90,7 @@ function ChooseTutorial() {
             navigate('/')
           }}
         >
-          SIGN-IN
+          OP-IN
         </button>
         )}
       </div>
