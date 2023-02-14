@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import cx from "classnames";
 
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import { useSetRecoilState } from "recoil";
 import { menuState, repoMenuState } from "@recoil/sidebar/atoms";

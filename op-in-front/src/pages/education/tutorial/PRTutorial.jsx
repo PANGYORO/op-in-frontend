@@ -81,7 +81,8 @@ function PRTutorial() {
     [
   
       {
-        title:"FORK", 
+        title: "FORK",
+        disableBeacon: true,
         content: "first contributor가 되기 위한 첫걸음 입니다!  fork를 눌러 repository를 나의 repository에 복제해봅시다. ",
         target: "#player",
         placement:"top-end",
@@ -89,7 +90,8 @@ function PRTutorial() {
     ],
     [
       {
-        title:"FORK", 
+        title: "FORK",
+        disableBeacon: true,
         content: "create fork를 눌러 복제를 완료하세요! ",
         target: "#player",
         placement:"top-end",
@@ -97,13 +99,15 @@ function PRTutorial() {
     ],
     [
       {
-        title:"CLONE", 
+        title: "CLONE",
+        disableBeacon: true,
         content: "fork를 완료했습니다! 이제 clone을 통해 컴퓨터에 repository를 설치해봅시다.",
         target: "#player",
         placement:"top-end",
       },
       {
-        title:"CLONE", 
+        title: "CLONE",
+        disableBeacon: true,
         content: "code를 눌러 repository 주소를 복사해주세요!",
         target: "#player",
         placement:"bottom",
@@ -111,7 +115,8 @@ function PRTutorial() {
     ],
     [
       {
-        title:"CLONE", 
+        title: "CLONE",
+        disableBeacon: true,
         content: "Visual Studio Code 를 실행하여 터미널을 실행시켜주세요! ",
         target: "#player",
         placement:"top-end",
@@ -138,7 +143,8 @@ function PRTutorial() {
     ],
     [
       {
-        title:"BRANCH", 
+        title: "BRANCH",
+        disableBeacon: true,
         content: "컴퓨터에 설치된 first-contribution에 접근하여 나만의 branch를 만들어 봅시다",
         target: "#player",
         placement:"top-end",
@@ -170,7 +176,8 @@ function PRTutorial() {
     ],
     [
       {
-        title:"FIX", 
+        title: "FIX",
+        disableBeacon: true,
         content: "이제 Contributor.md 파일에 이름을 남겨 기여를 해봅시다! ",
         target: "#player",
         placement:"top-end",
@@ -190,7 +197,8 @@ function PRTutorial() {
     ],
     [
       {
-        title:"ADD", 
+        title: "ADD", 
+        disableBeacon: true,
         content: "Contributor.md 파일을 수정하고 저장했다면 'git add Contributors.md' 를 입력하여 변경 내용을 스테이징 영역에 추가하세요",
         target: "#player",
         placement:"top-end",
@@ -198,7 +206,8 @@ function PRTutorial() {
     ],
     [
       {
-        title:"COMMIT", 
+        title: "COMMIT",
+        disableBeacon: true,
         content: "변경 내용에 대해 message를 남겨 봅시다. git commit -m 'Add your-name to Contributors list' 을 입력하세요",
         target: "#player",
         placement:"top-end",
@@ -206,7 +215,8 @@ function PRTutorial() {
     ],
     [
       {
-        title:"PUSH", 
+        title: "PUSH",
+        disableBeacon: true,
         content: "이제 변경된 파일을 다시 웹상의 repository로 업로드 해봅시다.",
         target: "#player",
         placement:"top-end",
@@ -226,7 +236,8 @@ function PRTutorial() {
     ],
     [
       {
-        title:"PULL & REQUEST", 
+        title: "PULL & REQUEST",
+        disableBeacon: true,
         content: "다시 fork 받은 repository로 돌아가보면 아까는 보이지 않던 compare & pull request 버튼이 활성화된걸 볼 수 있습니다",
         target: "#player",
         placement:"top-end",
@@ -240,7 +251,8 @@ function PRTutorial() {
     ],
     [
       {
-        title:"PULL & REQUEST", 
+        title: "PULL & REQUEST",
+        disableBeacon: true,
         content: "마지막으로 Create pull request 버튼을 눌러주세요",
         target: "#player",
         placement:"top-end",
@@ -248,7 +260,8 @@ function PRTutorial() {
     ],
     [
       {
-        title:"COMPLETE", 
+        title: "COMPLETE",
+        disableBeacon: true,
         content: "first-contriburions repository로 Pull request가 날라갔습니다! 관리자가 확인한 후 문제가 없다면 merge 시켜줄 것입니다",
         target: "#player",
         placement:"top-end",
