@@ -13,6 +13,7 @@ public enum RepositoryExceptionEnum {
 	REPOSITORY_SAVE_EXCEPTION(HttpStatus.BAD_REQUEST, "M0008", "래포지토리 저장을 실패했습니다"),
 
 	REPOSITORY_POST_SAVE_EXCEPTION(HttpStatus.BAD_REQUEST, "M0009", "래포지토리 포스트 등록 실패"),
+	REPOSITORY_POST_IMAGE_UPLOAD_EXCEPTION(HttpStatus.BAD_REQUEST, "M0099", "래포지토리 포스트 이미지 업로드 실패"),
 	REPOSITORY_POST_EXIST_EXCEPTION(HttpStatus.BAD_REQUEST, "M0010", "래포지토리 포스트 가 존재하지 않습니다."),
 	REPOSITORY_POST_COMMENT_SAVE_EXCEPTION(HttpStatus.BAD_REQUEST, "M0011", "포스트 타입 댓글 저장에 실패했습니다."),
 	REPOSITORY_QNA_CONTENT_EMPTY_EXCEPTION(HttpStatus.BAD_REQUEST, "M0012", "질문이 빈칸일수 없습니다."),

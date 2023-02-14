@@ -1,24 +1,26 @@
-import React, { useState } from "react";
-import { Fragment, useRef } from "react";
+import React, { Fragment, useState, useRef, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
 import http from "@api/http";
 
-export default function PostModal({ open, setOpen, propFunction, repositoryId }) {
-  const cancelButtonRef = useRef(null);
-
-  const toastuiEditor = useRef();
+export default function PostModal({
+  open,
+  setOpen,
+  propFunction,
+  repositoryId,
+}) {
   const [data, setData] = useState("");
   const [title, setText] = useState("");
+  const cancelButtonRef = useRef();
+  const editorRef = useRef();
 
   const textChangeHandler = (e) => {
-    setText(e.currentTarget.value);
+    setText(e.target.value);
   };
 
   const onChange = () => {
-    setData(toastuiEditor.current.getInstance().getMarkdown());
-    // setData(toastuiEditor.current.getInstance().getHTML());
+    setData(editorRef.current?.getInstance().getMarkdown());
   };
 
   const createPost = async () => {
@@ -40,9 +42,33 @@ export default function PostModal({ open, setOpen, propFunction, repositoryId })
     setText("");
   };
 
+  const uploadImage = async (file, callback) => {
+    const formData = new FormData();
+    formData.append("uploadImage", file);
+
+    await http
+      .post("post/upload/image", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(({ data }) => {
+        console.debug(data);
+        callback(data.url, data.fileName);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
+
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-40" initialFocus={cancelButtonRef} onClose={setOpen}>
+      <Dialog
+        as="div"
+        className="relative z-40"
+        initialFocus={cancelButtonRef}
+        onClose={setOpen}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -67,7 +93,10 @@ export default function PostModal({ open, setOpen, propFunction, repositoryId })
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-4/5">
-                <Dialog.Title as="h2" className="text-3xl font-bold leading-6 text-gray-900 p-4">
+                <Dialog.Title
+                  as="h2"
+                  className="text-3xl font-bold leading-6 text-gray-900 p-4"
+                >
                   New Post
                 </Dialog.Title>
                 <div className=" relative  p-4">
@@ -84,9 +113,8 @@ export default function PostModal({ open, setOpen, propFunction, repositoryId })
 
                 <Editor
                   height="500px"
-                  initialValue=" "
+                  initialValue=""
                   previewStyle="vertical"
-                  ref={toastuiEditor}
                   onChange={onChange}
                   language="ko-KR"
                   toolbarItems={[
@@ -97,6 +125,11 @@ export default function PostModal({ open, setOpen, propFunction, repositoryId })
                     ["table", "image", "link"],
                     ["code", "codeblock"],
                   ]}
+                  ref={editorRef}
+                  hooks={{
+                    addImageBlobHook: uploadImage,
+                  }}
+                  placeholder="내용을 넣어주세요 :)"
                 />
                 <div className="bg-gray-50 px-4 p-4 sm:flex sm:flex-row-reverse sm:px-6">
                   <button
