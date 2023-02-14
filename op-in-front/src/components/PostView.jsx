@@ -14,10 +14,6 @@ import PostDeleteModal from "./modals/PostDeleteModal";
 import PostModifyModal from "./modals/PostModifyModal";
 import useAuth from "@hooks/useAuth";
 
-// 여기 css를 수정해서 코드 하이라이팅 커스텀
-import "@toast-ui/editor/dist/toastui-editor.css";
-import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
-
 const view = (data) => {
   return <Viewer initialValue={data} />;
 };
@@ -234,7 +230,11 @@ const PostDetail = ({
         <div className="flex items-start text-left">
           <div className="flex-shrink-0">
             <div className="relative inline-block">
-              <Link to={`/userdetail`} state={authorMemberName} className="relative block">
+              <Link
+                to={`/userdetail`}
+                state={authorMemberName}
+                className="relative block"
+              >
                 <img
                   alt="profile"
                   src={authorMemberAvatar || DefaultImg}
@@ -247,7 +247,9 @@ const PostDetail = ({
             <span className="ml-2 font-bold text-gray-600 dark:text-gray-200">
               <h2>{authorMemberName}</h2>
             </span>
-            <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">{date}</span>
+            <span className="ml-2 text-sm text-gray-500 dark:text-gray-300">
+              {date}
+            </span>
             <button
               onClick={() =>
                 navigate(`/repo/${repoId}`, {

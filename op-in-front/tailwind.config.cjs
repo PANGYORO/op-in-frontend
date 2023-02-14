@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
-  content: ["./index.html", "./src/**/*.{html,js,jsx,css}"],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   darkMode: "class",
   theme: {
     extend: {
@@ -14,7 +14,8 @@ module.exports = {
     },
   },
   corePlugins: {
-    backgroundImage: false,
+    // due to https://github.com/tailwindlabs/tailwindcss/issues/6602 - buttons disappear
+    // preflight: false,
   },
-  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/colors")],
+  plugins: [require("@tailwindcss/forms")],
 };
