@@ -10,6 +10,7 @@ import { useRecoilState } from "recoil";
 import PasswordModifyModal from "@components/modals/PasswordModifyModal";
 import { Tooltip } from "react-tooltip";
 import { useToast } from "@hooks/useToast";
+import useAuth from "@hooks/useAuth";
 
 const PostList = ({ posts = [] }) =>
   posts.map((post) => (
@@ -36,7 +37,7 @@ const UserDetail = () => {
   const location = useLocation();
   const currentNick = location.state;
   const { setToast } = useToast();
-
+  const { auth } = useAuth();
   const [user, setUser] = useRecoilState(userInfo);
   const [open, setOpen] = useState(false);
   const [myInfo, setMyInfo] = useState("");
@@ -348,17 +349,19 @@ const UserDetail = () => {
 
                   <div className="self-center">
                     {isMe ? (
-                      <button
-                        type="button"
-                        disabled=""
-                        onClick={() => setOpen(true)}
-                        className={`py-1 px-3 bg-green-600 hover:bg-green-700 focus:ring-green-500
+                      auth?.githubSync == false && (
+                        <button
+                          type="button"
+                          disabled=""
+                          onClick={() => setOpen(true)}
+                          className={`py-1 px-3 bg-green-600 hover:bg-green-700 focus:ring-green-500
                       focus:ring-offset-red-200 text-white transition ease-in duration-200 text-xl
                       text-center font-semibold shadow-md focus:outline-none focus:ring-2
                       focus:ring-offset-2 opacity-70 rounded-lg`}
-                      >
-                        Modify Password
-                      </button>
+                        >
+                          Modify Password
+                        </button>
+                      )
                     ) : (
                       <button
                         type="button"
