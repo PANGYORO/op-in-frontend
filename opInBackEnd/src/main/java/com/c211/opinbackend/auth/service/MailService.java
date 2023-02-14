@@ -1,11 +1,20 @@
 package com.c211.opinbackend.auth.service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import com.c211.opinbackend.exception.api.ApiExceptionEnum;
 import com.c211.opinbackend.exception.api.ApiRuntimeException;
@@ -23,19 +32,20 @@ import lombok.extern.slf4j.Slf4j;
 public class MailService {
 
 	private final JavaMailSender javaMailSender;
+	private final SpringTemplateEngine templateEngine;
 
 	private final MemberRepository memberRepository;
 
 	public String mailSend(String email) {
 		Member member = memberRepository.findByEmail(email)
 			.orElseThrow(() -> new MemberRuntimeException(MemberExceptionEnum.MEMBER_NOT_EXIST_EXCEPTION));
-
 		String temporaryPassword = createCode();
 
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		simpleMailMessage.setTo(email);
 		simpleMailMessage.setSubject("Op-in 임시 비밀번호 발급 안내");
 		simpleMailMessage.setText("Op-in 임시 비밀번호 발급 안내 \n " + temporaryPassword);
+		String mimeMessage = "Op-in 임시 비밀번호 발급 안내";
 
 		try {
 			javaMailSender.send(simpleMailMessage);
@@ -70,6 +80,39 @@ public class MailService {
 		key.append(pwCollection[(int)random.nextInt(10)]);
 
 		return key.toString();
+	}
+
+	public void sendTemplateMessage(String title, String address, String content, String template) throws
+		MessagingException {
+		MimeMessage message = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+		//메일 제목 설정
+		helper.setSubject(title);
+
+		//수신자 설정
+		helper.setTo(address);
+
+		//참조자 설정
+		helper.setCc(content);
+
+		//템플릿에 전달할 데이터 설정
+		Map<String, String> emailValues = new HashMap<>();
+		emailValues.put("name", "jimin");
+
+		Context context = new Context();
+		emailValues.forEach((key, value) -> {
+			context.setVariable(key, value);
+		});
+
+		//메일 내용 설정 : 템플릿 프로세스
+		String html = templateEngine.process(template, context);
+		helper.setText(html, true);
+
+		//템플릿에 들어가는 이미지 cid로 삽입
+		helper.addInline("image1", new ClassPathResource("static/images/image-1.jpeg"));
+
+		//메일 보내기
+		javaMailSender.send(message);
 	}
 
 }
