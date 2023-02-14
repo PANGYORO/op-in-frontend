@@ -9,8 +9,7 @@ import http from "@api/http";
 import { useSetRecoilState } from "recoil";
 import { userInfo } from "@recoil/user/atoms";
 
-
-function Button({ onClick = () => { }, loading = false, children }) {
+function Button({ onClick = () => {}, loading = false, children }) {
   return (
     <button
       type="submit"
@@ -153,8 +152,10 @@ function Password({ register, error, name, label }) {
             message: "비밀번호를 입력해주세요.",
           },
           pattern: {
-            value: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$/,
-            message: "비밀번호는 대문자, 소문자, 특수문자, 숫자를 포함해야합니다 (8~16 글자)",
+            value:
+              /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,16}$/,
+            message:
+              "비밀번호는 대문자, 소문자, 특수문자, 숫자를 포함해야합니다 (8~16 글자)",
           },
         })}
       />
@@ -224,7 +225,10 @@ function EmailInput({ register, error, name }) {
 
   return (
     <div className="col-span-6 sm:col-span-3">
-      <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+      <label
+        htmlFor="email"
+        className="block text-sm font-medium text-gray-700"
+      >
         Email Address
       </label>
       <input
@@ -296,8 +300,6 @@ function SignUpForm({ setToast }) {
 
   const setUser = useSetRecoilState(userInfo);
 
-
-
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
@@ -311,7 +313,7 @@ function SignUpForm({ setToast }) {
         setUser((before) => ({
           ...before,
           nickname: data.nickname,
-          email: res.data
+          email: res.data,
         }));
         setToast({ message: "회원가입 성공! 관심있는 tag를 골라주세요!!" });
         navigate("/selecttag");
@@ -345,7 +347,12 @@ function SignUpForm({ setToast }) {
               name="nickname"
               label="Nickname"
             />
-            <EmailInput register={register} error={errors?.email} name="email" check={false} />
+            <EmailInput
+              register={register}
+              error={errors?.email}
+              name="email"
+              check={false}
+            />
             <Password
               register={register}
               error={errors?.password}
@@ -366,7 +373,7 @@ function SignUpForm({ setToast }) {
             </div>
             <div>
               <a
-                href={`${import.meta.env.VITE_API_URL}oauth/redirect/github`}
+                href={`${import.meta.env.VITE_API_URL}/oauth/redirect/github`}
                 className="group relative flex w-full justify-center rounded-md border py-2 px-4 text-sm font-medium hover:bg-gray-100"
                 disabled={isSubmitting}
               >
