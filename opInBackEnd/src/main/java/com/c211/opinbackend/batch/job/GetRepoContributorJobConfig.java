@@ -6,6 +6,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,6 +34,9 @@ public class GetRepoContributorJobConfig {
 	private final RepoContributorRepository repoContributorRepository;
 	private final Action action;
 
+	@Value("${githubToken3}")
+	private String githubToken;
+
 	@Bean
 	public Job getRepoContributorJob(Step getRepoContributorStep) {
 		return jobBuilderFactory.get("getRepoContributorJob")
@@ -48,7 +52,7 @@ public class GetRepoContributorJobConfig {
 		return stepBuilderFactory.get("getRepoContributorStep")
 			.<ContributorDto
 				, ContributorDto>chunk(1)
-			.reader(new GetRepoContributorReader(repoRepository, action))
+			.reader(new GetRepoContributorReader(repoRepository, action, githubToken))
 			.writer(new GetRepoContributorWriter(memberRepository, repoContributorRepository))
 			.build();
 	}

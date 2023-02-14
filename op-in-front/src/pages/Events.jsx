@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Event from "@components/event/event";
-import axios from "axios";
+import http from "@api/http";
 
 const EventList = ({ events }) => {
   // console.debug(events);
@@ -26,8 +26,8 @@ const Eventselect = () => {
   }, []);
 
   const getEventData = async () => {
-    await axios
-      .get("http://i8c211.p.ssafy.io:5001/event")
+    await http
+      .get("event")
       .then(({ data }) => {
         // console.debug(data);
         setEventData([...data]);

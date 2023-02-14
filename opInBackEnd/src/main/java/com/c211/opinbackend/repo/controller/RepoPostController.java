@@ -37,7 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 
 // TODO: 2023/02/07 권한 검사 필요
 @Slf4j
-@RequestMapping("/post")
+@RequestMapping("/api/post")
 @RestController
 @AllArgsConstructor
 public class RepoPostController {
