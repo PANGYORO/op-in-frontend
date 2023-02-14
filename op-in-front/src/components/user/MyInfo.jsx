@@ -67,7 +67,7 @@ const renderRepos = (list = [], flag) => {
         <span>{item.title}</span>
       </div>
       <span className="mr-4">
-        {flag ? (
+        {flag && (
           <a
             id={index + item.title}
             className="inline-flex"
@@ -76,10 +76,11 @@ const renderRepos = (list = [], flag) => {
             rel="noreferrer"
           >
             <GithubSvg />
-            <Tooltip anchorId={index + item.title} content="go to Github page" />
+            <Tooltip
+              anchorId={index + item.title}
+              content="go to Github page"
+            />
           </a>
-        ) : (
-          <></>
         )}
       </span>
     </li>
@@ -87,7 +88,7 @@ const renderRepos = (list = [], flag) => {
 };
 
 // Language , Topic
-const MyInfo = ({ currentuser }) => {
+const MyInfo = ({ currentUser }) => {
   const [open, setOpen] = useState(false);
   const user = useRecoilValue(userInfo);
 
@@ -102,35 +103,43 @@ const MyInfo = ({ currentuser }) => {
         <div className="mr-3">
           <TagInfo
             title="Language"
-            taglist={currentuser?.techLanguages}
-            ismine={user.nickname == currentuser.nickname ? true : false}
+            taglist={currentUser?.techLanguages}
+            ismine={user.nickname == currentUser.nickname ? true : false}
           />
         </div>
         <hr />
         <div className="mr-3">
           <TagInfo
             title="Topic"
-            taglist={currentuser?.topicResponses}
-            ismine={user.nickname == currentuser.nickname ? true : false}
+            taglist={currentUser?.topicResponses}
+            ismine={user.nickname == currentUser.nickname ? true : false}
           />
         </div>
         <hr />
         <p className="p-4 font-bold text-black text-md ">
           Completed Contributes
           <span className="ml-2 text-sm text-gray-500 ">
-            ({currentuser.contributeRepo == null ? 0 : currentuser.contributeRepo.length})
+            (
+            {currentUser.contributeRepo == null
+              ? 0
+              : currentUser.contributeRepo.length}
+            )
           </span>
         </p>
-        <ul>{renderRepos(currentuser.contributeRepo, true)}</ul>
+        <ul>{renderRepos(currentUser.contributeRepo, true)}</ul>
         <hr />
         <p className="p-4 font-bold text-black text-md ">
           following Respsitories
           <span className="ml-2 text-sm text-gray-500 ">
-            ({currentuser.followRepos == null ? 0 : currentuser.followRepos.length})
+            (
+            {currentUser.followRepos == null
+              ? 0
+              : currentUser.followRepos.length}
+            )
           </span>
         </p>
-        <ul>{renderRepos(currentuser.followRepos, false)}</ul>
-        {currentuser.nickname == user.nickname ? (
+        <ul>{renderRepos(currentUser.followRepos, false)}</ul>
+        {currentUser.nickname == user.nickname ? (
           <div className="grid grid-cols-1 justify-items-center py-4">
             <button
               type="button"
