@@ -24,7 +24,7 @@ public enum ApiExceptionEnum {
 
 	API_OAUTH_CENTER_CALL_EXCEPTION(HttpStatus.BAD_REQUEST, "E0007", "github 로그인 중 오류가 발생했습니다. 고객센터에 문의주세요."),
 
-	API_CENTER_CALL_EXCEPTION(HttpStatus.BAD_REQUEST, "E0007", "오류가 발생했습니다. 고객센터에 문의주세요."),
+	API_CENTER_CALL_EXCEPTION(HttpStatus.BAD_REQUEST, "E0007", "메일 발송 실패."),
 
 	API_WORK_FAILED_EXCEPTION(HttpStatus.BAD_REQUEST, "E0008", "API 실행 중 오류 발생.");
 

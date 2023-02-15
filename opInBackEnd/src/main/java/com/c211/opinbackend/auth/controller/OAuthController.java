@@ -70,7 +70,6 @@ public class OAuthController {
 			response.addCookie(typeCookie);
 			response.sendRedirect(redirectUri);
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new MemberRuntimeException(MEMBER_WRONG_EXCEPTION);
 		}
 
