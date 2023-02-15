@@ -13,6 +13,9 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -31,6 +34,7 @@ public class Repository {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "MEMBER_ID")
 	private Member member;
 

@@ -7,6 +7,7 @@ import DeleteModal from "@components/modals/DeleteModal";
 import { userInfo } from "@recoil/user/atoms";
 import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
+import useAuth from "@hooks/useAuth";
 
 const GithubSvg = () => {
   return (
@@ -91,7 +92,7 @@ const MyInfo = ({ currentUser, addTag, deleteTag }) => {
   const [open, setOpen] = useState(false);
   const user = useRecoilValue(userInfo);
   const isMine = user.nickname == currentUser.nickname;
-
+  const { auth } = useAuth();
   function toggleModal() {
     setOpen((prev) => !prev);
   }
@@ -135,7 +136,7 @@ const MyInfo = ({ currentUser, addTag, deleteTag }) => {
           </span>
         </p>
         <ul>{renderRepos(currentUser.followRepos, false)}</ul>
-        {isMine && (
+        {isMine && auth?.githubSync == false && (
           <div className="grid grid-cols-1 justify-items-center py-4">
             <button
               type="button"
