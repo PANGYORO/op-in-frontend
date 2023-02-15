@@ -27,14 +27,19 @@ public class GetRepoTechLanguageWriter implements ItemWriter<RepoTechLanguageDto
 			// language 가 Tech language 테이블에 존재한다면 넘어가고, 아니면 저장한 후
 			// member Tech language 테이블에 관계 저장
 			try {
-				TechLanguage techLanguage = techLanguageRepository.findById(repoTech.getLanguage()).orElse(null);
+				TechLanguage techLanguage = techLanguageRepository.findByTitle(repoTech.getLanguage()).orElse(null);
 				if (techLanguage == null) {
-					techLanguage = techLanguageRepository.save(TechLanguage.builder().title(repoTech.getLanguage()).build());
+					techLanguage = techLanguageRepository.save(
+						TechLanguage.builder().title(repoTech.getLanguage()).build());
 				}
 
-				RepositoryTechLanguage repoTechRelation = repoTechLanguageRepository.findByRepositoryAndTechLanguage(repoTech.getRepository(), techLanguage).orElse(null);
+				RepositoryTechLanguage repoTechRelation = repoTechLanguageRepository.findByRepositoryAndTechLanguage(
+					repoTech.getRepository(), techLanguage).orElse(null);
 				if (repoTechRelation == null) {
-					repoTechLanguageRepository.save(RepositoryTechLanguage.builder().techLanguage(techLanguage).repository(repoTech.getRepository()).build());
+					repoTechLanguageRepository.save(RepositoryTechLanguage.builder()
+						.techLanguage(techLanguage)
+						.repository(repoTech.getRepository())
+						.build());
 				}
 			} catch (Exception e) {
 				log.info(e.toString());

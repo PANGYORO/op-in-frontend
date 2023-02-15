@@ -729,16 +729,16 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<RepositoryResponseDto> getRecommendRepositories(){
+	public List<RepositoryResponseDto> getRecommendRepositories() {
 		List<Repository> list = repoRepository.findTop10ByOrderByStargazersCountDesc();
 		List<RepositoryResponseDto> starResult = list.stream()
-			.map(m-> RepoMapper.toMyRepoDto(m))
+			.map(m -> RepoMapper.toMyRepoDto(m))
 			.collect(Collectors.toList());
 
 		Member me = new Member();
 		try {
-			 me = getMember();
-		}catch (Exception e) {
+			me = getMember();
+		} catch (Exception e) {
 			return starResult;
 		}
 
@@ -764,11 +764,11 @@ public class MemberServiceImpl implements MemberService {
 			}
 			Double dou = findSimilarity(repoTechs, myTechs);
 			// 내 언어 10개랑 비교
-			qQueue.offer(new SimilarDto(dou,repo));
+			qQueue.offer(new SimilarDto(dou, repo));
 		}
 
 		List<RepositoryResponseDto> followResults = new ArrayList<>();
-		for(int i = 0, size  = Math.min(10,qQueue.size()); i < size ;i++){
+		for (int i = 0, size = Math.min(10, qQueue.size()); i < size; i++) {
 			followResults.add(RepoMapper.toMyRepoDto(qQueue.poll().repo));
 		}
 
@@ -781,7 +781,7 @@ public class MemberServiceImpl implements MemberService {
 		// 내가 팔로우하고 있는 사람들 최대 10명 중에서 각각이 가지고 있는 레포지토리(팔로우)
 		// 스타 수가 가장 많은 레포지토리 10개
 		List<MemberFollow> myFollows = memberFollowRepository.findByFromMember(me);
-		for (int i = 0; i < Math.min(10,myFollows.size()); i++) {
+		for (int i = 0; i < Math.min(10, myFollows.size()); i++) {
 			List<Repository> toMemberRepos = repoRepository.findByMember(myFollows.get(i).getToMember());
 			result.addAll(toMemberRepos);
 		}
