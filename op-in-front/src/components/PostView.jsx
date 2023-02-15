@@ -109,6 +109,7 @@ const PostDetail = ({
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [postTitle, setPostTitle] = useState(title);
   const [postContent, setPostContent] = useState(content);
+  const dateTime = new Date(date).toLocaleString();
   const { hasAuth } = useAuth();
   const navigate = useNavigate();
 
@@ -196,7 +197,7 @@ const PostDetail = ({
             memberName: comment.memberName,
             memberAvatarUrl: comment.memberAvatarUrl,
             commentContent: comment.commentContent,
-            date: new Date(comment.updateDate),
+            date: new Date(comment.updateDate).toLocaleString(),
           },
         ]);
         setCommentsCount((prev) => prev + 1);
@@ -248,7 +249,7 @@ const PostDetail = ({
               <h2>{authorMemberName}</h2>
             </span>
             <span className="ml-2 text-sm text-gray-500 ">
-              {date}
+              {dateTime}
             </span>
             <button
               onClick={() =>
