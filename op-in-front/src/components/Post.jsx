@@ -4,7 +4,7 @@ import DefaultImg from "@assets/basicprofile.png";
 
 export default function Post({
   id = 1,
-  createTime = "2022-02-09",
+  date = "2022-02-09",
   title = "basic title",
   likeCount = 0,
   commentCount = 0,
@@ -96,7 +96,7 @@ export default function Post({
                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                       ></path>
                     </svg>
-                    <p className="text-xs truncate">{new Date(createTime).toLocaleString()}</p>
+                    <p className="text-xs truncate">{new Date(date).toLocaleString()}</p>
                   </div>
                 </div>
               </div>
