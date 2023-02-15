@@ -41,7 +41,7 @@ public class Scheduler {
 		jobLauncher.run(getMemberRepositoryJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 36 7 * * *")
+	@Scheduled(cron = "0 40 19 * * *")
 	public void getEnterRepositoryJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
