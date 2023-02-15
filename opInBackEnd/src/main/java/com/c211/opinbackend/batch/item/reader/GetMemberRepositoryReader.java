@@ -8,12 +8,9 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.c211.opinbackend.batch.dto.github.RepositoryDto;
 import com.c211.opinbackend.batch.step.Action;
-import com.c211.opinbackend.constant.GitHub;
 import com.c211.opinbackend.persistence.entity.BatchToken;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.repository.BatchTokenRepository;
@@ -38,7 +35,7 @@ public class GetMemberRepositoryReader implements ItemReader<RepositoryDto> {
 	public RepositoryDto read() throws Exception,
 		UnexpectedInputException, ParseException, NonTransientResourceException {
 
-		if (checkRestCall == false){//한번도 호출 않았는지 체크
+		if (checkRestCall == false) {//한번도 호출 않았는지 체크
 			// token 초기화
 			List<BatchToken> batchTokens = batchTokenRepository.findAll();
 			int index = 0;
@@ -51,7 +48,10 @@ public class GetMemberRepositoryReader implements ItemReader<RepositoryDto> {
 
 				while (true) {
 					try {
-						RepositoryDto[] repositoryDtos = action.getMemberRepository(githubToken, member.getGithubUserName(), String.valueOf(page));
+						RepositoryDto[] repositoryDtos = action.getMemberRepository(githubToken,
+							member.getGithubUserName(),
+							String.valueOf(page));
+						
 						result.addAll(Arrays.asList(repositoryDtos));
 						if (repositoryDtos.length < 100) {
 							break;

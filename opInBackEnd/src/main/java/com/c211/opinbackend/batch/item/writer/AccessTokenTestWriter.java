@@ -23,7 +23,7 @@ public class AccessTokenTestWriter implements ItemWriter<String> {
 
 			try {
 				batchTokenRepository.save(batchToken);
-			}catch (Exception e) {
+			} catch (Exception e) {
 
 			}
 		}

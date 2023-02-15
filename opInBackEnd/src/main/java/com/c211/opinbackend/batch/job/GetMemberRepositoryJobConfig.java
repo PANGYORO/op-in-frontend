@@ -35,14 +35,15 @@ public class GetMemberRepositoryJobConfig {
 	private final RepoRepository repoRepository;
 
 	@Bean
-	public Job getMemberRepositoryJob(Step accessTokenTestStep, Step getMemberRepositoryStep, Step batchTokenResetStep) {
+	public Job getMemberRepositoryJob(Step accessTokenTestStep, Step getMemberRepositoryStep,
+		Step batchTokenResetStep) {
 		return jobBuilderFactory.get("getMemberRepositoryJob")
 			.incrementer(new RunIdIncrementer())
 			.listener(new LoggerListener())
 			.start(accessTokenTestStep)
-				.on("FAILED").to(batchTokenResetStep).on("*").end()
+			.on("FAILED").to(batchTokenResetStep).on("*").end()
 			.from(accessTokenTestStep)
-				.on("*").to(getMemberRepositoryStep).on("*").to(batchTokenResetStep).end()
+			.on("*").to(getMemberRepositoryStep).on("*").to(batchTokenResetStep).end()
 			.build();
 	}
 

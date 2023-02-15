@@ -17,7 +17,8 @@ public class CommitHistoryMapper {
 	public CommitHistory toCommitHistory(CommitDto commit) {
 
 		if (commit.getParents() != null & commit.getParents().size() > 0) {
-			CommitHistory commitHistory = commitHistoryRepository.findBySha(commit.getParents().get(0).getSha()).orElse(null);
+			CommitHistory commitHistory = commitHistoryRepository.findBySha(commit.getParents().get(0).getSha())
+				.orElse(null);
 
 			if (commitHistory != null) {
 				return CommitHistory.builder()

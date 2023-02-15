@@ -16,6 +16,7 @@ import com.c211.opinbackend.persistence.entity.BatchToken;
 public interface BatchTokenRepository extends JpaRepository<BatchToken, Long> {
 
 	List<BatchToken> findAll();
+
 	BatchToken save(BatchToken batchToken);
 
 	Optional<BatchToken> findByAccessToken(String accessToken);
@@ -24,6 +25,5 @@ public interface BatchTokenRepository extends JpaRepository<BatchToken, Long> {
 	@Modifying
 	@Query(value = "truncate batch_token", nativeQuery = true)
 	void truncateBatchToken();
-
 
 }

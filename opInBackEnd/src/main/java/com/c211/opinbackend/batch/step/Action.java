@@ -41,7 +41,7 @@ public class Action {
 		return webClient
 			.get()
 			.uri(GitHub.getUserRepoUrl(githubUserName, page))
-			.header("Authorization", "token "+githubToken)
+			.header("Authorization", "token " + githubToken)
 			.retrieve().bodyToMono(RepositoryDto[].class).block();
 	}
 
@@ -51,7 +51,7 @@ public class Action {
 			.uri(
 				GitHub.getPublicRepositoryLanguageUrl(repositoryFullName, page)
 			)
-			.header("Authorization", "token "+githubToken)
+			.header("Authorization", "token " + githubToken)
 			.retrieve().bodyToMono(new ParameterizedTypeReference<Map<String, Long>>() {
 			}).block();
 	}
@@ -70,15 +70,15 @@ public class Action {
 		return webClient
 			.get()
 			.uri(GitHub.getPublicRepositoryCommitUrl(repositoryFullName, page))
-			.header("Authorization", "token "+githubToken)
+			.header("Authorization", "token " + githubToken)
 			.retrieve().bodyToMono(CommitDto[].class).block();
 	}
 
 	public PullRequestDto[] getRepositoryPulls(String githubToken, String repositoryFullName, String page) {
 		return webClient
 			.get()
-			.uri(GitHub.getPublicRepositoryPullsUrl(repositoryFullName,page))
-			.header("Authorization", "token "+githubToken)
+			.uri(GitHub.getPublicRepositoryPullsUrl(repositoryFullName, page))
+			.header("Authorization", "token " + githubToken)
 			.retrieve().bodyToMono(PullRequestDto[].class).block();
 	}
 
@@ -86,7 +86,7 @@ public class Action {
 		return webClient
 			.get()
 			.uri(GitHub.getPublicRepositoryContributorsUrl(repositoryFullName, page))
-			.header("Authorization", "token "+githubToken)
+			.header("Authorization", "token " + githubToken)
 			.retrieve().bodyToMono(ContributorDto[].class).block();
 
 	}

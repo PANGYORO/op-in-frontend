@@ -13,7 +13,6 @@ import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -23,8 +22,9 @@ public class AsyncService {
 	RepoRepository repoRepository;
 
 	public AsyncService(RepoRepository repoRepository) {
-		this.repoRepository =repoRepository;
+		this.repoRepository = repoRepository;
 	}
+
 	@Async
 	public CompletableFuture<String> process(final Member member) {
 		try {
@@ -33,7 +33,8 @@ public class AsyncService {
 				try {
 					Repository repository = RepoMapper.toRepository(repo, member);
 					repoRepository.save(repository);
-					log.info("[SUCCESS] github 유저: {} || repository update: {}", member.getGithubId(), repository.getId());
+					log.info("[SUCCESS] github 유저: {} || repository update: {}",
+						member.getGithubId(), repository.getId());
 				} catch (Exception e) {
 					log.error("[FAILED] github 유저: {} || repository update: {}", member.getGithubId(), repo.getId());
 				}
@@ -44,11 +45,12 @@ public class AsyncService {
 		}
 		return CompletableFuture.completedFuture("FAILED");
 	}
+
 	public static RepositoryDto[] getMemberRepository(String githubToken, String githubUserName) {
 		return WebClient.create()
 			.get()
 			.uri(GitHub.getUserRepoUrl(githubUserName, "1"))
-			.header("Authorization", "token "+githubToken)
+			.header("Authorization", "token " + githubToken)
 			.retrieve().bodyToMono(RepositoryDto[].class).block();
 	}
 }
