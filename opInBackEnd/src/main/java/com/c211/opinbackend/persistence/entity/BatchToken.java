@@ -23,6 +23,7 @@ public class BatchToken {
 	@Id
 	@GeneratedValue
 	private Long id;
+
 	@NotNull
 	private String accessToken;
 }

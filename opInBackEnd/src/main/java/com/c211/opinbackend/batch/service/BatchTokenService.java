@@ -15,6 +15,6 @@ public class BatchTokenService {
 
 	@Transactional
 	public void deleteBatchToken() {
-		batchTokenRepository.truncateBatchToken();
+		batchTokenRepository.deleteAll();
 	}
 }
