@@ -67,7 +67,7 @@ public class Scheduler {
 		jobLauncher.run(getRepoTechLanguageJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 30 1 * * *") // 매 3시간 마다
+	@Scheduled(cron = "0 32 4 * * *") // 매 3시간 마다
 	public void getRepoCommitJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
