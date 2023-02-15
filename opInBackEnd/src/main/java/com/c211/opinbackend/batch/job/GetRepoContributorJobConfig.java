@@ -35,16 +35,15 @@ public class GetRepoContributorJobConfig {
 	private final Action action;
 	private final BatchTokenRepository batchTokenRepository;
 
-
 	@Bean
 	public Job getRepoContributorJob(Step accessTokenTestStep, Step getRepoContributorStep, Step batchTokenResetStep) {
 		return jobBuilderFactory.get("getRepoContributorJob")
 			.incrementer(new RunIdIncrementer())
 			.listener(new LoggerListener())
 			.start(accessTokenTestStep)
-				.on("FAILED").to(batchTokenResetStep).on("*").end()
+			.on("FAILED").to(batchTokenResetStep).on("*").end()
 			.from(accessTokenTestStep)
-				.on("*").to(getRepoContributorStep).on("*").to(batchTokenResetStep).end()
+			.on("*").to(getRepoContributorStep).on("*").to(batchTokenResetStep).end()
 			.build();
 	}
 
@@ -52,8 +51,7 @@ public class GetRepoContributorJobConfig {
 	@Bean
 	public Step getRepoContributorStep() {
 		return stepBuilderFactory.get("getRepoContributorStep")
-			.<ContributorDto
-				, ContributorDto>chunk(1)
+			.<ContributorDto, ContributorDto>chunk(1)
 			.reader(new GetRepoContributorReader(repoRepository, action, batchTokenRepository))
 			.writer(new GetRepoContributorWriter(memberRepository, repoContributorRepository))
 			.build();

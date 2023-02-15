@@ -1,7 +1,6 @@
 package com.c211.opinbackend.batch.item.reader;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -9,14 +8,10 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.c211.opinbackend.batch.dto.RepoTechLanguageDto;
 import com.c211.opinbackend.batch.dto.github.RepositoryDto;
 import com.c211.opinbackend.batch.step.Action;
-import com.c211.opinbackend.constant.GitHub;
 import com.c211.opinbackend.persistence.entity.BatchToken;
 import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.repository.BatchTokenRepository;
@@ -40,7 +35,7 @@ public class GetRepoTechLanguageReader implements ItemReader<RepoTechLanguageDto
 	public RepoTechLanguageDto read() throws Exception,
 		UnexpectedInputException, ParseException, NonTransientResourceException {
 
-		if (checkRestCall == false) {//한번도 호출 않았는지 체크
+		if (checkRestCall == false) { //한번도 호출 않았는지 체크
 			// token 초기화
 			List<BatchToken> batchTokens = batchTokenRepository.findAll();
 			int index = 0;
@@ -54,7 +49,8 @@ public class GetRepoTechLanguageReader implements ItemReader<RepoTechLanguageDto
 
 				while (true) {
 					try {
-						Map<String, Long> languages = action.getRepositoryLanguages(githubToken, repo.getFullName(), String.valueOf(page));
+						Map<String, Long> languages = action.getRepositoryLanguages(githubToken, repo.getFullName(),
+							String.valueOf(page));
 						for (String lan : languages.keySet()) {
 							collectData.add(RepoTechLanguageDto.builder().repository(repo).language(lan).build());
 						}

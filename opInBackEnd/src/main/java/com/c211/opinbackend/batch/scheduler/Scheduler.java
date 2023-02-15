@@ -27,7 +27,7 @@ public class Scheduler {
 
 	private final JobLauncher jobLauncher;
 
-	@Scheduled(cron = "0 0 2 * * *")
+	@Scheduled(cron = "0 42 11 * * ?")
 	public void getMemberRepositoryJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -40,7 +40,7 @@ public class Scheduler {
 		jobLauncher.run(getMemberRepositoryJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 30 3 * * *")
+	@Scheduled(cron = "0 25 13 * * *")
 	public void getEnterRepositoryJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -53,7 +53,7 @@ public class Scheduler {
 		jobLauncher.run(getEnterRepositoryJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 56 7 * * *")
+	@Scheduled(cron = "0 23 16 * * *")
 	public void getRepoTechLanguageJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,

@@ -33,7 +33,6 @@ import com.c211.opinbackend.member.model.response.FileUploadResponse;
 import com.c211.opinbackend.member.service.MemberService;
 import com.c211.opinbackend.member.service.S3FileUploadService;
 import com.c211.opinbackend.persistence.entity.Member;
-import com.c211.opinbackend.persistence.repository.RepositoryFollowRepository;
 import com.c211.opinbackend.util.SecurityUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -48,8 +47,6 @@ public class MemberController {
 	private final MemberService memberService;
 	private final MailService mailService;
 	private final S3FileUploadService s3FileUploadService;
-
-	private final RepositoryFollowRepository repositoryFollowRepository;
 
 	/**
 	 * 로그인 되어 있다면 내정보를 가져올수 있는 api
