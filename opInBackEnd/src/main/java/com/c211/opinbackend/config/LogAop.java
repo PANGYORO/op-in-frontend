@@ -14,14 +14,16 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class LogAop {
 	@Before("execution(* com.c211.opinbackend..*(..)) && !execution(* com.c211.opinbackend.config..*(..))"
-		+ "&& !execution(* com.c211.opinbackend.auth.jwt..*(..))")
+		+ "&& !execution(* com.c211.opinbackend.auth.jwt..*(..))"
+		+ " && !execution(* com.c211.opinbackend.batch..*(..))")
 	public void before(JoinPoint joinPoint) {
 		log.info("[log] {} -> {} 실행", joinPoint.getSignature().getDeclaringType().getSimpleName(),
 			joinPoint.getSignature().getName());
 	}
 
 	@After("execution(* com.c211.opinbackend..*(..)) && !execution(* com.c211.opinbackend.config..*(..))"
-		+ "&& !execution(* com.c211.opinbackend.auth.jwt..*(..))")
+		+ "&& !execution(* com.c211.opinbackend.auth.jwt..*(..))"
+		+ " && !execution(* com.c211.opinbackend.batch..*(..))")
 	public void after(JoinPoint joinPoint) {
 		log.info("[log] {} -> {} 종료", joinPoint.getSignature().getDeclaringType().getSimpleName(),
 			joinPoint.getSignature().getName());
