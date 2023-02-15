@@ -3,13 +3,22 @@ import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Editor } from "@toast-ui/react-editor";
 import http from "@api/http";
+import { useToast } from "@hooks/useToast";
 
-const PostModifyModal = ({ id, title, previousValue, open, setOpen, propFunction }) => {
+const PostModifyModal = ({
+  id,
+  title,
+  previousValue,
+  open,
+  setOpen,
+  propFunction,
+}) => {
   const cancelButtonRef = useRef(null);
 
   const toastuiEditor = useRef();
   const [curTitle, setTitle] = useState(title);
-  const [data, setData] = useState("");
+  const [data, setData] = useState(previousValue);
+  const { setToast } = useToast();
 
   const titleChangeHandler = (e) => {
     setTitle(e.currentTarget.value);
@@ -43,6 +52,7 @@ const PostModifyModal = ({ id, title, previousValue, open, setOpen, propFunction
       })
       .then(({ data }) => {
         callback(data.url, "");
+        setToast("이미지 등록이 완료됐습니다.");
       })
       .catch((e) => {
         console.error(e);
@@ -51,7 +61,12 @@ const PostModifyModal = ({ id, title, previousValue, open, setOpen, propFunction
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-40" initialFocus={cancelButtonRef} onClose={setOpen}>
+      <Dialog
+        as="div"
+        className="relative z-40"
+        initialFocus={cancelButtonRef}
+        onClose={setOpen}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"

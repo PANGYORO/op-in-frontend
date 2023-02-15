@@ -14,10 +14,6 @@ import PostDeleteModal from "./modals/PostDeleteModal";
 import PostModifyModal from "./modals/PostModifyModal";
 import useAuth from "@hooks/useAuth";
 
-const view = (data) => {
-  return <Viewer initialValue={data} />;
-};
-
 const HeartUnpressed = () => {
   return (
     <svg
@@ -247,9 +243,7 @@ const PostDetail = ({
             <span className="ml-2 font-bold text-gray-600 ">
               <h2>{authorMemberName}</h2>
             </span>
-            <span className="ml-2 text-sm text-gray-500 ">
-              {date}
-            </span>
+            <span className="ml-2 text-sm text-gray-500 ">{date}</span>
             <button
               onClick={() =>
                 navigate(`/repo/${repoId}`, {
@@ -277,7 +271,9 @@ const PostDetail = ({
           </div>
         </div>
         <div className="mt-3">
-          <div className="my-3 mx-4 font-light ">{view(postContent)}</div>
+          <div className="my-3 mx-4 font-light ">
+            <Viewer initialValue={postContent} />
+          </div>
         </div>
         {authorMemberName == user.nickname ? (
           <div className="">
