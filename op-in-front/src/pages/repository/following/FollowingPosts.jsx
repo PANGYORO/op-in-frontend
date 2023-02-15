@@ -14,7 +14,7 @@ const PostList = ({ posts = [] }) => {
           <Post
             key={post.id}
             id={post.id}
-            createTime={post.date}
+            date={post.date}
             title={post.title}
             post_content={post.post_content}
             likeCount={post.likeCount}
@@ -73,7 +73,7 @@ function FollowingPosts({ repoId }) {
       {
         id: data.id,
         title: data.title,
-        createTime: new Date(data.date),
+        date: new Date(data.date).toLocaleString(),
         post_content: data.content,
         likeCount: data.likeCount,
         commentCount: data.commentCount,

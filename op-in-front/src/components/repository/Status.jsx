@@ -131,7 +131,7 @@ const Status = ({ repoDetail }) => {
         {tagRender(repoDetail?.techLangs)}
       </div>
       <div className="my-2 font-bold">Last Update</div>
-      <div>{repoDetail.date}</div>
+      <div>{new Date(repoDetail.date).toLocaleString()}</div>
       <div className="m-4">
         <div className="inline-flex">
           <svg

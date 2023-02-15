@@ -2,6 +2,7 @@ package com.c211.opinbackend.persistence.entity;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -32,11 +33,11 @@ public class Comment {
 	@JoinColumn(name = "MEMBER_ID")
 	private Member member;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "REPOSITORY_QNA_ID")
 	private RepositoryQnA repositoryQnA;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "REPOSITORY_POST_ID")
 	private RepositoryPost repositoryPost;
 	private String content;
