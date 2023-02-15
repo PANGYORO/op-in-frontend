@@ -6,7 +6,6 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -39,9 +38,9 @@ public class GetRepoCommitJobConfig {
 			.incrementer(new RunIdIncrementer())
 			.listener(new LoggerListener())
 			.start(accessTokenTestStep)
-				.on("FAILED").to(batchTokenResetStep).on("*").end()
+			.on("FAILED").to(batchTokenResetStep).on("*").end()
 			.from(accessTokenTestStep)
-				.on("*").to(getRepoCommitStep).on("*").to(batchTokenResetStep).end()
+			.on("*").to(getRepoCommitStep).on("*").to(batchTokenResetStep).end()
 			.build();
 	}
 
@@ -49,8 +48,7 @@ public class GetRepoCommitJobConfig {
 	@Bean
 	public Step getRepoCommitStep() {
 		return stepBuilderFactory.get("getRepoCommitStep")
-			.<CommitDto
-				, CommitDto>chunk(1)
+			.<CommitDto, CommitDto>chunk(1)
 			.reader(new GetRepoCommitReader(repoRepository, action, batchTokenRepository))
 			.writer(new GetRepoCommitWriter(commitHistoryRepository, commitHistoryMapper))
 			.build();

@@ -48,10 +48,10 @@ public class GetEnterRepositoryReader implements ItemReader<RepositoryDto> {
 
 				while (true) {
 					try {
-						RepositoryDto[] repositoryDtos = action.getMemberRepository(githubToken
-							, enter.getTitle()
-							, String.valueOf(page));
-						
+						RepositoryDto[] repositoryDtos = action.getMemberRepository(githubToken,
+							enter.getTitle(),
+							String.valueOf(page));
+
 						result.addAll(Arrays.asList(repositoryDtos));
 						if (repositoryDtos.length < 100) {
 							break;
