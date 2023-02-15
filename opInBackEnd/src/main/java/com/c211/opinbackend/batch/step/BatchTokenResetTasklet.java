@@ -4,6 +4,7 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.c211.opinbackend.persistence.repository.BatchTokenRepository;
 
@@ -14,9 +15,10 @@ public class BatchTokenResetTasklet implements Tasklet {
 
 	private final BatchTokenRepository batchTokenRepository;
 
+	@Transactional
 	@Override
 	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-		// batchTokenRepository.truncateBatchToken();
+		batchTokenRepository.truncateBatchToken();
 		return RepeatStatus.FINISHED;
 	}
 }
