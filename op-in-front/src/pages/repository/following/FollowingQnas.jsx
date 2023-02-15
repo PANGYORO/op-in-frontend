@@ -70,12 +70,12 @@ const FollowingQnas = ({ repoId }) => {
       ...Array.from(prev),
       {
         repoId: repoId,
-        qnaId: data.qnaId,
+        id: data.qnaId,
         member: {
           nickname: user.nickname,
           user_img: user.img_url,
         },
-        createTime: new Date(),
+        createTime: data.createTime,
         content: data.content,
         comments: [],
       },
