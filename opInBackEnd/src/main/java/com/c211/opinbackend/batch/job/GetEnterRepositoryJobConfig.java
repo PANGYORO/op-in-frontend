@@ -6,17 +6,16 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.c211.opinbackend.batch.dto.github.RepositoryDto;
 import com.c211.opinbackend.batch.item.reader.AccessTokenTestReader;
 import com.c211.opinbackend.batch.item.reader.GetEnterRepositoryReader;
-import com.c211.opinbackend.batch.item.reader.GetMemberRepositoryReader;
 import com.c211.opinbackend.batch.item.writer.AccessTokenTestWriter;
 import com.c211.opinbackend.batch.item.writer.GetMemberRepositoryWriter;
 import com.c211.opinbackend.batch.listener.LoggerListener;
+import com.c211.opinbackend.batch.service.BatchTokenService;
 import com.c211.opinbackend.batch.service.RepositoryService;
 import com.c211.opinbackend.batch.step.Action;
 import com.c211.opinbackend.batch.step.BatchTokenResetTasklet;
@@ -40,6 +39,7 @@ public class GetEnterRepositoryJobConfig {
 	private final Action action;
 	private final RepoRepository repoRepository;
 	private final BatchTokenRepository batchTokenRepository;
+	private final BatchTokenService batchTokenService;
 
 	@Bean
 	public Job getEnterRepositoryJob(Step accessTokenTestStep, Step getEnterRepositoryStep, Step batchTokenResetStep) {
@@ -47,9 +47,9 @@ public class GetEnterRepositoryJobConfig {
 			.incrementer(new RunIdIncrementer())
 			.listener(new LoggerListener())
 			.start(accessTokenTestStep)
-				.on("FAILED").to(batchTokenResetStep).on("*").end()
+			.on("FAILED").to(batchTokenResetStep).on("*").end()
 			.from(accessTokenTestStep)
-				.on("*").to(getEnterRepositoryStep).on("*").to(batchTokenResetStep).end()
+			.on("*").to(getEnterRepositoryStep).on("*").to(batchTokenResetStep).end()
 			.build();
 	}
 
@@ -77,7 +77,7 @@ public class GetEnterRepositoryJobConfig {
 	@Bean
 	public Step batchTokenResetStep() {
 		return stepBuilderFactory.get("batchTokenResetStep")
-			.tasklet(new BatchTokenResetTasklet(batchTokenRepository))
+			.tasklet(new BatchTokenResetTasklet(batchTokenService))
 			.build();
 	}
 }
