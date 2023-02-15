@@ -16,6 +16,7 @@ import com.c211.opinbackend.batch.item.writer.GetRepoPullRequestWriter;
 import com.c211.opinbackend.batch.listener.LoggerListener;
 import com.c211.opinbackend.batch.step.Action;
 import com.c211.opinbackend.persistence.entity.PullRequest;
+import com.c211.opinbackend.persistence.repository.BatchTokenRepository;
 import com.c211.opinbackend.persistence.repository.PullRequestRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
 
@@ -26,23 +27,24 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @RequiredArgsConstructor
 public class GetRepoPullRequestJobConfig {
-	/**
 
 	private final JobBuilderFactory jobBuilderFactory;
 	private final StepBuilderFactory stepBuilderFactory;
 	private final RepoRepository repoRepository;
 	private final PullRequestMapper pullRequestMapper;
 	private final PullRequestRepository pullRequestRepository;
+	private final BatchTokenRepository batchTokenRepository;
 	private final Action action;
-	@Value("${githubToken3}")
-	private String githubToken;
 
 	@Bean
-	public Job getRepoPullRequestJob(Step getRepoPullRequestStep) {
+	public Job getRepoPullRequestJob(Step accessTokenTestStep, Step getRepoPullRequestStep, Step batchTokenResetStep) {
 		return jobBuilderFactory.get("getRepoPullRequestJob")
 			.incrementer(new RunIdIncrementer())
 			.listener(new LoggerListener())
-			.start(getRepoPullRequestStep)
+			.start(accessTokenTestStep)
+				.on("FAILED").to(batchTokenResetStep).on("*").end()
+			.from(accessTokenTestStep)
+				.on("*").to(getRepoPullRequestStep).on("*").to(batchTokenResetStep).end()
 			.build();
 	}
 
@@ -52,10 +54,9 @@ public class GetRepoPullRequestJobConfig {
 		return stepBuilderFactory.get("getRepoPullRequestStep")
 			.<PullRequest
 				, PullRequest>chunk(1)
-			.reader(new GetRepoPullRequestReader(repoRepository, pullRequestMapper, action, githubToken))
+			.reader(new GetRepoPullRequestReader(repoRepository, pullRequestMapper, action, batchTokenRepository))
 			.writer(new GetRepoPullRequestWriter(pullRequestRepository))
 			.build();
 	}
 
-	*/
 }

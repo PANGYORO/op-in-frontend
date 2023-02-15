@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.c211.opinbackend.batch.dto.github.CommitDto;
@@ -20,6 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class Action {
+	private ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
+		.codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(10 * 1024 * 1024)) // 10MB
+		.build();
+
+	private WebClient webClient = WebClient.builder()
+		.exchangeStrategies(exchangeStrategies)
+		.build();
 
 	public static UserDto getMemberInfo(String githubUserName) {
 		return WebClient.create()
@@ -29,21 +37,21 @@ public class Action {
 			.bodyToMono(UserDto.class).block();
 	}
 
-	public static RepositoryDto[] getMemberRepository(String githubToken, String githubUserName) {
-		return WebClient.create()
+	public RepositoryDto[] getMemberRepository(String githubToken, String githubUserName, String page) {
+		return webClient
 			.get()
-			.uri(GitHub.getUserRepoUrl(githubUserName))
-			.header("Authorization", "token "+githubToken)
+			.uri(GitHub.getUserRepoUrl(githubUserName, page))
+			.header("Authorization", "token " + githubToken)
 			.retrieve().bodyToMono(RepositoryDto[].class).block();
 	}
 
-	public static Map<String, Long> getRepositoryLanguages(String githubToken, String repositoryFullName) {
-		return WebClient.create()
+	public Map<String, Long> getRepositoryLanguages(String githubToken, String repositoryFullName, String page) {
+		return webClient
 			.get()
 			.uri(
-				GitHub.getPublicRepositoryLanguageUrl(repositoryFullName)
+				GitHub.getPublicRepositoryLanguageUrl(repositoryFullName, page)
 			)
-			.header("Authorization", "token "+githubToken)
+			.header("Authorization", "token " + githubToken)
 			.retrieve().bodyToMono(new ParameterizedTypeReference<Map<String, Long>>() {
 			}).block();
 	}
@@ -58,27 +66,27 @@ public class Action {
 			}).block();
 	}
 
-	public static CommitDto[] getRepositoryCommits(String githubToken, String repositoryFullName) {
-		return WebClient.create()
+	public CommitDto[] getRepositoryCommits(String githubToken, String repositoryFullName, String page) {
+		return webClient
 			.get()
-			.uri(GitHub.getPublicRepositoryCommitUrl(repositoryFullName))
-			.header("Authorization", "token "+githubToken)
+			.uri(GitHub.getPublicRepositoryCommitUrl(repositoryFullName, page))
+			.header("Authorization", "token " + githubToken)
 			.retrieve().bodyToMono(CommitDto[].class).block();
 	}
 
-	public static PullRequestDto[] getRepositoryPulls(String githubToken, String repositoryFullName) {
-		return WebClient.create()
+	public PullRequestDto[] getRepositoryPulls(String githubToken, String repositoryFullName, String page) {
+		return webClient
 			.get()
-			.uri(GitHub.getPublicRepositoryPullsUrl(repositoryFullName))
-			.header("Authorization", "token "+githubToken)
+			.uri(GitHub.getPublicRepositoryPullsUrl(repositoryFullName, page))
+			.header("Authorization", "token " + githubToken)
 			.retrieve().bodyToMono(PullRequestDto[].class).block();
 	}
 
-	public static ContributorDto[] getContributors(String githubToken, String repositoryFullName) {
-		return WebClient.create()
+	public ContributorDto[] getContributors(String githubToken, String repositoryFullName, String page) {
+		return webClient
 			.get()
-			.uri(GitHub.getPublicRepositoryContributorsUrl(repositoryFullName))
-			.header("Authorization", "token "+githubToken)
+			.uri(GitHub.getPublicRepositoryContributorsUrl(repositoryFullName, page))
+			.header("Authorization", "token " + githubToken)
 			.retrieve().bodyToMono(ContributorDto[].class).block();
 
 	}

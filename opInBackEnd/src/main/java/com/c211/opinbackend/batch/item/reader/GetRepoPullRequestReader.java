@@ -11,12 +11,15 @@ import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.c211.opinbackend.batch.dto.github.CommitDto;
 import com.c211.opinbackend.batch.dto.github.PullRequestDto;
 import com.c211.opinbackend.batch.dto.mapper.PullRequestMapper;
 import com.c211.opinbackend.batch.step.Action;
 import com.c211.opinbackend.constant.GitHub;
+import com.c211.opinbackend.persistence.entity.BatchToken;
 import com.c211.opinbackend.persistence.entity.PullRequest;
 import com.c211.opinbackend.persistence.entity.Repository;
+import com.c211.opinbackend.persistence.repository.BatchTokenRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -32,7 +35,7 @@ public class GetRepoPullRequestReader implements ItemReader<PullRequest> {
 	private final RepoRepository repoRepository;
 	private final PullRequestMapper pullRequestMapper;
 	private final Action action;
-	private final String githubToken;
+	private final BatchTokenRepository batchTokenRepository;
 
 	@Override
 	public PullRequest read() throws
@@ -42,15 +45,37 @@ public class GetRepoPullRequestReader implements ItemReader<PullRequest> {
 		NonTransientResourceException {
 
 		if (checkRestCall == false) {//한번도 호출 않았는지 체크
+			// token 초기화
+			List<BatchToken> batchTokens = batchTokenRepository.findAll();
+			int index = 0;
+			String githubToken = batchTokens.get(index).getAccessToken();
+
 			List<Repository> repos = repoRepository.findAll();
 
 			for (Repository repo : repos) {
-				PullRequest[] pullRequests = Arrays.stream(action.getRepositoryPulls(githubToken, repo.getFullName())).map(
-					prDto -> pullRequestMapper.toPullRequest(prDto, repo)
-				).toArray(PullRequest[]::new);
+				List<PullRequest> result = new ArrayList<>();
+				int page = 1;
 
-				List<PullRequest> pullRequestList = Arrays.asList(pullRequests);
-				collectData.addAll(pullRequestList);
+				while (true) {
+					try {
+						PullRequest[] pullRequests = Arrays.stream(action.getRepositoryPulls(githubToken, repo.getFullName(), String.valueOf(page))).map(
+							prDto -> pullRequestMapper.toPullRequest(prDto, repo)
+						).toArray(PullRequest[]::new);
+						result.addAll(Arrays.asList(pullRequests));
+						if (pullRequests.length < 100) {
+							break;
+						}
+						page += 1;
+					} catch (Exception e) {
+						index += 1;
+						if (batchTokens.size() <= index) {
+							break;
+						}
+						githubToken = batchTokens.get(index).getAccessToken();
+					}
+				}
+
+				collectData.addAll(result);
 			}
 
 			log.info("Rest Call result : >>>>>>>" + collectData.size());
