@@ -24,6 +24,7 @@ public class Scheduler {
 	private final Job getRepoPullRequestJob;
 	private final Job getRepoContributorJob;
 	private final Job getEnterRepositoryJob;
+	private final Job getMemberTechLanguageJob;
 
 	private final JobLauncher jobLauncher;
 
@@ -66,7 +67,7 @@ public class Scheduler {
 		jobLauncher.run(getRepoTechLanguageJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 30 3 * * *") // 매 3시간 마다
+	@Scheduled(cron = "0 30 1 * * *") // 매 3시간 마다
 	public void getRepoCommitJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -103,6 +104,19 @@ public class Scheduler {
 			Collections.singletonMap("requestTime", new JobParameter(System.currentTimeMillis())));
 
 		jobLauncher.run(getRepoContributorJob, jobParameters);
+	}
+
+	@Scheduled(cron = "0 25 3 * * *") // 매 시간 55분에
+	public void getMemberTechLanguageJobRus() throws
+		JobInstanceAlreadyCompleteException,
+		JobExecutionAlreadyRunningException,
+		JobParametersInvalidException,
+		JobRestartException {
+
+		JobParameters jobParameters = new JobParameters(
+			Collections.singletonMap("requestTime", new JobParameter(System.currentTimeMillis())));
+
+		jobLauncher.run(getMemberTechLanguageJob, jobParameters);
 	}
 
 }

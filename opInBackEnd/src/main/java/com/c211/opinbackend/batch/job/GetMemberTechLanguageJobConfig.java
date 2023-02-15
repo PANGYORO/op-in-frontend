@@ -9,15 +9,10 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.c211.opinbackend.batch.dto.github.CommitDto;
-import com.c211.opinbackend.batch.dto.mapper.CommitHistoryMapper;
-import com.c211.opinbackend.batch.item.reader.GetRepoCommitReader;
-import com.c211.opinbackend.batch.item.writer.GetRepoCommitWriter;
 import com.c211.opinbackend.batch.listener.LoggerListener;
-import com.c211.opinbackend.batch.step.Action;
-import com.c211.opinbackend.persistence.repository.BatchTokenRepository;
-import com.c211.opinbackend.persistence.repository.CommitHistoryRepository;
-import com.c211.opinbackend.persistence.repository.RepoRepository;
+import com.c211.opinbackend.batch.step.GetMemberTechLanguageTasklet;
+import com.c211.opinbackend.persistence.repository.MemberTechLanguageRepository;
+import com.c211.opinbackend.persistence.repository.RepoTechLanguageRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,31 +21,28 @@ import lombok.RequiredArgsConstructor;
 public class GetMemberTechLanguageJobConfig {
 	private final JobBuilderFactory jobBuilderFactory;
 	private final StepBuilderFactory stepBuilderFactory;
-	private final RepoRepository repoRepository;
-	private final CommitHistoryRepository commitHistoryRepository;
-	private final CommitHistoryMapper commitHistoryMapper;
-	private final BatchTokenRepository batchTokenRepository;
-	private final Action action;
+	private final RepoTechLanguageRepository repoTechLanguageRepository;
+	private final MemberTechLanguageRepository memberTechLanguageRepository;
 
 	@Bean
-	public Job getRepoCommitJob(Step accessTokenTestStep, Step getRepoCommitStep, Step batchTokenResetStep) {
-		return jobBuilderFactory.get("getRepoCommitJob")
+	public Job getMemberTechLanguageJob(Step accessTokenTestStep, Step getMemberTechLanguageStep,
+		Step batchTokenResetStep) {
+		return jobBuilderFactory.get("getMemberTechLanguageJob")
 			.incrementer(new RunIdIncrementer())
 			.listener(new LoggerListener())
 			.start(accessTokenTestStep)
 			.on("FAILED").to(batchTokenResetStep).on("*").end()
 			.from(accessTokenTestStep)
-			.on("*").to(getRepoCommitStep).on("*").to(batchTokenResetStep).end()
+			.on("*").to(getMemberTechLanguageStep).on("*").to(batchTokenResetStep).end()
 			.build();
 	}
 
 	@JobScope
 	@Bean
-	public Step getRepoCommitStep() {
-		return stepBuilderFactory.get("getRepoCommitStep")
-			.<CommitDto, CommitDto>chunk(1)
-			.reader(new GetRepoCommitReader(repoRepository, action, batchTokenRepository))
-			.writer(new GetRepoCommitWriter(commitHistoryRepository, commitHistoryMapper))
+	public Step getMemberTechLanguageStep() {
+		return stepBuilderFactory.get("getMemberTechLanguageStep")
+			.tasklet(
+				new GetMemberTechLanguageTasklet(repoTechLanguageRepository, memberTechLanguageRepository))
 			.build();
 	}
 }
