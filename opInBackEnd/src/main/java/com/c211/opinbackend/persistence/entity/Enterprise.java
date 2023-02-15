@@ -29,6 +29,7 @@ public class Enterprise {
 
 	@Id
 	@GeneratedValue
+	@Column(name = "ENTERPRISE_ID")
 	private Long id;
 
 	@NotNull

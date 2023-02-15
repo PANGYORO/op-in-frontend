@@ -47,19 +47,6 @@ public class AuthServiceImpl implements AuthService {
 	private final AuthenticationManagerBuilder authenticationManagerBuilder;
 	private final TokenProvider tokenProvider;
 	private final MemberRepository memberRepository;
-	private final MemberFollowRepository memberFollowRepository;
-	private final MemberBadgeRepository memberBadgeRepository;
-	private final MemberTechLanguageRepository memberTechLanguageRepository;
-	private final MemberTopicRepository memberTopicRepository;
-	private final BadgeRepository badgeRepository;
-	private final TopicRepository topicRepository;
-	private final TechLanguageRepository techLanguageRepository;
-	private final RepoRepository repoRepository;
-	private final RepoPostRepository repoPostRepository;
-	private final CommentRepository commentRepository;
-	private final RepositoryPostMemberLikeRepository repositoryPostMemberLikeRepository;
-	private final RepositoryFollowRepository repositoryFollowRepository;
-	private final RepoContributorRepository repoContributorRepository;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 

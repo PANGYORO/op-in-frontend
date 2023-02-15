@@ -15,6 +15,7 @@ import com.c211.opinbackend.batch.item.reader.GetRepoTechLanguageReader;
 import com.c211.opinbackend.batch.item.writer.GetRepoTechLanguageWriter;
 import com.c211.opinbackend.batch.listener.LoggerListener;
 import com.c211.opinbackend.batch.step.Action;
+import com.c211.opinbackend.persistence.repository.BatchTokenRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
 import com.c211.opinbackend.persistence.repository.RepoTechLanguageRepository;
 import com.c211.opinbackend.persistence.repository.TechLanguageRepository;
@@ -26,7 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @RequiredArgsConstructor
 public class GetRepoTechLanguageJobConfig {
-	/**
 
 	private final JobBuilderFactory jobBuilderFactory;
 	private final StepBuilderFactory stepBuilderFactory;
@@ -34,16 +34,17 @@ public class GetRepoTechLanguageJobConfig {
 	private final TechLanguageRepository techLanguageRepository;
 	private final RepoTechLanguageRepository repoTechLanguageRepository;
 	private final Action action;
-	@Value("${githubToken2}")
-	private String githubToken;
-
+	private final BatchTokenRepository batchTokenRepository;
 
 	@Bean
-	public Job getRepoTechLanguageJob(Step getAllRepositoryTechLanguageStep) {
+	public Job getRepoTechLanguageJob(Step accessTokenTestStep, Step getAllRepositoryTechLanguageStep, Step batchTokenResetStep) {
 		return jobBuilderFactory.get("getRepoTechLanguageJob")
 			.incrementer(new RunIdIncrementer())
 			.listener(new LoggerListener())
-			.start(getAllRepositoryTechLanguageStep)
+			.start(accessTokenTestStep)
+				.on("FAILED").to(batchTokenResetStep).on("*").end()
+			.from(accessTokenTestStep)
+				.on("*").to(getAllRepositoryTechLanguageStep).on("*").to(batchTokenResetStep).end()
 			.build();
 	}
 
@@ -53,9 +54,8 @@ public class GetRepoTechLanguageJobConfig {
 		return stepBuilderFactory.get("getAllRepositoryTechLanguageStep")
 			.<RepoTechLanguageDto
 				, RepoTechLanguageDto>chunk(1)
-			.reader(new GetRepoTechLanguageReader(repoRepository, action, githubToken))
+			.reader(new GetRepoTechLanguageReader(repoRepository, action, batchTokenRepository))
 			.writer(new GetRepoTechLanguageWriter(techLanguageRepository, repoTechLanguageRepository))
 			.build();
 	}
-	*/
 }
