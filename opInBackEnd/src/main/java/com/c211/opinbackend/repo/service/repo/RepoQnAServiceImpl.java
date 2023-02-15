@@ -88,11 +88,13 @@ public class RepoQnAServiceImpl implements RepoQnAService {
 			RepositoryQnA repositoryQnA = repoQnARepository.findById(qnaId).orElseThrow(
 				() -> new RepositoryRuntimeException(RepositoryExceptionEnum.REPOSITORY_QNA_EXIST_EXCEPTION)
 			);
+			List<Comment> findQnACommentList = commentRepository.findByRepositoryQnAId(qnaId);
 			repositoryQnA.setMemberNull();
 			repositoryQnA.setRepositoryNull();
 			repoQnARepository.delete(repositoryQnA);
 			return true;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}

@@ -22,10 +22,7 @@ export default function QnaModal({
     await http
       .post(`qna`, { comment: text, repoId: repositoryId })
       .then(({ data }) => {
-        propFunction({
-          repoId: data,
-          comment: text,
-        });
+        propFunction(data);
       })
       .catch((error) => {
         console.debug(error);

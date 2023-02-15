@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import lombok.Getter;
 
 @Entity(name = "REPOSITORY_QNA_MEMBER_LIKE")
@@ -26,6 +29,7 @@ public class RepositoryQnAMemberLike {
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "MEMBER_ID")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Member member;
 
 }

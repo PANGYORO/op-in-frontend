@@ -14,6 +14,9 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,6 +35,7 @@ public class RepositoryQnA {
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "MEMBER_ID")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Member authorMember;
 
 	@ManyToOne(cascade = CascadeType.ALL)

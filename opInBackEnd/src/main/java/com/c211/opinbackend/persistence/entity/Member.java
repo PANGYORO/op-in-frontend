@@ -3,6 +3,7 @@ package com.c211.opinbackend.persistence.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -56,8 +57,34 @@ public class Member {
 		return this;
 	}
 
-	@OneToMany(mappedBy = "member")
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
 	List<Repository> repositoryLists = new ArrayList<>();
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	List<RepositoryFollow> repositoryFollows = new ArrayList<>();
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	List<MemberTechLanguage> techLanguages = new ArrayList<>();
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	List<RepositoryPost> repositoryPosts = new ArrayList<>();
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	List<Comment> comments = new ArrayList<>();
+
+	@OneToMany(mappedBy = "authorMember", cascade = CascadeType.ALL)
+	List<RepositoryQnA> qnAList = new ArrayList<>();
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	List<MemberBadge> memberBadges = new ArrayList<>();
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	List<RepositoryPostMemberLike> repositoryPostMemberLikes = new ArrayList<>();
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	List<RepositoryQnAMemberLike> repositoryQnAMemberLikes = new ArrayList<>();
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	List<MemberTopic> memberTopics = new ArrayList<>();
+
+	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+	List<RepositoryContributor> repositoryContributors = new ArrayList<>();
 
 	public void setNickname(String name) {
 		this.nickname = name;
