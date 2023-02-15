@@ -135,7 +135,7 @@ const MyInfo = ({ currentUser, addTag, deleteTag }) => {
           </span>
         </p>
         <ul>{renderRepos(currentUser.followRepos, false)}</ul>
-        {isMine && (
+        {/* {isMine && (
           <div className="grid grid-cols-1 justify-items-center py-4">
             <button
               type="button"
@@ -148,9 +148,9 @@ const MyInfo = ({ currentUser, addTag, deleteTag }) => {
               Delete Member
             </button>
           </div>
-        )}
+        )} */}
       </div>
-      <DeleteModal open={open} setOpen={setOpen} />
+      {/* <DeleteModal open={open} setOpen={setOpen} /> */}
     </div>
   );
 };
