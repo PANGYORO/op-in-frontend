@@ -56,7 +56,7 @@ const Status = ({ repoDetail }) => {
       .map((contributor) => (
         <span key={contributor.id}>
           {contributor.githubUrl ? (
-            <a href={contributor.githubUrl}>
+            <a href={contributor.githubUrl} id={"cont" + contributor.id}>
               <img
                 className="inline-block h-10 w-10 rounded-full object-cover ring-2 ring-white"
                 src={contributor.profileImg || DefaultImg}
