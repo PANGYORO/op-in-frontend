@@ -123,7 +123,10 @@ const Status = ({ repoDetail }) => {
                 </div>
               </div>
               <div className="mt-2 text-blue-500" onClick={toggleModal}>
-                {moreContributors()}
+                {moreContributors(
+                  repoDetail?.contributors,
+                  repoDetail?.githubContributors
+                )}
               </div>
             </div>
           </div>
