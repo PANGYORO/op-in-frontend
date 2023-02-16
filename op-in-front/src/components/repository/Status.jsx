@@ -87,15 +87,17 @@ const Status = ({ repoDetail }) => {
     const tagSet = new Set();
     [...list].filter((tag) => tagSet.add(tag.title));
 
-    return Array.from(tagSet).map((tag, _index) => (
-      <button
-        key={_index}
-        type="button"
-        className="fpx-3 py-2 px-2 text-xs text-blue-600 bg-blue-200 rounded-full mx-1"
-      >
-        {tag}
-      </button>
-    ));
+    return Array.from(tagSet)
+      .sort((a, b) => a.localeCompare(b))
+      .map((tag, _index) => (
+        <button
+          key={_index}
+          type="button"
+          className="fpx-3 py-2 px-2 text-xs text-blue-600 bg-blue-200 rounded-full mx-1"
+        >
+          {tag}
+        </button>
+      ));
   };
 
   const moreContributors = (contributors = [], githubContributors = []) => {
