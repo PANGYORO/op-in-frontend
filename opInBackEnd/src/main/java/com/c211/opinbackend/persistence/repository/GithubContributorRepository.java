@@ -12,5 +12,9 @@ import com.c211.opinbackend.persistence.entity.GithubContributor;
 public interface GithubContributorRepository extends JpaRepository<GithubContributor, Long> {
 
 	Optional<GithubContributor> findByAuthorId(String authorId);
+
+	@Override
+	void deleteById(Long aLong);
+
 	GithubContributor save(GithubContributor contributor);
 }

@@ -85,8 +85,8 @@ public class GetRepoContributorTasklet implements Tasklet {
 								// 있다면
 								if (githubContributor != null) {
 									// 관계 연결돼 있는지 보고
-									RepositoryGithubContributor repositoryGithubContributor = repositoryGithubContributorRepository.findByGithubContributor(
-										githubContributor).orElse(null);
+									RepositoryGithubContributor repositoryGithubContributor = repositoryGithubContributorRepository.findByGithubContributorAndRepository(
+										githubContributor, repo).orElse(null);
 									// 관계 없다면
 									if (repositoryGithubContributor == null) {
 										// 관계 insert

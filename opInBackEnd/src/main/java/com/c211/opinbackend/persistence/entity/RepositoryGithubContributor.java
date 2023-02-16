@@ -34,4 +34,12 @@ public class RepositoryGithubContributor {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REPOSITORY_ID")
 	private Repository repository;
+
+	public void setRepository(Repository repository) {
+		this.repository = repository;
+	}
+
+	public void setGithubContributor(GithubContributor githubContributor) {
+		this.githubContributor = githubContributor;
+	}
 }
