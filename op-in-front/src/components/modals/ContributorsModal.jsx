@@ -2,24 +2,36 @@ import { Fragment, useRef } from "react";
 import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import User from "@components/user/User";
-import http from "@api/http";
-import { userInfo } from "@recoil/user/atoms";
 
-export default function ContributorsModal({ open, setOpen, contributors }) {
+export default function ContributorsModal({
+  open,
+  setOpen,
+  contributors = [],
+  githubContributors = [],
+}) {
   const cancelButtonRef = useRef(null);
 
-  const userRender = (list) => {
-    const result = [];
-    if (list != null)
-      for (let i = 0; i < list.length; i++) {
-        result.push(<User key={i} profileImg={list[i].profileImg} nickname={list[i].nickname} />);
-      }
-    return result;
+  const userRender = (contributors = [], githubContributors = []) => {
+    const _contributors = [...contributors, ...githubContributors];
+
+    return _contributors.map((user) => (
+      <User
+        key={user.id}
+        profileimg={user.profileImg}
+        nickname={user.nickname}
+        showButton={false}
+      />
+    ));
   };
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-40" initialFocus={cancelButtonRef} onClose={setOpen}>
+      <Dialog
+        as="div"
+        className="relative z-40"
+        initialFocus={cancelButtonRef}
+        onClose={setOpen}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -53,7 +65,9 @@ export default function ContributorsModal({ open, setOpen, contributors }) {
                       >
                         Contributors
                       </Dialog.Title>
-                      <div className="mt-2 grid grid-cols-2 gap-2">{userRender(contributors)}</div>
+                      <div className="mt-2 grid grid-cols-2 gap-2">
+                        {userRender(contributors, githubContributors)}
+                      </div>
                     </div>
                   </div>
                 </div>

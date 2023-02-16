@@ -56,7 +56,7 @@ const Status = ({ repoDetail }) => {
       .map((contributor) => (
         <span key={contributor.id}>
           {contributor.githubUrl ? (
-            <a href={contributor.githubUrl}>
+            <a href={contributor.githubUrl} id={"cont" + contributor.id}>
               <img
                 className="inline-block h-10 w-10 rounded-full object-cover ring-2 ring-white"
                 src={contributor.profileImg || DefaultImg}
@@ -87,15 +87,17 @@ const Status = ({ repoDetail }) => {
     const tagSet = new Set();
     [...list].filter((tag) => tagSet.add(tag.title));
 
-    return Array.from(tagSet).map((tag, _index) => (
-      <button
-        key={_index}
-        type="button"
-        className="fpx-3 py-1 mb-3 text-base text-blue-600 bg-blue-200 rounded-full mx-1"
-      >
-        {tag}
-      </button>
-    ));
+    return Array.from(tagSet)
+      .sort((a, b) => a.localeCompare(b))
+      .map((tag, _index) => (
+        <button
+          key={_index}
+          type="button"
+          className="fpx-3 py-2 px-2 text-xs text-blue-600 bg-blue-200 rounded-full mr-1 mb-1"
+        >
+          {tag}
+        </button>
+      ));
   };
 
   const moreContributors = (contributors = [], githubContributors = []) => {
@@ -121,7 +123,10 @@ const Status = ({ repoDetail }) => {
                 </div>
               </div>
               <div className="mt-2 text-blue-500" onClick={toggleModal}>
-                {moreContributors()}
+                {moreContributors(
+                  repoDetail?.contributors,
+                  repoDetail?.githubContributors
+                )}
               </div>
             </div>
           </div>
@@ -132,9 +137,7 @@ const Status = ({ repoDetail }) => {
         {repoDetail?.updateDate == null ? "no data" : repoDetail?.updateDate}
       </div>
       <div className="my-2 font-bold">About</div>
-      <div className="grid grid-cols-3 my-2">
-        {tagRender(repoDetail?.techLangs)}
-      </div>
+      <div className="my-2">{tagRender(repoDetail?.techLangs)}</div>
       <div className="my-2 font-bold">Last Update</div>
       <div>{new Date(repoDetail.date).toLocaleString()}</div>
       <div className="m-4">
@@ -192,6 +195,7 @@ const Status = ({ repoDetail }) => {
         open={open}
         setOpen={setOpen}
         contributors={repoDetail?.contributors}
+        githubContributors={repoDetail?.githubContributors}
       />
     </div>
   );
