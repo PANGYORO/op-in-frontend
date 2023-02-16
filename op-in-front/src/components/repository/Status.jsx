@@ -49,57 +49,62 @@ const Status = ({ repoDetail }) => {
   const toggleModal = () => {
     setOpen(true);
   };
-  const contributerRender = (list) => {
-    const result = [];
-    if (list != null)
-      for (let i = 0; i < (list.length < 5 ? list.length : 5); i++) {
-        result.push(
-          <span key={i}>
+
+  const contributerRender = (contributors = [], githubContributors = []) => {
+    return [...contributors, ...githubContributors]
+      .slice(0, 5)
+      .map((contributor) => (
+        <span key={contributor.id}>
+          {contributor.githubUrl ? (
+            <a href={contributor.githubUrl}>
+              <img
+                className="inline-block h-10 w-10 rounded-full object-cover ring-2 ring-white"
+                src={contributor.profileImg || DefaultImg}
+                alt={contributor.nickname}
+              />
+            </a>
+          ) : (
             <Link
-              id={"cont" + list[i].id}
+              id={"cont" + contributor.id}
               to={`/userdetail`}
-              state={list[i].nickname}
-              key={i}
+              state={contributor.nickname}
             >
               <img
                 className="inline-block h-10 w-10 rounded-full object-cover ring-2 ring-white"
-                src={DefaultImg}
-                alt={list[i].nickname}
+                src={contributor.profileImg || DefaultImg}
+                alt={contributor.nickname}
               />
             </Link>
-            <Tooltip
-              anchorId={"cont" + list[i].id}
-              content={list[i].nickname}
-            />
-          </span>
-        );
-      }
-    return result;
+          )}
+          <Tooltip
+            anchorId={"cont" + contributor.id}
+            content={contributor.nickname}
+          />
+        </span>
+      ));
   };
-  const tagRender = (list) => {
-    const result = [];
-    if (list != null)
-      for (let i = 0; i < list.length; i++) {
-        result.push(
-          <button
-            key={i}
-            type="button"
-            className="fpx-3 py-1 mb-3 text-base text-blue-600 bg-blue-200 rounded-full mx-1"
-          >
-            {list[i]?.title}
-          </button>
-        );
-      }
-    return result;
+  const tagRender = (list = []) => {
+    const tagSet = new Set();
+    [...list].filter((tag) => tagSet.add(tag.title));
+
+    return Array.from(tagSet).map((tag, _index) => (
+      <button
+        key={_index}
+        type="button"
+        className="fpx-3 py-1 mb-3 text-base text-blue-600 bg-blue-200 rounded-full mx-1"
+      >
+        {tag}
+      </button>
+    ));
   };
-  const moreContributors = () => {
-    if (
-      repoDetail?.contributors != null &&
-      repoDetail?.contributors.length > 4
-    ) {
-      return repoDetail?.contributors.length - 4 + " more Contributors...";
+
+  const moreContributors = (contributors = [], githubContributors = []) => {
+    const maxLength = contributors.length + githubContributors.length;
+    if (maxLength > 4) {
+      return maxLength - 4 + " more Contributors...";
     } else return "";
   };
+
   return (
     <div className="relative max-w-xs p-4 bg-white shadow-lg rounded-xl  ">
       <div className="my-2">
@@ -109,13 +114,13 @@ const Status = ({ repoDetail }) => {
             <div className="w-full">
               <div className="flex items-center">
                 <div className="flex -space-x-2">
-                  {contributerRender(repoDetail?.contributors)}
+                  {contributerRender(
+                    repoDetail?.contributors,
+                    repoDetail?.githubContributors
+                  )}
                 </div>
               </div>
-              <div
-                className="mt-2 text-blue-500 "
-                onClick={toggleModal}
-              >
+              <div className="mt-2 text-blue-500" onClick={toggleModal}>
                 {moreContributors()}
               </div>
             </div>
