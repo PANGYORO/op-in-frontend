@@ -2,21 +2,14 @@ import React from "react";
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import http from "@api/http";
-import { userInfo } from "@recoil/user/atoms";
-import { useToast } from "@hooks/useToast";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { useNavigate } from "react-router-dom";
+import useAuth from "@hooks/useAuth";
 
 export default function DeleteModal({ open, setOpen }) {
   const cancelButtonRef = useRef(null);
 
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
-  const user = useRecoilValue(userInfo);
-  const setUser = useSetRecoilState(userInfo);
-  const navigate = useNavigate();
-  const { setToast } = useToast();
+  const { deleteAccount } = useAuth();
 
   const emailChangeHandler = (e) => {
     setInputEmail(e.currentTarget.value);
@@ -26,38 +19,17 @@ export default function DeleteModal({ open, setOpen }) {
   };
 
   const deleteLogic = async () => {
-    await http
-      .post(`member/delete`, {
-        email: inputEmail,
-        password: inputPassword,
-      })
-      .then((response) => {
-        {
-          if (response.data) {
-            setToast({ message: "회원 탈퇴 성공!" });
-            setToast({ message: "로그인 페이지로 이동합니다." });
-            setUser((before) => ({
-              ...before,
-              nickname: "",
-              email: "",
-              img_url: "",
-              logined: false,
-            }));
-            navigate("/signin");
-            setOpen(false);
-          } else {
-            setToast({ message: "입력 값이 정확하지 않습니다. 다시 입력해주세요." });
-            setInputEmail("");
-            setInputPassword("");
-          }
-        }
-      })
-      .catch((error) => console.debug(error));
+    deleteAccount(inputEmail, inputPassword);
   };
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-40" initialFocus={cancelButtonRef} onClose={setOpen}>
+      <Dialog
+        as="div"
+        className="relative z-40"
+        initialFocus={cancelButtonRef}
+        onClose={setOpen}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -91,13 +63,16 @@ export default function DeleteModal({ open, setOpen }) {
                       />
                     </div>
                     <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                      <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+                      <Dialog.Title
+                        as="h3"
+                        className="text-lg font-medium leading-6 text-gray-900"
+                      >
                         Delete Account
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
-                          정말 탈퇴하시겠습니까? 탈퇴를 원하신다면 아래에 이메일과 비밀번호를
-                          작성해주시기 바랍니다.
+                          정말 탈퇴하시겠습니까? 탈퇴를 원하신다면 아래에
+                          이메일과 비밀번호를 작성해주시기 바랍니다.
                         </p>
                         <div className="col-span-6 sm:col-span-3 mt-4">
                           <label
@@ -114,7 +89,10 @@ export default function DeleteModal({ open, setOpen }) {
                           />
                         </div>
                         <div className="col-span-6 sm:col-span-3">
-                          <label htmlFor={name} className="block text-sm font-medium text-blue-700">
+                          <label
+                            htmlFor={name}
+                            className="block text-sm font-medium text-blue-700"
+                          >
                             Password
                           </label>
                           <input
@@ -156,3 +134,4 @@ export default function DeleteModal({ open, setOpen }) {
     </Transition.Root>
   );
 }
+

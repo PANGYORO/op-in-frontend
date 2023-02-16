@@ -19,6 +19,28 @@ function useAuth() {
   const navigate = useNavigate();
   const { setToast } = useToast();
 
+  const deleteAccount = useCallback(async (email, password) => {
+    http
+      .post("member/delete", {
+        email,
+        password,
+      })
+      .then(({ data }) => {
+        if (data) {
+          setUser(DEFAULT_USERINFO);
+          setToast({ message: "회원 탈퇴 성공!" });
+          setToast({ message: "메인 페이지로 이동합니다." });
+          _removeToken();
+          _goHome();
+        }
+      })
+      .catch(() => {
+        setToast({
+          message: "내부문제로 삭제되지 않았습니다. 다음에 다시 시도해주세요.",
+        });
+      });
+  }, []);
+
   const logout = useCallback(() => {
     _logout();
     _removeToken();
@@ -138,9 +160,11 @@ function useAuth() {
   return {
     logout,
     login,
+    deleteAccount,
     hasAuth: user.logined,
     auth: user,
   };
 }
 
 export default useAuth;
+
