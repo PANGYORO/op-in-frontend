@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import com.c211.opinbackend.batch.listener.LoggerListener;
 import com.c211.opinbackend.batch.step.GetMemberTechLanguageTasklet;
 import com.c211.opinbackend.persistence.repository.MemberTechLanguageRepository;
+import com.c211.opinbackend.persistence.repository.RepoRepository;
 import com.c211.opinbackend.persistence.repository.RepoTechLanguageRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class GetMemberTechLanguageJobConfig {
 	private final JobBuilderFactory jobBuilderFactory;
 	private final StepBuilderFactory stepBuilderFactory;
-	private final RepoTechLanguageRepository repoTechLanguageRepository;
+	private final RepoRepository repoRepository;
 	private final MemberTechLanguageRepository memberTechLanguageRepository;
 
 	@Bean
@@ -42,7 +43,7 @@ public class GetMemberTechLanguageJobConfig {
 	public Step getMemberTechLanguageStep() {
 		return stepBuilderFactory.get("getMemberTechLanguageStep")
 			.tasklet(
-				new GetMemberTechLanguageTasklet(repoTechLanguageRepository, memberTechLanguageRepository))
+				new GetMemberTechLanguageTasklet(memberTechLanguageRepository, repoRepository))
 			.build();
 	}
 }

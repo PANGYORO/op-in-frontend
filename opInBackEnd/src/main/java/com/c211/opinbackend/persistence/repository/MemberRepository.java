@@ -19,6 +19,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 	Optional<Member> findByEmailAndPassword(String email, String password);
 
+	Optional<Member> findByGithubUserName(String name);
+
 	Optional<Member> findByGithubId(String githubId);
 
 	List<Member> findAllByGithubIdIsNotNull();

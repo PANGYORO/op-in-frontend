@@ -16,10 +16,14 @@ import com.c211.opinbackend.auth.model.RepositoryDto;
 import com.c211.opinbackend.constant.GitHub;
 import com.c211.opinbackend.persistence.entity.BatchToken;
 import com.c211.opinbackend.persistence.entity.Member;
+import com.c211.opinbackend.persistence.entity.MemberTechLanguage;
 import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.entity.RepositoryTechLanguage;
 import com.c211.opinbackend.persistence.entity.TechLanguage;
+import com.c211.opinbackend.persistence.repository.MemberTechLanguageRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
+import com.c211.opinbackend.persistence.repository.RepoTechLanguageRepository;
+import com.c211.opinbackend.persistence.repository.TechLanguageRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,9 +32,18 @@ import lombok.extern.slf4j.Slf4j;
 public class AsyncService {
 
 	RepoRepository repoRepository;
+	TechLanguageRepository techLanguageRepository;
+	RepoTechLanguageRepository repoTechLanguageRepository;
+	MemberTechLanguageRepository memberTechLanguageRepository;
 
-	public AsyncService(RepoRepository repoRepository) {
+	public AsyncService(RepoRepository repoRepository,
+		TechLanguageRepository techLanguageRepository,
+		RepoTechLanguageRepository repoTechLanguageRepository,
+		MemberTechLanguageRepository memberTechLanguageRepository) {
 		this.repoRepository = repoRepository;
+		this.techLanguageRepository = techLanguageRepository;
+		this.repoTechLanguageRepository = repoTechLanguageRepository;
+		this.memberTechLanguageRepository = memberTechLanguageRepository;
 	}
 
 	@Async
@@ -38,13 +51,18 @@ public class AsyncService {
 		try {
 			RepositoryDto[] dtos = getMemberRepository(member.getGithubToken(), member.getGithubUserName());
 			for (RepositoryDto repo : dtos) {
-				// dto 에 따라 tech language 가져오기
 
 				try {
 					Repository repository = RepoMapper.toRepository(repo, member);
 					repoRepository.save(repository);
 					log.info("[SUCCESS] github 유저: {} || repository update: {}",
 						member.getGithubId(), repository.getId());
+
+					// tech language 가져오기
+					getMemberTechLanguage(member.getGithubToken(), repository, member);
+					// contribute 가져오기
+					getMemberContribute();
+
 				} catch (Exception e) {
 					log.error("[FAILED] github 유저: {} || repository update: {}", member.getGithubId(), repo.getId());
 				}
@@ -64,46 +82,59 @@ public class AsyncService {
 			.retrieve().bodyToMono(RepositoryDto[].class).block();
 	}
 
-	public static void getMemberTechLanguage(String githubToken, RepositoryDto repo) {
-		/**
-			int page = 1;
-			while (true) {
-					Map<String, Long> languages = getRepositoryLanguages(githubToken, repo.getFullName(),
-						String.valueOf(page));
+	public void getMemberTechLanguage(String githubToken, Repository repo, Member member) {
+		int page = 1;
+		while (true) {
+			Map<String, Long> languages = getRepositoryLanguages(githubToken, repo.getFullName(),
+				String.valueOf(page));
 
-					for (String lan : languages.keySet()) {
-						try {
-							TechLanguage techLanguage = techLanguageRepository.findByTitle(lan)
-								.orElse(null);
+			for (String lan : languages.keySet()) {
+				TechLanguage techLanguage = techLanguageRepository.findByTitle(lan)
+					.orElse(null);
 
-							if (techLanguage == null) {
-								techLanguage = techLanguageRepository.save(
-									TechLanguage.builder().title(lan).build());
-							}
+				if (techLanguage == null) {
+					techLanguage = techLanguageRepository.save(
+						TechLanguage.builder().title(lan).build());
+				}
 
-							RepositoryTechLanguage repoTechRelation = repoTechLanguageRepository.findByRepositoryAndTechLanguage(
-								repo, techLanguage).orElse(null);
+				RepositoryTechLanguage repoTechRelation = repoTechLanguageRepository.findByRepositoryAndTechLanguage(
+					repo, techLanguage).orElse(null);
+				MemberTechLanguage memberTechLanguage = memberTechLanguageRepository.findByMemberAndTechLanguage(member,
+					techLanguage).orElse(null);
 
-							if (repoTechRelation == null) {
-								repoTechLanguageRepository.save(RepositoryTechLanguage.builder()
-									.techLanguage(techLanguage)
-									.repository(repo)
-									.build());
-							}
-						} catch (Exception e) {
-							log.info(e.toString());
-						}
-					}
+				if (repoTechRelation == null) {
+					repoTechLanguageRepository.save(RepositoryTechLanguage.builder()
+						.techLanguage(techLanguage)
+						.repository(repo)
+						.build());
+				}
 
-					if (languages.size() < 100) {
-						break;
-					}
+				if (memberTechLanguage == null) {
+					memberTechLanguageRepository.save(
+						MemberTechLanguage.builder()
+							.member(member)
+							.techLanguage(techLanguage)
+							.build()
+					);
 
-					page += 1;
+				}
+			}
+
+			if (languages.size() < 100) {
+				break;
+			}
+
+			page += 1;
 
 		}
-		return RepeatStatus.FINISHED;
-		 */
+	}
+
+	public void getMemberContribute(){
+		// 먼저 githubContributor 에 있는 회원인가 보고
+		// 있으면 githubContributor 삭제하고
+		// repository - github contributor 삭제하고
+		// repository contributor 에 연결
+		// 없으면 pass
 	}
 
 	public Map<String, Long> getRepositoryLanguages(String githubToken, String repositoryFullName, String page) {

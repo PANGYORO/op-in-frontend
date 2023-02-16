@@ -9,6 +9,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 
 import com.c211.opinbackend.batch.dto.github.ContributorDto;
+import com.c211.opinbackend.batch.dto.github.RepositoryDto;
 import com.c211.opinbackend.batch.service.RepositoryService;
 import com.c211.opinbackend.persistence.entity.BatchToken;
 import com.c211.opinbackend.persistence.entity.GithubContributor;
@@ -70,7 +71,7 @@ public class GetRepoContributorTasklet implements Tasklet {
 								if (repositoryContributor == null) {
 									RepositoryContributor con = RepositoryContributor
 										.builder()
-										.repository(contributor.getRepository())
+										.repository(repo)
 										.member(member)
 										.build();
 

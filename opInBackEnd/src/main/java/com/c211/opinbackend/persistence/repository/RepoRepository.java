@@ -18,6 +18,8 @@ public interface RepoRepository extends JpaRepository<Repository, Long> {
 
 	List<Repository> findAll();
 
+	List<Repository> findByMemberNotNull();
+
 	List<Repository> findByMember(Member member);
 
 	@Query("SELECT repo FROM Repository repo JOIN FETCH repo.member WHERE repo.member.id = :memberId")

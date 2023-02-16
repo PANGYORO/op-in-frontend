@@ -176,17 +176,18 @@ public class MemberServiceImpl implements MemberService {
 	 * GET 사용자의 레포지토리 이름 목록
 	 */
 	public List<RepositoryTitleResponse> getMemberRepo(Member member) {
-
 		List<Repository> myRepos = repoRepository.findByMember(member);
 		List<RepositoryTitleResponse> myRepoTitles = new ArrayList<RepositoryTitleResponse>();
 
-		for (Repository myRepo : myRepos) {
-			RepositoryTitleResponse repositoryTitleResponse = RepositoryTitleResponse.builder()
-				.id(myRepo.getId())
-				.title(myRepo.getName())
-				.build();
+		if (myRepos != null && myRepos.size() > 0) {
+			for (Repository myRepo : myRepos) {
+				RepositoryTitleResponse repositoryTitleResponse = RepositoryTitleResponse.builder()
+					.id(myRepo.getId())
+					.title(myRepo.getName())
+					.build();
 
-			myRepoTitles.add(repositoryTitleResponse);
+				myRepoTitles.add(repositoryTitleResponse);
+			}
 		}
 
 		return myRepoTitles;
@@ -199,20 +200,22 @@ public class MemberServiceImpl implements MemberService {
 		List<RepositoryPost> myPosts = repoPostRepository.findByMember(member);
 		List<RepositoryPostResponse> myRepoPosts = new ArrayList<RepositoryPostResponse>();
 
-		for (RepositoryPost myPost : myPosts) {
-			RepositoryPostResponse repositoryPostResponse = RepositoryPostResponse.builder()
-				.id(myPost.getId())
-				.title(myPost.getTitleContent().getTitle())
-				.content(myPost.getTitleContent().getContent())
-				.mergeFL(myPost.getMergeFL())
-				.date(myPost.getDate())
-				.closeState(myPost.getCloseState())
-				.commentCount(commentRepository.countByRepositoryPost(myPost))
-				.likeCount(repositoryPostMemberLikeRepository.countByRepositoryPost(myPost))
-				.repoTitle(myPost.getRepository().getName())
-				.build();
+		if (myPosts != null && myPosts.size() > 0) {
+			for (RepositoryPost myPost : myPosts) {
+				RepositoryPostResponse repositoryPostResponse = RepositoryPostResponse.builder()
+					.id(myPost.getId())
+					.title(myPost.getTitleContent().getTitle())
+					.content(myPost.getTitleContent().getContent())
+					.mergeFL(myPost.getMergeFL())
+					.date(myPost.getDate())
+					.closeState(myPost.getCloseState())
+					.commentCount(commentRepository.countByRepositoryPost(myPost))
+					.likeCount(repositoryPostMemberLikeRepository.countByRepositoryPost(myPost))
+					.repoTitle(myPost.getRepository().getName())
+					.build();
 
-			myRepoPosts.add(repositoryPostResponse);
+				myRepoPosts.add(repositoryPostResponse);
+			}
 		}
 
 		return myRepoPosts;
@@ -224,15 +227,18 @@ public class MemberServiceImpl implements MemberService {
 	public List<BadgeResponse> getMemberBadge(Member member) {
 		List<MemberBadge> memBadRelations = memberBadgeRepository.findByMember(member);
 		List<BadgeResponse> myBadges = new ArrayList<BadgeResponse>();
-		for (MemberBadge mb : memBadRelations) {
-			Badge badge = mb.getBadge();
 
-			BadgeResponse badgeResponse = BadgeResponse.builder()
-				.title(badge.getTitle())
-				.imageUrl(badge.getImageUrl())
-				.build();
+		if (memBadRelations != null && memBadRelations.size() > 0) {
+			for (MemberBadge mb : memBadRelations) {
+				Badge badge = mb.getBadge();
 
-			myBadges.add(badgeResponse);
+				BadgeResponse badgeResponse = BadgeResponse.builder()
+					.title(badge.getTitle())
+					.imageUrl(badge.getImageUrl())
+					.build();
+
+				myBadges.add(badgeResponse);
+			}
 		}
 
 		return myBadges;
@@ -244,16 +250,20 @@ public class MemberServiceImpl implements MemberService {
 	public List<TechLanguageResponse> getMemberTechLanguage(Member member) {
 		List<MemberTechLanguage> memTechRelations = memberTechLanguageRepository.findByMember(member);
 		List<TechLanguageResponse> myTechLanguages = new ArrayList<TechLanguageResponse>();
-		for (MemberTechLanguage mt : memTechRelations) {
-			TechLanguage tech = mt.getTechLanguage();
 
-			TechLanguageResponse techLanguageResponse = TechLanguageResponse.builder()
-				.id(tech.getId())
-				.title(tech.getTitle())
-				.build();
+		if (memTechRelations != null && memTechRelations.size() > 0) {
+			for (MemberTechLanguage mt : memTechRelations) {
+				TechLanguage tech = mt.getTechLanguage();
 
-			myTechLanguages.add(techLanguageResponse);
+				TechLanguageResponse techLanguageResponse = TechLanguageResponse.builder()
+					.id(tech.getId())
+					.title(tech.getTitle())
+					.build();
+
+				myTechLanguages.add(techLanguageResponse);
+			}
 		}
+
 		return myTechLanguages;
 	}
 
@@ -263,17 +273,19 @@ public class MemberServiceImpl implements MemberService {
 	public List<TopicResponse> getMemberTopic(Member member) {
 		List<MemberTopic> memTopicRelations = memberTopicRepository.findByMember(member);
 		List<TopicResponse> myTopics = new ArrayList<TopicResponse>();
-		for (MemberTopic mtp : memTopicRelations) {
-			Topic topic = mtp.getTopic();
 
-			TopicResponse topicResponse = TopicResponse.builder()
-				.id(topic.getId())
-				.title(topic.getTitle())
-				.build();
+		if (memTopicRelations != null && memTopicRelations.size() > 0) {
+			for (MemberTopic mtp : memTopicRelations) {
+				Topic topic = mtp.getTopic();
 
-			myTopics.add(topicResponse);
+				TopicResponse topicResponse = TopicResponse.builder()
+					.id(topic.getId())
+					.title(topic.getTitle())
+					.build();
+
+				myTopics.add(topicResponse);
+			}
 		}
-
 		return myTopics;
 	}
 
@@ -283,16 +295,18 @@ public class MemberServiceImpl implements MemberService {
 	public List<RepositoryTitleResponse> getMemberContributes(Member member) {
 		List<RepositoryContributor> repositoryContributors = repoContributorRepository.findByMember(member);
 		List<RepositoryTitleResponse> contributeRepos = new ArrayList<RepositoryTitleResponse>();
-		for (RepositoryContributor rc : repositoryContributors) {
-			Repository repo = rc.getRepository();
+		if (repositoryContributors != null && repositoryContributors.size() > 0) {
+			for (RepositoryContributor rc : repositoryContributors) {
+				Repository repo = rc.getRepository();
 
-			RepositoryTitleResponse repositoryTitleResponse = RepositoryTitleResponse.builder()
-				.id(repo.getId())
-				.title(repo.getName())
-				.html(repo.getHtmlUrl())
-				.build();
+				RepositoryTitleResponse repositoryTitleResponse = RepositoryTitleResponse.builder()
+					.id(repo.getId())
+					.title(repo.getName())
+					.html(repo.getHtmlUrl())
+					.build();
 
-			contributeRepos.add(repositoryTitleResponse);
+				contributeRepos.add(repositoryTitleResponse);
+			}
 		}
 
 		return contributeRepos;
@@ -304,17 +318,18 @@ public class MemberServiceImpl implements MemberService {
 	public List<RepositoryTitleResponse> getMemberFollows(Member member) {
 		List<RepositoryFollow> repositoryFollows = repositoryFollowRepository.findByMember(member);
 		List<RepositoryTitleResponse> followRepos = new ArrayList<RepositoryTitleResponse>();
-		for (RepositoryFollow rf : repositoryFollows) {
-			Repository repo = rf.getRepository();
+		if (repositoryFollows != null && repositoryFollows.size() > 0) {
+			for (RepositoryFollow rf : repositoryFollows) {
+				Repository repo = rf.getRepository();
 
-			RepositoryTitleResponse repositoryTitleResponse = RepositoryTitleResponse.builder()
-				.id(repo.getId())
-				.title(repo.getName())
-				.build();
+				RepositoryTitleResponse repositoryTitleResponse = RepositoryTitleResponse.builder()
+					.id(repo.getId())
+					.title(repo.getName())
+					.build();
 
-			followRepos.add(repositoryTitleResponse);
+				followRepos.add(repositoryTitleResponse);
+			}
 		}
-
 		return followRepos;
 	}
 
