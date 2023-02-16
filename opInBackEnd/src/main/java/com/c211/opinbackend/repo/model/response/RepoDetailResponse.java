@@ -3,6 +3,7 @@ package com.c211.opinbackend.repo.model.response;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.c211.opinbackend.repo.model.contributor.GithubContributorDto;
 import com.c211.opinbackend.repo.model.contributor.RepositoryContributorDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -18,6 +19,7 @@ public class RepoDetailResponse {
 	private String content;
 	private List<RepoTechLangDto> techLangs;
 	private List<RepositoryContributorDto> contributors;
+	private List<GithubContributorDto> githubContributors;
 	private Long star;
 	private Long forkNum;
 	private List<String> topicList;

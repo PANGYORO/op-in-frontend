@@ -3,11 +3,14 @@ package com.c211.opinbackend.repo.service.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.c211.opinbackend.persistence.entity.GithubContributor;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.entity.RepositoryContributor;
+import com.c211.opinbackend.persistence.entity.RepositoryGithubContributor;
 import com.c211.opinbackend.persistence.entity.RepositoryTechLanguage;
 import com.c211.opinbackend.persistence.entity.RepositoryTopic;
+import com.c211.opinbackend.repo.model.contributor.GithubContributorDto;
 import com.c211.opinbackend.repo.model.contributor.RepositoryContributorDto;
 import com.c211.opinbackend.repo.model.dto.RepoDto;
 import com.c211.opinbackend.repo.model.response.RepoDetailResponse;
@@ -55,6 +58,7 @@ public class RepoMapper {
 		List<String> topics = getTopicList(repository);
 		Member member = repository.getMember();
 		List<RepositoryContributorDto> repositoryContributorDtoList = getRepoTechContributorDtoList(repository);
+		List<GithubContributorDto> githubContributors = getGithubContributorDtoList(repository);
 		RepoDetailResponse repositoryResponseDto = RepoDetailResponse.builder()
 			.id(repository.getId())
 			.ownerId(member == null ? null : member.getId())
@@ -63,6 +67,7 @@ public class RepoMapper {
 			.techLangs(repoTechLangDtoList)
 			.star(repository.getStargazersCount())
 			.contributors(repositoryContributorDtoList)
+			.githubContributors(githubContributors)
 			.forkNum(repository.getForks())
 			.topicList(topics)
 			.date(repository.getUpdatedAt())
@@ -89,6 +94,21 @@ public class RepoMapper {
 				.id(String.valueOf(contributorEntity.getId()))
 				.nickname(contributorEntity.getMember().getNickname())
 				.profileImg(contributorEntity.getMember().getAvatarUrl())
+				.build());
+		}
+		return res;
+	}
+
+	private static List<GithubContributorDto> getGithubContributorDtoList(Repository repository) {
+		List<GithubContributorDto> res = new ArrayList<>();
+		List<RepositoryGithubContributor> contributorEntityList = repository.getRepositoryGithubContributors();
+
+		for (RepositoryGithubContributor contributorEntity : contributorEntityList) {
+			res.add(GithubContributorDto.builder()
+				.githubUrl(contributorEntity.getGithubContributor().getGithubUrl())
+				.id(contributorEntity.getGithubContributor().getAuthorId())
+				.nickname(contributorEntity.getGithubContributor().getNickname())
+				.profileImg(contributorEntity.getGithubContributor().getAvatarUrl())
 				.build());
 		}
 		return res;

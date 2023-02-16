@@ -47,7 +47,8 @@ public class GetRepoTechLanguageTasklet implements Tasklet {
 						String.valueOf(page));
 
 					for (String lan : languages.keySet()) {
-						// collectData.add(RepoTechLanguageDto.builder().repository(repo).language(lan).build());
+						lan = lan.toUpperCase();
+
 						try {
 							TechLanguage techLanguage = techLanguageRepository.findByTitle(lan)
 								.orElse(null);

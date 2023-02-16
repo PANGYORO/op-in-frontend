@@ -141,6 +141,7 @@ public class MemberServiceImpl implements MemberService {
 		return memberRepository.existsByEmailAndAndGithubSyncFl(email, true);
 	}
 
+	@Override
 	public boolean deleteMember(String email, String password) {
 
 		Member member = memberRepository.findByEmail(email).orElse(null);
