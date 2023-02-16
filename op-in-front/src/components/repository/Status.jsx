@@ -91,7 +91,7 @@ const Status = ({ repoDetail }) => {
       <button
         key={_index}
         type="button"
-        className="fpx-3 py-1 mb-3 text-base text-blue-600 bg-blue-200 rounded-full mx-1"
+        className="fpx-3 py-2 px-2 text-xs text-blue-600 bg-blue-200 rounded-full mx-1"
       >
         {tag}
       </button>
@@ -132,9 +132,7 @@ const Status = ({ repoDetail }) => {
         {repoDetail?.updateDate == null ? "no data" : repoDetail?.updateDate}
       </div>
       <div className="my-2 font-bold">About</div>
-      <div className="grid grid-cols-3 my-2">
-        {tagRender(repoDetail?.techLangs)}
-      </div>
+      <div className="my-2">{tagRender(repoDetail?.techLangs)}</div>
       <div className="my-2 font-bold">Last Update</div>
       <div>{new Date(repoDetail.date).toLocaleString()}</div>
       <div className="m-4">
