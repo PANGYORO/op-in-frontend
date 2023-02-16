@@ -24,10 +24,10 @@ public class SecurityUtil {
 
 		logger.info(authentication.toString());
 
-		if (authentication == null) {
-			logger.debug("Security Context에 인증정보가 없습니다.");
-			return Optional.empty();
-		}
+		// if (authentication == null) {
+		// 	logger.debug("Security Context에 인증정보가 없습니다.");
+		// 	return Optional.empty();
+		// }
 
 		String id = null;
 		if (authentication.getPrincipal() instanceof UserDetails) {

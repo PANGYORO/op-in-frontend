@@ -28,7 +28,7 @@ public class Scheduler {
 
 	private final JobLauncher jobLauncher;
 
-	@Scheduled(cron = "0 30 18 * * *")
+	@Scheduled(cron = "0 55 11 * * *")
 	public void getMemberRepositoryJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -41,7 +41,7 @@ public class Scheduler {
 		jobLauncher.run(getMemberRepositoryJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 40 19 * * *")
+	@Scheduled(cron = "0 57 11 * * *")
 	public void getEnterRepositoryJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -54,7 +54,7 @@ public class Scheduler {
 		jobLauncher.run(getEnterRepositoryJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 10 0 * * *")
+	@Scheduled(cron = "0 24 13 * * *")
 	public void getRepoTechLanguageJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -67,33 +67,7 @@ public class Scheduler {
 		jobLauncher.run(getRepoTechLanguageJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 30 18 * * *") // 매 3시간 마다
-	public void getRepoCommitJobRus() throws
-		JobInstanceAlreadyCompleteException,
-		JobExecutionAlreadyRunningException,
-		JobParametersInvalidException,
-		JobRestartException {
-
-		JobParameters jobParameters = new JobParameters(
-			Collections.singletonMap("requestTime", new JobParameter(System.currentTimeMillis())));
-
-		jobLauncher.run(getRepoCommitJob, jobParameters);
-	}
-
-	@Scheduled(cron = "0 0 18 * * *") // 매 4시간 마다
-	public void getRepoPullRequestJobRus() throws
-		JobInstanceAlreadyCompleteException,
-		JobExecutionAlreadyRunningException,
-		JobParametersInvalidException,
-		JobRestartException {
-
-		JobParameters jobParameters = new JobParameters(
-			Collections.singletonMap("requestTime", new JobParameter(System.currentTimeMillis())));
-
-		jobLauncher.run(getRepoPullRequestJob, jobParameters);
-	}
-
-	@Scheduled(cron = "0 25 18 * * *") // 매 시간 55분에
+	@Scheduled(cron = "0 30 13 * * *") // 매 시간 55분에
 	public void getRepoContributorJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -106,7 +80,7 @@ public class Scheduler {
 		jobLauncher.run(getRepoContributorJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 25 18 * * *") // 매 시간 55분에
+	@Scheduled(cron = "0 52 13 * * *") // 매 시간 55분에
 	public void getMemberTechLanguageJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,

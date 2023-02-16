@@ -1,5 +1,9 @@
 package com.c211.opinbackend.batch.service;
 
+import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import com.c211.opinbackend.batch.dto.github.RepositoryDto;
