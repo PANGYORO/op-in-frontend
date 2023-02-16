@@ -6,7 +6,12 @@ import { useRecoilValue } from "recoil";
 import http from "@api/http";
 import { useToast } from "@hooks/useToast";
 
-const User = ({ profileimg = BasicProfile, nickname = "test", isfollow = false }) => {
+const User = ({
+  profileimg = BasicProfile,
+  nickname = "test",
+  isfollow = false,
+  buttonHide = false,
+}) => {
   const { setToast } = useToast();
 
   const followClassState =
@@ -21,21 +26,25 @@ const User = ({ profileimg = BasicProfile, nickname = "test", isfollow = false }
     setFollowState(
       isfollow
         ? {
-          state: true,
-          classValue: followingClassState,
-          value: "following",
-        }
+            state: true,
+            classValue: followingClassState,
+            value: "following",
+          }
         : {
-          state: false,
-          classValue: followClassState,
-          value: "follow",
-        }
+            state: false,
+            classValue: followClassState,
+            value: "follow",
+          }
     );
   }, []);
 
   const FollowButton = () => {
     return (
-      <button type="button" onClick={() => followStateChange()} className={followState.classValue}>
+      <button
+        type="button"
+        onClick={() => followStateChange()}
+        className={followState.classValue}
+      >
         {followState.value}
       </button>
     );
@@ -93,20 +102,24 @@ const User = ({ profileimg = BasicProfile, nickname = "test", isfollow = false }
             alt="Profile image"
           />
           <div>
-            <h5 className="mb-1 text-xl font-medium text-gray-900 ">{nickname}</h5>
+            <h5 className="mb-1 text-xl font-medium text-gray-900 ">
+              {nickname}
+            </h5>
           </div>
         </div>
-        <div className="flex mt-4 space-x-3 md:mt-6">
-          {user.nickname == nickname ? <></> : <FollowButton />}
-          <div
-            onClick={() => {
-              navigate(`/userdetail`, { state: nickname });
-            }}
-            className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 "
-          >
-            Visit
+        {!!buttonHide && (
+          <div className="flex mt-4 space-x-3 md:mt-6">
+            {user.nickname != nickname && <FollowButton />}
+            <div
+              onClick={() => {
+                navigate(`/userdetail`, { state: nickname });
+              }}
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 "
+            >
+              Visit
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
