@@ -195,6 +195,7 @@ const Status = ({ repoDetail }) => {
         open={open}
         setOpen={setOpen}
         contributors={repoDetail?.contributors}
+        githubContributors={repoDetail?.githubContributors}
       />
     </div>
   );
