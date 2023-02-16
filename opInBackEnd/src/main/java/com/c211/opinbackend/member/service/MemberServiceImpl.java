@@ -152,11 +152,12 @@ public class MemberServiceImpl implements MemberService {
 		}
 
 		try {
-			// 지우다가 남의 포스트는 지우면안된다 큐엔엔에이 커맨트 하면 안된다...
+			// 커맨트가 지운다
 			List<RepositoryPostMemberLike> byMemberId = repositoryPostMemberLikeRepository.findByMemberId(
 				member.getId());
 			repositoryPostMemberLikeRepository.deleteAll(byMemberId);
 			List<Comment> comments = member.getComments();
+			comments.forEach(Comment::postQNaNull);
 			commentRepository.deleteAll(comments);
 			memberRepository.delete(member);
 		} catch (Exception ex) {
