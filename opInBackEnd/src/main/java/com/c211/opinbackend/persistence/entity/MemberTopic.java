@@ -28,12 +28,12 @@ public class MemberTopic {
 	@Column(name = "MEMBER_TOPIC_ID")
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "MEMBER_ID")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Member member;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TOPIC_ID")
 	private Topic topic;
 

@@ -20,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 public class Scheduler {
 	private final Job getMemberRepositoryJob;
 	private final Job getRepoTechLanguageJob;
+	private final Job getRepoCommitJob;
+	private final Job getRepoPullRequestJob;
 	private final Job getRepoContributorJob;
 	private final Job getEnterRepositoryJob;
 	private final Job getMemberTechLanguageJob;
