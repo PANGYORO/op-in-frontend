@@ -205,19 +205,19 @@ const PostDetail = ({
 
   return (
     <>
+      <button
+        type="button"
+        onClick={() => {
+          navigate(-1);
+        }}
+        className="focus:outline-none bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-md text-md px-5 py-2.5"
+      >
+        {"< "}Back
+      </button>
       <div className="lg:flex lg:items-center lg:justify-between w-full mx-auto py-12 px-4 sm:px-6 lg:py-5 lg:px-8 z-20">
         <h1 className="text-3xl font-extrabold  w-full text-black  sm:text-4xl">
           <div className="flex justify-between">
             <div>{postTitle}</div>
-            <button
-              type="button"
-              onClick={() => {
-                navigate(-1);
-              }}
-              className="focus:outline-none bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-lg px-5 py-2.5"
-            >
-              {"< "}Back
-            </button>
           </div>
         </h1>
       </div>
