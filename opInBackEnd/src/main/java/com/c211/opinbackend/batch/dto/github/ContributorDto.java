@@ -21,6 +21,9 @@ public class ContributorDto {
 	@JsonProperty("url")
 	private String userInfoUrl;
 
+	@JsonProperty("html_url")
+	private String htmlUrl;
+
 	@JsonProperty("followers_url")
 	private String followersUrl;
 
