@@ -19,7 +19,7 @@ export default function ContributorsModal({
         key={user.id}
         profileimg={user.profileImg}
         nickname={user.nickname}
-        buttonHide
+        showButton={false}
       />
     ));
   };

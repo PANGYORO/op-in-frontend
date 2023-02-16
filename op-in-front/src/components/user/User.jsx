@@ -10,7 +10,7 @@ const User = ({
   profileimg = BasicProfile,
   nickname = "test",
   isfollow = false,
-  buttonHide = false,
+  showButton = true,
 }) => {
   const { setToast } = useToast();
 
@@ -107,7 +107,7 @@ const User = ({
             </h5>
           </div>
         </div>
-        {!!buttonHide && (
+        {showButton && (
           <div className="flex mt-4 space-x-3 md:mt-6">
             {user.nickname != nickname && <FollowButton />}
             <div
