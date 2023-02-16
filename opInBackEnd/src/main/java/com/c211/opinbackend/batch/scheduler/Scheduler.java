@@ -26,7 +26,7 @@ public class Scheduler {
 
 	private final JobLauncher jobLauncher;
 
-	@Scheduled(cron = "0 55 11 * * *")
+	@Scheduled(cron = "0 0 1 * * *")
 	public void getMemberRepositoryJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -39,7 +39,7 @@ public class Scheduler {
 		jobLauncher.run(getMemberRepositoryJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 20 14 * * *")
+	@Scheduled(cron = "0 0 2 * * *")
 	public void getEnterRepositoryJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -52,7 +52,7 @@ public class Scheduler {
 		jobLauncher.run(getEnterRepositoryJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 55 14 * * *")
+	@Scheduled(cron = "0 0 3 * * *")
 	public void getRepoTechLanguageJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -65,7 +65,7 @@ public class Scheduler {
 		jobLauncher.run(getRepoTechLanguageJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 15 19 * * *") // 매 시간 55분에
+	@Scheduled(cron = "0 0 5 * * *") // 매 시간 55분에
 	public void getRepoContributorJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
@@ -78,7 +78,7 @@ public class Scheduler {
 		jobLauncher.run(getRepoContributorJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 49 19 * * *") // 매 시간 55분에
+	@Scheduled(cron = "0 0 7 * * *") // 매 시간 55분에
 	public void getMemberTechLanguageJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
