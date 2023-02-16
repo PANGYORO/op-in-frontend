@@ -5,9 +5,10 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class RepositoryContributorDto {
+public class GithubContributorDto {
 	private String nickname;
 	private String id;
 	private String profileImg;
-
+	private String githubUrl;
+	
 }

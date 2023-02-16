@@ -83,6 +83,9 @@ public class Repository {
 	List<RepositoryContributor> repositoryContributorList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "repository")
+	List<RepositoryGithubContributor> repositoryGithubContributors = new ArrayList<>();
+
+	@OneToMany(mappedBy = "repository")
 	List<RepositoryTopic> topicList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "repository")

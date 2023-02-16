@@ -9,15 +9,16 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.c211.opinbackend.batch.dto.github.ContributorDto;
-import com.c211.opinbackend.batch.item.reader.GetRepoContributorReader;
-import com.c211.opinbackend.batch.item.writer.GetRepoContributorWriter;
 import com.c211.opinbackend.batch.listener.LoggerListener;
+import com.c211.opinbackend.batch.service.RepositoryService;
 import com.c211.opinbackend.batch.step.Action;
+import com.c211.opinbackend.batch.step.GetRepoContributorTasklet;
 import com.c211.opinbackend.persistence.repository.BatchTokenRepository;
+import com.c211.opinbackend.persistence.repository.GithubContributorRepository;
 import com.c211.opinbackend.persistence.repository.MemberRepository;
 import com.c211.opinbackend.persistence.repository.RepoContributorRepository;
 import com.c211.opinbackend.persistence.repository.RepoRepository;
+import com.c211.opinbackend.persistence.repository.RepositoryGithubContributorRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,8 @@ public class GetRepoContributorJobConfig {
 	private final RepoContributorRepository repoContributorRepository;
 	private final Action action;
 	private final BatchTokenRepository batchTokenRepository;
+	private final GithubContributorRepository githubContributorRepository;
+	private final RepositoryGithubContributorRepository repositoryGithubContributorRepository;
 
 	@Bean
 	public Job getRepoContributorJob(Step accessTokenTestStep, Step getRepoContributorStep, Step batchTokenResetStep) {
@@ -50,9 +53,9 @@ public class GetRepoContributorJobConfig {
 	@Bean
 	public Step getRepoContributorStep() {
 		return stepBuilderFactory.get("getRepoContributorStep")
-			.<ContributorDto, ContributorDto>chunk(1)
-			.reader(new GetRepoContributorReader(repoRepository, action, batchTokenRepository))
-			.writer(new GetRepoContributorWriter(memberRepository, repoContributorRepository))
+			.tasklet(
+				new GetRepoContributorTasklet(batchTokenRepository, repoRepository, action, memberRepository,
+					repoContributorRepository, githubContributorRepository, repositoryGithubContributorRepository))
 			.build();
 	}
 }
