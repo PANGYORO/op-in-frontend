@@ -37,11 +37,11 @@ public class Comment {
 	@JoinColumn(name = "MEMBER_ID")
 	private Member member;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REPOSITORY_QNA_ID")
 	private RepositoryQnA repositoryQnA;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REPOSITORY_POST_ID")
 	private RepositoryPost repositoryPost;
 	private String content;
@@ -51,4 +51,9 @@ public class Comment {
 
 	@Enumerated(EnumType.STRING)
 	private CommentType commentType;
+
+	public void postQNaNull(){
+		this.repositoryPost = null;
+		this.repositoryQnA = null;
+	}
 }

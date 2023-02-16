@@ -33,6 +33,7 @@ import com.c211.opinbackend.exception.repositroy.RepositoryRuntimeException;
 import com.c211.opinbackend.member.model.dto.MemberDto;
 import com.c211.opinbackend.member.model.dto.SimilarDto;
 import com.c211.opinbackend.persistence.entity.Badge;
+import com.c211.opinbackend.persistence.entity.Comment;
 import com.c211.opinbackend.persistence.entity.Member;
 import com.c211.opinbackend.persistence.entity.MemberBadge;
 import com.c211.opinbackend.persistence.entity.MemberFollow;
@@ -42,6 +43,7 @@ import com.c211.opinbackend.persistence.entity.Repository;
 import com.c211.opinbackend.persistence.entity.RepositoryContributor;
 import com.c211.opinbackend.persistence.entity.RepositoryFollow;
 import com.c211.opinbackend.persistence.entity.RepositoryPost;
+import com.c211.opinbackend.persistence.entity.RepositoryPostMemberLike;
 import com.c211.opinbackend.persistence.entity.RepositoryTechLanguage;
 import com.c211.opinbackend.persistence.entity.TechLanguage;
 import com.c211.opinbackend.persistence.entity.Topic;
@@ -150,6 +152,13 @@ public class MemberServiceImpl implements MemberService {
 		}
 
 		try {
+			// 커맨트가 지운다
+			List<RepositoryPostMemberLike> byMemberId = repositoryPostMemberLikeRepository.findByMemberId(
+				member.getId());
+			repositoryPostMemberLikeRepository.deleteAll(byMemberId);
+			List<Comment> comments = member.getComments();
+			comments.forEach(Comment::postQNaNull);
+			commentRepository.deleteAll(comments);
 			memberRepository.delete(member);
 		} catch (Exception ex) {
 			throw new ApiRuntimeException(ApiExceptionEnum.API_CENTER_CALL_EXCEPTION);

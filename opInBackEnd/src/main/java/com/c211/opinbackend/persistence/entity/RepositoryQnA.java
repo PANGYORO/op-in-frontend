@@ -40,6 +40,7 @@ public class RepositoryQnA {
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "REPOSITORY_ID")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Repository repository;
 
 	@OneToMany(mappedBy = "repositoryQnA")
