@@ -54,7 +54,7 @@ public class Scheduler {
 		jobLauncher.run(getEnterRepositoryJob, jobParameters);
 	}
 
-	@Scheduled(cron = "0 40 21 * * *")
+	@Scheduled(cron = "0 10 0 * * *")
 	public void getRepoTechLanguageJobRus() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
