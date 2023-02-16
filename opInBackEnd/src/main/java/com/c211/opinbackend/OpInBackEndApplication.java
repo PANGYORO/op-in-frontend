@@ -1,5 +1,9 @@
 package com.c211.opinbackend;
 
+import java.util.TimeZone;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,5 +21,9 @@ public class OpInBackEndApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(OpInBackEndApplication.class, args);
 	}
-
+	@PostConstruct
+	public void started() {
+		// timezone UTC 셋팅
+		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
+	}
 }
