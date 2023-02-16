@@ -19,7 +19,7 @@ export default function ContributorsModal({
     return _contributors.map((user) => (
       <User
         key={user.id}
-        profileImg={user.profileImg}
+        profileimg={user.profileImg}
         nickname={user.nickname}
       />
     ));
