@@ -102,7 +102,7 @@ public class GetRepoContributorTasklet implements Tasklet {
 									GithubContributor con = GithubContributor.builder()
 										.authorId(String.valueOf(contributor.getId()))
 										.nickname(contributor.getLogin())
-										.githubUrl(contributor.getUserInfoUrl())
+										.githubUrl(contributor.getHtmlUrl())
 										.avatarUrl(contributor.getAvatarUrl())
 										.build();
 
