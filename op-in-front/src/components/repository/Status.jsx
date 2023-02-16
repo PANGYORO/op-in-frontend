@@ -93,7 +93,7 @@ const Status = ({ repoDetail }) => {
         <button
           key={_index}
           type="button"
-          className="fpx-3 py-2 px-2 text-xs text-blue-600 bg-blue-200 rounded-full mx-1"
+          className="fpx-3 py-2 px-2 text-xs text-blue-600 bg-blue-200 rounded-full mr-1 mb-1"
         >
           {tag}
         </button>
