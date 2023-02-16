@@ -12,4 +12,6 @@ public interface RepositoryPostMemberLikeRepository extends JpaRepository<Reposi
 	long countByRepositoryPost(RepositoryPost repositoryPost);
 
 	List<RepositoryPostMemberLike> findByMemberIdAndRepositoryPostId(Long memberId, Long postId);
+
+	List<RepositoryPostMemberLike> findByMemberId(Long memberId);
 }

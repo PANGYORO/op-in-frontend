@@ -1,6 +1,5 @@
 package com.c211.opinbackend.persistence.entity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,7 +27,7 @@ public class RepositoryPostMemberLike {
 	@Column(name = "REPOSITORY_POST_MEMBER_LIKE_ID")
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "REPOSITORY_POST_ID")
 	private RepositoryPost repositoryPost;
 
