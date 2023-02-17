@@ -9,4 +9,5 @@ public class RepositoryContributorDto {
 	private String nickname;
 	private String id;
 	private String profileImg;
+
 }

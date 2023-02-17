@@ -2,8 +2,10 @@ import React from "react";
 import { useForm } from "react-hook-form";
 
 import Logo from "@components/Logo";
+import http from "@api/http";
+import { useToast } from "@hooks/useToast";
 
-function Button({ onClick = () => {}, loading = false, children }) {
+function Button({ onClick = () => { }, loading = false, children }) {
   return (
     <button
       type="submit"
@@ -66,22 +68,36 @@ function EmailInput({ register, error }) {
   );
 }
 function SignUpForm() {
+  const { setToast } = useToast();
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm();
 
+  // const onSubmit = async (data) => {
+  //   const result = await new Promise((res) => {
+  //     setTimeout(() => {
+  //       res(data);
+  //     }, 3000);
+  //   });
+
+  //   window.alert(JSON.stringify(result));
+  // };
   const onSubmit = async (data) => {
-    const result = await new Promise((res) => {
-      setTimeout(() => {
-        res(data);
-      }, 3000);
-    });
+    try {
+      let res = await http.post("member/password/email", {
+        email: data.email,
+      });
 
-    window.alert(JSON.stringify(result));
+      console.debug(res);
+      setToast({ message: "임시 비밀번호가 전송되었습니다. 메일함을 확인해주세요." });
+    } catch (error) {
+      setToast({ message: "이메일이 존재하지 않거나 형식이 잘못되었습니다." });
+      console.debug("hi");
+      console.debug(error);
+    }
   };
-
   return (
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8 bg-gray-50 p-5">

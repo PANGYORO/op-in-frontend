@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import BoxLogo from "@assets/box-logo.png";
-import { Link, useMatch } from "react-router-dom";
+import { Link, useMatch, useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { menuState } from "@recoil/sidebar/atoms";
-import { repoMenuState } from "@recoil/sidebar/atoms2";
+import { menuState, repoMenuState } from "@recoil/sidebar/atoms";
+
+import { userInfo } from "@recoil/user/atoms";
+import ToLoginModal from "./modals/ToLoginModal";
 
 const ITEMS = {
   DASHBOARD: "dashboard",
@@ -13,25 +15,44 @@ const ITEMS = {
   EVENTS: "events",
 };
 export default function Sidebar() {
+  const user = useRecoilValue(userInfo);
   const currentMenu = useRecoilValue(menuState);
   const setCurrentMenu = useSetRecoilState(menuState);
   const repoCurrentMenu = useRecoilValue(repoMenuState);
   const setRepoCurrentMenu = useSetRecoilState(repoMenuState);
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+
+  function toggleModal() {
+    setOpen((prev) => !prev);
+  }
   const deselected =
-    "flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 dark:text-gray-200 hover:text-blue-500";
+    "flex items-center justify-start w-full p-4 my-2 font-thin text-gray-500 uppercase transition-colors duration-200 hover:text-blue-500";
   const selected =
-    "flex items-center justify-start w-full p-4 my-2 font-thin text-blue-500 uppercase transition-colors duration-200 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 dark:from-gray-700 dark:to-gray-800";
+    "flex items-center justify-start w-full p-4 my-2 font-thin text-blue-500 uppercase transition-colors duration-200 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 ";
   function selectMenu(id) {
+    if (id == ITEMS.MYPAGE) {
+      if (!user.logined) {
+        toggleModal();
+      } else {
+        navigate(`/userdetail`, { state: user.nickname });
+      }
+    } else if (id == ITEMS.REPOSITORY) {
+      if (user.logined) setRepoCurrentMenu("myrepo");
+      else setRepoCurrentMenu("recommand");
+    }
     setCurrentMenu(id);
-    setRepoCurrentMenu("myrepo");
   }
   function selectRepoMenu(id) {
+    if (!user.logined && id == "myrepo") {
+      toggleModal();
+    }
     setRepoCurrentMenu(id);
   }
 
   return (
-    <div className="relative hidden h-screen my-4 ml-4 shadow-lg lg:block w-64">
-      <div className="h-full bg-white rounded-2xl dark:bg-gray-700 w-64">
+    <div className="ms:absolute rounded-2xl my-4 ml-4 shadow-lg lg:block w-64">
+      <div className="h-full bg-white rounded-2xl overflow-hidden">
         <div className="flex items-center justify-center pt-6">
           <Link
             to="/"
@@ -40,7 +61,11 @@ export default function Sidebar() {
               selectMenu(ITEMS.DASHBOARD);
             }}
           >
-            <img src={BoxLogo} alt="none" className="object-contain h-30 w-48" />
+            <img
+              src={BoxLogo}
+              alt="none"
+              className="object-contain h-30 w-48"
+            />
           </Link>
         </div>
 
@@ -67,10 +92,10 @@ export default function Sidebar() {
               </span>
               <span className="mx-4 text-sm font-normal">Dashboard</span>
             </Link>
-            <Link
+            <div
               id="mypage"
               className={deselected}
-              to="/detail"
+              // to="/userdetail"
               onClick={() => {
                 selectMenu(ITEMS.MYPAGE);
               }}
@@ -88,7 +113,7 @@ export default function Sidebar() {
                 </svg>
               </span>
               <span className="mx-4 text-sm font-normal">My Page</span>
-            </Link>
+            </div>
             <Link
               id="repository"
               className={useMatch("repo/*") ? selected : deselected}
@@ -118,7 +143,9 @@ export default function Sidebar() {
                     <li className="mb-3">
                       <Link
                         id="myrepo"
-                        className={repoCurrentMenu == "myrepo" ? "text-blue-500" : ""}
+                        className={
+                          repoCurrentMenu == "myrepo" ? "text-blue-500" : ""
+                        }
                         to="/repo"
                         onClick={() => {
                           selectRepoMenu("myrepo");
@@ -130,7 +157,9 @@ export default function Sidebar() {
                     <li>
                       <Link
                         id="recommand"
-                        className={repoCurrentMenu == "recommand" ? "text-blue-500" : ""}
+                        className={
+                          repoCurrentMenu == "recommand" ? "text-blue-500" : ""
+                        }
                         to="/repo/recommand"
                         onClick={() => {
                           selectRepoMenu("recommand");
@@ -169,7 +198,11 @@ export default function Sidebar() {
             </Link>
             <Link
               id="events"
-              className={useMatch("events") ? selected : deselected}
+              className={
+                useMatch("events")
+                  ? "flex items-center justify-start w-full p-4 mt-2 font-thin text-blue-500 uppercase transition-colors duration-200 border-r-4 border-blue-500 bg-gradient-to-r from-white to-blue-100 "
+                  : "flex items-center justify-start w-full p-4 mt-2 font-thin text-gray-500 uppercase transition-colors duration-200 hover:text-blue-500"
+              }
               to="/events"
               onClick={() => {
                 selectMenu(ITEMS.EVENTS);
@@ -192,6 +225,8 @@ export default function Sidebar() {
           </div>
         </nav>
       </div>
+      <ToLoginModal open={open} setOpen={setOpen} />
     </div>
   );
 }
+

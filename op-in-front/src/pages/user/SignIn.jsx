@@ -1,14 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import React, { useEffect } from "react";
-import jwt_decode from "jwt-decode";
 
 import Logo from "@components/Logo";
 import http from "@api/http";
-import { useSetRecoilState, useRecoilValue } from "recoil";
-import { userInfo } from "@recoil/user/atoms";
-
-import useToken from "@hooks/useToken";
+import { useToast } from "@hooks/useToast";
+import useAuth from "@hooks/useAuth";
 
 function Button({ onClick = () => {}, loading = false, children }) {
   return (
@@ -97,35 +94,30 @@ function EmailInput({ register, error }) {
   );
 }
 
-function LoginForm({ saveToken }) {
+function LoginForm() {
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm();
+  const { setToast } = useToast();
+  const { login } = useAuth();
 
-  const setUser = useSetRecoilState(userInfo);
-  const user = useRecoilValue(userInfo);
-  const navigate = useNavigate();
-
-  useEffect(() => {}, [user]);
-  const onSubmit = async (data) => {
-    try {
-      let res = await http.post("auth/login", {
+  const onSubmit = (data) => {
+    http
+      .post("auth/login", {
         email: data.email,
         password: data.password,
+      })
+      .then(({ data }) => {
+        login(data.accessToken);
+      })
+      .catch((error) => {
+        console.debug(error);
+        setToast({
+          message: error?.response?.data?.message || "로그인에 실패했습니다.",
+        });
       });
-      const decodedUserInfo = jwt_decode(res.data.accessToken);
-      setUser((before) => ({
-        ...before,
-        ...decodedUserInfo,
-        logined: true,
-      }));
-      saveToken(res.data);
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (
@@ -155,22 +147,7 @@ function LoginForm({ saveToken }) {
             label="Password"
           />
           <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-              />
-              <label
-                htmlFor="remember-me"
-                className="ml-2 block text-sm text-gray-900"
-              >
-                Remember me
-              </label>
-            </div>
-
-            <div className="text-sm">
+            <div className="text-sm flex-1 text-right">
               <Link
                 to="/userfind"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
@@ -187,7 +164,7 @@ function LoginForm({ saveToken }) {
           </div>
           <div>
             <a
-              href={`${import.meta.env.VITE_API_URL}oauth/redirect/github`}
+              href={`${import.meta.env.VITE_API_URL}/oauth/redirect/github`}
               className="group relative flex w-full justify-center rounded-md border py-2 px-4 text-sm font-medium hover:bg-gray-100"
             >
               <span className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -210,9 +187,8 @@ function LoginForm({ saveToken }) {
 }
 
 function SignIn() {
-  const { saveToken } = useToken();
-
-  return <LoginForm saveToken={saveToken} />;
+  return <LoginForm />;
 }
 
 export default SignIn;
+

@@ -1,20 +1,75 @@
-import React from "react";
-import { Fragment, useRef } from "react";
+import React, { Fragment, useState, useRef, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
-import Prism from "prismjs";
-import "prismjs/themes/prism.css";
-import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight";
-import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
-import fontSize from "tui-editor-plugin-font-size";
+import http from "@api/http";
+import { useToast } from "@hooks/useToast";
 
-export default function PostModal({ open, setOpen }) {
-  const cancelButtonRef = useRef(null);
+
+export default function PostModal({
+  open,
+  setOpen,
+  propFunction,
+  repositoryId,
+}) {
+  const [data, setData] = useState("");
+  const [title, setText] = useState("");
+  const cancelButtonRef = useRef();
+  const editorRef = useRef();
+  const { setToast } = useToast();
+
+  const textChangeHandler = (e) => {
+    setText(e.target.value);
+  };
+
+  const onChange = () => {
+    setData(editorRef.current?.getInstance().getMarkdown());
+  };
+
+  const createPost = async () => {
+    // 서버에 데이터 보내는 로직
+    await http
+      .post(`post`, {
+        repositoryId,
+        title: title,
+        content: data,
+      })
+      .then(({ data }) => {
+        // console.debug(data);
+        propFunction(data);
+      })
+      .catch((error) => {
+        console.debug(error);
+      });
+
+    setText("");
+  };
+
+  const uploadImage = async (file, callback) => {
+    const formData = new FormData();
+    formData.append("uploadImage", file);
+
+    http
+      .post("post/upload/image", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(({ data }) => {
+        callback(data.url, "");
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-40" initialFocus={cancelButtonRef} onClose={setOpen}>
+      <Dialog
+        as="div"
+        className="relative z-40"
+        initialFocus={cancelButtonRef}
+        onClose={setOpen}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -39,11 +94,43 @@ export default function PostModal({ open, setOpen }) {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-4/5">
+                <Dialog.Title
+                  as="h2"
+                  className="text-3xl font-bold leading-6 text-gray-900 p-4"
+                >
+                  New Post
+                </Dialog.Title>
+                <div className=" relative p-4">
+                  <input
+                    type="text"
+                    id="name-with-label"
+                    className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-400 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                    name="Title"
+                    placeholder="Insert Title..."
+                    value={title}
+                    onChange={textChangeHandler}
+                  />
+                </div>
+
                 <Editor
                   height="500px"
-                  initialValue="hello"
+                  initialValue=""
                   previewStyle="vertical"
-                  plugins={[[codeSyntaxHighlight, { highlighter: Prism }, colorSyntax, fontSize]]}
+                  onChange={onChange}
+                  language="ko-KR"
+                  toolbarItems={[
+                    // 툴바 옵션 설정
+                    ["heading", "bold", "italic", "strike"],
+                    ["hr", "quote"],
+                    ["ul", "ol", "task", "indent", "outdent"],
+                    ["table", "image", "link"],
+                    ["code", "codeblock"],
+                  ]}
+                  ref={editorRef}
+                  hooks={{
+                    addImageBlobHook: uploadImage,
+                  }}
+                  placeholder="내용을 넣어주세요 :)"
                 />
                 <div className="bg-gray-50 px-4 p-4 sm:flex sm:flex-row-reverse sm:px-6">
                   <button
@@ -57,7 +144,14 @@ export default function PostModal({ open, setOpen }) {
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-                    onClick={() => setOpen(false)}
+                    onClick={() => {
+                      if (title?.length == 0) {
+                        setToast({ message: "제목을 입력해주세요." });
+                      } else {
+                        setOpen(false);
+                        createPost();
+                      }
+                    }}
                   >
                     Write
                   </button>

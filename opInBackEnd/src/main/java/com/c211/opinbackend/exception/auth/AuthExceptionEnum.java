@@ -19,6 +19,9 @@ public enum AuthExceptionEnum {
 
 	AUTH_JWT_SUPPORT_EXCEPTION(HttpStatus.UNAUTHORIZED, "A0003", "지원하지 않는 JWT 토큰 입니다."),
 
+	AUTH_SECURITY_AUTHENTICATION_EXCEPTION(HttpStatus.UNAUTHORIZED, "A0005",
+		"Security UsernamePasswordAuthenticationToken 에러입니다."),
+
 	AUTH_JWT_SIGNATURE_EXCEPTION(HttpStatus.UNAUTHORIZED, "A0004", "잘못된 JWT 서명입니다.");
 
 	private final HttpStatus httpStatus;

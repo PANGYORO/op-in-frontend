@@ -1,7 +1,7 @@
 package com.c211.opinbackend.auth.model;
 
-import com.c211.opinbackend.auth.entity.Member;
-import com.c211.opinbackend.auth.entity.Role;
+import com.c211.opinbackend.persistence.entity.Member;
+import com.c211.opinbackend.persistence.entity.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +30,7 @@ public class MemberDto {
 
 	private String githubToken;
 	private String githubId;
+	private String githubUserName;
 
 	private Role role;
 
@@ -37,12 +38,13 @@ public class MemberDto {
 		return Member.builder()
 			.id(id)
 			.password(password)
-			.githubId(githubId)
 			.email(email)
 			.nickname(nickname)
 			.avatarUrl(avatarUrl)
+			.githubId(githubId)
 			.githubToken(githubToken)
 			.githubSyncFl(githubSyncFl)
+			.githubUserName(githubUserName)
 			.role(role)
 			.build();
 	}

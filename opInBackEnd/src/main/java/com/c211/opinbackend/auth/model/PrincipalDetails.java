@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.c211.opinbackend.auth.entity.Member;
+import com.c211.opinbackend.persistence.entity.Member;
 
 import lombok.Data;
 
